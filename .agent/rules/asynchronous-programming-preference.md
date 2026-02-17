@@ -1,0 +1,7 @@
+---
+trigger: model_decision
+description: Favors the use of async and await for asynchronous programming in Python.
+globs: **/*.py
+---
+
+- **Asynchronous Programming:** Prefer `async` and `await`
