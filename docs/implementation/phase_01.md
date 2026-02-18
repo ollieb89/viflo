@@ -14,7 +14,7 @@
 
 ---
 
-### Task 1: High-Performance Model Procurement & Configuration
+### Task 1: High-Performance Model Procurement & Configuration [Completed]
 
 **Files:**
 - Create: `.env.template`
@@ -73,7 +73,7 @@ git commit -m "chore: setup environment configuration templates"
 
 ---
 
-### Task 2: Local Cost-Optimization Infrastructure Setup
+### Task 2: Local Cost-Optimization Infrastructure Setup [Completed]
 
 **Files:**
 - Create: `scripts/setup_local_llms.sh`
@@ -124,7 +124,7 @@ git commit -m "infra: add local llm setup script"
 
 ---
 
-### Task 3: Agentic CLI Toolchain Installation & Configuration
+### Task 3: Agentic CLI Toolchain Installation & Configuration [Completed]
 
 **Files:**
 - Create: `scripts/install_toolchain.sh`
@@ -165,7 +165,7 @@ git commit -m "chore: configure aider and toolchain scripts"
 
 ---
 
-### Task 4: IDE Integration & Extension Setup
+### Task 4: IDE Integration & Extension Setup [Completed]
 
 **Files:**
 - Create: `.cursorrules`
