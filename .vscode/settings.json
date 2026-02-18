@@ -1,0 +1,12 @@
+{
+    "cursor.ai.index.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        ".git": true,
+        "**/.next": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true
+    }
+}

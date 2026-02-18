@@ -1,0 +1,9 @@
+# .cursorrules
+You are an expert software engineer working on the Universal Agentic Workflow project.
+
+# Project Context
+- Stack: Next.js, Python, TypeScript.
+- Rules:
+  - ALWAYS use the implementation plans in docs/implementation/.
+  - DO NOT invent new patterns; follow docs/implementation/universal_agentic_development.md.
+  - Test Driven Development (TDD) is mandatory.
