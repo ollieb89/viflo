@@ -10,7 +10,7 @@ Viflo is a comprehensive development methodology and toolchain designed to stand
 - **Structured Planning Protocol**: A mandatory "Planning-First" approach where no code is written without a granular, pre-approved `PLAN.md`.
 - **Agentic Workflow**: Implementation is broken down into atomic, independently testable units executed by specialized CLI agents.
 - **5-Phase Lifecycle**: A complete framework covering everything from initial Model Strategy to Continuous Improvement and Iteration.
-- **34 Reusable Skills**: A library of skill packages covering frontend, backend, database, security, CI/CD, and more.
+- **35 Reusable Skills**: A library of skill packages covering frontend, backend, database, security, CI/CD, and more.
 
 ## Getting Started
 
@@ -116,6 +116,7 @@ Skills are reusable packages in `.agent/skills/` that provide specialized AI gui
 | **Security** | `pci-compliance` | PCI DSS compliance implementation |
 | **Security** | `security/security-scanning` | SAST configuration and vulnerability detection |
 | **TypeScript** | `typescript-advanced-types` | Advanced TypeScript type system patterns |
+| **Workflows** | `i18n-implementation` | Next.js i18n with next-i18next, RTL, Intl API |
 | **Workflows** | `monorepo-management` | Turborepo/Nx/pnpm workspace management |
 | **Workflows** | `workflow-orchestration-patterns` | Temporal durable workflow patterns |
 
@@ -129,7 +130,7 @@ See **[AGENTS.md](./AGENTS.md)** for a comprehensive AI agent reference guide, i
 ├── README.md               # This file
 ├── .agent/
 │   ├── rules/              # Coding rules by technology/domain
-│   ├── skills/             # 34 reusable skill packages
+│   ├── skills/             # 35 reusable skill packages
 │   └── workflows/          # Workflow definitions
 ├── docs/
 │   ├── overview.md         # Master Plan and project pillars
@@ -143,7 +144,9 @@ See **[AGENTS.md](./AGENTS.md)** for a comprehensive AI agent reference guide, i
 
 ## Contributing
 
-We welcome contributions! Please see our [Master Plan](./docs/overview.md) to understand the core philosophy before submitting pull requests. Ensure all changes follow the "Planning-First" methodology.
+We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) to understand how to contribute skills, report bugs, and submit pull requests. Ensure all changes follow the "Planning-First" methodology.
+
+For full guidelines on the core philosophy, see the [Master Plan](./docs/overview.md).
 
 When contributing new skills, use the `skill-creator` skill as a guide:
 
