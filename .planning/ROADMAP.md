@@ -105,7 +105,12 @@ Plans:
 4. Phase 7 VERIFICATION.md exists documenting Phase 7 artifacts and success criteria
 5. All 11 v1.1 requirements in REQUIREMENTS.md are checked `[x]`
 
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+
+- [ ] 08-01-PLAN.md — Trim microservices-patterns/SKILL.md to ≤500 lines (CONTENT-01 gap closure)
+- [ ] 08-02-PLAN.md — Create VERIFICATION.md for Phases 5–7 and check off REQUIREMENTS.md (CONTENT-02 gap closure)
 
 ### Phase 9: Workspace & Developer Tooling
 
