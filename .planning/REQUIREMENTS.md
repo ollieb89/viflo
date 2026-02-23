@@ -1,0 +1,44 @@
+# Viflo Requirements
+
+## v1 (Must Have)
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| R1 | Complete 5-phase methodology documentation | P0 | Complete |
+| R2 | Agent configuration structure (skills, rules, workflows) | P0 | Complete |
+| R3 | GSD Workflow skill with helper scripts | P0 | Complete |
+| R4 | Project templates (PROJECT, REQUIREMENTS, ROADMAP, PLAN) | P0 | Complete |
+| R5 | AGENTS.md reference guide | P0 | Complete |
+
+## v2 (Should Have)
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| R6 | Frontend development skill (React/Next.js) | P1 | 1 |
+| R7 | Backend development skill (FastAPI) | P1 | 1 |
+| R8 | Database design skill (PostgreSQL) | P1 | 2 |
+| R9 | E2E testing skill (Playwright) | P1 | 2 |
+| R10 | Example project templates | P1 | 2 |
+
+## v3 (Could Have)
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| R11 | CI/CD integration guides | P2 | 3 |
+| R12 | Docker/containerization skill | P2 | 3 |
+| R13 | Cloud deployment skill (AWS/Vercel) | P2 | 3 |
+| R14 | Multi-language support (i18n) | P2 | 3 |
+
+## Out of Scope
+
+- AI model training/fine-tuning
+- Proprietary/closed-source components
+- Non-agentic development workflows
+- IDE plugins/extensions (for now)
+
+## Constraints
+
+- All skills must follow SKILL.md specification
+- Scripts must work on macOS, Linux, and WSL
+- Documentation must be AI and human readable
+- No external dependencies beyond standard tools
