@@ -20,12 +20,34 @@
 | 2026-02-23 | Use next-i18next over next-intl for i18n skill | Direct integration with Next.js Pages Router built-in i18n routing |
 | 2026-02-23 | Use native Intl API for date/number/currency formatting | Zero dependencies, built into all modern browsers and Node.js |
 | 2026-02-23 | Namespace translations by domain not by component | Stable as components are refactored; auth/dashboard/common grouping |
+| 2026-02-23 | triggers: is standard SKILL.md frontmatter field | Consistent with backend-dev-guidelines pattern; allowed-tools: only for tool-specific skills |
+| 2026-02-23 | Create INDEX.md at .agent/skills/INDEX.md | Central discovery file for all 35+ skills with difficulty and quick selection |
+| 2026-02-23 | Defer oversized SKILL.md refactoring | Files >500 lines need modular reference file structure — requires dedicated plan |
 
 ## Blockers
 
 - [x] None
 
 ## Session Memory
+
+### 2026-02-23 19:08
+
+**Phase 4**: executing - Plan 4-1 Complete
+
+Plan 4-1 (Documentation Review) delivered:
+- Added triggers: field to all 35 SKILL.md files for consistent frontmatter
+- Fixed postgresql skill name mismatch (was postgresql-table-design)
+- Fixed broken cross-reference in i18n-implementation/SKILL.md
+- Updated README with full skills table (35 skills) and project structure
+- Created .agent/skills/INDEX.md with categorized skill table and quick selection guide
+- Updated AGENTS.md with current skill count, INDEX.md reference, resources/ in structure
+
+Key decisions:
+- triggers: field (not allowed-tools:) is the standard for non-tool skills
+- Oversized SKILL.md files (>500 lines) deferred to future refactoring plan
+- INDEX.md placed at .agent/skills/INDEX.md for direct discovery
+
+Stopped at: Completed 4-1-PLAN.md (Documentation Review)
 
 ### 2026-02-23 20:00
 
