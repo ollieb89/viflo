@@ -41,6 +41,7 @@ Quick-start scaffolding for new projects. **Read the matching template only!**
 | [chrome-extension](templates/chrome-extension/TEMPLATE.md)     | Chrome MV3          | Browser extension     |
 | [cli-tool](templates/cli-tool/TEMPLATE.md)                     | Node.js + Commander | CLI app               |
 | [monorepo-turborepo](templates/monorepo-turborepo/TEMPLATE.md) | Turborepo + pnpm    | Monorepo              |
+| [minimal-app](assets/templates/minimal-app/) | Next.js + FastAPI   | Quick start template  |
 
 ---
 
