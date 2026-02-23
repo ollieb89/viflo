@@ -33,6 +33,7 @@ jobs:
 ### Organization Secrets
 
 Available to all repositories in the organization:
+
 - Navigate to: Organization → Settings → Secrets
 
 ## Best Practices
@@ -147,6 +148,7 @@ GitHub logs secret access:
 **Settings → Security → Audit log**
 
 Monitor for:
+
 - Unauthorized access
 - Unusual patterns
 - Failed authentication attempts

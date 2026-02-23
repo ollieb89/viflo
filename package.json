@@ -1,0 +1,21 @@
+{
+  "name": "viflo",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Universal Agentic Development Environment — methodology, skills, and workflows for hybrid AI-human software development",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@10.6.5",
+  "scripts": {
+    "lint": "prettier --check \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
+    "lint:fix": "prettier --write \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
+    "type-check": "echo 'type-check: no TS sources at root (documentation repo)' && exit 0",
+    "test": "echo 'test: no test suite yet (Phase 6)' && exit 0",
+    "build": "echo 'build: documentation repo — no build step' && exit 0"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.0"
+  }
+}

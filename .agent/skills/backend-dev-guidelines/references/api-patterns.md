@@ -115,7 +115,7 @@ class ItemUpdate(BaseModel):
 class ItemInDB(ItemBase):
     """Database representation."""
     model_config = ConfigDict(from_attributes=True)
-    
+
     id: int
     owner_id: int
     created_at: datetime
@@ -149,18 +149,18 @@ async def value_error_handler(request: Request, exc: ValueError):
 
 ### HTTP Status Codes
 
-| Code | Usage |
-|------|-------|
-| 200 | Successful GET, PUT, PATCH |
-| 201 | Successful POST (created) |
-| 204 | Successful DELETE (no content) |
-| 400 | Bad request, validation error |
-| 401 | Unauthorized (not authenticated) |
-| 403 | Forbidden (no permission) |
-| 404 | Resource not found |
-| 409 | Conflict (duplicate, state conflict) |
-| 422 | Validation error (Pydantic) |
-| 500 | Internal server error |
+| Code | Usage                                |
+| ---- | ------------------------------------ |
+| 200  | Successful GET, PUT, PATCH           |
+| 201  | Successful POST (created)            |
+| 204  | Successful DELETE (no content)       |
+| 400  | Bad request, validation error        |
+| 401  | Unauthorized (not authenticated)     |
+| 403  | Forbidden (no permission)            |
+| 404  | Resource not found                   |
+| 409  | Conflict (duplicate, state conflict) |
+| 422  | Validation error (Pydantic)          |
+| 500  | Internal server error                |
 
 ## Pagination Strategies
 
@@ -185,7 +185,7 @@ def list_items(
     skip = (page - 1) * per_page
     items = repo.get_multi(db, skip=skip, limit=per_page)
     total = repo.count(db)
-    
+
     return {
         "data": items,
         "meta": {
@@ -208,7 +208,7 @@ def list_items_cursor(
 ):
     items = repo.get_page(db, cursor=cursor, limit=limit)
     next_cursor = encode_cursor(items[-1].id) if len(items) == limit else None
-    
+
     return {
         "data": items,
         "meta": {
@@ -234,12 +234,12 @@ def login(
     user = user_repo.get_by_email(db, email=credentials.username)
     if not user or not verify_password(credentials.password, user.hashed_password):
         raise HTTPException(401, detail="Invalid credentials")
-    
+
     access_token = create_access_token(
         data={"sub": str(user.id)},
         expires_delta=timedelta(hours=24)
     )
-    
+
     return {"access_token": access_token, "token_type": "bearer"}
 ```
 
@@ -275,7 +275,7 @@ def get_db() -> Generator[Session, None, None]:
 class RoleChecker:
     def __init__(self, allowed_roles: List[str]):
         self.allowed_roles = allowed_roles
-    
+
     def __call__(self, user: User = Depends(get_current_user)):
         if user.role not in self.allowed_roles:
             raise HTTPException(403, detail="Insufficient permissions")

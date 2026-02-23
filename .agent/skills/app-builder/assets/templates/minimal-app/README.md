@@ -28,12 +28,14 @@ open http://localhost:8000/docs
 ## What's Included
 
 ### Backend (`backend/`)
+
 - Single `Item` model (id, name, description, completed)
 - Full CRUD API at `/items`
 - Auto-created database tables
 - CORS enabled for frontend
 
 ### Frontend (`frontend/`)
+
 - Single page app
 - List items with checkbox for completion
 - Form to create new items
@@ -41,19 +43,20 @@ open http://localhost:8000/docs
 - No styling framework (plain CSS)
 
 ### E2E Tests (`e2e/`)
+
 - 4 test cases covering CRUD operations
 - Playwright configuration
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Health check |
-| GET | `/items` | List all items |
-| POST | `/items` | Create item |
-| GET | `/items/{id}` | Get single item |
-| PATCH | `/items/{id}` | Update item |
-| DELETE | `/items/{id}` | Delete item |
+| Method | Endpoint      | Description     |
+| ------ | ------------- | --------------- |
+| GET    | `/`           | Health check    |
+| GET    | `/items`      | List all items  |
+| POST   | `/items`      | Create item     |
+| GET    | `/items/{id}` | Get single item |
+| PATCH  | `/items/{id}` | Update item     |
+| DELETE | `/items/{id}` | Delete item     |
 
 ## Development
 
@@ -99,6 +102,7 @@ npx playwright test
 ## Production Notes
 
 Before production:
+
 - Use proper environment variables (not hardcoded)
 - Add authentication
 - Use migrations (Alembic) instead of `create_all`

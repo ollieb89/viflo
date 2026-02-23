@@ -5,6 +5,7 @@
 **Goal:** Establish the detailed architectural blueprint (`PLAN.md`) and tasks backlog (`TASKS.md`) before execution, focusing on rigorous planning using reasoning models to refine design and catch errors early.
 
 **Architecture:**
+
 - **Planning-First:** Create immutable architectural design before writing code.
 - **Blueprint:** Define Schema, API Surface, and Constraints in `PLAN.md`.
 - **Validation:** Perform "Mental Compile" and referential integrity checks on design.
@@ -17,6 +18,7 @@
 ### Task 1: Context Aggregation & Technology Stack Definition
 
 **Files:**
+
 - Create: `docs/planning/PLAN.md`
 
 **Step 1: Create Planning Directory**
@@ -37,9 +39,11 @@ Create the initial skeleton with Goal, Tech Stack, and System Constraints.
 # Architectural Blueprint
 
 ## Goal
+
 [Insert detailed goal from PRD]
 
 ## Tech Stack
+
 - Frontend: Next.js 16, TypeScript 5.7+, Tailwind v4
 - Backend: Supabase (PostgreSQL), Next.js API Routes (or Python FastAPI if specified)
 - Database: PostgreSQL with pgvector
@@ -47,15 +51,19 @@ Create the initial skeleton with Goal, Tech Stack, and System Constraints.
 - Deployment: Vercel / Docker
 
 ## System Constraints
+
 ### Infrastructure
+
 - Deployment Target: Vercel
 - Database: Managed PostgreSQL (Supabase)
 
 ### Budget
+
 - Latency Target: < 200ms API response
 - Token Budget: Cost-Efficient Execution (Gemini Flash)
 
 ### Security
+
 - Auth: HttpOnly Cookies / JWT
 - RLS: Enabled by default on all tables
 ```
@@ -72,6 +80,7 @@ git commit -m "docs: initialize PLAN.md with constraints and tech stack"
 ### Task 2: Schema & API Surface Definition (The "Blueprint")
 
 **Files:**
+
 - Modify: `docs/planning/PLAN.md`
 
 **Step 1: Define Database Schema**
@@ -82,21 +91,23 @@ Add Entity-Relationship Diagram (ERD) and Schema definitions.
 ## Database Schema
 
 ### ERD (Mermaid)
+
 \`\`\`mermaid
 erDiagram
-    USER ||--o{ POST : writes
-    USER {
-        string id PK
-        string email
-    }
-    POST {
-        string id PK
-        string content
-        string user_id FK
-    }
+USER ||--o{ POST : writes
+USER {
+string id PK
+string email
+}
+POST {
+string id PK
+string content
+string user_id FK
+}
 \`\`\`
 
 ### Schema Definitions (Prisma/SQL)
+
 [Insert specific schema code here]
 ```
 
@@ -110,11 +121,12 @@ Add detailed API routes with request/response types.
 ### Endpoints
 
 #### POST /api/v1/resource
+
 - **Auth**: Required (Role: User)
 - **Input (Zod)**:
   \`\`\`typescript
   z.object({
-    data: z.string().min(1)
+  data: z.string().min(1)
   })
   \`\`\`
 - **Response**:
@@ -135,6 +147,7 @@ git commit -m "docs: add schema and API definitions to PLAN.md"
 ### Task 3: Authentication & Authorization Strategy Design
 
 **Files:**
+
 - Modify: `docs/planning/PLAN.md`
 
 **Step 1: Define Auth Middleware Strategy**
@@ -145,6 +158,7 @@ Specify how requests are authenticated.
 ## Security & Authorization
 
 ### Middleware Strategy
+
 - Use Next.js Middleware to validate session tokens.
 - Public Routes: `/login`, `/register`, `/api/public/*`
 - Protected Routes: `/dashboard/*`, `/api/protected/*`
@@ -158,10 +172,12 @@ Explicitly define SQL policies for data access.
 ### RLS Policies
 
 #### Table: users
+
 - **Select**: Users can select their own data (`auth.uid() = id`).
 - **Update**: Users can update their own data.
 
 #### Table: posts
+
 - **Select**: Public (if published) or Owner.
 - **Insert**: Authenticated users only.
 ```
@@ -178,6 +194,7 @@ git commit -m "docs: add auth strategy and RLS policies to PLAN.md"
 ### Task 4: Task Decomposition (The "Agent Handoff")
 
 **Files:**
+
 - Create: `docs/planning/TASKS.md`
 
 **Step 1: Create TASKS.md**

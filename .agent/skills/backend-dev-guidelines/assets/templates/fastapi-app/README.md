@@ -88,12 +88,12 @@ pytest --cov=app --cov-report=term-missing
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| DATABASE_URL | postgresql://... | Database connection |
-| SECRET_KEY | change-me | JWT signing key |
-| ACCESS_TOKEN_EXPIRE_MINUTES | 1440 | Token expiry |
-| ALLOWED_HOSTS | * | CORS origins |
+| Variable                    | Default          | Description         |
+| --------------------------- | ---------------- | ------------------- |
+| DATABASE_URL                | postgresql://... | Database connection |
+| SECRET_KEY                  | change-me        | JWT signing key     |
+| ACCESS_TOKEN_EXPIRE_MINUTES | 1440             | Token expiry        |
+| ALLOWED_HOSTS               | \*               | CORS origins        |
 
 ## Learn More
 

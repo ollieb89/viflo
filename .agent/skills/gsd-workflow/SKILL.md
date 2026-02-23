@@ -32,40 +32,40 @@ new-project → discuss-phase → plan-phase → execute-phase → verify-work �
 
 ### Initialization
 
-| Command | Purpose |
-|---------|---------|
+| Command                                   | Purpose                                                                       |
+| ----------------------------------------- | ----------------------------------------------------------------------------- |
 | `python3 scripts/init_gsd.py [--dir DIR]` | Initialize new project with PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md |
-| `python3 scripts/init_gsd.py --existing` | Initialize GSD in existing codebase (runs codebase mapping first) |
+| `python3 scripts/init_gsd.py --existing`  | Initialize GSD in existing codebase (runs codebase mapping first)             |
 
 ### Phase Workflow
 
 These are conceptual commands. Kimi implements them by:
 
-| Command | What Kimi Does |
-|---------|----------------|
-| `gsd discuss <phase>` | Kimi asks questions, captures decisions in `{phase}-CONTEXT.md` |
-| `gsd plan <phase>` | Kimi researches, creates `{phase}-{N}-PLAN.md` files with XML structure |
-| `gsd execute <phase>` | Kimi executes plans in waves, commits per task |
-| `gsd verify <phase>` | Kimi runs checks, creates `{phase}-UAT.md` with verification results |
+| Command               | What Kimi Does                                                          |
+| --------------------- | ----------------------------------------------------------------------- |
+| `gsd discuss <phase>` | Kimi asks questions, captures decisions in `{phase}-CONTEXT.md`         |
+| `gsd plan <phase>`    | Kimi researches, creates `{phase}-{N}-PLAN.md` files with XML structure |
+| `gsd execute <phase>` | Kimi executes plans in waves, commits per task                          |
+| `gsd verify <phase>`  | Kimi runs checks, creates `{phase}-UAT.md` with verification results    |
 
 ### Utility
 
-| Command | Purpose |
-|---------|---------|
-| `python3 scripts/status.py [--dir DIR]` | Show current progress and next steps |
-| `python3 scripts/quick_task.py "task"` | Ad-hoc task with GSD guarantees (no full planning) |
+| Command                                 | Purpose                                            |
+| --------------------------------------- | -------------------------------------------------- |
+| `python3 scripts/status.py [--dir DIR]` | Show current progress and next steps               |
+| `python3 scripts/quick_task.py "task"`  | Ad-hoc task with GSD guarantees (no full planning) |
 
 ## Artifacts
 
-| File | Purpose | Location |
-|------|---------|----------|
-| `PROJECT.md` | Project vision, goals, constraints | `.planning/` |
-| `REQUIREMENTS.md` | Scoped v1/v2/out-of-scope requirements | `.planning/` |
-| `ROADMAP.md` | Phases mapped to requirements | `.planning/` |
-| `STATE.md` | Decisions, blockers, session memory | `.planning/` |
-| `{phase}-CONTEXT.md` | Implementation decisions per phase | `.planning/` |
-| `{phase}-{N}-PLAN.md` | Atomic task plans with XML structure | `.planning/` |
-| `{phase}-{N}-SUMMARY.md` | Execution results per plan | `.planning/` |
+| File                     | Purpose                                | Location     |
+| ------------------------ | -------------------------------------- | ------------ |
+| `PROJECT.md`             | Project vision, goals, constraints     | `.planning/` |
+| `REQUIREMENTS.md`        | Scoped v1/v2/out-of-scope requirements | `.planning/` |
+| `ROADMAP.md`             | Phases mapped to requirements          | `.planning/` |
+| `STATE.md`               | Decisions, blockers, session memory    | `.planning/` |
+| `{phase}-CONTEXT.md`     | Implementation decisions per phase     | `.planning/` |
+| `{phase}-{N}-PLAN.md`    | Atomic task plans with XML structure   | `.planning/` |
+| `{phase}-{N}-SUMMARY.md` | Execution results per plan             | `.planning/` |
 
 ## Plan XML Structure
 
@@ -77,23 +77,23 @@ Every plan uses structured XML optimized for AI execution:
     <phase_name>User Authentication</phase_name>
     <goal>Implement login/signup with email and OAuth</goal>
   </overview>
-  
+
   <dependencies>
     <complete>Phase 0: Database Setup</complete>
   </dependencies>
-  
+
   <tasks>
     <task type="auto" priority="1">
       <name>Create user model with Prisma</name>
       <files>prisma/schema.prisma</files>
       <action>
-        Add User model with email, password_hash, oauth_provider, 
+        Add User model with email, password_hash, oauth_provider,
         oauth_id fields. Include timestamps.
       </action>
       <verify>npx prisma validate passes</verify>
       <done>User model exists with all required fields</done>
     </task>
-    
+
     <task type="manual" priority="1">
       <name>Run database migration</name>
       <action>Run prisma migrate dev to apply schema changes</action>
@@ -124,13 +124,13 @@ This maximizes parallelization while respecting dependencies.
 
 Keep artifacts under these limits to maintain AI quality:
 
-| Artifact | Max Size |
-|----------|----------|
-| PROJECT.md | 500 lines |
+| Artifact        | Max Size  |
+| --------------- | --------- |
+| PROJECT.md      | 500 lines |
 | REQUIREMENTS.md | 300 lines |
-| ROADMAP.md | 200 lines |
-| PLAN.md | 150 lines |
-| Individual task | 50 lines |
+| ROADMAP.md      | 200 lines |
+| PLAN.md         | 150 lines |
+| Individual task | 50 lines  |
 
 ## Quick Reference
 
@@ -175,6 +175,7 @@ gsd map-codebase
 ```
 
 Creates `.planning/codebase/` with:
+
 - Stack analysis
 - Architecture overview
 - Code conventions
@@ -205,12 +206,12 @@ gsd new-milestone                # Start next version
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| Plans too large | Split into smaller phases |
-| Context degradation | Start fresh session, use `gsd status` |
-| Dependencies unclear | Use `gsd discuss` to clarify |
-| Verification fails | Run `gsd plan <phase> --fix` to regenerate |
+| Problem              | Solution                                   |
+| -------------------- | ------------------------------------------ |
+| Plans too large      | Split into smaller phases                  |
+| Context degradation  | Start fresh session, use `gsd status`      |
+| Dependencies unclear | Use `gsd discuss` to clarify               |
+| Verification fails   | Run `gsd plan <phase> --fix` to regenerate |
 
 ## Advanced Tools
 
@@ -253,6 +254,7 @@ python3 scripts/wave_planner.py 1
 ```
 
 Output shows:
+
 - Which plans can run in parallel
 - Estimated time per wave
 - Sequential vs parallel efficiency
@@ -346,6 +348,7 @@ python3 scripts/validate_plan.py --all
 ```
 
 Checks for:
+
 - Valid XML structure
 - Required elements (overview, tasks, etc.)
 - Task completeness (name, action, verify)
@@ -377,30 +380,30 @@ The skill includes Python scripts to streamline GSD workflow:
 
 ### Core Scripts
 
-| Script | Command | Purpose |
-|--------|---------|---------|
-| `init_gsd.py` | `python3 scripts/init_gsd.py [--dir DIR]` | Initialize `.planning/` directory with all artifacts |
-| `status.py` | `python3 scripts/status.py [--dir DIR]` | Show project status, phases progress, and next steps |
-| `quick_task.py` | `python3 scripts/quick_task.py "task description"` | Create quick task plan without full GSD ceremony |
+| Script          | Command                                            | Purpose                                              |
+| --------------- | -------------------------------------------------- | ---------------------------------------------------- |
+| `init_gsd.py`   | `python3 scripts/init_gsd.py [--dir DIR]`          | Initialize `.planning/` directory with all artifacts |
+| `status.py`     | `python3 scripts/status.py [--dir DIR]`            | Show project status, phases progress, and next steps |
+| `quick_task.py` | `python3 scripts/quick_task.py "task description"` | Create quick task plan without full GSD ceremony     |
 
 ### Validation & Planning
 
-| Script | Command | Purpose |
-|--------|---------|---------|
-| `validate_plan.py` | `python3 scripts/validate_plan.py [PLAN] [--all]` | Validate plan XML structure |
-| `wave_planner.py` | `python3 scripts/wave_planner.py <phase>` | Analyze dependencies, create wave schedule |
+| Script                     | Command                                            | Purpose                                         |
+| -------------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| `validate_plan.py`         | `python3 scripts/validate_plan.py [PLAN] [--all]`  | Validate plan XML structure                     |
+| `wave_planner.py`          | `python3 scripts/wave_planner.py <phase>`          | Analyze dependencies, create wave schedule      |
 | `dependency_visualizer.py` | `python3 scripts/dependency_visualizer.py <phase>` | Visualize plan dependencies (ASCII/Mermaid/DOT) |
-| `plan_merger.py` | `python3 scripts/plan_merger.py <action>` | Merge or split plans |
+| `plan_merger.py`           | `python3 scripts/plan_merger.py <action>`          | Merge or split plans                            |
 
 ### Project Management
 
-| Script | Command | Purpose |
-|--------|---------|---------|
-| `phase_transition.py` | `python3 scripts/phase_transition.py <action>` | Manage phase lifecycle |
-| `commit_helper.py` | `python3 scripts/commit_helper.py [options]` | Create GSD-style commits |
-| `project_generator.py` | `python3 scripts/project_generator.py` | Interactive PROJECT.md generator |
-| `research_aggregator.py` | `python3 scripts/research_aggregator.py [--phase N]` | Aggregate research notes |
-| `progress_reporter.py` | `python3 scripts/progress_reporter.py [--format]` | Generate progress reports |
+| Script                   | Command                                              | Purpose                          |
+| ------------------------ | ---------------------------------------------------- | -------------------------------- |
+| `phase_transition.py`    | `python3 scripts/phase_transition.py <action>`       | Manage phase lifecycle           |
+| `commit_helper.py`       | `python3 scripts/commit_helper.py [options]`         | Create GSD-style commits         |
+| `project_generator.py`   | `python3 scripts/project_generator.py`               | Interactive PROJECT.md generator |
+| `research_aggregator.py` | `python3 scripts/research_aggregator.py [--phase N]` | Aggregate research notes         |
+| `progress_reporter.py`   | `python3 scripts/progress_reporter.py [--format]`    | Generate progress reports        |
 
 ### Script Usage Examples
 
@@ -458,33 +461,33 @@ python3 .agent/skills/gsd-workflow/scripts/commit_helper.py
 
 ### Core Artifacts
 
-| Template | Purpose | Location |
-|----------|---------|----------|
-| `PROJECT.md` | Project vision, goals, constraints | `assets/templates/PROJECT.md` |
-| `REQUIREMENTS.md` | v1/v2 requirements, scope | `assets/templates/REQUIREMENTS.md` |
-| `ROADMAP.md` | Phases mapped to requirements | `assets/templates/ROADMAP.md` |
-| `STATE.md` | Decisions, blockers, memory | `assets/templates/STATE.md` |
-| `PLAN.md` | XML plan structure | `assets/templates/PLAN.md` |
-| `VERIFICATION.md` | Verification checklist | `assets/templates/VERIFICATION.md` |
+| Template          | Purpose                            | Location                           |
+| ----------------- | ---------------------------------- | ---------------------------------- |
+| `PROJECT.md`      | Project vision, goals, constraints | `assets/templates/PROJECT.md`      |
+| `REQUIREMENTS.md` | v1/v2 requirements, scope          | `assets/templates/REQUIREMENTS.md` |
+| `ROADMAP.md`      | Phases mapped to requirements      | `assets/templates/ROADMAP.md`      |
+| `STATE.md`        | Decisions, blockers, memory        | `assets/templates/STATE.md`        |
+| `PLAN.md`         | XML plan structure                 | `assets/templates/PLAN.md`         |
+| `VERIFICATION.md` | Verification checklist             | `assets/templates/VERIFICATION.md` |
 
 ### Context Templates by Feature Type
 
 Use these during `discuss-phase` to capture implementation decisions:
 
-| Template | Use For | Location |
-|----------|---------|----------|
-| `CONTEXT-ui.md` | Frontend/UI features | `assets/templates/CONTEXT-ui.md` |
-| `CONTEXT-api.md` | API/backend features | `assets/templates/CONTEXT-api.md` |
+| Template              | Use For              | Location                               |
+| --------------------- | -------------------- | -------------------------------------- |
+| `CONTEXT-ui.md`       | Frontend/UI features | `assets/templates/CONTEXT-ui.md`       |
+| `CONTEXT-api.md`      | API/backend features | `assets/templates/CONTEXT-api.md`      |
 | `CONTEXT-database.md` | Database schema work | `assets/templates/CONTEXT-database.md` |
 
 ## Examples
 
 Complete phase examples with plans:
 
-| Example | Description | Location |
-|---------|-------------|----------|
+| Example                 | Description                                                 | Location                                |
+| ----------------------- | ----------------------------------------------------------- | --------------------------------------- |
 | `auth-phase-example.md` | Authentication with JWT, database models, login/register UI | `assets/examples/auth-phase-example.md` |
-| `crud-api-example.md` | Full CRUD API with permissions, pagination, soft delete | `assets/examples/crud-api-example.md` |
+| `crud-api-example.md`   | Full CRUD API with permissions, pagination, soft delete     | `assets/examples/crud-api-example.md`   |
 
 ## Additional References
 

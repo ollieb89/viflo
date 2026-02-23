@@ -23,7 +23,7 @@ import uuid
 
 class User(Base):
     __tablename__ = "users"
-    
+
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         primary_key=True,
@@ -32,6 +32,7 @@ class User(Base):
 ```
 
 **When to use:**
+
 - Distributed systems
 - Exposing IDs in URLs (not sequential)
 - Merging data from multiple sources
@@ -43,11 +44,11 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 class Event(Base):
     __tablename__ = "events"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     event_type: Mapped[str]
     payload: Mapped[dict] = mapped_column(JSONB, default={})
-    
+
     # Index for JSONB queries
     __table_args__ = (
         Index('ix_events_payload', 'payload', postgresql_using='gin'),
@@ -55,6 +56,7 @@ class Event(Base):
 ```
 
 **Querying JSONB:**
+
 ```python
 # Find events with specific payload
 stmt = select(Event).where(Event.payload["user_id"].as_integer() == 123)
@@ -70,7 +72,7 @@ from sqlalchemy.dialects.postgresql import ARRAY
 
 class Post(Base):
     __tablename__ = "posts"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     tags: Mapped[list[str]] = mapped_column(ARRAY(String), default=list)
 ```
@@ -88,7 +90,7 @@ class UserStatus(str, enum.Enum):
 
 class User(Base):
     __tablename__ = "users"
-    
+
     status: Mapped[UserStatus] = mapped_column(
         SQLEnum(UserStatus),
         default=UserStatus.ACTIVE
@@ -106,7 +108,7 @@ from sqlalchemy import UniqueConstraint
 
 class User(Base):
     __tablename__ = "users"
-    
+
     __table_args__ = (
         UniqueConstraint('email', 'organization_id', name='uix_user_org_email'),
     )
@@ -117,10 +119,10 @@ class User(Base):
 ```python
 class User(Base):
     __tablename__ = "users"
-    
+
     __table_args__ = (
         # Only index active users
-        Index('ix_users_email_active', 'email', 
+        Index('ix_users_email_active', 'email',
               postgresql_where="is_active = true"),
     )
 ```
@@ -130,7 +132,7 @@ class User(Base):
 ```python
 class User(Base):
     __tablename__ = "users"
-    
+
     __table_args__ = (
         # Case-insensitive email lookup
         Index('ix_users_email_lower', func.lower(email)),
@@ -144,13 +146,13 @@ class User(Base):
 ```python
 class Article(Base):
     __tablename__ = "articles"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     content: Mapped[str]
-    
+
     __table_args__ = (
-        Index('ix_articles_search', 
+        Index('ix_articles_search',
               text("to_tsvector('english', title || ' ' || content)"),
               postgresql_using='gin'),
     )

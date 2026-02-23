@@ -20,11 +20,11 @@ triggers:
 
 ### Choose Your Platform
 
-| Platform | Best For | Complexity |
-|----------|----------|------------|
-| [Vercel](guides/vercel.md) | Next.js, static sites | Easy |
-| [Railway](guides/railway.md) | Full-stack, containers | Easy |
-| [AWS](guides/aws.md) | Enterprise, scale | Complex |
+| Platform                     | Best For               | Complexity |
+| ---------------------------- | ---------------------- | ---------- |
+| [Vercel](guides/vercel.md)   | Next.js, static sites  | Easy       |
+| [Railway](guides/railway.md) | Full-stack, containers | Easy       |
+| [AWS](guides/aws.md)         | Enterprise, scale      | Complex    |
 
 ### One-Command Deploy
 
@@ -43,15 +43,15 @@ cdk deploy
 
 ## Platform Comparison
 
-| Feature | Vercel | Railway | AWS |
-|---------|--------|---------|-----|
-| Next.js | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
-| Static sites | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Full-stack | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| Databases | ⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| Serverless | ⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| Cost (start) | Free | Free | Free tier |
-| Cost (scale) | $$ | $$ | $-$$$ |
+| Feature      | Vercel | Railway | AWS       |
+| ------------ | ------ | ------- | --------- |
+| Next.js      | ⭐⭐⭐ | ⭐⭐    | ⭐⭐      |
+| Static sites | ⭐⭐⭐ | ⭐⭐    | ⭐⭐⭐    |
+| Full-stack   | ⭐⭐   | ⭐⭐⭐  | ⭐⭐⭐    |
+| Databases    | ⭐     | ⭐⭐⭐  | ⭐⭐⭐    |
+| Serverless   | ⭐⭐⭐ | ⭐⭐    | ⭐⭐⭐    |
+| Cost (start) | Free   | Free    | Free tier |
+| Cost (scale) | $$     | $$      | $-$$$     |
 
 ---
 
@@ -75,11 +75,11 @@ DEBUG=false
 
 ### Platform Environment Variables
 
-| Platform | Setup Location |
-|----------|---------------|
-| Vercel | Dashboard → Settings → Environment Variables |
-| Railway | Dashboard → Variables |
-| AWS | Parameter Store / Secrets Manager |
+| Platform | Setup Location                               |
+| -------- | -------------------------------------------- |
+| Vercel   | Dashboard → Settings → Environment Variables |
+| Railway  | Dashboard → Variables                        |
+| AWS      | Parameter Store / Secrets Manager            |
 
 ---
 
@@ -124,36 +124,39 @@ Before deploying:
 
 ## Guides
 
-| Guide | Platform | Use Case |
-|-------|----------|----------|
-| [vercel.md](guides/vercel.md) | Vercel | Next.js, React |
-| [railway.md](guides/railway.md) | Railway | Full-stack apps |
-| [aws.md](guides/aws.md) | AWS | Enterprise, scale |
+| Guide                           | Platform | Use Case          |
+| ------------------------------- | -------- | ----------------- |
+| [vercel.md](guides/vercel.md)   | Vercel   | Next.js, React    |
+| [railway.md](guides/railway.md) | Railway  | Full-stack apps   |
+| [aws.md](guides/aws.md)         | AWS      | Enterprise, scale |
 
 ---
 
 ## References
 
-| File | Description |
-|------|-------------|
+| File                                                      | Description             |
+| --------------------------------------------------------- | ----------------------- |
 | [environment-config.md](references/environment-config.md) | Multi-environment setup |
-| [domain-ssl.md](references/domain-ssl.md) | Custom domains, SSL |
+| [domain-ssl.md](references/domain-ssl.md)                 | Custom domains, SSL     |
 
 ---
 
 ## Cost Optimization
 
 ### Vercel
+
 - Use static generation when possible
 - Limit serverless function duration
 - Monitor bandwidth usage
 
 ### Railway
+
 - Use hobby plan for development
 - Scale vertically before horizontally
 - Monitor resource usage
 
 ### AWS
+
 - Use reserved instances for steady workloads
 - Set up billing alerts
 - Clean up unused resources

@@ -14,33 +14,33 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 0 * * *'  # Daily at midnight
+    - cron: "0 0 * * *" # Daily at midnight
 
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-      
+
       - name: Run Playwright tests
         run: npx playwright test
         env:
           BASE_URL: ${{ secrets.STAGING_URL }}
-      
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -61,10 +61,10 @@ jobs:
       fail-fast: false
       matrix:
         shard: [1/4, 2/4, 3/4, 4/4]
-    
+
     steps:
       # ... setup steps
-      
+
       - name: Run tests (shard ${{ matrix.shard }})
         run: npx playwright test --shard=${{ matrix.shard }}
 ```
@@ -82,16 +82,16 @@ jobs:
   test:
     if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Install Playwright
         run: npx playwright install --with-deps
-      
+
       - name: Run tests against preview
         run: npx playwright test
         env:
@@ -116,10 +116,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
-    
+
     steps:
       # ... setup
-      
+
       - name: Run tests
         run: npx playwright test
         env:
@@ -133,7 +133,7 @@ jobs:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     services:
       postgres:
         image: postgres:16
@@ -146,10 +146,10 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup application
         run: |
           npm ci
@@ -157,15 +157,15 @@ jobs:
           npm run db:seed
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
-      
+
       - name: Start application
         run: npm start &
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
-      
+
       - name: Wait for app
         run: npx wait-on http://localhost:3000 --timeout 60000
-      
+
       - name: Run E2E tests
         run: npx playwright test
         env:
@@ -258,10 +258,10 @@ jobs:
 ```yaml
 jobs:
   test:
-    timeout-minutes: 30  # Increase if needed
-    
+    timeout-minutes: 30 # Increase if needed
+
     steps:
       - name: Run tests
         run: npx playwright test
-        timeout-minutes: 25  # Slightly less than job timeout
+        timeout-minutes: 25 # Slightly less than job timeout
 ```

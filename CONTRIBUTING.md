@@ -101,6 +101,25 @@ pip3 install -r scripts/requirements.txt
 python3 scripts/verify_env.py
 ```
 
+#### Pre-commit Hooks (Secret Scanning)
+
+This repository uses [pre-commit](https://pre-commit.com/) to run secret scanning before every commit. The hooks run `gitleaks` and `detect-secrets` to prevent accidental credential exposure.
+
+Install the hooks after cloning:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+Once installed, the hooks run automatically on `git commit`. To run them manually against all files:
+
+```bash
+pre-commit run --all-files
+```
+
+If a commit is blocked, the hook will print the detected secret's file and line. Remove the secret, use an environment variable instead, and re-commit.
+
 ### Step 4: Make Your Changes
 
 Follow these conventions:
@@ -138,13 +157,13 @@ Then open a pull request on GitHub using the **Pull Request Template**. Fill in 
 
 ### Requirements
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| Node.js | 20+ | Toolchain (Claude Code, etc.) |
-| pnpm | 10.0.0+ | Package management |
-| Python | 3.10+ | Verification scripts |
-| Git | Any recent | Version control |
-| Ollama | Optional | Local model execution |
+| Tool    | Version    | Purpose                       |
+| ------- | ---------- | ----------------------------- |
+| Node.js | 20+        | Toolchain (Claude Code, etc.) |
+| pnpm    | 10.0.0+    | Package management            |
+| Python  | 3.10+      | Verification scripts          |
+| Git     | Any recent | Version control               |
+| Ollama  | Optional   | Local model execution         |
 
 ### Environment Variables
 
@@ -155,19 +174,20 @@ cp .env.template .env
 ```
 
 Required keys (depending on which tools you use):
+
 - `ANTHROPIC_API_KEY` — For Claude Code
 - `GEMINI_API_KEY` — For Gemini models
 
 ### Project Structure
 
-| Path | What's There |
-|------|-------------|
-| `.agent/skills/` | Skill packages (the main contribution area) |
-| `.agent/rules/` | Coding rules by technology |
-| `.agent/workflows/` | Workflow definitions |
-| `docs/` | Viflo methodology documentation |
-| `scripts/` | Setup and verification scripts |
-| `packages/` | Shared TypeScript packages |
+| Path                | What's There                                |
+| ------------------- | ------------------------------------------- |
+| `.agent/skills/`    | Skill packages (the main contribution area) |
+| `.agent/rules/`     | Coding rules by technology                  |
+| `.agent/workflows/` | Workflow definitions                        |
+| `docs/`             | Viflo methodology documentation             |
+| `scripts/`          | Setup and verification scripts              |
+| `packages/`         | Shared TypeScript packages                  |
 
 ---
 

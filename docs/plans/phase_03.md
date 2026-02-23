@@ -38,17 +38,18 @@ Each task must satisfy the **ACID-T** criteria:
 Assign each task to a language/runtime ecosystem so the correct agent and model can be selected:
 
 | Category         | Examples                                                   |
-|------------------|------------------------------------------------------------|
+| ---------------- | ---------------------------------------------------------- |
 | Frontend (JS/TS) | UI components, pages, layouts, client state, form handling |
-| Backend (JS/TS)  | API route handlers, middleware, server actions              |
-| Backend (Python) | FastAPI endpoints, SQLAlchemy models, Pydantic schemas      |
-| Database         | Migrations, seed data, index creation                       |
-| Infrastructure   | Docker configs, CI pipelines, deployment scripts            |
-| Cross-cutting    | Auth integration, error handling, shared types/schemas      |
+| Backend (JS/TS)  | API route handlers, middleware, server actions             |
+| Backend (Python) | FastAPI endpoints, SQLAlchemy models, Pydantic schemas     |
+| Database         | Migrations, seed data, index creation                      |
+| Infrastructure   | Docker configs, CI pipelines, deployment scripts           |
+| Cross-cutting    | Auth integration, error handling, shared types/schemas     |
 
 ### Example Transformation
 
 **High-level feature:**
+
 > "Build user profile feature"
 
 **Granulated tasks:**
@@ -66,12 +67,12 @@ Assign each task to a language/runtime ecosystem so the correct agent and model 
 
 ### Task Sizing Guidelines
 
-| Size    | Description                            | Example                             |
-|---------|----------------------------------------|-------------------------------------|
-| XS      | Single-file change, <20 lines          | Add an env variable, fix a typo     |
-| S       | One function/component, 20–80 lines    | Write a utility, create a component |
-| M       | One feature slice, 80–200 lines        | Full CRUD endpoint + test           |
-| L       | Multi-file coordinated change          | Auth flow across frontend + backend |
+| Size | Description                         | Example                             |
+| ---- | ----------------------------------- | ----------------------------------- |
+| XS   | Single-file change, <20 lines       | Add an env variable, fix a typo     |
+| S    | One function/component, 20–80 lines | Write a utility, create a component |
+| M    | One feature slice, 80–200 lines     | Full CRUD endpoint + test           |
+| L    | Multi-file coordinated change       | Auth flow across frontend + backend |
 
 **Target:** Most tasks should be **S** or **M**. Break **L** tasks further if possible.
 
@@ -83,28 +84,28 @@ Assign each task to a language/runtime ecosystem so the correct agent and model 
 
 Select the agent/model combination based on task characteristics, not brand loyalty. The table below maps task attributes to recommended tools.
 
-| Task Characteristic                 | Recommended Agent Type           | Model Tier (Phase 1)     |
-|-------------------------------------|----------------------------------|--------------------------|
-| Single-file generation (<100 lines) | Inline CLI (Gemini CLI, Copilot) | Code Execution (Flash)   |
-| Multi-file refactoring              | Aider, Claude Code               | Code Execution (Mid)     |
-| Complex reasoning / debugging       | Claude Code, Codex CLI            | High Performance         |
-| Repository-wide changes             | Codex CLI, Aider (architect)      | High Performance         |
-| Cloud infrastructure / IaC          | Google Q CLI, AWS Q               | Code Execution (Mid)     |
-| Privacy-sensitive / offline         | Qwen Code, local Ollama           | Open-Source               |
-| Test generation                     | Any CLI agent                     | Code Execution (Cheap)   |
-| Documentation / comments            | Any CLI agent                     | Code Execution (Cheap)   |
+| Task Characteristic                 | Recommended Agent Type           | Model Tier (Phase 1)   |
+| ----------------------------------- | -------------------------------- | ---------------------- |
+| Single-file generation (<100 lines) | Inline CLI (Gemini CLI, Copilot) | Code Execution (Flash) |
+| Multi-file refactoring              | Aider, Claude Code               | Code Execution (Mid)   |
+| Complex reasoning / debugging       | Claude Code, Codex CLI           | High Performance       |
+| Repository-wide changes             | Codex CLI, Aider (architect)     | High Performance       |
+| Cloud infrastructure / IaC          | Google Q CLI, AWS Q              | Code Execution (Mid)   |
+| Privacy-sensitive / offline         | Qwen Code, local Ollama          | Open-Source            |
+| Test generation                     | Any CLI agent                    | Code Execution (Cheap) |
+| Documentation / comments            | Any CLI agent                    | Code Execution (Cheap) |
 
 ### Agent Capabilities Reference
 
-| Agent           | Strengths                                    | Best For                              |
-|-----------------|----------------------------------------------|---------------------------------------|
-| Aider           | Multi-file edits, git-aware, architect mode  | Refactoring, feature slices           |
-| Gemini CLI      | Fast, cheap, large context                   | Single-file generation, quick fixes   |
-| Codex CLI       | Multi-step reasoning, repo-wide context      | Complex multi-step tasks              |
-| Claude Code CLI | Deep reasoning, structured output            | Architecture, debugging, complex logic |
-| Google Q CLI    | GCP-native, cloud infrastructure              | Infrastructure, deployment            |
-| Qwen Code       | Local execution, no API cost                 | Privacy-sensitive, offline work       |
-| Cursor / Windsurf | IDE-integrated, visual diff                | Interactive development, exploration  |
+| Agent             | Strengths                                   | Best For                               |
+| ----------------- | ------------------------------------------- | -------------------------------------- |
+| Aider             | Multi-file edits, git-aware, architect mode | Refactoring, feature slices            |
+| Gemini CLI        | Fast, cheap, large context                  | Single-file generation, quick fixes    |
+| Codex CLI         | Multi-step reasoning, repo-wide context     | Complex multi-step tasks               |
+| Claude Code CLI   | Deep reasoning, structured output           | Architecture, debugging, complex logic |
+| Google Q CLI      | GCP-native, cloud infrastructure            | Infrastructure, deployment             |
+| Qwen Code         | Local execution, no API cost                | Privacy-sensitive, offline work        |
+| Cursor / Windsurf | IDE-integrated, visual diff                 | Interactive development, exploration   |
 
 ### Cost-Optimized Routing
 
@@ -224,13 +225,13 @@ Conventions:
 
 ### Anti-Patterns to Avoid
 
-| Anti-Pattern                        | Why It Fails                                          | Correct Approach                                   |
-|-------------------------------------|-------------------------------------------------------|----------------------------------------------------|
-| "Add validation"                    | Ambiguous — what fields, what rules, what error format | "Add Zod schema for `CreateUserInput` with email (string, email format), name (string, 2-50 chars)" |
-| "Build the user page"              | Too broad for a single task                           | Decompose into data fetching, layout, form, tests  |
-| "Use best practices"               | Means nothing to an LLM                               | Specify exact patterns, error boundaries, etc.     |
-| No file path specified              | Agent will guess wrong                                | Always provide exact path relative to project root |
-| No framework version specified      | API differences between versions cause bugs            | Always specify major + minor version               |
+| Anti-Pattern                   | Why It Fails                                           | Correct Approach                                                                                    |
+| ------------------------------ | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| "Add validation"               | Ambiguous — what fields, what rules, what error format | "Add Zod schema for `CreateUserInput` with email (string, email format), name (string, 2-50 chars)" |
+| "Build the user page"          | Too broad for a single task                            | Decompose into data fetching, layout, form, tests                                                   |
+| "Use best practices"           | Means nothing to an LLM                                | Specify exact patterns, error boundaries, etc.                                                      |
+| No file path specified         | Agent will guess wrong                                 | Always provide exact path relative to project root                                                  |
+| No framework version specified | API differences between versions cause bugs            | Always specify major + minor version                                                                |
 
 ---
 
@@ -242,13 +243,13 @@ Every agent has a limited context window. Stuffing the entire codebase into cont
 
 ### Context Loading Strategy
 
-| Task Type                 | Context to Provide                                                        |
-|---------------------------|---------------------------------------------------------------------------|
-| New endpoint              | Related model/schema, existing endpoint patterns, API error format         |
-| New UI component          | Design system tokens, similar existing components, shared types            |
-| Bug fix                   | Failing test output, relevant source file, stack trace                    |
-| Refactoring               | All files being touched, their tests, dependency graph                    |
-| Infrastructure            | Existing configs (docker-compose, CI yaml), environment variable list     |
+| Task Type        | Context to Provide                                                    |
+| ---------------- | --------------------------------------------------------------------- |
+| New endpoint     | Related model/schema, existing endpoint patterns, API error format    |
+| New UI component | Design system tokens, similar existing components, shared types       |
+| Bug fix          | Failing test output, relevant source file, stack trace                |
+| Refactoring      | All files being touched, their tests, dependency graph                |
+| Infrastructure   | Existing configs (docker-compose, CI yaml), environment variable list |
 
 ### Context Layering
 
@@ -293,18 +294,21 @@ AI output is a **first draft**, not a final product. Every generated artifact mu
 Apply this checklist to every AI-generated code artifact:
 
 #### Correctness
+
 - [ ] Does the code compile / type-check without errors?
 - [ ] Does it handle edge cases (empty input, null values, unauthorized access)?
 - [ ] Are all imports resolved and correct?
 - [ ] Does it match the `PLAN.md` specification?
 
 #### Security
+
 - [ ] No hardcoded secrets, tokens, or credentials?
 - [ ] Input validation present at API boundaries?
 - [ ] Auth checks on protected routes/endpoints?
 - [ ] No SQL injection, XSS, or CSRF vulnerabilities?
 
 #### Quality
+
 - [ ] Follows project naming conventions?
 - [ ] No unnecessary complexity (YAGNI)?
 - [ ] No duplicated logic (DRY)?
@@ -312,18 +316,19 @@ Apply this checklist to every AI-generated code artifact:
 - [ ] Type-safe (no `any` in TypeScript, proper type hints in Python)?
 
 #### Testing
+
 - [ ] Unit test exists and covers the primary behavior?
 - [ ] Test passes locally?
 - [ ] Edge case tests exist for critical paths?
 
 ### Review Severity Levels
 
-| Level    | Action Required                    | Example                                    |
-|----------|------------------------------------|--------------------------------------------|
-| Critical | Block merge, fix immediately       | Security vulnerability, data loss risk     |
-| Major    | Fix before merge                   | Missing error handling, broken test         |
-| Minor    | Fix in same PR if easy             | Naming convention violation, missing comment |
-| Nit      | Optional, developer's discretion   | Style preference, alternative approach      |
+| Level    | Action Required                  | Example                                      |
+| -------- | -------------------------------- | -------------------------------------------- |
+| Critical | Block merge, fix immediately     | Security vulnerability, data loss risk       |
+| Major    | Fix before merge                 | Missing error handling, broken test          |
+| Minor    | Fix in same PR if easy           | Naming convention violation, missing comment |
+| Nit      | Optional, developer's discretion | Style preference, alternative approach       |
 
 ### Iterative Refinement Process
 
@@ -333,6 +338,7 @@ When AI output needs improvement, **refine through prompts rather than manual re
 2. **Provide a targeted correction prompt** — Don't regenerate the whole file
 
    Example:
+
    ```
    The `createUser` function is missing input validation.
    Add Zod/Pydantic schema validation for the request body.
@@ -410,13 +416,13 @@ Each PR should be independently deployable and not break existing functionality.
 
 Maintain a simple task tracker (GitHub Issues, Linear, or even a checklist in `PLAN.md`) with these states:
 
-| State       | Meaning                                             |
-|-------------|-----------------------------------------------------|
-| `TODO`      | Task defined, not started                            |
-| `IN_PROGRESS` | Agent or developer is actively working on it       |
-| `IN_REVIEW` | Code generated, awaiting human review                |
-| `BLOCKED`   | Waiting on a dependency or decision                  |
-| `DONE`      | Reviewed, tested, committed                          |
+| State         | Meaning                                      |
+| ------------- | -------------------------------------------- |
+| `TODO`        | Task defined, not started                    |
+| `IN_PROGRESS` | Agent or developer is actively working on it |
+| `IN_REVIEW`   | Code generated, awaiting human review        |
+| `BLOCKED`     | Waiting on a dependency or decision          |
+| `DONE`        | Reviewed, tested, committed                  |
 
 ### Sprint Metrics
 

@@ -6,6 +6,7 @@
 ## Progress
 
 ### Task Management App
+
 - ✅ Docker Compose structure
 - ✅ Backend folder structure
 - ✅ Task model and schemas
@@ -15,6 +16,7 @@
 - ⏳ E2E: Playwright tests
 
 ### Files Created
+
 ```
 app-builder/assets/templates/task-app/
 ├── docker-compose.yml        # Multi-service setup
@@ -29,6 +31,7 @@ app-builder/assets/templates/task-app/
 ## Remaining Work
 
 ### Backend (30 min)
+
 - app/core/config.py
 - app/core/security.py (simplified)
 - app/db/base.py
@@ -39,6 +42,7 @@ app-builder/assets/templates/task-app/
 - tests/
 
 ### Frontend (40 min)
+
 - Next.js setup (package.json, tsconfig)
 - app/layout.tsx with providers
 - app/page.tsx (task list)
@@ -49,11 +53,13 @@ app-builder/assets/templates/task-app/
 - lib/api.ts (TanStack Query)
 
 ### E2E (20 min)
+
 - playwright.config.ts
 - pages/TaskPage.ts
 - e2e/tasks.spec.ts
 
 ### Documentation (10 min)
+
 - README.md with setup instructions
 
 ## Recommendation

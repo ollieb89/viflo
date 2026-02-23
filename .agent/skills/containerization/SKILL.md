@@ -101,11 +101,11 @@ USER appuser
 
 ### Minimal Base Images
 
-| Language | Base Image | Size |
-|----------|-----------|------|
-| Python | `python:3.11-slim` | ~50MB |
-| Node.js | `node:20-alpine` | ~40MB |
-| Go | `scratch` or `distroless` | ~5MB |
+| Language | Base Image                | Size  |
+| -------- | ------------------------- | ----- |
+| Python   | `python:3.11-slim`        | ~50MB |
+| Node.js  | `node:20-alpine`          | ~40MB |
+| Go       | `scratch` or `distroless` | ~5MB  |
 
 ### Secrets Handling
 
@@ -203,12 +203,12 @@ Before deploying:
 
 ## References
 
-| File | Description |
-|------|-------------|
-| [docker-best-practices.md](references/docker-best-practices.md) | Comprehensive best practices |
-| [multi-stage-builds.md](references/multi-stage-builds.md) | Language-specific examples |
-| [docker-compose-patterns.md](references/docker-compose-patterns.md) | Common patterns |
-| [production-checklist.md](references/production-checklist.md) | Deployment verification |
+| File                                                                | Description                  |
+| ------------------------------------------------------------------- | ---------------------------- |
+| [docker-best-practices.md](references/docker-best-practices.md)     | Comprehensive best practices |
+| [multi-stage-builds.md](references/multi-stage-builds.md)           | Language-specific examples   |
+| [docker-compose-patterns.md](references/docker-compose-patterns.md) | Common patterns              |
+| [production-checklist.md](references/production-checklist.md)       | Deployment verification      |
 
 ---
 

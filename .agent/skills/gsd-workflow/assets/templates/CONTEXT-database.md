@@ -3,16 +3,19 @@
 ## Schema Design
 
 ### Tables/Collections
+
 - [ ] Table names (plural? singular?)
 - [ ] Column naming conventions
 - [ ] Primary key strategy
 
 ### Relationships
+
 - [ ] One-to-one, one-to-many, many-to-many
 - [ ] Foreign key constraints
 - [ ] Cascade behavior (delete, update)
 
 ### Indexes
+
 - [ ] Primary key indexes
 - [ ] Foreign key indexes
 - [ ] Query optimization indexes
@@ -63,6 +66,6 @@
 
 ## Decisions Log
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| {Decision} | {Choice} | {Why} |
+| Decision   | Choice   | Rationale |
+| ---------- | -------- | --------- |
+| {Decision} | {Choice} | {Why}     |

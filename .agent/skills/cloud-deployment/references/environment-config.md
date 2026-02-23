@@ -4,11 +4,11 @@
 
 ## Environment Types
 
-| Environment | Purpose | Data |
-|-------------|---------|------|
-| Development | Local development | Synthetic/sample |
-| Staging | Pre-production testing | Production-like |
-| Production | Live application | Real user data |
+| Environment | Purpose                | Data             |
+| ----------- | ---------------------- | ---------------- |
+| Development | Local development      | Synthetic/sample |
+| Staging     | Pre-production testing | Production-like  |
+| Production  | Live application       | Real user data   |
 
 ## Configuration Strategy
 
@@ -85,6 +85,7 @@ DATABASE_URL=postgresql://localhost:5432/myapp
 ### Loading in Application
 
 **Python:**
+
 ```python
 from dotenv import load_dotenv
 load_dotenv()  # Loads .env.local
@@ -93,10 +94,11 @@ database_url = os.getenv('DATABASE_URL')
 ```
 
 **Node.js:**
-```javascript
-require('dotenv').config()
 
-const databaseUrl = process.env.DATABASE_URL
+```javascript
+require("dotenv").config();
+
+const databaseUrl = process.env.DATABASE_URL;
 ```
 
 ## Feature Flags
@@ -105,28 +107,28 @@ const databaseUrl = process.env.DATABASE_URL
 
 ```javascript
 const features = {
-  newDashboard: process.env.ENABLE_NEW_DASHBOARD === 'true',
-  betaFeature: process.env.ENABLE_BETA === 'true'
-}
+  newDashboard: process.env.ENABLE_NEW_DASHBOARD === "true",
+  betaFeature: process.env.ENABLE_BETA === "true",
+};
 ```
 
 ### Feature Flag Service
 
 ```javascript
 // Using LaunchDarkly or similar
-import { init } from 'launchdarkly-node-server-sdk'
+import { init } from "launchdarkly-node-server-sdk";
 
-const client = init(process.env.LD_SDK_KEY)
-const showFeature = await client.variation('new-feature', user, false)
+const client = init(process.env.LD_SDK_KEY);
+const showFeature = await client.variation("new-feature", user, false);
 ```
 
 ## Database Per Environment
 
-| Environment | Database | Access |
-|-------------|----------|--------|
+| Environment | Database         | Access         |
+| ----------- | ---------------- | -------------- |
 | Development | Local PostgreSQL | Developer only |
-| Staging | RDS staging | Team only |
-| Production | RDS production | Limited access |
+| Staging     | RDS staging      | Team only      |
+| Production  | RDS production   | Limited access |
 
 ### Migration Strategy
 
@@ -158,10 +160,10 @@ if (user.id % 10 === 0) {
 ### Feature Flags
 
 ```javascript
-if (isEnabled('new-checkout', user)) {
-  return <NewCheckout />
+if (isEnabled("new-checkout", user)) {
+  return <NewCheckout />;
 }
-return <OldCheckout />
+return <OldCheckout />;
 ```
 
 ## Environment Checklist
@@ -208,8 +210,8 @@ secrets/
 
 ## Cost Management
 
-| Environment | Strategy | Example |
-|-------------|----------|---------|
-| Development | Local/free tier | Docker locally |
-| Staging | Small instances | 1 vCPU, 1GB RAM |
-| Production | Right-sized | Based on load |
+| Environment | Strategy        | Example         |
+| ----------- | --------------- | --------------- |
+| Development | Local/free tier | Docker locally  |
+| Staging     | Small instances | 1 vCPU, 1GB RAM |
+| Production  | Right-sized     | Based on load   |

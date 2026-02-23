@@ -49,15 +49,15 @@ npm install next-i18next react-i18next i18next
 // next-i18next.config.js
 module.exports = {
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'es'],
+    defaultLocale: "en",
+    locales: ["en", "es"],
   },
 };
 ```
 
 ```js
 // next.config.js
-const { i18n } = require('./next-i18next.config');
+const { i18n } = require("./next-i18next.config");
 module.exports = { i18n };
 ```
 
@@ -80,13 +80,13 @@ public/
 
 ### Namespace Strategy
 
-| Namespace  | Contents                          |
-| ---------- | --------------------------------- |
-| `common`   | Navigation, buttons, global errors|
-| `home`     | Landing page, hero section        |
-| `auth`     | Login, register, forgot password  |
-| `dashboard`| Dashboard-specific strings        |
-| `errors`   | Error page messages               |
+| Namespace   | Contents                           |
+| ----------- | ---------------------------------- |
+| `common`    | Navigation, buttons, global errors |
+| `home`      | Landing page, hero section         |
+| `auth`      | Login, register, forgot password   |
+| `dashboard` | Dashboard-specific strings         |
+| `errors`    | Error page messages                |
 
 ### Translation Key Naming
 
@@ -113,6 +113,7 @@ Use dot notation for grouping; keep flat within namespace files.
 ```
 
 **Naming rules:**
+
 - Use camelCase for keys: `firstName`, not `first_name`
 - Group by UI area, not by component: `nav.home`, not `Navbar.homeLink`
 - Keep key names semantic: `button.save`, not `button.green`
@@ -124,15 +125,15 @@ Use dot notation for grouping; keep flat within namespace files.
 ### Basic Usage
 
 ```tsx
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 
 export const Navbar: React.FC = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
 
   return (
     <nav>
-      <a href="/">{t('nav.home')}</a>
-      <a href="/about">{t('nav.about')}</a>
+      <a href="/">{t("nav.home")}</a>
+      <a href="/about">{t("nav.about")}</a>
     </nav>
   );
 };
@@ -141,20 +142,20 @@ export const Navbar: React.FC = () => {
 ### Multiple Namespaces
 
 ```tsx
-const { t: tCommon } = useTranslation('common');
-const { t: tDashboard } = useTranslation('dashboard');
+const { t: tCommon } = useTranslation("common");
+const { t: tDashboard } = useTranslation("dashboard");
 ```
 
 ### Server-Side Translation Loading
 
 ```tsx
 // pages/index.tsx
-import { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetStaticProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en', ['common', 'home'])),
+    ...(await serverSideTranslations(locale ?? "en", ["common", "home"])),
   },
 });
 ```
@@ -165,11 +166,11 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
 
 ```tsx
 // components/LanguageSwitcher.tsx
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 const LANGUAGES = [
-  { code: 'en', label: 'English' },
-  { code: 'es', label: 'Español' },
+  { code: "en", label: "English" },
+  { code: "es", label: "Español" },
 ];
 
 export const LanguageSwitcher: React.FC = () => {
@@ -206,19 +207,18 @@ Right-to-left languages (Arabic, Hebrew, Persian) require document direction cha
 
 ```tsx
 // lib/rtl.ts
-const RTL_LOCALES = ['ar', 'he', 'fa', 'ur'];
+const RTL_LOCALES = ["ar", "he", "fa", "ur"];
 
-export const isRTL = (locale: string): boolean =>
-  RTL_LOCALES.includes(locale);
+export const isRTL = (locale: string): boolean => RTL_LOCALES.includes(locale);
 ```
 
-### Applying Direction in _app.tsx
+### Applying Direction in \_app.tsx
 
 ```tsx
-import { isRTL } from '../lib/rtl';
+import { isRTL } from "../lib/rtl";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-  const dir = isRTL(router.locale ?? 'en') ? 'rtl' : 'ltr';
+  const dir = isRTL(router.locale ?? "en") ? "rtl" : "ltr";
 
   return (
     <div dir={dir} lang={router.locale}>
@@ -234,8 +234,8 @@ Use logical properties instead of `left`/`right` for automatic RTL support:
 
 ```css
 /* Instead of: margin-left, padding-right */
-margin-inline-start: 1rem;   /* left in LTR, right in RTL */
-padding-inline-end: 0.5rem;  /* right in LTR, left in RTL */
+margin-inline-start: 1rem; /* left in LTR, right in RTL */
+padding-inline-end: 0.5rem; /* right in LTR, left in RTL */
 ```
 
 ---
@@ -249,14 +249,14 @@ Use the browser's built-in `Intl` API for locale-aware formatting.
 ```tsx
 const formatDate = (date: Date, locale: string): string =>
   new Intl.DateTimeFormat(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   }).format(date);
 
 // Usage
-formatDate(new Date(), 'en');  // "February 23, 2026"
-formatDate(new Date(), 'es');  // "23 de febrero de 2026"
+formatDate(new Date(), "en"); // "February 23, 2026"
+formatDate(new Date(), "es"); // "23 de febrero de 2026"
 ```
 
 ### Numbers
@@ -265,21 +265,25 @@ formatDate(new Date(), 'es');  // "23 de febrero de 2026"
 const formatNumber = (value: number, locale: string): string =>
   new Intl.NumberFormat(locale).format(value);
 
-formatNumber(1234567.89, 'en');  // "1,234,567.89"
-formatNumber(1234567.89, 'es');  // "1.234.567,89"
+formatNumber(1234567.89, "en"); // "1,234,567.89"
+formatNumber(1234567.89, "es"); // "1.234.567,89"
 ```
 
 ### Currency
 
 ```tsx
-const formatCurrency = (amount: number, locale: string, currency = 'USD'): string =>
+const formatCurrency = (
+  amount: number,
+  locale: string,
+  currency = "USD",
+): string =>
   new Intl.NumberFormat(locale, {
-    style: 'currency',
+    style: "currency",
     currency,
   }).format(amount);
 
-formatCurrency(9.99, 'en', 'USD');  // "$9.99"
-formatCurrency(9.99, 'es', 'EUR');  // "9,99 €"
+formatCurrency(9.99, "en", "USD"); // "$9.99"
+formatCurrency(9.99, "es", "EUR"); // "9,99 €"
 ```
 
 ---
@@ -290,31 +294,33 @@ Next.js middleware can detect and redirect to the correct locale.
 
 ```ts
 // middleware.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-const SUPPORTED_LOCALES = ['en', 'es'];
-const DEFAULT_LOCALE = 'en';
+const SUPPORTED_LOCALES = ["en", "es"];
+const DEFAULT_LOCALE = "en";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip if already has locale prefix
   const hasLocale = SUPPORTED_LOCALES.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
   if (hasLocale) return NextResponse.next();
 
   // Detect from Accept-Language header
-  const acceptLang = request.headers.get('Accept-Language') ?? '';
-  const preferred = acceptLang.split(',')[0]?.split('-')[0] ?? DEFAULT_LOCALE;
-  const locale = SUPPORTED_LOCALES.includes(preferred) ? preferred : DEFAULT_LOCALE;
+  const acceptLang = request.headers.get("Accept-Language") ?? "";
+  const preferred = acceptLang.split(",")[0]?.split("-")[0] ?? DEFAULT_LOCALE;
+  const locale = SUPPORTED_LOCALES.includes(preferred)
+    ? preferred
+    : DEFAULT_LOCALE;
 
   request.nextUrl.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|favicon.ico).*)'],
+  matcher: ["/((?!_next|api|favicon.ico).*)"],
 };
 ```
 
@@ -352,16 +358,16 @@ _(See inline content above for patterns)_
 
 ## Navigation Guide
 
-| Need to...                        | Read this                                                             |
-| --------------------------------- | --------------------------------------------------------------------- |
-| Set up next-i18next               | Quick Start section above                                             |
-| Structure translation files       | Translation File Structure section above                              |
-| Add a language switcher           | Language Switcher Component section above                             |
-| Support Arabic/Hebrew/RTL         | RTL Support section above                                             |
-| Format dates or currencies        | Date, Number, and Currency Formatting above                           |
-| Pluralization and interpolation   | Advanced Translation Patterns section above                           |
-| Manage translations with a team   | [translation-workflow.md](references/translation-workflow.md)         |
-| See a working Next.js example     | [assets/examples/nextjs-i18n/](assets/examples/nextjs-i18n/)         |
+| Need to...                      | Read this                                                     |
+| ------------------------------- | ------------------------------------------------------------- |
+| Set up next-i18next             | Quick Start section above                                     |
+| Structure translation files     | Translation File Structure section above                      |
+| Add a language switcher         | Language Switcher Component section above                     |
+| Support Arabic/Hebrew/RTL       | RTL Support section above                                     |
+| Format dates or currencies      | Date, Number, and Currency Formatting above                   |
+| Pluralization and interpolation | Advanced Translation Patterns section above                   |
+| Manage translations with a team | [translation-workflow.md](references/translation-workflow.md) |
+| See a working Next.js example   | [assets/examples/nextjs-i18n/](assets/examples/nextjs-i18n/)  |
 
 ---
 

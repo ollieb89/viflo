@@ -24,6 +24,7 @@ Viflo is a comprehensive development methodology and toolchain designed to stand
 ### Installation
 
 1. **Clone the Repository**
+
    ```bash
    git clone https://github.com/your-org/viflo.git
    cd viflo
@@ -31,6 +32,7 @@ Viflo is a comprehensive development methodology and toolchain designed to stand
 
 2. **Configure Environment**
    Copy the template and add your API keys.
+
    ```bash
    cp .env.template .env
    # Edit .env and add:
@@ -40,12 +42,14 @@ Viflo is a comprehensive development methodology and toolchain designed to stand
 
 3. **Install Toolchain**
    Installs core dependencies like `aider-chat` and `claude-code`.
+
    ```bash
    ./scripts/install_toolchain.sh
    ```
 
 4. **Setup Local LLMs** (optional)
    Installs Ollama and pulls the required local models (`deepseek-r1`, `qwen2.5-coder`).
+
    ```bash
    ./scripts/setup_local_llms.sh
    ```
@@ -83,42 +87,42 @@ Ensure quality and continuous improvement.
 
 Skills are reusable packages in `.agent/skills/` that provide specialized AI guidance for specific tasks.
 
-| Category | Skill | Description |
-|----------|-------|-------------|
-| **API** | `api-design-principles` | REST and GraphQL API design patterns |
-| **API** | `api-patterns` | API style selection and decision-making |
-| **Architecture** | `architectural-design` | Create PLAN.md and architecture blueprints |
-| **Architecture** | `architecture-patterns` | Clean Architecture, Hexagonal, DDD |
-| **Architecture** | `microservices-patterns` | Service boundaries and event-driven patterns |
-| **Backend** | `backend-dev-guidelines` | FastAPI + SQLAlchemy development standards |
-| **Backend** | `fastapi-templates` | Production-ready FastAPI project templates |
-| **Backend** | `nodejs-backend-patterns` | Node.js/Express/Fastify patterns |
-| **Build** | `app-builder` | Full-stack application scaffolding orchestrator |
-| **CI/CD** | `ci-cd-pipelines` | GitHub Actions workflow templates |
-| **Cloud** | `cloud-deployment` | Vercel, AWS, Railway deployment guides |
-| **Cloud** | `containerization` | Docker best practices and multi-stage builds |
-| **Database** | `database-design` | PostgreSQL schema and migration patterns |
-| **Database** | `postgresql` | PostgreSQL-specific schema design |
-| **Frontend** | `frontend-dev-guidelines` | React/TypeScript/MUI development guidelines |
-| **Frontend** | `frontend-design` | Distinctive, production-grade UI creation |
-| **Git** | `git-advanced-workflows` | Rebase, cherry-pick, bisect, worktrees |
-| **Methodology** | `behavioral-modes` | Agent operational mode definitions |
-| **Methodology** | `brainstorming` | Socratic questioning and communication protocol |
-| **Methodology** | `gsd-workflow` | Get Shit Done spec-driven development |
-| **Methodology** | `skill-creator` | Create and update skills |
-| **Methodology** | `writing-skills` | Test-driven skill documentation |
-| **Quality** | `code-review-excellence` | Effective code review practices |
-| **Quality** | `debugging-strategies` | Systematic debugging techniques |
-| **Quality** | `e2e-testing-patterns` | Playwright and Cypress E2E testing |
-| **Quality** | `error-handling-patterns` | Exception handling and resilience patterns |
-| **Quality** | `temporal-python-testing` | Temporal workflow testing with pytest |
-| **README** | `github-readme-writer` | GitHub-optimized README creation |
-| **Security** | `pci-compliance` | PCI DSS compliance implementation |
-| **Security** | `security/security-scanning` | SAST configuration and vulnerability detection |
-| **TypeScript** | `typescript-advanced-types` | Advanced TypeScript type system patterns |
-| **Workflows** | `i18n-implementation` | Next.js i18n with next-i18next, RTL, Intl API |
-| **Workflows** | `monorepo-management` | Turborepo/Nx/pnpm workspace management |
-| **Workflows** | `workflow-orchestration-patterns` | Temporal durable workflow patterns |
+| Category         | Skill                             | Description                                     |
+| ---------------- | --------------------------------- | ----------------------------------------------- |
+| **API**          | `api-design-principles`           | REST and GraphQL API design patterns            |
+| **API**          | `api-patterns`                    | API style selection and decision-making         |
+| **Architecture** | `architectural-design`            | Create PLAN.md and architecture blueprints      |
+| **Architecture** | `architecture-patterns`           | Clean Architecture, Hexagonal, DDD              |
+| **Architecture** | `microservices-patterns`          | Service boundaries and event-driven patterns    |
+| **Backend**      | `backend-dev-guidelines`          | FastAPI + SQLAlchemy development standards      |
+| **Backend**      | `fastapi-templates`               | Production-ready FastAPI project templates      |
+| **Backend**      | `nodejs-backend-patterns`         | Node.js/Express/Fastify patterns                |
+| **Build**        | `app-builder`                     | Full-stack application scaffolding orchestrator |
+| **CI/CD**        | `ci-cd-pipelines`                 | GitHub Actions workflow templates               |
+| **Cloud**        | `cloud-deployment`                | Vercel, AWS, Railway deployment guides          |
+| **Cloud**        | `containerization`                | Docker best practices and multi-stage builds    |
+| **Database**     | `database-design`                 | PostgreSQL schema and migration patterns        |
+| **Database**     | `postgresql`                      | PostgreSQL-specific schema design               |
+| **Frontend**     | `frontend-dev-guidelines`         | React/TypeScript/MUI development guidelines     |
+| **Frontend**     | `frontend-design`                 | Distinctive, production-grade UI creation       |
+| **Git**          | `git-advanced-workflows`          | Rebase, cherry-pick, bisect, worktrees          |
+| **Methodology**  | `behavioral-modes`                | Agent operational mode definitions              |
+| **Methodology**  | `brainstorming`                   | Socratic questioning and communication protocol |
+| **Methodology**  | `gsd-workflow`                    | Get Shit Done spec-driven development           |
+| **Methodology**  | `skill-creator`                   | Create and update skills                        |
+| **Methodology**  | `writing-skills`                  | Test-driven skill documentation                 |
+| **Quality**      | `code-review-excellence`          | Effective code review practices                 |
+| **Quality**      | `debugging-strategies`            | Systematic debugging techniques                 |
+| **Quality**      | `e2e-testing-patterns`            | Playwright and Cypress E2E testing              |
+| **Quality**      | `error-handling-patterns`         | Exception handling and resilience patterns      |
+| **Quality**      | `temporal-python-testing`         | Temporal workflow testing with pytest           |
+| **README**       | `github-readme-writer`            | GitHub-optimized README creation                |
+| **Security**     | `pci-compliance`                  | PCI DSS compliance implementation               |
+| **Security**     | `security/security-scanning`      | SAST configuration and vulnerability detection  |
+| **TypeScript**   | `typescript-advanced-types`       | Advanced TypeScript type system patterns        |
+| **Workflows**    | `i18n-implementation`             | Next.js i18n with next-i18next, RTL, Intl API   |
+| **Workflows**    | `monorepo-management`             | Turborepo/Nx/pnpm workspace management          |
+| **Workflows**    | `workflow-orchestration-patterns` | Temporal durable workflow patterns              |
 
 See **[AGENTS.md](./AGENTS.md)** for a comprehensive AI agent reference guide, including model routing strategy, code style guidelines, and working with skills and rules.
 

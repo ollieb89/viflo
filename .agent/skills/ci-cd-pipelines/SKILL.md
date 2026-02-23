@@ -52,23 +52,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          
+          python-version: "3.11"
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pytest ruff mypy
-          
+
       - name: Lint
         run: ruff check .
-        
+
       - name: Type check
         run: mypy .
-        
+
       - name: Test
         run: pytest --cov=.
 ```
@@ -86,25 +86,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Lint
         run: npm run lint
-        
+
       - name: Type check
         run: npm run type-check
-        
+
       - name: Test
         run: npm test
-        
+
       - name: Build
         run: npm run build
 ```
@@ -129,8 +129,8 @@ jobs:
 - name: Setup Node.js
   uses: actions/setup-node@v4
   with:
-    node-version: '20'
-    cache: 'npm'  # Automatic caching
+    node-version: "20"
+    cache: "npm" # Automatic caching
 ```
 
 ---
@@ -144,16 +144,16 @@ deploy:
   needs: test
   runs-on: ubuntu-latest
   if: github.ref == 'refs/heads/main'
-  
+
   steps:
     - uses: actions/checkout@v4
-    
+
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        
+
     - name: Build and push
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }} .
@@ -167,10 +167,10 @@ deploy:
   needs: test
   runs-on: ubuntu-latest
   if: github.ref == 'refs/heads/main'
-  
+
   steps:
     - uses: actions/checkout@v4
-    
+
     - name: Deploy to Vercel
       uses: vercel/action-deploy@v1
       with:
@@ -224,11 +224,11 @@ steps:
 
 ## Workflow Templates
 
-| Template | Purpose |
-|----------|---------|
-| [python.yml](workflows/python.yml) | Python lint, test, build |
-| [nodejs.yml](workflows/nodejs.yml) | Node.js lint, test, build |
-| [fullstack.yml](workflows/fullstack.yml) | Multi-service deployment |
+| Template                                 | Purpose                   |
+| ---------------------------------------- | ------------------------- |
+| [python.yml](workflows/python.yml)       | Python lint, test, build  |
+| [nodejs.yml](workflows/nodejs.yml)       | Node.js lint, test, build |
+| [fullstack.yml](workflows/fullstack.yml) | Multi-service deployment  |
 
 ---
 
@@ -260,8 +260,8 @@ python scripts/generate-workflow.py --type node --deploy vercel --output .github
 
 ## References
 
-| File | Description |
-|------|-------------|
+| File                                                    | Description               |
+| ------------------------------------------------------- | ------------------------- |
 | [secret-management.md](references/secret-management.md) | Managing secrets securely |
 
 ---

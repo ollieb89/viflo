@@ -1,9 +1,9 @@
 ---
 name: Feature Request
 about: Suggest an idea or improvement for Viflo
-title: '[Feature] '
-labels: ['enhancement', 'needs-triage']
-assignees: ''
+title: "[Feature] "
+labels: ["enhancement", "needs-triage"]
+assignees: ""
 ---
 
 ## Problem Statement

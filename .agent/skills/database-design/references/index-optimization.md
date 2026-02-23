@@ -29,6 +29,7 @@ Index('ix_users_email', 'email')  # Equality and range queries
 ```
 
 **Best for:**
+
 - Equality: `WHERE email = 'user@example.com'`
 - Range: `WHERE created_at > '2024-01-01'`
 - Ordering: `ORDER BY created_at`
@@ -40,13 +41,14 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 class Event(Base):
     payload: Mapped[dict] = mapped_column(JSONB)
-    
+
     __table_args__ = (
         Index('ix_events_payload', 'payload', postgresql_using='gin'),
     )
 ```
 
 **Best for:**
+
 - JSONB columns
 - Array columns
 - Full-text search
@@ -59,7 +61,7 @@ from sqlalchemy.dialects.postgresql import TSTZRANGE
 
 class Reservation(Base):
     period: Mapped[TSTZRANGE]
-    
+
     __table_args__ = (
         Index('ix_reservations_period', 'period', postgresql_using='gist'),
     )
@@ -80,6 +82,7 @@ Index('ix_users_org_email', 'organization_id', 'email')
 ```
 
 **Rules:**
+
 1. Equality columns first (=)
 2. Range columns second (>, <, BETWEEN)
 3. Low cardinality columns last
@@ -100,7 +103,7 @@ Index('ix_users_email_name', 'email', 'name', 'created_at')
 
 ```python
 # Only index active users
-Index('ix_active_users_email', 'email', 
+Index('ix_active_users_email', 'email',
       postgresql_where="is_active = true")
 
 # Query:
@@ -108,6 +111,7 @@ Index('ix_active_users_email', 'email',
 ```
 
 **Benefits:**
+
 - Smaller index size
 - Faster queries on subset
 - Efficient for soft deletes
@@ -169,14 +173,14 @@ op.execute("ANALYZE users")
 
 ```sql
 -- PostgreSQL index usage statistics
-SELECT 
+SELECT
     schemaname,
     tablename,
     indexname,
     idx_scan,        -- Number of index scans
     idx_tup_read,    -- Tuples read via index
     idx_tup_fetch    -- Tuples fetched via index
-FROM pg_stat_user_indexes 
+FROM pg_stat_user_indexes
 WHERE schemaname = 'public'
 ORDER BY idx_scan DESC;
 ```
@@ -185,7 +189,7 @@ ORDER BY idx_scan DESC;
 
 ```sql
 -- Tables with sequential scans
-SELECT 
+SELECT
     schemaname,
     tablename,
     seq_scan,        -- Sequential scans
@@ -203,7 +207,7 @@ ORDER BY seq_tup_read DESC;
 
 ```sql
 -- Indexes rarely used (consider dropping)
-SELECT 
+SELECT
     schemaname,
     tablename,
     indexname,
@@ -244,6 +248,7 @@ Index('ix_orders_status_date', 'status', 'created_at')
 ### 3. Ignoring Write Performance
 
 Each index:
+
 - Speeds up SELECTs
 - Slows down INSERT/UPDATE/DELETE
 - Uses disk space
@@ -273,12 +278,12 @@ After adding an index:
 
 ## Quick Reference
 
-| Scenario | Index Type | Example |
-|----------|------------|---------|
-| Primary key lookup | B-Tree | `WHERE id = 1` |
-| Foreign key | B-Tree | `JOIN ON user_id` |
-| Text search | GIN | `WHERE payload @> '{"key": "value"}'` |
-| Array contains | GIN | `WHERE tags && ['python']` |
-| Range queries | B-Tree | `WHERE created_at > '2024-01-01'` |
-| Partial data | Partial B-Tree | `WHERE is_active = true` |
-| Case-insensitive | Expression | `WHERE lower(email) = 'x'` |
+| Scenario           | Index Type     | Example                               |
+| ------------------ | -------------- | ------------------------------------- |
+| Primary key lookup | B-Tree         | `WHERE id = 1`                        |
+| Foreign key        | B-Tree         | `JOIN ON user_id`                     |
+| Text search        | GIN            | `WHERE payload @> '{"key": "value"}'` |
+| Array contains     | GIN            | `WHERE tags && ['python']`            |
+| Range queries      | B-Tree         | `WHERE created_at > '2024-01-01'`     |
+| Partial data       | Partial B-Tree | `WHERE is_active = true`              |
+| Case-insensitive   | Expression     | `WHERE lower(email) = 'x'`            |

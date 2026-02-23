@@ -28,13 +28,16 @@ This workflow guides the creation of `docs/planning/PLAN.md` with a flexible, us
 4. **Generate Blueprint**
    - Create `docs/planning/PLAN.md` using the collected information.
    - Initial Structure:
+
      ```markdown
      # Architectural Blueprint
 
      ## Goal
+
      [Project Goal]
 
      ## Tech Stack
+
      - Frontend: [Frontend Framework]
      - Backend: [Backend Framework]
      - Database: [Database System]
@@ -42,15 +45,19 @@ This workflow guides the creation of `docs/planning/PLAN.md` with a flexible, us
      - Deployment: [Deployment Target]
 
      ## System Constraints
+
      ### Infrastructure
+
      - Deployment: [Infrastructure Details]
      - Database: [Database Details]
 
      ### Budget
+
      - Latency Target: [Latency Target]
      - Token Budget: [Token Budget]
 
      ### Security
+
      - Auth: [Auth Strategy]
      - RLS: [Row Level Security Policy]
      ```

@@ -1,6 +1,6 @@
 # Creating Skills for Viflo
 
-Skills are reusable knowledge packages that AI agents load as context when working on specific tasks. A skill tells the agent *how to do something well* — encoding best practices, patterns, and conventions that would otherwise have to be communicated through lengthy prompts.
+Skills are reusable knowledge packages that AI agents load as context when working on specific tasks. A skill tells the agent _how to do something well_ — encoding best practices, patterns, and conventions that would otherwise have to be communicated through lengthy prompts.
 
 This guide explains how to create a skill that the community can use and benefit from.
 
@@ -58,19 +58,21 @@ description: |
   or implementing authentication. Triggers on phrases like 'FastAPI endpoint',
   'SQLAlchemy model', 'Pydantic schema'."
 triggers:
-  - Creating FastAPI endpoints      # Optional: explicit trigger list
+  - Creating FastAPI endpoints # Optional: explicit trigger list
   - Designing database models
   - Implementing authentication
-version: "1.0"                      # Optional but recommended
-tags: [backend, python, fastapi]    # Optional: for discoverability
+version: "1.0" # Optional but recommended
+tags: [backend, python, fastapi] # Optional: for discoverability
 ---
 ```
 
 **Required fields:**
+
 - `name` — Must match the directory name exactly (kebab-case)
 - `description` — One or two paragraphs. The first sentence should clearly state what the skill covers. Include trigger conditions so agents know when to load it.
 
 **Optional but recommended:**
+
 - `triggers` — Explicit list of situations that warrant loading this skill
 - `version` — Semantic version for tracking changes
 - `tags` — Keywords for discoverability
@@ -83,23 +85,30 @@ After the frontmatter, write the skill content in Markdown. Structure it for AI 
 # Skill Name
 
 ## Overview
+
 Brief summary of what this skill covers and why it matters.
 
 ## When to Use This Skill
+
 - Specific situation 1
 - Specific situation 2
 
 ## Core Principles
+
 High-level rules that govern all decisions in this domain.
 
 ## Patterns
+
 ### Pattern Name
+
 Explanation with code example.
 
 ## Common Mistakes
+
 Things agents (and humans) frequently get wrong — and how to avoid them.
 
 ## Quick Reference
+
 Tables, checklists, or command references for fast lookup.
 ```
 
@@ -112,10 +121,13 @@ Tables, checklists, or command references for fast lookup.
 Vague advice is useless. Compare:
 
 **Too vague:**
+
 > Write clean code with good error handling.
 
 **Actionable:**
+
 > Every FastAPI endpoint must:
+>
 > 1. Validate input with a Pydantic model (never raw `dict`)
 > 2. Return typed response models (never `dict` or `Any`)
 > 3. Raise `HTTPException` with meaningful status codes, not return error strings
@@ -125,12 +137,13 @@ Vague advice is useless. Compare:
 
 AI agents learn from examples. For every rule, show the correct pattern:
 
-```markdown
+````markdown
 ## Repository Pattern
 
 Always use the repository pattern. Never query the database directly in endpoint handlers.
 
 **Correct:**
+
 ```python
 # endpoints/users.py
 @router.get("/users/{user_id}")
@@ -140,8 +153,10 @@ async def get_user(user_id: int, repo: UserRepo = Depends(get_user_repo)):
         raise HTTPException(status_code=404, detail="User not found")
     return UserResponse.model_validate(user)
 ```
+````
 
 **Incorrect:**
+
 ```python
 # Direct DB access in endpoint — avoid this
 @router.get("/users/{user_id}")
@@ -149,7 +164,8 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     user = await db.get(User, user_id)  # Wrong: bypass repository
     return user
 ```
-```
+
+````
 
 ### Document "Why", Not Just "What"
 
@@ -161,7 +177,7 @@ An agent that understands the reasoning makes better decisions in edge cases:
 Pydantic v2's `model_validate()` is required for ORM mode (converting SQLAlchemy objects
 to Pydantic schemas). It also provides better error messages and is the v2 idiomatic approach.
 `Model(**data)` works for dicts but silently fails with ORM objects.
-```
+````
 
 ### Avoid Hallucination Traps
 
@@ -241,12 +257,12 @@ A skill that doesn't produce measurably better output doesn't belong in the coll
 
 Skill directories use **kebab-case** and follow this pattern:
 
-| Pattern | Examples |
-|---------|---------|
-| `{technology}-patterns` | `react-patterns`, `rust-patterns` |
+| Pattern                   | Examples                                            |
+| ------------------------- | --------------------------------------------------- |
+| `{technology}-patterns`   | `react-patterns`, `rust-patterns`                   |
 | `{technology}-guidelines` | `frontend-dev-guidelines`, `backend-dev-guidelines` |
-| `{domain}-design` | `database-design`, `api-design-principles` |
-| `{technology}-{type}` | `fastapi-templates`, `postgresql` |
+| `{domain}-design`         | `database-design`, `api-design-principles`          |
+| `{technology}-{type}`     | `fastapi-templates`, `postgresql`                   |
 
 Avoid generic names like `best-practices` or `guidelines` — be specific about what domain the skill covers.
 
@@ -268,13 +284,13 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full contribution workflow.
 
 The following existing skills are good references for style and structure:
 
-| Skill | What to Study |
-|-------|--------------|
-| `backend-dev-guidelines` | Comprehensive tech stack skill with code examples |
-| `frontend-dev-guidelines` | Trigger phrase examples, "when to use" clarity |
-| `gsd-workflow` | Procedural skill covering a methodology |
-| `database-design` | Reference tables and decision guides |
-| `ci-cd-pipelines` | Multi-platform skill with workflow examples |
+| Skill                     | What to Study                                     |
+| ------------------------- | ------------------------------------------------- |
+| `backend-dev-guidelines`  | Comprehensive tech stack skill with code examples |
+| `frontend-dev-guidelines` | Trigger phrase examples, "when to use" clarity    |
+| `gsd-workflow`            | Procedural skill covering a methodology           |
+| `database-design`         | Reference tables and decision guides              |
+| `ci-cd-pipelines`         | Multi-platform skill with workflow examples       |
 
 ---
 

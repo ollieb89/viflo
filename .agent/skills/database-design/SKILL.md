@@ -27,6 +27,7 @@ python .agent/skills/database-design/scripts/generate-schema.py User \
 ```
 
 Generates:
+
 - SQLAlchemy 2.0 model
 - Alembic migration
 - Pydantic schemas
@@ -98,13 +99,13 @@ python migration-helper.py safety alembic/versions/xxx.py
 
 ### Data Types
 
-| Type | Use When | SQLAlchemy |
-|------|----------|------------|
-| UUID | Distributed systems, exposed IDs | `UUID(as_uuid=True)` |
-| JSONB | Flexible schema, nested data | `JSONB` |
-| ARRAY | Lists of values | `ARRAY(String)` |
-| ENUM | Fixed set of values | `Enum(Status)` |
-| TIMESTAMPTZ | Date/time with timezone | `DateTime(timezone=True)` |
+| Type        | Use When                         | SQLAlchemy                |
+| ----------- | -------------------------------- | ------------------------- |
+| UUID        | Distributed systems, exposed IDs | `UUID(as_uuid=True)`      |
+| JSONB       | Flexible schema, nested data     | `JSONB`                   |
+| ARRAY       | Lists of values                  | `ARRAY(String)`           |
+| ENUM        | Fixed set of values              | `Enum(Status)`            |
+| TIMESTAMPTZ | Date/time with timezone          | `DateTime(timezone=True)` |
 
 ### Essential Indexes
 
@@ -141,6 +142,7 @@ python migration-helper.py safety alembic/versions/xxx.py
 ```
 
 **Flags unsafe operations:**
+
 - DROP TABLE / COLUMN
 - ALTER COLUMN TYPE (rewrites table)
 - ADD COLUMN NOT NULL without default
@@ -169,19 +171,19 @@ stmt = select(User).options(selectinload(User.orders))
 
 ## References
 
-| File | Description |
-|------|-------------|
-| [postgresql-patterns.md](references/postgresql-patterns.md) | UUID, JSONB, arrays, RLS |
-| [index-optimization.md](references/index-optimization.md) | Index types, optimization |
-| [schema-design.md](schema-design.md) | Normalization, relationships |
-| [migrations.md](migrations.md) | Migration patterns |
+| File                                                        | Description                  |
+| ----------------------------------------------------------- | ---------------------------- |
+| [postgresql-patterns.md](references/postgresql-patterns.md) | UUID, JSONB, arrays, RLS     |
+| [index-optimization.md](references/index-optimization.md)   | Index types, optimization    |
+| [schema-design.md](schema-design.md)                        | Normalization, relationships |
+| [migrations.md](migrations.md)                              | Migration patterns           |
 
 ---
 
 ## Templates
 
-| Template | Purpose |
-|----------|---------|
+| Template          | Purpose                            |
+| ----------------- | ---------------------------------- |
 | `postgres-setup/` | Docker Compose + PostgreSQL config |
 
 ---
@@ -190,7 +192,7 @@ stmt = select(User).options(selectinload(User.orders))
 
 ❌ **Default to PostgreSQL** for simple apps (SQLite may suffice)  
 ❌ **Skip indexing** on foreign keys and query columns  
-❌ **Use SELECT *** - specify columns explicitly  
+❌ **Use SELECT \*** - specify columns explicitly  
 ❌ **Store JSON** when structured data is better  
 ❌ **Ignore N+1 queries** - use eager loading  
 ❌ **Big migrations** without testing on production-like data
@@ -201,12 +203,12 @@ stmt = select(User).options(selectinload(User.orders))
 
 ### Choosing Database
 
-| Use Case | Recommendation |
-|----------|----------------|
-| Simple app, single user | SQLite |
-| Web app, moderate traffic | PostgreSQL |
-| Serverless/edge | Neon, Supabase |
-| Multi-region | CockroachDB, Spanner |
+| Use Case                  | Recommendation       |
+| ------------------------- | -------------------- |
+| Simple app, single user   | SQLite               |
+| Web app, moderate traffic | PostgreSQL           |
+| Serverless/edge           | Neon, Supabase       |
+| Multi-region              | CockroachDB, Spanner |
 
 ### When to Index
 

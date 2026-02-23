@@ -17,19 +17,19 @@ This document provides essential information for AI coding agents working on the
 
 ### Key Directories
 
-| Directory | Purpose |
-|-----------|---------|
-| `docs/` | Comprehensive documentation of Viflo phases and protocols |
-| `docs/plans/` | Operational plans for each of the 5 phases |
-| `docs/implementation/` | Detailed implementation guides |
-| `docs/planning/` | PLAN.md and TASKS.md templates |
-| `scripts/` | Environment setup and verification automation |
-| `.agent/` | AI agent configuration, rules, skills, and workflows |
-| `.agent/agents/` | Agent persona definitions |
-| `.agent/rules/` | Coding rules organized by technology/domain |
-| `.agent/skills/` | Reusable skill packages with SKILL.md files |
-| `.agent/workflows/` | Workflow definitions for common operations |
-| `packages/` | Shared packages (types, tsconfig, eslint-config) |
+| Directory              | Purpose                                                   |
+| ---------------------- | --------------------------------------------------------- |
+| `docs/`                | Comprehensive documentation of Viflo phases and protocols |
+| `docs/plans/`          | Operational plans for each of the 5 phases                |
+| `docs/implementation/` | Detailed implementation guides                            |
+| `docs/planning/`       | PLAN.md and TASKS.md templates                            |
+| `scripts/`             | Environment setup and verification automation             |
+| `.agent/`              | AI agent configuration, rules, skills, and workflows      |
+| `.agent/agents/`       | Agent persona definitions                                 |
+| `.agent/rules/`        | Coding rules organized by technology/domain               |
+| `.agent/skills/`       | Reusable skill packages with SKILL.md files               |
+| `.agent/workflows/`    | Workflow definitions for common operations                |
+| `packages/`            | Shared packages (types, tsconfig, eslint-config)          |
 
 ---
 
@@ -38,21 +38,23 @@ This document provides essential information for AI coding agents working on the
 This repository uses a **monorepo structure** with the following technologies:
 
 ### Package Management
+
 - **pnpm** (>=10.0.0) - Primary package manager
 - Lockfile: `pnpm-lock.yaml`
 
 ### Supported Tech Stacks (for projects built with Viflo)
 
-| Layer | Technologies |
-|-------|--------------|
+| Layer    | Technologies                                              |
+| -------- | --------------------------------------------------------- |
 | Frontend | Next.js 16, React 18/19, TypeScript 5.7+, Tailwind CSS v4 |
-| Backend | Python 3.11+, FastAPI, SQLAlchemy 2.0, Pydantic |
-| Database | PostgreSQL, Redis, PGVector |
-| Mobile | React Native 0.73+, Expo SDK 50 |
-| Testing | Vitest, Playwright, pytest |
-| AI/ML | PyTorch, Unsloth, Transformers, vLLM |
+| Backend  | Python 3.11+, FastAPI, SQLAlchemy 2.0, Pydantic           |
+| Database | PostgreSQL, Redis, PGVector                               |
+| Mobile   | React Native 0.73+, Expo SDK 50                           |
+| Testing  | Vitest, Playwright, pytest                                |
+| AI/ML    | PyTorch, Unsloth, Transformers, vLLM                      |
 
 ### Development Tools
+
 - **Aider** - Multi-file git-aware refactoring
 - **Claude Code** - Autonomous coding tasks
 - **Ollama** - Local LLM execution (DeepSeek R1, Qwen 2.5-Coder)
@@ -159,6 +161,7 @@ types: feat, fix, refactor, test, chore, docs, style, perf
 ```
 
 Examples:
+
 - `feat: add user authentication flow`
 - `fix: handle null avatar URL in profile card`
 - `test: add unit tests for user service`
@@ -193,6 +196,7 @@ pytest --cov
 ### Pre-Commit Quality Gates
 
 Before any commit:
+
 - [ ] All lint rules pass
 - [ ] Type checking passes
 - [ ] Related unit tests pass
@@ -211,6 +215,7 @@ Before any commit:
 ### Security Review Checklist
 
 For every AI-generated artifact:
+
 - [ ] No hardcoded secrets, tokens, or credentials
 - [ ] Input validation at API boundaries
 - [ ] Auth checks on protected routes/endpoints
@@ -219,6 +224,7 @@ For every AI-generated artifact:
 ### RLS (Row Level Security)
 
 When working with databases:
+
 - Default deny policy
 - Explicit policies for each role/permission
 - Audit trails for healthcare/financial data
@@ -229,15 +235,15 @@ When working with databases:
 
 When generating code or performing tasks, use this decision matrix:
 
-| Task Type | Model Tier | Examples |
-|-----------|------------|----------|
-| Planning, Architecture | Premium | Claude Opus 4.6, GPT-5.3, Gemini 3 Pro |
-| Complex Reasoning | Premium | Schema design, system architecture |
-| Multi-file Refactoring | Mid | Claude Sonnet 4.6, Gemini 2.5 Pro |
-| Single-file Generation | Cheap | Gemini 3 Flash, GPT-5 Mini |
-| Boilerplate/Code Gen | Cheap | Component scaffolding, CRUD endpoints |
-| Test Generation | Cheap | Unit tests, test fixtures |
-| Privacy-sensitive | Local | Qwen, DeepSeek via Ollama |
+| Task Type              | Model Tier | Examples                               |
+| ---------------------- | ---------- | -------------------------------------- |
+| Planning, Architecture | Premium    | Claude Opus 4.6, GPT-5.3, Gemini 3 Pro |
+| Complex Reasoning      | Premium    | Schema design, system architecture     |
+| Multi-file Refactoring | Mid        | Claude Sonnet 4.6, Gemini 2.5 Pro      |
+| Single-file Generation | Cheap      | Gemini 3 Flash, GPT-5 Mini             |
+| Boilerplate/Code Gen   | Cheap      | Component scaffolding, CRUD endpoints  |
+| Test Generation        | Cheap      | Unit tests, test fixtures              |
+| Privacy-sensitive      | Local      | Qwen, DeepSeek via Ollama              |
 
 ### Escalation Protocol
 
@@ -274,20 +280,20 @@ See the complete index at [`.agent/skills/INDEX.md`](.agent/skills/INDEX.md) for
 
 **Most commonly used skills:**
 
-| Skill | Purpose |
-|-------|---------|
-| `skill-creator` | Create new skills |
-| `app-builder` | Scaffold new applications |
-| `architectural-design` | Generate PLAN.md and architecture |
-| `database-design` | Schema design and migrations |
-| `api-patterns` | API design patterns (REST, GraphQL, tRPC) |
-| `frontend-dev-guidelines` | Frontend development best practices |
-| `backend-dev-guidelines` | FastAPI + SQLAlchemy backend standards |
-| `e2e-testing-patterns` | Playwright/Cypress testing patterns |
-| `containerization` | Docker best practices |
-| `ci-cd-pipelines` | GitHub Actions workflow templates |
-| `cloud-deployment` | Vercel, AWS, Railway deployment |
-| `gsd-workflow` | Get Shit Done spec-driven development |
+| Skill                     | Purpose                                   |
+| ------------------------- | ----------------------------------------- |
+| `skill-creator`           | Create new skills                         |
+| `app-builder`             | Scaffold new applications                 |
+| `architectural-design`    | Generate PLAN.md and architecture         |
+| `database-design`         | Schema design and migrations              |
+| `api-patterns`            | API design patterns (REST, GraphQL, tRPC) |
+| `frontend-dev-guidelines` | Frontend development best practices       |
+| `backend-dev-guidelines`  | FastAPI + SQLAlchemy backend standards    |
+| `e2e-testing-patterns`    | Playwright/Cypress testing patterns       |
+| `containerization`        | Docker best practices                     |
+| `ci-cd-pipelines`         | GitHub Actions workflow templates         |
+| `cloud-deployment`        | Vercel, AWS, Railway deployment           |
+| `gsd-workflow`            | Get Shit Done spec-driven development     |
 
 ---
 
@@ -308,9 +314,8 @@ Rules are located in `.agent/rules/` and provide technology-specific guidance:
 ---
 trigger: always_on | conditional
 description: Brief description of when this rule applies
-globs: ["*.ts", "*.tsx"]  # Optional file patterns
+globs: ["*.ts", "*.tsx"] # Optional file patterns
 ---
-
 # Rule content in markdown
 ```
 
@@ -320,25 +325,25 @@ globs: ["*.ts", "*.tsx"]  # Optional file patterns
 
 ### Phase Documentation
 
-| Document | Purpose |
-|----------|---------|
-| `docs/overview.md` | Master plan and project pillars |
-| `docs/plans/phase_01.md` | Model Strategy & Selection |
-| `docs/plans/phase_02.md` | Planning Protocol & PLAN.md generation |
-| `docs/plans/phase_03.md` | Implementation Workflow |
-| `docs/plans/phase_04.md` | Testing & CI/CD |
-| `docs/plans/phase_05.md` | Iteration & Continuous Improvement |
-| `docs/implementation/universal_agentic_development.md` | Comprehensive implementation guide |
-| `Cost-Efficient-Development-Workflow-Extended.md` | Extended workflow documentation |
+| Document                                               | Purpose                                |
+| ------------------------------------------------------ | -------------------------------------- |
+| `docs/overview.md`                                     | Master plan and project pillars        |
+| `docs/plans/phase_01.md`                               | Model Strategy & Selection             |
+| `docs/plans/phase_02.md`                               | Planning Protocol & PLAN.md generation |
+| `docs/plans/phase_03.md`                               | Implementation Workflow                |
+| `docs/plans/phase_04.md`                               | Testing & CI/CD                        |
+| `docs/plans/phase_05.md`                               | Iteration & Continuous Improvement     |
+| `docs/implementation/universal_agentic_development.md` | Comprehensive implementation guide     |
+| `Cost-Efficient-Development-Workflow-Extended.md`      | Extended workflow documentation        |
 
 ### Planning Templates
 
-| Document | Purpose |
-|----------|---------|
-| `docs/planning/PLAN.md` | Architectural blueprint template |
-| `docs/planning/TASKS.md` | Task breakdown template |
-| `.agent/skills/architectural-design/templates/PLAN.md` | PLAN.md generator template |
-| `.agent/skills/architectural-design/templates/TASKS.md` | TASKS.md generator template |
+| Document                                                | Purpose                          |
+| ------------------------------------------------------- | -------------------------------- |
+| `docs/planning/PLAN.md`                                 | Architectural blueprint template |
+| `docs/planning/TASKS.md`                                | Task breakdown template          |
+| `.agent/skills/architectural-design/templates/PLAN.md`  | PLAN.md generator template       |
+| `.agent/skills/architectural-design/templates/TASKS.md` | TASKS.md generator template      |
 
 ---
 
@@ -387,12 +392,12 @@ python3 scripts/verify_env.py
 
 ### Common Problems
 
-| Problem | Solution |
-|---------|----------|
-| API key not recognized | Check `.env` file is loaded; verify key format |
-| Ollama models not found | Run `ollama serve` in background |
-| Aider config not loading | Verify `.aider.conf.yml` syntax |
-| Pre-commit hooks failing | Run linting/fixing manually first |
+| Problem                  | Solution                                       |
+| ------------------------ | ---------------------------------------------- |
+| API key not recognized   | Check `.env` file is loaded; verify key format |
+| Ollama models not found  | Run `ollama serve` in background               |
+| Aider config not loading | Verify `.aider.conf.yml` syntax                |
+| Pre-commit hooks failing | Run linting/fixing manually first              |
 
 ---
 
@@ -406,4 +411,4 @@ python3 scripts/verify_env.py
 
 ---
 
-*This document is maintained for AI coding agents. For human contributors, see README.md.*
+_This document is maintained for AI coding agents. For human contributors, see README.md._

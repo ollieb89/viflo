@@ -2,7 +2,19 @@
 phase: 04-polish-community
 plan: 3
 subsystem: ui
-tags: [i18n, l10n, next-i18next, react-i18next, next.js, translations, rtl, intl-api, crowdin, pluralization]
+tags:
+  [
+    i18n,
+    l10n,
+    next-i18next,
+    react-i18next,
+    next.js,
+    translations,
+    rtl,
+    intl-api,
+    crowdin,
+    pluralization,
+  ]
 
 # Dependency graph
 requires:
@@ -140,12 +152,14 @@ None - no external service configuration required.
 - Translation workflow guide is suitable for sharing with translators and translation services
 
 ---
-*Phase: 04-polish-community*
-*Completed: 2026-02-23*
+
+_Phase: 04-polish-community_
+_Completed: 2026-02-23_
 
 ## Self-Check: PASSED
 
 All files verified present on disk:
+
 - FOUND: .agent/skills/i18n-implementation/SKILL.md
 - FOUND: .agent/skills/i18n-implementation/references/translation-workflow.md
 - FOUND: .agent/skills/i18n-implementation/references/i18n-patterns.md
@@ -154,6 +168,7 @@ All files verified present on disk:
 - FOUND: .planning/4-3-SUMMARY.md
 
 All commits verified present:
+
 - FOUND: f9a8eb5 (skill structure + SKILL.md)
 - FOUND: e8dda8c (Next.js i18n example)
 - FOUND: 57b4d40 (translation workflow guide)

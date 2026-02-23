@@ -10,6 +10,7 @@ Specialized agents for the GSD workflow. Kimi spawns these as subagents for spec
 
 **Input**: User's project idea, tech preferences
 **Output**: Research summary covering:
+
 - Stack recommendations
 - Feature comparisons
 - Architecture patterns
@@ -36,6 +37,7 @@ Specialized agents for the GSD workflow. Kimi spawns these as subagents for spec
 
 **Input**: Phase description, CONTEXT.md
 **Output**: Research report with:
+
 - Implementation patterns
 - Library recommendations
 - Code examples
@@ -53,6 +55,7 @@ Specialized agents for the GSD workflow. Kimi spawns these as subagents for spec
 **Output**: PLAN.md files (2-3 per phase) with XML task structure
 
 **Guidelines**:
+
 - Each plan < 150 lines
 - Tasks are atomic and independently executable
 - Include verification steps
@@ -81,6 +84,7 @@ Specialized agents for the GSD workflow. Kimi spawns these as subagents for spec
 **Output**: SUMMARY.md with what was done
 
 **Guidelines**:
+
 - Fresh context per plan (200k tokens available)
 - Execute auto tasks
 - Guide user through manual tasks
@@ -118,6 +122,7 @@ Specialized agents for the GSD workflow. Kimi spawns these as subagents for spec
 
 **Input**: Codebase files
 **Output**: Codebase analysis covering:
+
 - Tech stack
 - Architecture
 - Conventions

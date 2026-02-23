@@ -107,7 +107,7 @@ services:
       dockerfile: backend/Dockerfile
     ports:
       - 8000
-    
+
   frontend:
     build:
       dockerfile: frontend/Dockerfile
@@ -225,11 +225,11 @@ Not directly supported. Use multiple services.
 
 ## Pricing
 
-| Plan | Cost | Includes |
-|------|------|----------|
-| Starter | Free | $5/mo credit |
-| Hobby | $5/mo | 2 vCPU, 2GB RAM |
-| Pro | $50/mo | 4 vCPU, 8GB RAM |
+| Plan    | Cost   | Includes        |
+| ------- | ------ | --------------- |
+| Starter | Free   | $5/mo credit    |
+| Hobby   | $5/mo  | 2 vCPU, 2GB RAM |
+| Pro     | $50/mo | 4 vCPU, 8GB RAM |
 
 ## Best Practices
 
@@ -263,8 +263,8 @@ railway connect postgres
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| Out of memory | Upgrade plan |
-| Build fails | Check Dockerfile |
+| Issue               | Solution            |
+| ------------------- | ------------------- |
+| Out of memory       | Upgrade plan        |
+| Build fails         | Check Dockerfile    |
 | Database connection | Verify DATABASE_URL |

@@ -119,8 +119,9 @@ None - no external service configuration required.
 - New contributors can now find clear onboarding path via CONTRIBUTING.md and issue templates
 
 ---
-*Phase: 4-polish-community*
-*Completed: 2026-02-23*
+
+_Phase: 4-polish-community_
+_Completed: 2026-02-23_
 
 ## Self-Check: PASSED
 

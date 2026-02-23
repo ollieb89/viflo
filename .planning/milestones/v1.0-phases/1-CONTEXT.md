@@ -3,6 +3,7 @@
 ## Phase Goal
 
 Create essential development skills for the Viflo ecosystem:
+
 1. Frontend development guidelines (React/Next.js)
 2. Backend development guidelines (FastAPI)
 
@@ -22,11 +23,9 @@ Create essential development skills for the Viflo ecosystem:
   - Tailwind CSS v4?
   - Component architecture?
   - State management (Zustand, Redux, Context)?
-  
 - [ ] **Approach**: How prescriptive should it be?
   - Strict conventions vs flexible guidelines?
   - Code examples or just patterns?
-  
 - [ ] **Scripts**: Any automation needed?
   - Component generator?
   - Page scaffold?
@@ -40,12 +39,10 @@ Create essential development skills for the Viflo ecosystem:
   - Pydantic schemas?
   - Authentication patterns?
   - API design (REST vs GraphQL)?
-  
 - [ ] **Database**: Which patterns to include?
   - Repository pattern?
   - Unit of work?
   - Migrations with Alembic?
-  
 - [ ] **Testing**: What testing approach?
   - pytest structure?
   - Test database setup?

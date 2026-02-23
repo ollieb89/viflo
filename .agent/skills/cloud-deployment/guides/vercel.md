@@ -56,9 +56,9 @@ vercel env add DATABASE_URL
 ```javascript
 // next.config.js
 module.exports = {
-  output: 'export',  // Static HTML export
-  distDir: 'dist',
-}
+  output: "export", // Static HTML export
+  distDir: "dist",
+};
 ```
 
 ### Server-Side Rendering (SSR)
@@ -70,7 +70,7 @@ Default for Next.js. No config needed.
 ```javascript
 // pages/api/hello.js
 export default function handler(req, res) {
-  res.status(200).json({ message: 'Hello' })
+  res.status(200).json({ message: "Hello" });
 }
 ```
 
@@ -83,6 +83,7 @@ Dashboard → Project → Settings → Domains → Add
 ### Step 2: Configure DNS
 
 **Option A: Nameservers (recommended)**
+
 ```
 Type: NS
 Name: @
@@ -90,6 +91,7 @@ Value: ns1.vercel-dns.com
 ```
 
 **Option B: A Record**
+
 ```
 Type: A
 Name: @
@@ -97,6 +99,7 @@ Value: 76.76.21.21
 ```
 
 **Option C: CNAME (subdomains)**
+
 ```
 Type: CNAME
 Name: www
@@ -146,12 +149,13 @@ vercel --confirm
 ```javascript
 // api/users.js
 export default async function handler(req, res) {
-  const users = await fetchUsers()
-  res.status(200).json(users)
+  const users = await fetchUsers();
+  res.status(200).json(users);
 }
 ```
 
 Config:
+
 ```json
 {
   "functions": {
@@ -167,16 +171,16 @@ Config:
 
 ```javascript
 // middleware.js
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server";
 
 export function middleware(request) {
   // Run at edge
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: '/api/:path*',
-}
+  matcher: "/api/:path*",
+};
 ```
 
 ## Troubleshooting
@@ -193,19 +197,19 @@ vercel logs --all
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| Out of memory | Increase memory in vercel.json |
-| Timeout | Reduce function duration or split |
-| Build error | Check buildCommand in vercel.json |
+| Issue         | Solution                          |
+| ------------- | --------------------------------- |
+| Out of memory | Increase memory in vercel.json    |
+| Timeout       | Reduce function duration or split |
+| Build error   | Check buildCommand in vercel.json |
 
 ## Pricing
 
-| Plan | Cost | Limits |
-|------|------|--------|
-| Hobby | Free | 100GB bandwidth |
-| Pro | $20/mo | 1TB bandwidth |
-| Enterprise | Custom | Custom |
+| Plan       | Cost   | Limits          |
+| ---------- | ------ | --------------- |
+| Hobby      | Free   | 100GB bandwidth |
+| Pro        | $20/mo | 1TB bandwidth   |
+| Enterprise | Custom | Custom          |
 
 ## Best Practices
 

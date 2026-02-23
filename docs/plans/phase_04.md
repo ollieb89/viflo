@@ -16,7 +16,7 @@ This phase establishes the **automated verification layer** that ensures every a
 
 ### Purpose
 
-Define the overall testing pyramid, tooling, and organizational conventions. This section operationalizes the **Testing Plan** defined in Phase 2's `PLAN.md` (§ 3.6) — it specifies *how* to implement the test architecture that was *designed* during planning.
+Define the overall testing pyramid, tooling, and organizational conventions. This section operationalizes the **Testing Plan** defined in Phase 2's `PLAN.md` (§ 3.6) — it specifies _how_ to implement the test architecture that was _designed_ during planning.
 
 ### The Testing Pyramid
 
@@ -33,14 +33,14 @@ Apply the standard testing pyramid. The majority of tests should be fast, cheap 
 
 Select test tools based on the project's tech stack. The table below covers common ecosystems:
 
-| Ecosystem       | Unit / Integration     | E2E               | Accessibility  | Coverage       |
-|-----------------|------------------------|--------------------|----------------|----------------|
-| JS/TS (Node)    | Vitest                 | Playwright         | jest-axe       | v8 / istanbul  |
-| JS/TS (React)   | Vitest + Testing Lib   | Playwright         | jest-axe       | v8 / istanbul  |
-| JS/TS (Vue)     | Vitest + Vue Test Utils| Playwright         | jest-axe       | v8 / istanbul  |
-| Python (FastAPI) | pytest + httpx        | Playwright (API)   | —              | coverage.py    |
-| Python (Django) | pytest-django          | Playwright         | —              | coverage.py    |
-| Mobile (RN)     | Jest + Testing Lib     | Detox / Maestro    | —              | istanbul       |
+| Ecosystem        | Unit / Integration      | E2E              | Accessibility | Coverage      |
+| ---------------- | ----------------------- | ---------------- | ------------- | ------------- |
+| JS/TS (Node)     | Vitest                  | Playwright       | jest-axe      | v8 / istanbul |
+| JS/TS (React)    | Vitest + Testing Lib    | Playwright       | jest-axe      | v8 / istanbul |
+| JS/TS (Vue)      | Vitest + Vue Test Utils | Playwright       | jest-axe      | v8 / istanbul |
+| Python (FastAPI) | pytest + httpx          | Playwright (API) | —             | coverage.py   |
+| Python (Django)  | pytest-django           | Playwright       | —             | coverage.py   |
+| Mobile (RN)      | Jest + Testing Lib      | Detox / Maestro  | —             | istanbul      |
 
 ### Test File Organization
 
@@ -63,6 +63,7 @@ tests/
 ```
 
 **Convention Rules:**
+
 - Unit and integration tests: co-located as `<filename>.test.ts` or `test_<filename>.py`
 - E2E tests: separate `tests/e2e/` directory (they test flows, not files)
 - Test fixtures and factories: shared `tests/fixtures/` directory
@@ -72,13 +73,13 @@ tests/
 
 Define minimum coverage thresholds per layer:
 
-| Layer                    | Target  | Rationale                                      |
-|--------------------------|---------|-------------------------------------------------|
-| Business logic / services | 85%    | Core value; most bugs hide here                |
-| API route handlers        | 80%    | Entry points; must handle errors correctly     |
-| UI components             | 70%    | Test behavior, not visual layout               |
-| Utilities / helpers       | 90%    | Pure functions; easy and cheap to test          |
-| Configuration / infra     | 50%    | Smoke tests; verified by CI pipeline itself    |
+| Layer                     | Target | Rationale                                   |
+| ------------------------- | ------ | ------------------------------------------- |
+| Business logic / services | 85%    | Core value; most bugs hide here             |
+| API route handlers        | 80%    | Entry points; must handle errors correctly  |
+| UI components             | 70%    | Test behavior, not visual layout            |
+| Utilities / helpers       | 90%    | Pure functions; easy and cheap to test      |
+| Configuration / infra     | 50%    | Smoke tests; verified by CI pipeline itself |
 
 **Important:** Coverage is a floor, not a goal. 100% coverage with bad assertions is worse than 80% coverage with meaningful tests.
 
@@ -92,13 +93,13 @@ Leverage LLMs to generate the bulk of test boilerplate, then refine with human r
 
 ### Model Selection for Test Generation
 
-| Test Type          | Recommended Model Tier | Reasoning                                             |
-|--------------------|------------------------|-------------------------------------------------------|
+| Test Type          | Recommended Model Tier | Reasoning                                                     |
+| ------------------ | ---------------------- | ------------------------------------------------------------- |
 | Unit tests         | Code Execution Cheap   | Formulaic, one function → one test. Gemini Flash excels here. |
-| Integration tests  | Code Execution Mid     | Requires understanding of request/response flows.     |
-| E2E test skeletons | Code Execution Mid     | Needs understanding of UI flows and selectors.        |
-| Edge case tests    | Code Execution Mid     | Requires reasoning about failure modes.               |
-| Fuzz / property    | High Performance       | Requires deep understanding of domain invariants.     |
+| Integration tests  | Code Execution Mid     | Requires understanding of request/response flows.             |
+| E2E test skeletons | Code Execution Mid     | Needs understanding of UI flows and selectors.                |
+| Edge case tests    | Code Execution Mid     | Requires reasoning about failure modes.                       |
+| Fuzz / property    | High Performance       | Requires deep understanding of domain invariants.             |
 
 ### Test Generation Prompting Template
 
@@ -134,14 +135,14 @@ AI-generated tests must pass these checks before acceptance:
 
 ### Anti-Patterns in Generated Tests
 
-| Anti-Pattern                           | Why It Fails                                       | Correct Approach                                    |
-|----------------------------------------|----------------------------------------------------|-----------------------------------------------------|
-| `expect(result).toBeTruthy()`          | Passes on any truthy value; proves nothing         | `expect(result).toEqual(expectedValue)`             |
-| Testing mock return values             | Tests the mock, not the code                       | Assert on the *effect* of calling the mocked dep    |
-| One giant test per function            | Hard to diagnose failures                          | One behavior per test case                          |
-| No negative tests                      | Misses error handling paths                        | Always test at least one error/edge case            |
-| Snapshot tests for logic               | Brittle; break on any change                       | Use snapshots for UI rendering only                 |
-| Hardcoded dates/times                  | Flaky in different timezones / over time           | Use deterministic time mocking                      |
+| Anti-Pattern                  | Why It Fails                               | Correct Approach                                 |
+| ----------------------------- | ------------------------------------------ | ------------------------------------------------ |
+| `expect(result).toBeTruthy()` | Passes on any truthy value; proves nothing | `expect(result).toEqual(expectedValue)`          |
+| Testing mock return values    | Tests the mock, not the code               | Assert on the _effect_ of calling the mocked dep |
+| One giant test per function   | Hard to diagnose failures                  | One behavior per test case                       |
+| No negative tests             | Misses error handling paths                | Always test at least one error/edge case         |
+| Snapshot tests for logic      | Brittle; break on any change               | Use snapshots for UI rendering only              |
+| Hardcoded dates/times         | Flaky in different timezones / over time   | Use deterministic time mocking                   |
 
 ---
 
@@ -157,18 +158,18 @@ Configure linting and formatting per ecosystem. The goal is **zero-config enforc
 
 #### JavaScript / TypeScript
 
-| Tool     | Purpose                   | Config File         |
-|----------|---------------------------|---------------------|
-| ESLint   | Code quality rules        | `eslint.config.js`  |
-| Prettier | Formatting                | `.prettierrc`       |
-| TypeScript | Type checking           | `tsconfig.json`     |
+| Tool       | Purpose            | Config File        |
+| ---------- | ------------------ | ------------------ |
+| ESLint     | Code quality rules | `eslint.config.js` |
+| Prettier   | Formatting         | `.prettierrc`      |
+| TypeScript | Type checking      | `tsconfig.json`    |
 
 #### Python
 
-| Tool     | Purpose                   | Config File         |
-|----------|---------------------------|---------------------|
-| Ruff     | Linting + formatting      | `ruff.toml` or `pyproject.toml` |
-| mypy     | Static type checking      | `mypy.ini` or `pyproject.toml`  |
+| Tool | Purpose              | Config File                     |
+| ---- | -------------------- | ------------------------------- |
+| Ruff | Linting + formatting | `ruff.toml` or `pyproject.toml` |
+| mypy | Static type checking | `mypy.ini` or `pyproject.toml`  |
 
 **Note:** Ruff replaces Black, flake8, and isort in a single tool with 10–100x faster execution. Prefer Ruff for all new Python projects.
 
@@ -316,7 +317,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 23
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r lint
       - run: pnpm -r typecheck
@@ -330,7 +331,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 23
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r test -- --coverage
       - uses: actions/upload-artifact@v4
@@ -347,7 +348,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 23
-          cache: 'pnpm'
+          cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r build
       - run: npx playwright install --with-deps
@@ -430,31 +431,31 @@ Track the operational costs and performance of the AI-assisted development workf
 
 #### Agent Performance Metrics
 
-| Metric                   | Definition                                              | Target           |
-|--------------------------|---------------------------------------------------------|------------------|
-| First-pass acceptance    | % of AI-generated code that passes human review         | > 70%            |
-| Refinement rounds        | Average prompt iterations before acceptance             | < 2.5            |
-| Test generation accuracy | % of AI-generated tests that run green immediately      | > 85%            |
-| Build break rate         | % of commits that break CI                              | < 5%             |
-| Flaky test rate          | % of test runs with non-deterministic failures          | < 2%             |
+| Metric                   | Definition                                         | Target |
+| ------------------------ | -------------------------------------------------- | ------ |
+| First-pass acceptance    | % of AI-generated code that passes human review    | > 70%  |
+| Refinement rounds        | Average prompt iterations before acceptance        | < 2.5  |
+| Test generation accuracy | % of AI-generated tests that run green immediately | > 85%  |
+| Build break rate         | % of commits that break CI                         | < 5%   |
+| Flaky test rate          | % of test runs with non-deterministic failures     | < 2%   |
 
 #### Cost Metrics
 
-| Metric              | How to Track                                            | Review Cadence   |
-|----------------------|---------------------------------------------------------|------------------|
-| Token usage per task | Log API usage per agent session                         | Per sprint       |
-| Cost per feature     | Aggregate token cost across all tasks for a feature      | Per feature      |
-| Model cost breakdown | Cost distribution across model tiers (cheap/mid/high)   | Monthly          |
-| CI minutes consumed  | GitHub Actions usage dashboard                          | Monthly          |
+| Metric               | How to Track                                          | Review Cadence |
+| -------------------- | ----------------------------------------------------- | -------------- |
+| Token usage per task | Log API usage per agent session                       | Per sprint     |
+| Cost per feature     | Aggregate token cost across all tasks for a feature   | Per feature    |
+| Model cost breakdown | Cost distribution across model tiers (cheap/mid/high) | Monthly        |
+| CI minutes consumed  | GitHub Actions usage dashboard                        | Monthly        |
 
 #### Latency Metrics
 
-| Metric                  | Definition                                            | Target           |
-|--------------------------|------------------------------------------------------|------------------|
-| Agent response time      | Time from prompt to first output                     | < 30s for cheap  |
-| CI pipeline duration     | Total time from push to green/red                    | < 10 min         |
-| Time to review           | Time from PR creation to first human review          | < 4 hours        |
-| MTTR                     | Mean time to resolve a broken build                  | < 30 min         |
+| Metric               | Definition                                  | Target          |
+| -------------------- | ------------------------------------------- | --------------- |
+| Agent response time  | Time from prompt to first output            | < 30s for cheap |
+| CI pipeline duration | Total time from push to green/red           | < 10 min        |
+| Time to review       | Time from PR creation to first human review | < 4 hours       |
+| MTTR                 | Mean time to resolve a broken build         | < 30 min        |
 
 ### Monitoring Implementation
 
@@ -479,13 +480,13 @@ For larger teams or production projects:
 
 Take action when any of these thresholds are crossed:
 
-| Trigger                               | Action                                               |
-|---------------------------------------|------------------------------------------------------|
-| Monthly API spend > budget ceiling    | Shift more tasks to cheaper models or open-source    |
-| First-pass acceptance < 60%           | Improve prompting templates or switch models         |
-| CI pipeline > 15 min                  | Add caching, parallelize stages, reduce E2E scope    |
-| Flaky test rate > 5%                  | Quarantine flaky tests, fix root causes              |
-| Coverage dropping for 3+ sprints     | Mandate test-first development for new features      |
+| Trigger                            | Action                                            |
+| ---------------------------------- | ------------------------------------------------- |
+| Monthly API spend > budget ceiling | Shift more tasks to cheaper models or open-source |
+| First-pass acceptance < 60%        | Improve prompting templates or switch models      |
+| CI pipeline > 15 min               | Add caching, parallelize stages, reduce E2E scope |
+| Flaky test rate > 5%               | Quarantine flaky tests, fix root causes           |
+| Coverage dropping for 3+ sprints   | Mandate test-first development for new features   |
 
 ---
 
@@ -524,13 +525,13 @@ Flaky test identified
 ### Common Flakiness Root Causes
 
 | Root Cause                 | Solution                                              |
-|----------------------------|-------------------------------------------------------|
-| Timing / race conditions   | Use explicit waits, deterministic ordering             |
-| Shared test state          | Isolate tests; reset state in beforeEach/setUp         |
-| Date/time sensitivity      | Mock the clock; use frozen timestamps                  |
+| -------------------------- | ----------------------------------------------------- |
+| Timing / race conditions   | Use explicit waits, deterministic ordering            |
+| Shared test state          | Isolate tests; reset state in beforeEach/setUp        |
+| Date/time sensitivity      | Mock the clock; use frozen timestamps                 |
 | Network calls in tests     | Mock all external calls (MSW, responses, httpx mocks) |
-| Parallel test interference | Run conflicting tests sequentially                     |
-| Database state leaks       | Use transactions with rollback, or per-test databases  |
+| Parallel test interference | Run conflicting tests sequentially                    |
+| Database state leaks       | Use transactions with rollback, or per-test databases |
 
 ---
 

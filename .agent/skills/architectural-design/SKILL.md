@@ -13,6 +13,7 @@ triggers:
 This skill enforces a "Planning-First" development methodology by providing templates and automation for creating rigorous architectural documentation.
 
 ## Core Philosophy
+
 1.  **Plan Before Code**: No implementation begins without a `PLAN.md`.
 2.  **Granularity**: Tasks must be atomic (ACID-T).
 3.  **Constraints**: Technical and budget constraints are defined upfront.
@@ -28,20 +29,23 @@ python .agent/skills/architectural-design/scripts/init_architecture.py
 ## Outputs
 
 The skill generates:
--   `docs/planning/PLAN.md`: The Architectural Blueprint (Goal, Tech Stack, Constraints, Schema, API).
--   `docs/planning/TASKS.md`: The Implementation Backlog (Context, Action, Verification).
+
+- `docs/planning/PLAN.md`: The Architectural Blueprint (Goal, Tech Stack, Constraints, Schema, API).
+- `docs/planning/TASKS.md`: The Implementation Backlog (Context, Action, Verification).
 
 ## Template Structure
 
 ### PLAN.md
--   **Goal**: Clear objective.
--   **Tech Stack**: Frontend, Backend, Database, Auth, etc.
--   **System Constraints**: Infrastructure, Budget, Security.
--   **Database Schema**: ERD and DDL.
--   **API Surface**: Routes, Inputs (Zod), Outputs.
--   **Security**: Middleware, RLS.
+
+- **Goal**: Clear objective.
+- **Tech Stack**: Frontend, Backend, Database, Auth, etc.
+- **System Constraints**: Infrastructure, Budget, Security.
+- **Database Schema**: ERD and DDL.
+- **API Surface**: Routes, Inputs (Zod), Outputs.
+- **Security**: Middleware, RLS.
 
 ### TASKS.md
--   **Context**: Reference to specific `PLAN.md` section.
--   **Action**: Atomic implementation step.
--   **Verification**: How to confirm success.
+
+- **Context**: Reference to specific `PLAN.md` section.
+- **Action**: Atomic implementation step.
+- **Verification**: How to confirm success.

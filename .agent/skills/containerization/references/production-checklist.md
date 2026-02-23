@@ -35,10 +35,10 @@
 deploy:
   resources:
     limits:
-      cpus: '1.0'
+      cpus: "1.0"
       memory: 512M
     reservations:
-      cpus: '0.25'
+      cpus: "0.25"
       memory: 128M
 ```
 

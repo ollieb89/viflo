@@ -10,23 +10,25 @@ This example shows a complete authentication phase with 2 plans.
 ## Visual Design
 
 ### Login Page
+
 - Clean, minimal design
 - Centered card layout
 - Dark mode support
 
 ### Forms
+
 - Floating labels
 - Inline validation
 - Password visibility toggle
 
 ## Decisions
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| Auth method | JWT + httpOnly cookies | Secure, scalable |
-| Password hashing | bcrypt (10 rounds) | Industry standard |
-| Email verification | Required | Security |
-| OAuth providers | Google, GitHub | Common user preferences |
+| Decision           | Choice                 | Rationale               |
+| ------------------ | ---------------------- | ----------------------- |
+| Auth method        | JWT + httpOnly cookies | Secure, scalable        |
+| Password hashing   | bcrypt (10 rounds)     | Industry standard       |
+| Email verification | Required               | Security                |
+| OAuth providers    | Google, GitHub         | Common user preferences |
 ```
 
 ## Plan 1: Database & Models
@@ -37,7 +39,7 @@ This example shows a complete authentication phase with 2 plans.
     <phase_name>Authentication - Database & Models</phase_name>
     <goal>Create user model and authentication tables</goal>
   </overview>
-  
+
   <tasks>
     <task type="auto" priority="1">
       <name>Create User model</name>
@@ -54,7 +56,7 @@ Add User model with:
       <verify>npx prisma validate passes</verify>
       <done>User model exists with all fields</done>
     </task>
-    
+
     <task type="auto" priority="1">
       <name>Create RefreshToken model</name>
       <files>prisma/schema.prisma</files>
@@ -70,13 +72,13 @@ Add RefreshToken model with:
       <verify>Relations to User model correct</verify>
       <done>RefreshToken model exists</done>
     </task>
-    
+
     <task type="manual" priority="1">
       <name>Run database migration</name>
       <action>Run: npx prisma migrate dev --name add_auth_models</action>
       <verify>Migration file created in prisma/migrations/</verify>
     </task>
-    
+
     <task type="auto" priority="2">
       <name>Generate Prisma client</name>
       <files>src/lib/db.ts</files>
@@ -96,11 +98,11 @@ Add RefreshToken model with:
     <phase_name>Authentication - API & UI</phase_name>
     <goal>Implement login/signup endpoints and login page</goal>
   </overview>
-  
+
   <dependencies>
     <complete>Plan 1: Database & Models</complete>
   </dependencies>
-  
+
   <tasks>
     <task type="auto" priority="1">
       <name>Create auth utilities</name>
@@ -117,7 +119,7 @@ Create auth utilities:
       <verify>Unit tests pass for all functions</verify>
       <done>All auth utilities implemented and tested</done>
     </task>
-    
+
     <task type="auto" priority="1">
       <name>Create register API route</name>
       <files>src/app/api/auth/register/route.ts</files>
@@ -139,7 +141,7 @@ Returns 201
       </verify>
       <done>Registration endpoint works</done>
     </task>
-    
+
     <task type="auto" priority="1">
       <name>Create login API route</name>
       <files>src/app/api/auth/login/route.ts</files>
@@ -159,7 +161,7 @@ Invalid credentials return 401
       </verify>
       <done>Login endpoint works with cookie auth</done>
     </task>
-    
+
     <task type="auto" priority="2">
       <name>Create login page</name>
       <files>src/app/login/page.tsx, src/components/auth/LoginForm.tsx</files>
@@ -176,7 +178,7 @@ Create login page:
       <verify>Can log in through UI, redirects after success</verify>
       <done>Login page functional</done>
     </task>
-    
+
     <task type="auto" priority="2">
       <name>Create register page</name>
       <files>src/app/register/page.tsx, src/components/auth/RegisterForm.tsx</files>
@@ -199,12 +201,12 @@ Create register page:
 
 ## Verification
 
-| Check | Status |
-|-------|--------|
-| User can register | ✅ |
-| User can login | ✅ |
-| Passwords are hashed | ✅ |
-| JWT tokens in httpOnly cookies | ✅ |
-| Validation errors show inline | ✅ |
-| Responsive design | ✅ |
-| Dark mode support | ✅ |
+| Check                          | Status |
+| ------------------------------ | ------ |
+| User can register              | ✅     |
+| User can login                 | ✅     |
+| Passwords are hashed           | ✅     |
+| JWT tokens in httpOnly cookies | ✅     |
+| Validation errors show inline  | ✅     |
+| Responsive design              | ✅     |
+| Dark mode support              | ✅     |

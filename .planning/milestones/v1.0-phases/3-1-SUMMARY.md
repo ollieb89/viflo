@@ -5,19 +5,20 @@
 
 ## Deliverables
 
-| Task | Status | Deliverable |
-|------|--------|-------------|
-| Create skill structure | ✅ | Directory layout |
-| Write SKILL.md | ✅ | 234 lines |
-| Dockerfile generator | ✅ | Multi-stage generator script |
-| Docker best practices | ✅ | Reference documentation |
-| Multi-stage examples | ✅ | Language-specific examples |
-| Compose patterns | ✅ | Common patterns doc |
-| Production checklist | ✅ | Deployment verification |
+| Task                   | Status | Deliverable                  |
+| ---------------------- | ------ | ---------------------------- |
+| Create skill structure | ✅     | Directory layout             |
+| Write SKILL.md         | ✅     | 234 lines                    |
+| Dockerfile generator   | ✅     | Multi-stage generator script |
+| Docker best practices  | ✅     | Reference documentation      |
+| Multi-stage examples   | ✅     | Language-specific examples   |
+| Compose patterns       | ✅     | Common patterns doc          |
+| Production checklist   | ✅     | Deployment verification      |
 
 ## Files Created
 
 ### SKILL.md
+
 ```
 .containerization/
 └── SKILL.md (234 lines)
@@ -31,6 +32,7 @@
 ```
 
 ### Scripts
+
 ```
 scripts/
 └── generate-dockerfile.py
@@ -42,6 +44,7 @@ scripts/
 ```
 
 ### References
+
 ```
 references/
 ├── docker-best-practices.md (145 lines)
@@ -111,6 +114,7 @@ $ generate-dockerfile.py --type python --output /tmp/test
 ```
 
 Generated Dockerfile:
+
 - Python 3.11-slim builder stage
 - Dependencies cached separately
 - Non-root user (appuser)
@@ -119,13 +123,13 @@ Generated Dockerfile:
 
 ## Verification
 
-| Check | Status |
-|-------|--------|
-| SKILL.md < 500 lines | ✅ (234 lines) |
-| Generator creates working Dockerfiles | ✅ |
-| Best practices documented | ✅ |
-| Multi-stage builds explained | ✅ |
-| Production checklist actionable | ✅ |
+| Check                                 | Status         |
+| ------------------------------------- | -------------- |
+| SKILL.md < 500 lines                  | ✅ (234 lines) |
+| Generator creates working Dockerfiles | ✅             |
+| Best practices documented             | ✅             |
+| Multi-stage builds explained          | ✅             |
+| Production checklist actionable       | ✅             |
 
 ## Notes
 

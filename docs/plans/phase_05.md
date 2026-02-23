@@ -22,16 +22,16 @@ At the end of every sprint or iteration, conduct a structured review of the AI-a
 
 Collect the following data before the retrospective:
 
-| Data Source                | Metric                          | Where to Find It                              |
-|----------------------------|---------------------------------|-----------------------------------------------|
-| Phase 4 § 4.6              | First-pass acceptance rate     | Agent session logs / manual tracking          |
-| Phase 4 § 4.6              | Refinement rounds per task     | Agent session logs                             |
-| Phase 4 § 4.6              | Token usage per task           | API provider dashboard / billing              |
-| Phase 4 § 4.6              | Cost per feature               | Aggregated token cost                          |
-| Phase 4 § 4.4              | CI pipeline duration           | GitHub Actions run history                     |
-| Phase 4 § 4.7              | Flaky test count               | CI logs / quarantine list                      |
-| Phase 3 § 3.8              | Tasks completed vs planned     | Task board (GitHub Issues / Linear)           |
-| Phase 3 § 3.8              | Blocked time                   | Task board                                     |
+| Data Source   | Metric                     | Where to Find It                     |
+| ------------- | -------------------------- | ------------------------------------ |
+| Phase 4 § 4.6 | First-pass acceptance rate | Agent session logs / manual tracking |
+| Phase 4 § 4.6 | Refinement rounds per task | Agent session logs                   |
+| Phase 4 § 4.6 | Token usage per task       | API provider dashboard / billing     |
+| Phase 4 § 4.6 | Cost per feature           | Aggregated token cost                |
+| Phase 4 § 4.4 | CI pipeline duration       | GitHub Actions run history           |
+| Phase 4 § 4.7 | Flaky test count           | CI logs / quarantine list            |
+| Phase 3 § 3.8 | Tasks completed vs planned | Task board (GitHub Issues / Linear)  |
+| Phase 3 § 3.8 | Blocked time               | Task board                           |
 
 ### Sprint Review Agenda
 
@@ -49,26 +49,30 @@ Run through these items in order. Timebox the entire retrospective to **45 minut
 ## Sprint [N] Retrospective — [Date]
 
 ### Metrics Summary
-| Metric                     | Target   | Actual   | Status |
-|----------------------------|----------|----------|--------|
-| First-pass acceptance      | > 70%    |          | ✅/⚠️/❌ |
-| Avg refinement rounds      | < 2.5    |          | ✅/⚠️/❌ |
-| Monthly API cost           | < $X     |          | ✅/⚠️/❌ |
-| CI pipeline duration       | < 10 min |          | ✅/⚠️/❌ |
-| Flaky test count           | < 2%     |          | ✅/⚠️/❌ |
-| Tasks completed/planned    | > 80%    |          | ✅/⚠️/❌ |
+
+| Metric                  | Target   | Actual | Status   |
+| ----------------------- | -------- | ------ | -------- |
+| First-pass acceptance   | > 70%    |        | ✅/⚠️/❌ |
+| Avg refinement rounds   | < 2.5    |        | ✅/⚠️/❌ |
+| Monthly API cost        | < $X     |        | ✅/⚠️/❌ |
+| CI pipeline duration    | < 10 min |        | ✅/⚠️/❌ |
+| Flaky test count        | < 2%     |        | ✅/⚠️/❌ |
+| Tasks completed/planned | > 80%    |        | ✅/⚠️/❌ |
 
 ### What Worked
+
 - [List specific successes]
 
 ### What Didn't Work
+
 - [List specific issues]
 
 ### Action Items
-| # | Action                         | Owner  | Due Date   |
-|---|--------------------------------|--------|------------|
-| 1 |                                |        |            |
-| 2 |                                |        |            |
+
+| #   | Action | Owner | Due Date |
+| --- | ------ | ----- | -------- |
+| 1   |        |       |          |
+| 2   |        |       |          |
 ```
 
 ---
@@ -89,15 +93,15 @@ Maintain a scorecard per model. Update it every sprint.
 **Tier:** [High Performance / Code Execution Mid / Code Execution Cheap / Open-Source]
 **Usage:** [Task types this model was assigned]
 
-| Dimension              | Score (1-5) | Notes                                      |
-|------------------------|-------------|--------------------------------------------|
-| Code correctness       |             | Does it produce code that compiles/runs?   |
-| Convention adherence   |             | Does it follow project patterns?           |
-| Test quality           |             | Are generated tests meaningful?            |
-| Context utilization    |             | Does it use provided context effectively?  |
-| Error handling         |             | Does it handle edge cases unprompted?      |
-| Response time          |             | Is it fast enough for the workflow?        |
-| Cost efficiency        |             | Cost vs quality tradeoff                   |
+| Dimension            | Score (1-5) | Notes                                     |
+| -------------------- | ----------- | ----------------------------------------- |
+| Code correctness     |             | Does it produce code that compiles/runs?  |
+| Convention adherence |             | Does it follow project patterns?          |
+| Test quality         |             | Are generated tests meaningful?           |
+| Context utilization  |             | Does it use provided context effectively? |
+| Error handling       |             | Does it handle edge cases unprompted?     |
+| Response time        |             | Is it fast enough for the workflow?       |
+| Cost efficiency      |             | Cost vs quality tradeoff                  |
 
 **Overall Assessment:** [Keep / Monitor / Replace]
 **Recommended Action:** [None / Adjust routing / Downgrade tier / Replace with X]
@@ -107,14 +111,14 @@ Maintain a scorecard per model. Update it every sprint.
 
 Compare models side-by-side for each task type:
 
-| Task Type               | Current Model         | Acceptance Rate | Avg Cost | Latency | Verdict     |
-|--------------------------|-----------------------|-----------------|----------|---------|-------------|
-| Single-file generation   | Gemini 3 Flash        |                 |          |         | Keep/Change |
-| Multi-file refactoring   | Claude Sonnet 4.5     |                 |          |         | Keep/Change |
-| Complex debugging        | Claude Opus 4.5       |                 |          |         | Keep/Change |
-| Test generation          | GPT-5 Mini            |                 |          |         | Keep/Change |
-| Infrastructure / IaC     | Google Q CLI          |                 |          |         | Keep/Change |
-| Privacy-sensitive tasks  | Qwen / DeepSeek       |                 |          |         | Keep/Change |
+| Task Type               | Current Model     | Acceptance Rate | Avg Cost | Latency | Verdict     |
+| ----------------------- | ----------------- | --------------- | -------- | ------- | ----------- |
+| Single-file generation  | Gemini 3 Flash    |                 |          |         | Keep/Change |
+| Multi-file refactoring  | Claude Sonnet 4.5 |                 |          |         | Keep/Change |
+| Complex debugging       | Claude Opus 4.5   |                 |          |         | Keep/Change |
+| Test generation         | GPT-5 Mini        |                 |          |         | Keep/Change |
+| Infrastructure / IaC    | Google Q CLI      |                 |          |         | Keep/Change |
+| Privacy-sensitive tasks | Qwen / DeepSeek   |                 |          |         | Keep/Change |
 
 ### When to Change Models
 
@@ -144,23 +148,23 @@ Keep the total cost of AI-assisted development within budget while maintaining q
 
 Allocate the monthly AI budget across model tiers:
 
-| Tier                   | Budget Share | Rationale                                         |
-|------------------------|-------------|---------------------------------------------------|
-| High Performance       | 15–25%      | Reserved for planning, complex debugging, pivots  |
-| Code Execution Mid     | 30–40%      | Bulk of multi-file tasks, integration tests       |
-| Code Execution Cheap   | 30–40%      | Unit tests, boilerplate, single-file generation   |
-| Open-Source / Local     | 5–15%       | Privacy tasks, experimentation, offline work      |
+| Tier                 | Budget Share | Rationale                                        |
+| -------------------- | ------------ | ------------------------------------------------ |
+| High Performance     | 15–25%       | Reserved for planning, complex debugging, pivots |
+| Code Execution Mid   | 30–40%       | Bulk of multi-file tasks, integration tests      |
+| Code Execution Cheap | 30–40%       | Unit tests, boilerplate, single-file generation  |
+| Open-Source / Local  | 5–15%        | Privacy tasks, experimentation, offline work     |
 
 ### Cost Reduction Strategies
 
-| Strategy                                 | Expected Savings | Trade-off                                          |
-|------------------------------------------|------------------|----------------------------------------------------|
-| Downgrade task routing by one tier        | 20–40%          | May increase refinement rounds                     |
-| Use open-source for test generation       | 30–50%          | Lower quality; requires more human review          |
-| Reduce context window utilization         | 10–20%          | Less reference material; may reduce accuracy       |
-| Cache common prompting patterns           | 5–15%           | Prompt drift if templates aren't updated           |
-| Batch similar tasks for one agent session | 10–25%          | Longer sessions; risk of context pollution         |
-| Shift E2E tests to PR-only (not every push) | 15–30% CI mins | Slightly slower feedback for E2E regressions     |
+| Strategy                                    | Expected Savings | Trade-off                                    |
+| ------------------------------------------- | ---------------- | -------------------------------------------- |
+| Downgrade task routing by one tier          | 20–40%           | May increase refinement rounds               |
+| Use open-source for test generation         | 30–50%           | Lower quality; requires more human review    |
+| Reduce context window utilization           | 10–20%           | Less reference material; may reduce accuracy |
+| Cache common prompting patterns             | 5–15%            | Prompt drift if templates aren't updated     |
+| Batch similar tasks for one agent session   | 10–25%           | Longer sessions; risk of context pollution   |
+| Shift E2E tests to PR-only (not every push) | 15–30% CI mins   | Slightly slower feedback for E2E regressions |
 
 ### Monthly Cost Review
 
@@ -175,13 +179,13 @@ At the end of each month:
 
 ### Anti-Patterns in Cost Management
 
-| Anti-Pattern                              | Why It Fails                                         | Correct Approach                                    |
-|-------------------------------------------|------------------------------------------------------|-----------------------------------------------------|
-| Using High Performance for all tasks      | 5–10× cost with minimal quality gain for simple tasks | Route by complexity, not convenience                |
-| Optimizing cost without tracking quality  | Savings are illusory if refinement rounds double      | Track cost and acceptance rate together             |
-| Ignoring CI costs                         | Pipeline minutes add up; E2E tests are expensive     | Monitor CI spend alongside API spend               |
-| No budget ceiling                         | Spend spirals during deadline pressure               | Set and enforce monthly caps                        |
-| Refusing to use open-source models        | Misses 30–50% savings on low-stakes tasks            | Evaluate open-source for non-critical work          |
+| Anti-Pattern                             | Why It Fails                                          | Correct Approach                           |
+| ---------------------------------------- | ----------------------------------------------------- | ------------------------------------------ |
+| Using High Performance for all tasks     | 5–10× cost with minimal quality gain for simple tasks | Route by complexity, not convenience       |
+| Optimizing cost without tracking quality | Savings are illusory if refinement rounds double      | Track cost and acceptance rate together    |
+| Ignoring CI costs                        | Pipeline minutes add up; E2E tests are expensive      | Monitor CI spend alongside API spend       |
+| No budget ceiling                        | Spend spirals during deadline pressure                | Set and enforce monthly caps               |
+| Refusing to use open-source models       | Misses 30–50% savings on low-stakes tasks             | Evaluate open-source for non-critical work |
 
 ---
 
@@ -195,33 +199,33 @@ Improve Phases 2–4 based on real-world feedback. The workflow itself is a prod
 
 Review the quality of `PLAN.md` documents retrospectively:
 
-| Question                                                 | If No → Action                                              |
-|----------------------------------------------------------|-------------------------------------------------------------|
-| Did the plan have enough detail for agents to execute?   | Add more granular specifications to the template             |
-| Were there missing sections that caused blockers?        | Add sections to the Phase 2 template                         |
-| Did the tech stack assumptions hold up?                  | Update the default stack context in Phase 2 § 2.1            |
-| Were API routes complete and accurate?                   | Improve the route definition checklist                       |
-| Did the database schema need mid-sprint changes?         | Require more thorough schema review before lock              |
+| Question                                               | If No → Action                                    |
+| ------------------------------------------------------ | ------------------------------------------------- |
+| Did the plan have enough detail for agents to execute? | Add more granular specifications to the template  |
+| Were there missing sections that caused blockers?      | Add sections to the Phase 2 template              |
+| Did the tech stack assumptions hold up?                | Update the default stack context in Phase 2 § 2.1 |
+| Were API routes complete and accurate?                 | Improve the route definition checklist            |
+| Did the database schema need mid-sprint changes?       | Require more thorough schema review before lock   |
 
 ### Implementation Process Improvements (Phase 3 Feedback)
 
-| Question                                                 | If No → Action                                              |
-|----------------------------------------------------------|-------------------------------------------------------------|
-| Were tasks sized correctly (2–15 min)?                   | Adjust sizing guidelines in Phase 3 § 3.1                    |
-| Did the agent routing match task complexity?             | Update the decision matrix in Phase 3 § 3.2                  |
-| Were prompting templates effective?                      | Refine templates in Phase 3 § 3.4                            |
-| Did context management work (right files in prompt)?     | Update context loading strategy in Phase 3 § 3.5             |
-| Was the review checklist thorough enough?                | Add/remove items from the checklist in Phase 3 § 3.6         |
+| Question                                             | If No → Action                                       |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| Were tasks sized correctly (2–15 min)?               | Adjust sizing guidelines in Phase 3 § 3.1            |
+| Did the agent routing match task complexity?         | Update the decision matrix in Phase 3 § 3.2          |
+| Were prompting templates effective?                  | Refine templates in Phase 3 § 3.4                    |
+| Did context management work (right files in prompt)? | Update context loading strategy in Phase 3 § 3.5     |
+| Was the review checklist thorough enough?            | Add/remove items from the checklist in Phase 3 § 3.6 |
 
 ### Testing Process Improvements (Phase 4 Feedback)
 
-| Question                                                 | If No → Action                                              |
-|----------------------------------------------------------|-------------------------------------------------------------|
-| Were AI-generated tests meaningful?                      | Improve test generation prompts in Phase 4 § 4.2             |
-| Did coverage targets match real-world needs?             | Adjust per-layer targets in Phase 4 § 4.1                    |
-| Was the CI pipeline fast enough?                         | Optimize stages, add caching in Phase 4 § 4.4                |
-| Were there too many flaky tests?                         | Tighten test quality criteria in Phase 4 § 4.2               |
-| Did the cost monitoring catch issues early enough?       | Adjust thresholds in Phase 4 § 4.6                           |
+| Question                                           | If No → Action                                   |
+| -------------------------------------------------- | ------------------------------------------------ |
+| Were AI-generated tests meaningful?                | Improve test generation prompts in Phase 4 § 4.2 |
+| Did coverage targets match real-world needs?       | Adjust per-layer targets in Phase 4 § 4.1        |
+| Was the CI pipeline fast enough?                   | Optimize stages, add caching in Phase 4 § 4.4    |
+| Were there too many flaky tests?                   | Tighten test quality criteria in Phase 4 § 4.2   |
+| Did the cost monitoring catch issues early enough? | Adjust thresholds in Phase 4 § 4.6               |
 
 ### Template Evolution
 
@@ -245,6 +249,7 @@ The LLM landscape evolves rapidly. New models, providers, and pricing tiers emer
 Every quarter, run a standardized evaluation:
 
 **Step 1: Identify candidates**
+
 - Monitor model releases from major providers (OpenAI, Anthropic, Google, Meta, Mistral, DeepSeek)
 - Check community benchmarks (LiveCodeBench, HumanEval, Terminal-Bench, SWE-Bench)
 - Evaluate pricing changes from existing providers
@@ -253,13 +258,13 @@ Every quarter, run a standardized evaluation:
 
 Maintain a set of **10–20 representative tasks** drawn from your actual codebase:
 
-| Task Category       | Example Task                                         | Evaluation Criteria                       |
-|----------------------|------------------------------------------------------|-------------------------------------------|
-| Simple CRUD          | Generate a `GET /api/items/:id` endpoint             | Correctness, convention adherence         |
-| Complex logic        | Implement pagination with cursor-based navigation    | Edge case handling, type safety           |
-| Test generation      | Write tests for an auth middleware                    | Test quality, meaningful assertions       |
-| Debugging            | Fix a type error in a multi-file refactoring          | Root cause identification, fix quality    |
-| Planning             | Generate a schema design for a new feature            | Completeness, adherence to template       |
+| Task Category   | Example Task                                      | Evaluation Criteria                    |
+| --------------- | ------------------------------------------------- | -------------------------------------- |
+| Simple CRUD     | Generate a `GET /api/items/:id` endpoint          | Correctness, convention adherence      |
+| Complex logic   | Implement pagination with cursor-based navigation | Edge case handling, type safety        |
+| Test generation | Write tests for an auth middleware                | Test quality, meaningful assertions    |
+| Debugging       | Fix a type error in a multi-file refactoring      | Root cause identification, fix quality |
+| Planning        | Generate a schema design for a new feature        | Completeness, adherence to template    |
 
 **Step 3: Score candidates**
 
@@ -267,12 +272,12 @@ Use the Model Scorecard (§ 5.2) for each candidate. Compare against the current
 
 **Step 4: Decision**
 
-| Outcome                                   | Action                                                  |
-|-------------------------------------------|---------------------------------------------------------|
-| New model scores higher on all dimensions | Migrate immediately                                      |
-| New model scores higher on some dimensions| A/B test for 1 sprint, then decide                       |
-| New model scores similarly but is cheaper | Migrate after verifying quality parity                   |
-| New model scores lower                    | Do not migrate; re-evaluate next quarter                 |
+| Outcome                                    | Action                                   |
+| ------------------------------------------ | ---------------------------------------- |
+| New model scores higher on all dimensions  | Migrate immediately                      |
+| New model scores higher on some dimensions | A/B test for 1 sprint, then decide       |
+| New model scores similarly but is cheaper  | Migrate after verifying quality parity   |
+| New model scores lower                     | Do not migrate; re-evaluate next quarter |
 
 ### Model Migration Protocol
 
@@ -307,13 +312,13 @@ Capture learnings from AI-assisted development so they compound over time. Witho
 
 After each sprint, update the following:
 
-| Artifact                   | Contents                                                 | Location                          |
-|----------------------------|----------------------------------------------------------|-----------------------------------|
-| Prompt Library             | Effective prompting patterns per task type                | `docs/prompts/` or memory system  |
-| Anti-Pattern Log           | Failed approaches and why they failed                     | Sprint retro notes                |
-| Model Performance History  | Scorecard data over time                                  | `docs/metrics/` or memory system  |
-| Template Changelog         | Changes to planning, prompting, and testing templates     | Git history + changelog           |
-| Cost History               | Monthly cost data with breakdowns                         | Spreadsheet or dashboard          |
+| Artifact                  | Contents                                              | Location                         |
+| ------------------------- | ----------------------------------------------------- | -------------------------------- |
+| Prompt Library            | Effective prompting patterns per task type            | `docs/prompts/` or memory system |
+| Anti-Pattern Log          | Failed approaches and why they failed                 | Sprint retro notes               |
+| Model Performance History | Scorecard data over time                              | `docs/metrics/` or memory system |
+| Template Changelog        | Changes to planning, prompting, and testing templates | Git history + changelog          |
+| Cost History              | Monthly cost data with breakdowns                     | Spreadsheet or dashboard         |
 
 ### Prompt Library Maintenance
 
@@ -338,6 +343,7 @@ docs/prompts/
 ```
 
 **Maintenance rules:**
+
 - Update templates when refinement rounds for a task type average > 2.5
 - Add examples from successful first-pass generations
 - Remove prompting patterns that consistently produce low-quality output
@@ -347,12 +353,12 @@ docs/prompts/
 
 Maintain a living document of **successful patterns** and **observed anti-patterns**:
 
-| Pattern Type  | Example                                          | Outcome                                      |
-|---------------|--------------------------------------------------|-----------------------------------------------|
-| ✅ Success    | Providing 2 example files as style reference     | 90% first-pass adherence to project conventions |
-| ✅ Success    | Using repo map instead of full file contents     | 40% token reduction with no quality loss       |
-| ❌ Anti-pattern | Generating 5+ files in a single agent session   | Context pollution; files 4–5 had 50% defect rate |
-| ❌ Anti-pattern | Skipping the review checklist under time pressure | 3× more bugs found in next sprint             |
+| Pattern Type    | Example                                           | Outcome                                          |
+| --------------- | ------------------------------------------------- | ------------------------------------------------ |
+| ✅ Success      | Providing 2 example files as style reference      | 90% first-pass adherence to project conventions  |
+| ✅ Success      | Using repo map instead of full file contents      | 40% token reduction with no quality loss         |
+| ❌ Anti-pattern | Generating 5+ files in a single agent session     | Context pollution; files 4–5 had 50% defect rate |
+| ❌ Anti-pattern | Skipping the review checklist under time pressure | 3× more bugs found in next sprint                |
 
 ---
 

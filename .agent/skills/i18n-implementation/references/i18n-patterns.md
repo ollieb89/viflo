@@ -19,10 +19,10 @@ Pass dynamic values into translation strings using double-brace syntax.
 ```
 
 ```tsx
-const { t } = useTranslation('common');
+const { t } = useTranslation("common");
 
-t('welcome', { name: 'Alice' });        // "Welcome, Alice!"
-t('itemCount', { count: 3 });           // "You have 3 items in your cart"
+t("welcome", { name: "Alice" }); // "Welcome, Alice!"
+t("itemCount", { count: 3 }); // "You have 3 items in your cart"
 ```
 
 ### HTML in Translations
@@ -37,9 +37,9 @@ Use `<Trans>` component when the translation contains HTML markup or React compo
 ```
 
 ```tsx
-import { Trans, useTranslation } from 'next-i18next';
+import { Trans, useTranslation } from "next-i18next";
 
-const { t } = useTranslation('home');
+const { t } = useTranslation("home");
 
 <Trans
   i18nKey="termsNotice"
@@ -47,7 +47,7 @@ const { t } = useTranslation('home');
     terms: <a href="/terms" />,
     privacy: <a href="/privacy" />,
   }}
-/>
+/>;
 ```
 
 This renders: "By signing up, you agree to our **Terms** and **Privacy Policy**." with real anchor links, while keeping all text in the translation file.
@@ -63,7 +63,7 @@ This renders: "By signing up, you agree to our **Terms** and **Privacy Policy**.
 ```tsx
 <Trans
   i18nKey="highlight"
-  values={{ amount: '$49.99' }}
+  values={{ amount: "$49.99" }}
   components={{ bold: <strong /> }}
 />
 ```
@@ -86,8 +86,8 @@ i18next follows CLDR plural rules for each language.
 ```
 
 ```tsx
-t('item', { count: 1 });   // "1 item"
-t('item', { count: 5 });   // "5 items"
+t("item", { count: 1 }); // "1 item"
+t("item", { count: 5 }); // "5 items"
 ```
 
 ### Spanish (same two-form structure)
@@ -128,9 +128,9 @@ Arabic has 6 plural forms. Russian has 3. i18next handles this automatically via
 ```
 
 ```tsx
-t('result', { count: 0 });  // "No results found"
-t('result', { count: 1 });  // "1 result"
-t('result', { count: 42 }); // "42 results"
+t("result", { count: 0 }); // "No results found"
+t("result", { count: 1 }); // "1 result"
+t("result", { count: 42 }); // "42 results"
 ```
 
 ---
@@ -151,13 +151,13 @@ Use the `context` option when the same key needs different translations dependin
 ```
 
 ```tsx
-t('invitedBy', { context: 'female', name: 'Alice' });
+t("invitedBy", { context: "female", name: "Alice" });
 // "She invited you"
 
-t('invitedBy', { context: 'male', name: 'Bob' });
+t("invitedBy", { context: "male", name: "Bob" });
 // "He invited you"
 
-t('invitedBy', { name: 'Alex' });
+t("invitedBy", { name: "Alex" });
 // "You were invited by Alex" (no context → fallback)
 ```
 
@@ -173,7 +173,7 @@ t('invitedBy', { name: 'Alex' });
 ```
 
 ```tsx
-t('follower', { context: 'female', count: 3 });
+t("follower", { context: "female", count: 3 });
 // "3 female followers"
 ```
 
@@ -198,10 +198,10 @@ Use when you have a fixed set of values that map to translated labels, such as s
 ```
 
 ```tsx
-type Status = 'pending' | 'active' | 'suspended' | 'closed';
+type Status = "pending" | "active" | "suspended" | "closed";
 
 const StatusBadge: React.FC<{ status: Status }> = ({ status }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   return <span>{t(`status.${status}`)}</span>;
 };
 ```
@@ -211,8 +211,8 @@ const StatusBadge: React.FC<{ status: Status }> = ({ status }) => {
 Create a helper to get type safety on dynamic key segments:
 
 ```tsx
-const STATUS_KEYS = ['pending', 'active', 'suspended', 'closed'] as const;
-type StatusKey = typeof STATUS_KEYS[number];
+const STATUS_KEYS = ["pending", "active", "suspended", "closed"] as const;
+type StatusKey = (typeof STATUS_KEYS)[number];
 
 const isValidStatusKey = (key: string): key is StatusKey =>
   STATUS_KEYS.includes(key as StatusKey);
@@ -227,10 +227,10 @@ const getStatusLabel = (t: TFunction, status: string): string => {
 
 ```tsx
 // Conditionally load a namespace based on feature availability
-const namespaces = ['common', ...(featureEnabled ? ['premium'] : [])];
+const namespaces = ["common", ...(featureEnabled ? ["premium"] : [])];
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: await serverSideTranslations(locale ?? 'en', namespaces),
+  props: await serverSideTranslations(locale ?? "en", namespaces),
 });
 ```
 
@@ -243,7 +243,7 @@ By default, `serverSideTranslations` loads specified namespaces at render time. 
 ### Client-Side Lazy Load
 
 ```tsx
-import i18next from 'i18next';
+import i18next from "i18next";
 
 const loadNamespace = async (ns: string) => {
   if (!i18next.hasLoadedNamespace(ns)) {
@@ -252,8 +252,8 @@ const loadNamespace = async (ns: string) => {
 };
 
 // In a component or route handler
-await loadNamespace('reports');
-const { t } = useTranslation('reports');
+await loadNamespace("reports");
+const { t } = useTranslation("reports");
 ```
 
 ### Lazy Load on Demand (with React.lazy)
@@ -261,8 +261,8 @@ const { t } = useTranslation('reports');
 ```tsx
 // Combine code splitting with translation lazy loading
 const ReportsPage = React.lazy(async () => {
-  await loadNamespace('reports');
-  return import('./ReportsPage');
+  await loadNamespace("reports");
+  return import("./ReportsPage");
 });
 ```
 
@@ -271,7 +271,7 @@ const ReportsPage = React.lazy(async () => {
 ```tsx
 // In TanStack Router loader or Next.js loader
 export const loader = async ({ locale }: { locale: string }) => {
-  await i18next.loadNamespaces(['reports', 'exports']);
+  await i18next.loadNamespaces(["reports", "exports"]);
   return null;
 };
 ```
@@ -284,31 +284,33 @@ export const loader = async ({ locale }: { locale: string }) => {
 
 ```tsx
 const formatRelativeTime = (date: Date, locale: string): string => {
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
   const diffMs = date.getTime() - Date.now();
   const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
   if (Math.abs(diffDays) < 1) {
     const diffHours = Math.round(diffMs / (1000 * 60 * 60));
-    return rtf.format(diffHours, 'hour');
+    return rtf.format(diffHours, "hour");
   }
-  return rtf.format(diffDays, 'day');
+  return rtf.format(diffDays, "day");
 };
 
-formatRelativeTime(new Date(Date.now() - 3600000), 'en');  // "1 hour ago"
-formatRelativeTime(new Date(Date.now() - 3600000), 'es');  // "hace 1 hora"
+formatRelativeTime(new Date(Date.now() - 3600000), "en"); // "1 hour ago"
+formatRelativeTime(new Date(Date.now() - 3600000), "es"); // "hace 1 hora"
 ```
 
 ### List Formatting
 
 ```tsx
 const formatList = (items: string[], locale: string): string =>
-  new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(items);
+  new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(
+    items,
+  );
 
-formatList(['apples', 'bananas', 'oranges'], 'en');
+formatList(["apples", "bananas", "oranges"], "en");
 // "apples, bananas, and oranges"
 
-formatList(['manzanas', 'plátanos', 'naranjas'], 'es');
+formatList(["manzanas", "plátanos", "naranjas"], "es");
 // "manzanas, plátanos y naranjas"
 ```
 
@@ -322,18 +324,19 @@ Configure i18next to fall back to a parent locale or default locale when a key i
 // next-i18next.config.js
 module.exports = {
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'en-GB', 'es', 'es-MX'],
+    defaultLocale: "en",
+    locales: ["en", "en-GB", "es", "es-MX"],
   },
   fallbackLng: {
-    'en-GB': ['en'],      // British English falls back to US English
-    'es-MX': ['es'],      // Mexican Spanish falls back to Castilian Spanish
-    default: ['en'],
+    "en-GB": ["en"], // British English falls back to US English
+    "es-MX": ["es"], // Mexican Spanish falls back to Castilian Spanish
+    default: ["en"],
   },
 };
 ```
 
 With this config:
+
 - A missing `en-GB` key shows the `en` value
 - A missing `es-MX` key shows the `es` value
 - Any other missing key shows the `en` value
@@ -347,12 +350,12 @@ With this config:
 ```tsx
 const formatCompact = (value: number, locale: string): string =>
   new Intl.NumberFormat(locale, {
-    notation: 'compact',
-    compactDisplay: 'short',
+    notation: "compact",
+    compactDisplay: "short",
   }).format(value);
 
-formatCompact(1200000, 'en');  // "1.2M"
-formatCompact(1200000, 'es');  // "1,2 M"
+formatCompact(1200000, "en"); // "1.2M"
+formatCompact(1200000, "es"); // "1,2 M"
 ```
 
 ### Percentages
@@ -360,12 +363,12 @@ formatCompact(1200000, 'es');  // "1,2 M"
 ```tsx
 const formatPercent = (value: number, locale: string): string =>
   new Intl.NumberFormat(locale, {
-    style: 'percent',
+    style: "percent",
     maximumFractionDigits: 1,
   }).format(value);
 
-formatPercent(0.756, 'en');  // "75.6%"
-formatPercent(0.756, 'es');  // "75,6 %"
+formatPercent(0.756, "en"); // "75.6%"
+formatPercent(0.756, "es"); // "75,6 %"
 ```
 
 ### Unit Formatting
@@ -373,13 +376,13 @@ formatPercent(0.756, 'es');  // "75,6 %"
 ```tsx
 const formatBytes = (bytes: number, locale: string): string =>
   new Intl.NumberFormat(locale, {
-    style: 'unit',
-    unit: 'megabyte',
+    style: "unit",
+    unit: "megabyte",
     maximumFractionDigits: 1,
   }).format(bytes / 1_000_000);
 
-formatBytes(5242880, 'en');  // "5 MB"
-formatBytes(5242880, 'es');  // "5 MB"
+formatBytes(5242880, "en"); // "5 MB"
+formatBytes(5242880, "es"); // "5 MB"
 ```
 
 ---
@@ -390,17 +393,17 @@ formatBytes(5242880, 'es');  // "5 MB"
 
 ```ts
 // __tests__/translations.test.ts
-import en from '../public/locales/en/common.json';
-import es from '../public/locales/es/common.json';
+import en from "../public/locales/en/common.json";
+import es from "../public/locales/es/common.json";
 
-const flattenKeys = (obj: object, prefix = ''): string[] =>
+const flattenKeys = (obj: object, prefix = ""): string[] =>
   Object.entries(obj).flatMap(([k, v]) =>
-    typeof v === 'object'
+    typeof v === "object"
       ? flattenKeys(v as object, `${prefix}${k}.`)
-      : [`${prefix}${k}`]
+      : [`${prefix}${k}`],
   );
 
-test('ES common.json has all keys from EN common.json', () => {
+test("ES common.json has all keys from EN common.json", () => {
   const enKeys = flattenKeys(en).sort();
   const esKeys = flattenKeys(es).sort();
   expect(esKeys).toEqual(enKeys);
@@ -411,11 +414,15 @@ test('ES common.json has all keys from EN common.json', () => {
 
 ```ts
 // Using Playwright
-test('language switcher changes page text', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Welcome');
+test("language switcher changes page text", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Welcome",
+  );
 
-  await page.selectOption('[aria-label="Select language"]', 'es');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Bienvenido');
+  await page.selectOption('[aria-label="Select language"]', "es");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Bienvenido",
+  );
 });
 ```

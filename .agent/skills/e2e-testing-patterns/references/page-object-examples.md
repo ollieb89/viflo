@@ -6,7 +6,7 @@
 
 ```typescript
 // pages/BasePage.ts
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 export abstract class BasePage {
   readonly page: Page;
@@ -34,16 +34,18 @@ export abstract class BasePage {
 ```typescript
 // pages/FormPage.ts
 export class FormPage extends BasePage {
-  readonly url = '/form';
-  
+  readonly url = "/form";
+
   // Form elements
   readonly nameInput = this.page.locator('[data-testid="name-input"]');
   readonly emailInput = this.page.locator('[data-testid="email-input"]');
   readonly submitButton = this.page.locator('[data-testid="submit-button"]');
-  readonly successMessage = this.page.locator('[data-testid="success-message"]');
+  readonly successMessage = this.page.locator(
+    '[data-testid="success-message"]',
+  );
 
   async waitForLoad() {
-    await this.nameInput.waitFor({ state: 'visible' });
+    await this.nameInput.waitFor({ state: "visible" });
   }
 
   async fillForm(data: { name: string; email: string }) {
@@ -58,7 +60,7 @@ export class FormPage extends BasePage {
   async fillAndSubmit(data: { name: string; email: string }) {
     await this.fillForm(data);
     await this.submit();
-    await this.successMessage.waitFor({ state: 'visible' });
+    await this.successMessage.waitFor({ state: "visible" });
   }
 }
 ```
@@ -68,13 +70,13 @@ export class FormPage extends BasePage {
 ```typescript
 // pages/ListPage.ts
 export class ListPage extends BasePage {
-  readonly url = '/items';
-  
+  readonly url = "/items";
+
   readonly items = this.page.locator('[data-testid="item-row"]');
   readonly searchInput = this.page.locator('[data-testid="search-input"]');
 
   async waitForLoad() {
-    await this.items.first().waitFor({ state: 'visible' });
+    await this.items.first().waitFor({ state: "visible" });
   }
 
   async getItemCount(): Promise<number> {
@@ -92,8 +94,8 @@ export class ListPage extends BasePage {
 
   async search(query: string) {
     await this.searchInput.fill(query);
-    await this.page.keyboard.press('Enter');
-    await this.page.waitForLoadState('networkidle');
+    await this.page.keyboard.press("Enter");
+    await this.page.waitForLoadState("networkidle");
   }
 }
 ```
@@ -115,12 +117,12 @@ export class Modal {
 
   async confirm() {
     await this.confirmButton.click();
-    await this.modal.waitFor({ state: 'hidden' });
+    await this.modal.waitFor({ state: "hidden" });
   }
 
   async cancel() {
     await this.cancelButton.click();
-    await this.modal.waitFor({ state: 'hidden' });
+    await this.modal.waitFor({ state: "hidden" });
   }
 }
 
@@ -140,20 +142,20 @@ export class ItemPage extends BasePage {
 ```typescript
 // pages/UploadPage.ts
 export class UploadPage extends BasePage {
-  readonly url = '/upload';
-  
+  readonly url = "/upload";
+
   readonly fileInput = this.page.locator('input[type="file"]');
   readonly uploadButton = this.page.locator('[data-testid="upload-button"]');
   readonly progressBar = this.page.locator('[data-testid="progress-bar"]');
 
   async waitForLoad() {
-    await this.fileInput.waitFor({ state: 'visible' });
+    await this.fileInput.waitFor({ state: "visible" });
   }
 
   async uploadFile(filePath: string) {
     await this.fileInput.setInputFiles(filePath);
     await this.uploadButton.click();
-    await this.progressBar.waitFor({ state: 'hidden' });
+    await this.progressBar.waitFor({ state: "hidden" });
   }
 }
 ```
@@ -163,36 +165,38 @@ export class UploadPage extends BasePage {
 ```typescript
 // pages/WizardPage.ts
 export class WizardPage extends BasePage {
-  readonly url = '/wizard';
-  
+  readonly url = "/wizard";
+
   async waitForLoad() {
     await this.page.locator('[data-testid="wizard-container"]').waitFor();
   }
 
   async getCurrentStep(): Promise<number> {
-    const stepText = await this.page.locator('[data-testid="step-indicator"]').textContent();
-    return parseInt(stepText?.match(/Step (\d+)/)?.[1] || '1');
+    const stepText = await this.page
+      .locator('[data-testid="step-indicator"]')
+      .textContent();
+    return parseInt(stepText?.match(/Step (\d+)/)?.[1] || "1");
   }
 
   async nextStep() {
     await this.page.locator('[data-testid="next-button"]').click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   async previousStep() {
     await this.page.locator('[data-testid="previous-button"]').click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   async completeWizard(data: WizardData) {
     // Step 1
     await this.fillStep1(data.step1);
     await this.nextStep();
-    
+
     // Step 2
     await this.fillStep2(data.step2);
     await this.nextStep();
-    
+
     // Submit
     await this.page.locator('[data-testid="submit-button"]').click();
   }
@@ -204,23 +208,23 @@ export class WizardPage extends BasePage {
 ```typescript
 // pages/DashboardPage.ts
 export class DashboardPage extends BasePage {
-  readonly url = '/dashboard';
-  
+  readonly url = "/dashboard";
+
   readonly userMenu = this.page.locator('[data-testid="user-menu"]');
   readonly logoutButton = this.page.locator('[data-testid="logout-button"]');
 
   async waitForLoad() {
-    await this.userMenu.waitFor({ state: 'visible' });
+    await this.userMenu.waitFor({ state: "visible" });
   }
 
   async logout() {
     await this.userMenu.click();
     await this.logoutButton.click();
-    await this.page.waitForURL('/login');
+    await this.page.waitForURL("/login");
   }
 
   async getUserName(): Promise<string> {
-    return this.userMenu.textContent() || '';
+    return this.userMenu.textContent() || "";
   }
 }
 ```
@@ -230,11 +234,11 @@ export class DashboardPage extends BasePage {
 ```typescript
 // pages/ApiDrivenPage.ts
 export class ProductPage extends BasePage {
-  readonly url = '/products';
+  readonly url = "/products";
 
   async createViaAPI(product: Partial<Product>): Promise<string> {
-    const response = await this.page.request.post('/api/products', {
-      data: product
+    const response = await this.page.request.post("/api/products", {
+      data: product,
     });
     const data = await response.json();
     return data.id;

@@ -5,6 +5,7 @@
 **Goal:** Establish the foundational "Polyglot AI Environment" enabling seamless routing between Premium (Cloud), Cheap (Cloud), and Local LLMs, along with the necessary Agentic CLI toolchain and IDE configuration.
 
 **Architecture:**
+
 - **Configuration:** Centralized `.env` management for API keys.
 - **Local Infra:** Scripted setup of Ollama/vLLM for cost-effective local inference.
 - **Toolchain:** Automated installation and configuration of Aider and Claude Code with specific model routing (Architect vs. Execution).
@@ -17,6 +18,7 @@
 ### Task 1: High-Performance Model Procurement & Configuration [Completed]
 
 **Files:**
+
 - Create: `.env.template`
 - Modify: `.gitignore`
 - Create: `scripts/verify_env.py`
@@ -76,6 +78,7 @@ git commit -m "chore: setup environment configuration templates"
 ### Task 2: Local Cost-Optimization Infrastructure Setup [Completed]
 
 **Files:**
+
 - Create: `scripts/setup_local_llms.sh`
 
 **Step 1: Create Setup Script**
@@ -127,6 +130,7 @@ git commit -m "infra: add local llm setup script"
 ### Task 3: Agentic CLI Toolchain Installation & Configuration [Completed]
 
 **Files:**
+
 - Create: `scripts/install_toolchain.sh`
 - Create: `.aider.conf.yml`
 
@@ -168,6 +172,7 @@ git commit -m "chore: configure aider and toolchain scripts"
 ### Task 4: IDE Integration & Extension Setup [Completed]
 
 **Files:**
+
 - Create: `.cursorrules`
 - Create: `.vscode/settings.json`
 
@@ -177,9 +182,11 @@ Define project-specific AI rules.
 
 ```markdown
 # .cursorrules
+
 You are an expert software engineer working on the Universal Agentic Workflow project.
 
 # Project Context
+
 - Stack: Next.js, Python, TypeScript.
 - Rules:
   - ALWAYS use the implementation plans in docs/plans/.
@@ -194,16 +201,16 @@ Exclude heavy folders to save context.
 ```json
 // .vscode/settings.json
 {
-    "cursor.ai.index.exclude": {
-        "**/node_modules": true,
-        "**/dist": true,
-        ".git": true,
-        "**/.next": true
-    },
-    "files.exclude": {
-        "**/.git": true,
-        "**/.DS_Store": true
-    }
+  "cursor.ai.index.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    ".git": true,
+    "**/.next": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true
+  }
 }
 ```
 

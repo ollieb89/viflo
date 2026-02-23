@@ -6,12 +6,12 @@
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Documentation | Markdown |
-| Package Management | pnpm (>=10.0.0) |
-| Monorepo | TurboRepo structure |
-| Languages | TypeScript, Python |
+| Layer              | Technology          |
+| ------------------ | ------------------- |
+| Documentation      | Markdown            |
+| Package Management | pnpm (>=10.0.0)     |
+| Monorepo           | TurboRepo structure |
+| Languages          | TypeScript, Python  |
 
 ## Directory Structure
 
@@ -38,6 +38,7 @@ viflo/
 ## Key Components
 
 ### 1. Documentation (`docs/`)
+
 - **Phase Plans**: 5 phases of Viflo methodology
   - Phase 1: Model Strategy & Selection
   - Phase 2: Planning Protocol
@@ -48,12 +49,15 @@ viflo/
 - **Implementation Guides**: Universal agentic development guide
 
 ### 2. Agent Configuration (`.agent/`)
+
 - **Skills**: Reusable capabilities with SKILL.md
 - **Rules**: Technology-specific coding rules
 - **Workflows**: Common operation definitions
 
 ### 3. GSD Workflow Skill (`.agent/skills/gsd-workflow/`)
+
 **NEW**: Complete Get Shit Done methodology implementation
+
 - 12 helper scripts
 - 9 templates
 - 2 examples
@@ -62,6 +66,7 @@ viflo/
 ## Architecture Patterns
 
 ### Skill Structure
+
 ```
 skill-name/
 ├── SKILL.md          # Required metadata + instructions
@@ -71,6 +76,7 @@ skill-name/
 ```
 
 ### Rule Format
+
 ```yaml
 ---
 trigger: always_on | conditional
@@ -82,28 +88,33 @@ globs: ["*.ts", "*.tsx"]
 ## Code Conventions
 
 ### Naming
+
 - Files: kebab-case
 - Components: PascalCase
 - Functions: camelCase (JS/TS), snake_case (Python)
 - Constants: UPPER_SNAKE_CASE
 
 ### File Organization
+
 - Co-located tests: `.test.ts`, `test_*.py`
 - E2E tests: `tests/e2e/`
 - Skills: Self-contained directories
 
 ### Commits
+
 Conventional Commits: `type(scope): description`
 Types: feat, fix, refactor, test, chore, docs, style, perf
 
 ## Dependencies
 
 ### External Tools
+
 - **Aider**: Multi-file refactoring
 - **Claude Code**: Autonomous coding
 - **Ollama**: Local LLM execution
 
 ### API Keys Required
+
 - GEMINI_API_KEY
 - ANTHROPIC_API_KEY
 - OPENAI_API_KEY

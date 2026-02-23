@@ -22,30 +22,33 @@ This skill provides comprehensive guidelines for building robust, scalable FastA
 
 ### Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Framework | FastAPI 0.110+ |
-| ORM | SQLAlchemy 2.0 |
-| Validation | Pydantic v2 |
-| Database | PostgreSQL |
-| Migrations | Alembic |
-| Testing | pytest, pytest-asyncio, httpx |
-| Auth | JWT (python-jose) |
+| Layer      | Technology                    |
+| ---------- | ----------------------------- |
+| Framework  | FastAPI 0.110+                |
+| ORM        | SQLAlchemy 2.0                |
+| Validation | Pydantic v2                   |
+| Database   | PostgreSQL                    |
+| Migrations | Alembic                       |
+| Testing    | pytest, pytest-asyncio, httpx |
+| Auth       | JWT (python-jose)             |
 
 ## Core Principles
 
 ### 1. API-First Design
+
 - Define schemas before implementation
 - Use Pydantic models for request/response validation
 - Document endpoints with docstrings
 - Return consistent response structures
 
 ### 2. Repository Pattern
+
 - Separate data access from business logic
 - Use dependency injection for database sessions
 - Abstract database operations behind interfaces
 
 ### 3. Test-Driven Development
+
 - Write tests before implementation
 - Use test database (SQLite in-memory or test Postgres)
 - Mock external dependencies
@@ -117,6 +120,7 @@ python .agent/skills/backend-dev-guidelines/scripts/generate-endpoint.py User
 ```
 
 Generates:
+
 - Pydantic schemas (Create, Update, Response)
 - SQLAlchemy model
 - Repository class

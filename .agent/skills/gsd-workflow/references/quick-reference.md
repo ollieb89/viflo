@@ -57,13 +57,13 @@ gsd status
 
 ## Size Limits
 
-| Artifact | Max Lines |
-|----------|-----------|
-| PROJECT.md | 500 |
-| REQUIREMENTS.md | 300 |
-| ROADMAP.md | 200 |
-| PLAN.md | 150 |
-| Task | 50 |
+| Artifact        | Max Lines |
+| --------------- | --------- |
+| PROJECT.md      | 500       |
+| REQUIREMENTS.md | 300       |
+| ROADMAP.md      | 200       |
+| PLAN.md         | 150       |
+| Task            | 50        |
 
 ## Wave Execution
 
@@ -77,9 +77,9 @@ Wave 3: Plan 05 (needs 03, 04)         → sequential
 
 ```json
 {
-  "mode": "interactive",     // or "yolo"
-  "depth": "standard",       // or "quick", "comprehensive"
-  "profile": "balanced",     // or "quality", "budget"
+  "mode": "interactive", // or "yolo"
+  "depth": "standard", // or "quick", "comprehensive"
+  "profile": "balanced", // or "quality", "budget"
   "workflow": {
     "research": true,
     "plan_check": true,
@@ -92,16 +92,20 @@ Wave 3: Plan 05 (needs 03, 04)         → sequential
 ## Common Patterns
 
 ### Vertical Slice (Preferred)
+
 ```
 Plan 01: User feature end-to-end
 Plan 02: Product feature end-to-end
 ```
+
 → Parallelizes well
 
 ### Horizontal Layers (Avoid)
+
 ```
 Plan 01: All models
 Plan 02: All APIs
 Plan 03: All UI
 ```
+
 → Sequential, more conflicts

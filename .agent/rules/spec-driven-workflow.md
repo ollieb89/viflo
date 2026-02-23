@@ -12,11 +12,11 @@ Bridge the gap between requirements and implementation.
 
 Maintain these artifacts at all times:
 
-| Artifact | Purpose |
-|----------|---------|
-| `requirements.md` | User stories and acceptance criteria in structured EARS notation |
-| `design.md` | Technical architecture, sequence diagrams, implementation considerations |
-| `tasks.md` | Detailed, trackable implementation plan |
+| Artifact          | Purpose                                                                  |
+| ----------------- | ------------------------------------------------------------------------ |
+| `requirements.md` | User stories and acceptance criteria in structured EARS notation         |
+| `design.md`       | Technical architecture, sequence diagrams, implementation considerations |
+| `tasks.md`        | Detailed, trackable implementation plan                                  |
 
 ## Table of Contents
 
@@ -335,11 +335,11 @@ Never proceed with unresolved errors or ambiguities. Always document troubleshoo
 
 **EARS (Easy Approach to Requirements Syntax)** — Standard format for requirements:
 
-| Pattern | Format |
-|---------|--------|
-| **Ubiquitous** | `THE SYSTEM SHALL [expected behavior]` |
-| **Event-driven** | `WHEN [trigger event] THE SYSTEM SHALL [expected behavior]` |
-| **State-driven** | `WHILE [in specific state] THE SYSTEM SHALL [expected behavior]` |
+| Pattern               | Format                                                              |
+| --------------------- | ------------------------------------------------------------------- |
+| **Ubiquitous**        | `THE SYSTEM SHALL [expected behavior]`                              |
+| **Event-driven**      | `WHEN [trigger event] THE SYSTEM SHALL [expected behavior]`         |
+| **State-driven**      | `WHILE [in specific state] THE SYSTEM SHALL [expected behavior]`    |
 | **Unwanted behavior** | `IF [unwanted condition] THEN THE SYSTEM SHALL [required response]` |
-| **Optional** | `WHERE [feature is included] THE SYSTEM SHALL [expected behavior]` |
-| **Complex** | Combinat
+| **Optional**          | `WHERE [feature is included] THE SYSTEM SHALL [expected behavior]`  |
+| **Complex**           | Combinat                                                            |

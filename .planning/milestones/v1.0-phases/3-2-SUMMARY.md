@@ -5,19 +5,20 @@
 
 ## Deliverables
 
-| Task | Status | Deliverable |
-|------|--------|-------------|
-| Create skill structure | ✅ | Directory layout |
-| Write SKILL.md | ✅ | 160 lines |
-| Workflow generator | ✅ | GitHub Actions generator |
-| Python workflow | ✅ | Lint, test, coverage |
-| Node.js workflow | ✅ | Lint, test, build |
-| Full-stack workflow | ✅ | Multi-service pipeline |
-| Secret management | ✅ | Security best practices |
+| Task                   | Status | Deliverable              |
+| ---------------------- | ------ | ------------------------ |
+| Create skill structure | ✅     | Directory layout         |
+| Write SKILL.md         | ✅     | 160 lines                |
+| Workflow generator     | ✅     | GitHub Actions generator |
+| Python workflow        | ✅     | Lint, test, coverage     |
+| Node.js workflow       | ✅     | Lint, test, build        |
+| Full-stack workflow    | ✅     | Multi-service pipeline   |
+| Secret management      | ✅     | Security best practices  |
 
 ## Files Created
 
 ### SKILL.md
+
 ```
 ci-cd-pipelines/
 └── SKILL.md (160 lines)
@@ -30,6 +31,7 @@ ci-cd-pipelines/
 ```
 
 ### Scripts
+
 ```
 scripts/
 └── generate-workflow.py
@@ -40,6 +42,7 @@ scripts/
 ```
 
 ### Workflow Templates
+
 ```
 workflows/
 ├── python.yml       # Python lint/test with caching
@@ -48,6 +51,7 @@ workflows/
 ```
 
 ### References
+
 ```
 references/
 └── secret-management.md
@@ -76,6 +80,7 @@ python generate-workflow.py --type fullstack --output .github/workflows
 ## Generated Workflows
 
 ### Python Workflow
+
 - Lint with ruff
 - Type check with mypy
 - Test with pytest + coverage
@@ -84,6 +89,7 @@ python generate-workflow.py --type fullstack --output .github/workflows
 - Optional Docker deployment
 
 ### Node.js Workflow
+
 - Lint with ESLint
 - Type check with TypeScript
 - Test with coverage
@@ -92,6 +98,7 @@ python generate-workflow.py --type fullstack --output .github/workflows
 - Optional Vercel deployment
 
 ### Full-Stack Workflow
+
 - Lint backend (Python)
 - Lint frontend (Node.js)
 - Test backend with PostgreSQL service
@@ -106,6 +113,7 @@ $ generate-workflow.py --type python --deploy docker --output /tmp/test
 ```
 
 Generated workflow includes:
+
 - Lint job (ruff, mypy)
 - Test job (pytest with coverage)
 - Deploy job (Docker build & push)
@@ -114,12 +122,12 @@ Generated workflow includes:
 
 ## Verification
 
-| Check | Status |
-|-------|--------|
-| SKILL.md < 500 lines | ✅ (160 lines) |
-| Generator creates valid workflows | ✅ |
-| 3 workflow templates provided | ✅ |
-| Secret management documented | ✅ |
+| Check                             | Status         |
+| --------------------------------- | -------------- |
+| SKILL.md < 500 lines              | ✅ (160 lines) |
+| Generator creates valid workflows | ✅             |
+| 3 workflow templates provided     | ✅             |
+| Secret management documented      | ✅             |
 
 ## Notes
 

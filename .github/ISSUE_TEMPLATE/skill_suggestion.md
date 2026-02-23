@@ -1,9 +1,9 @@
 ---
 name: Skill Suggestion
 about: Propose a new skill package for the .agent/skills/ directory
-title: '[Skill] '
-labels: ['skill', 'needs-triage']
-assignees: ''
+title: "[Skill] "
+labels: ["skill", "needs-triage"]
+assignees: ""
 ---
 
 ## Skill Name

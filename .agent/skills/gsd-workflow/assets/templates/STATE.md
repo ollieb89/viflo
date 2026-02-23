@@ -8,9 +8,9 @@
 
 ## Decisions
 
-| Date | Decision | Rationale |
-|------|----------|-----------|
-| {YYYY-MM-DD} | {Decision} | {Why} |
+| Date         | Decision   | Rationale |
+| ------------ | ---------- | --------- |
+| {YYYY-MM-DD} | {Decision} | {Why}     |
 
 ## Blockers
 

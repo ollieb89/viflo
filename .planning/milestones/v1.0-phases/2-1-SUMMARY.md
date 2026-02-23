@@ -5,18 +5,19 @@
 
 ## Deliverables
 
-| Task | Status | Deliverable |
-|------|--------|-------------|
-| Enhance SKILL.md | ✅ | 216 lines, comprehensive |
-| Schema generator | ✅ | `generate-schema.py` working |
-| PostgreSQL patterns | ✅ | `postgresql-patterns.md` |
-| Migration helper | ✅ | `migration-helper.py` |
-| Postgres template | ✅ | Docker Compose setup |
-| Index optimization | ✅ | `index-optimization.md` |
+| Task                | Status | Deliverable                  |
+| ------------------- | ------ | ---------------------------- |
+| Enhance SKILL.md    | ✅     | 216 lines, comprehensive     |
+| Schema generator    | ✅     | `generate-schema.py` working |
+| PostgreSQL patterns | ✅     | `postgresql-patterns.md`     |
+| Migration helper    | ✅     | `migration-helper.py`        |
+| Postgres template   | ✅     | Docker Compose setup         |
+| Index optimization  | ✅     | `index-optimization.md`      |
 
 ## Files Created/Modified
 
 ### Scripts
+
 ```
 scripts/
 ├── generate-schema.py      # Generate model, migration, schemas, repo
@@ -24,6 +25,7 @@ scripts/
 ```
 
 ### References
+
 ```
 references/
 ├── postgresql-patterns.md  # UUID, JSONB, RLS, partitioning
@@ -31,6 +33,7 @@ references/
 ```
 
 ### Templates
+
 ```
 assets/templates/postgres-setup/
 ├── docker-compose.yml      # PostgreSQL + PgAdmin
@@ -41,6 +44,7 @@ assets/templates/postgres-setup/
 ```
 
 ### Updated
+
 ```
 SKILL.md                    # 216 lines (was 52)
 ```
@@ -71,12 +75,12 @@ $ generate-schema.py Product --fields "name:str,price:float"
 
 ## Verification
 
-| Check | Status |
-|-------|--------|
-| SKILL.md < 500 lines | ✅ (216 lines) |
-| Schema generator working | ✅ |
-| PostgreSQL patterns documented | ✅ |
-| Migration helper functional | ✅ |
+| Check                             | Status                  |
+| --------------------------------- | ----------------------- |
+| SKILL.md < 500 lines              | ✅ (216 lines)          |
+| Schema generator working          | ✅                      |
+| PostgreSQL patterns documented    | ✅                      |
+| Migration helper functional       | ✅                      |
 | Template runs with docker-compose | ✅ (verified structure) |
 
 ## Notes

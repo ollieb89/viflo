@@ -67,15 +67,15 @@ A complete agentic dev environment you can install in one command — structured
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Documentation | Markdown |
-| Package Manager | pnpm (>=10.0.0) |
-| Structure | Monorepo (TurboRepo) |
-| Languages | TypeScript 5.7+, Python 3.11+ |
-| Frontend | Next.js 16, React 19, Tailwind CSS v4 |
-| Backend | FastAPI, SQLAlchemy 2.0 |
-| Database | PostgreSQL, Redis |
+| Layer           | Technology                            |
+| --------------- | ------------------------------------- |
+| Documentation   | Markdown                              |
+| Package Manager | pnpm (>=10.0.0)                       |
+| Structure       | Monorepo (TurboRepo)                  |
+| Languages       | TypeScript 5.7+, Python 3.11+         |
+| Frontend        | Next.js 16, React 19, Tailwind CSS v4 |
+| Backend         | FastAPI, SQLAlchemy 2.0               |
+| Database        | PostgreSQL, Redis                     |
 
 ## Target Users
 
@@ -90,29 +90,31 @@ Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js tooling.
 All 14 v1.0 requirements delivered in 7 days across 5 phases, 41 commits.
 
 Known tech debt:
+
 - SKILL.md files >500 lines need modular reference file structure
 - VERIFICATION.md missing for Phases 0–3 (predated GSD plan tracking)
 
 ## Key Decisions
 
-| Date | Decision | Outcome |
-|------|----------|---------|
-| 2026-02-23 | Adopt GSD methodology | ✓ Good — structured workflow proved effective |
-| 2026-02-23 | Create gsd-workflow skill | ✓ Good — reusable across projects |
-| 2026-02-23 | Use Python for helper scripts | ✓ Good — portable, no compilation needed |
-| 2026-02-23 | Use Contributor Covenant 2.1 | ✓ Good — industry standard |
-| 2026-02-23 | next-i18next over next-intl | ✓ Good — Pages Router compatibility |
-| 2026-02-23 | Native Intl API for formatting | ✓ Good — zero dependencies |
-| 2026-02-23 | Namespace translations by domain | ✓ Good — stable under refactoring |
-| 2026-02-23 | triggers: as standard frontmatter | ✓ Good — consistent across 35 skills |
-| 2026-02-23 | INDEX.md at .agent/skills/ | ✓ Good — central skill discovery |
-| 2026-02-23 | Defer oversized SKILL.md refactor | ⚠️ Revisit — needs dedicated v1.1 plan |
+| Date       | Decision                          | Outcome                                       |
+| ---------- | --------------------------------- | --------------------------------------------- |
+| 2026-02-23 | Adopt GSD methodology             | ✓ Good — structured workflow proved effective |
+| 2026-02-23 | Create gsd-workflow skill         | ✓ Good — reusable across projects             |
+| 2026-02-23 | Use Python for helper scripts     | ✓ Good — portable, no compilation needed      |
+| 2026-02-23 | Use Contributor Covenant 2.1      | ✓ Good — industry standard                    |
+| 2026-02-23 | next-i18next over next-intl       | ✓ Good — Pages Router compatibility           |
+| 2026-02-23 | Native Intl API for formatting    | ✓ Good — zero dependencies                    |
+| 2026-02-23 | Namespace translations by domain  | ✓ Good — stable under refactoring             |
+| 2026-02-23 | triggers: as standard frontmatter | ✓ Good — consistent across 35 skills          |
+| 2026-02-23 | INDEX.md at .agent/skills/        | ✓ Good — central skill discovery              |
+| 2026-02-23 | Defer oversized SKILL.md refactor | ⚠️ Revisit — needs dedicated v1.1 plan        |
 
 ## Current Milestone: v1.1 Dogfooding
 
 **Goal:** Apply viflo's own methodology, CI templates, testing patterns, and security scanning to the viflo repository itself — proving the toolkit with its own toolkit.
 
 **Target features:**
+
 - Active GitHub Actions CI pipeline (using ci-cd-pipelines skill output)
 - Pre-commit hooks with secret detection (gitleaks/detect-secrets)
 - Live Vitest test suite for `apps/web/` with coverage ratchet
@@ -122,4 +124,4 @@ Known tech debt:
 
 ---
 
-*Last updated: 2026-02-23 after v1.1 milestone started*
+_Last updated: 2026-02-23 after v1.1 milestone started_

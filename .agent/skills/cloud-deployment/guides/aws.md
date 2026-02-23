@@ -255,13 +255,13 @@ aws cloudwatch put-metric-alarm \
 
 ## Pricing
 
-| Service | Cost | Notes |
-|---------|------|-------|
-| ECS Fargate | $0.04/vCPU/hr | Per usage |
-| Lambda | $0.20/million | First 1M free |
-| RDS | $13/mo | db.t3.micro |
-| S3 | $0.023/GB | Storage |
-| CloudFront | $0.085/GB | Data transfer |
+| Service     | Cost          | Notes         |
+| ----------- | ------------- | ------------- |
+| ECS Fargate | $0.04/vCPU/hr | Per usage     |
+| Lambda      | $0.20/million | First 1M free |
+| RDS         | $13/mo        | db.t3.micro   |
+| S3          | $0.023/GB     | Storage       |
+| CloudFront  | $0.085/GB     | Data transfer |
 
 ## Best Practices
 
@@ -287,8 +287,8 @@ aws logs tail /ecs/myapp --follow
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| Task pending | Check VPC/subnet config |
-| Out of memory | Increase task memory |
-| Health check fail | Check security groups |
+| Issue             | Solution                |
+| ----------------- | ----------------------- |
+| Task pending      | Check VPC/subnet config |
+| Out of memory     | Increase task memory    |
+| Health check fail | Check security groups   |

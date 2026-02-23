@@ -49,15 +49,15 @@ npm run test:generate Product -- --page --crud
 
 ```typescript
 // pages/ProductPage.ts
-import { BasePage } from './BasePage';
+import { BasePage } from "./BasePage";
 
 export class ProductPage extends BasePage {
-  readonly url = '/products';
-  
+  readonly url = "/products";
+
   async waitForLoad() {
     await this.page.locator('[data-testid="product-list"]').waitFor();
   }
-  
+
   async createProduct(name: string) {
     await this.page.locator('[data-testid="new-button"]').click();
     await this.page.locator('[data-testid="name-input"]').fill(name);
@@ -70,20 +70,22 @@ export class ProductPage extends BasePage {
 
 ```typescript
 // e2e/product.spec.ts
-import { test, expect } from '@playwright/test';
-import { ProductPage } from '../pages/ProductPage';
+import { test, expect } from "@playwright/test";
+import { ProductPage } from "../pages/ProductPage";
 
-test.describe('Product', () => {
+test.describe("Product", () => {
   let productPage: ProductPage;
-  
+
   test.beforeEach(async ({ page }) => {
     productPage = new ProductPage(page);
     await productPage.goto();
   });
-  
-  test('should create product', async () => {
-    await productPage.createProduct('Test Product');
-    await expect(productPage.page.locator('[data-testid="success"]')).toBeVisible();
+
+  test("should create product", async () => {
+    await productPage.createProduct("Test Product");
+    await expect(
+      productPage.page.locator('[data-testid="success"]'),
+    ).toBeVisible();
   });
 });
 ```
@@ -100,6 +102,7 @@ CI=true                           # CI mode (parallel off, retries on)
 ### Browsers
 
 Configured browsers in `playwright.config.ts`:
+
 - Chromium (Desktop Chrome)
 - Firefox (Desktop Firefox)
 - WebKit (Desktop Safari)

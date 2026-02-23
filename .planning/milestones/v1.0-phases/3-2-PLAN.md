@@ -59,77 +59,75 @@ Create script that generates:
 - Customizable via arguments
 
 Usage: python generate-workflow.py --type fullstack --deploy vercel
-      </action>
-      <verify>Script generates valid workflow files</verify>
-      <done>Workflow generator working</done>
-    </task>
-    
+</action>
+<verify>Script generates valid workflow files</verify>
+<done>Workflow generator working</done>
+</task>
+
     <task type="auto" priority="1">
       <name>Create Python project workflow</name>
       <files>.agent/skills/ci-cd-pipelines/workflows/python.yml</files>
       <action>
+
 Create workflow template for Python projects:
+
 - Lint (ruff, black, mypy)
 - Test (pytest with coverage)
 - Build Docker image
 - Push to registry
 - Deploy to staging/production
-      </action>
-      <verify>Workflow covers Python project lifecycle</verify>
-      <done>Python workflow template created</done>
-    </task>
-    
-    <task type="auto" priority="1">
-      <name>Create Node.js project workflow</name>
-      <files>.agent/skills/ci-cd-pipelines/workflows/nodejs.yml</files>
-      <action>
-Create workflow template for Node.js projects:
+  </action>
+  <verify>Workflow covers Python project lifecycle</verify>
+  <done>Python workflow template created</done>
+  </task>
+  <task type="auto" priority="1">
+  <name>Create Node.js project workflow</name>
+  <files>.agent/skills/ci-cd-pipelines/workflows/nodejs.yml</files>
+  <action>
+  Create workflow template for Node.js projects:
 - Lint (ESLint, Prettier)
 - Test (Jest/Vitest)
 - Type check (TypeScript)
 - Build
 - Deploy (Vercel/Netlify)
-      </action>
-      <verify>Workflow covers Node.js project lifecycle</verify>
-      <done>Node.js workflow template created</done>
-    </task>
-    
-    <task type="auto" priority="1">
-      <name>Create full-stack workflow</name>
-      <files>.agent/skills/ci-cd-pipelines/workflows/fullstack.yml</files>
-      <action>
-Create workflow for full-stack projects:
+  </action>
+  <verify>Workflow covers Node.js project lifecycle</verify>
+  <done>Node.js workflow template created</done>
+  </task>
+  <task type="auto" priority="1">
+  <name>Create full-stack workflow</name>
+  <files>.agent/skills/ci-cd-pipelines/workflows/fullstack.yml</files>
+  <action>
+  Create workflow for full-stack projects:
 - Backend tests and build
 - Frontend tests and build
 - E2E tests
 - Build and push Docker images
 - Deploy backend (ECS/Railway)
 - Deploy frontend (Vercel)
-      </action>
-      <verify>Workflow handles multi-service deployment</verify>
-      <done>Full-stack workflow template created</done>
-    </task>
-    
-    <task type="auto" priority="2">
-      <name>Create secret management guide</name>
-      <files>.agent/skills/ci-cd-pipelines/references/secret-management.md</files>
-      <action>
-Document secret management:
+  </action>
+  <verify>Workflow handles multi-service deployment</verify>
+  <done>Full-stack workflow template created</done>
+  </task>
+  <task type="auto" priority="2">
+  <name>Create secret management guide</name>
+  <files>.agent/skills/ci-cd-pipelines/references/secret-management.md</files>
+  <action>
+  Document secret management:
 - GitHub Secrets
 - Environment variables
 - Doppler/1Password integration
 - Best practices (no hardcoded secrets)
 - Rotation strategies
-      </action>
-      <verify>Guide security-focused and practical</verify>
-      <done>Secret management guide complete</done>
-    </task>
+  </action>
+  <verify>Guide security-focused and practical</verify>
+  <done>Secret management guide complete</done>
+  </task>
   </tasks>
-  
   <verification>
-    <check>SKILL.md under 500 lines</check>
-    <check>Workflow generator creates valid files</check>
-    <check>3 workflow templates provided</check>
-    <check>Secret management documented</check>
+  <check>SKILL.md under 500 lines</check>
+  <check>Workflow generator creates valid files</check>
+  <check>3 workflow templates provided</check>
+  <check>Secret management documented</check>
   </verification>
-</plan>
+  </plan>

@@ -91,5 +91,6 @@ None - no external service configuration required.
 - Phase 4 deliverables are now fully reachable from README.md
 
 ---
-*Phase: 04-polish-community*
-*Completed: 2026-02-23*
+
+_Phase: 04-polish-community_
+_Completed: 2026-02-23_

@@ -14,9 +14,9 @@
 
 ### Requirements Coverage
 
-| Requirement | Status | Notes |
-|-------------|--------|-------|
-| R{N}: {Requirement} | ✅/❌ | {Notes} |
+| Requirement         | Status | Notes   |
+| ------------------- | ------ | ------- |
+| R{N}: {Requirement} | ✅/❌  | {Notes} |
 
 ### Functional Testing
 
@@ -71,6 +71,6 @@
 
 ## Sign-off
 
-**Verified by**: _______________
-**Date**: _______________
-**Notes**: _______________
+**Verified by**: **\*\***\_\_\_**\*\***
+**Date**: **\*\***\_\_\_**\*\***
+**Notes**: **\*\***\_\_\_**\*\***

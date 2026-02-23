@@ -23,23 +23,24 @@ List the key changes in this PR. Focus on the "what" and "why", not a line-by-li
 
 -
 -
--
-
----
+- ***
 
 ## Testing Checklist
 
 Complete the items relevant to your change type:
 
 **All PRs:**
+
 - [ ] I have tested these changes locally
 - [ ] I have read the [CONTRIBUTING.md](../CONTRIBUTING.md) guidelines
 
 **Code / Script changes:**
+
 - [ ] `python3 scripts/verify_env.py` passes (or N/A)
 - [ ] No new warnings or errors introduced
 
 **Skill contributions (`feat` type):**
+
 - [ ] `SKILL.md` has valid YAML frontmatter
 - [ ] `name` and `description` fields are present and accurate
 - [ ] Trigger phrases in description are specific and useful
@@ -48,6 +49,7 @@ Complete the items relevant to your change type:
 - [ ] See [docs/CREATING_SKILLS.md](../docs/CREATING_SKILLS.md) for full requirements
 
 **Documentation changes:**
+
 - [ ] Links are valid and point to the correct targets
 - [ ] Content is accurate and up to date
 - [ ] Formatting renders correctly (checked preview)

@@ -7,7 +7,7 @@
 ### Development (docker-compose.yml)
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -17,14 +17,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/app           # Mount for hot reload
+      - .:/app # Mount for hot reload
       - /app/node_modules # Anonymous volume (don't overwrite)
     environment:
       - DEBUG=1
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/dev
     depends_on:
       - db
-    command: npm run dev  # Development server
+    command: npm run dev # Development server
 
   db:
     image: postgres:16
@@ -44,7 +44,7 @@ volumes:
 ### Production (docker-compose.prod.yml)
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -62,7 +62,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 512M
 
   db:
@@ -164,7 +164,7 @@ networks:
     driver: bridge
   backend_network:
     driver: bridge
-    internal: true  # No external access
+    internal: true # No external access
 ```
 
 ## Volume Management
@@ -177,7 +177,7 @@ services:
     build: .
     volumes:
       - app_data:/app/data
-      - /app/temp  # Anonymous volume (ephemeral)
+      - /app/temp # Anonymous volume (ephemeral)
 
   db:
     image: postgres:16
@@ -223,7 +223,7 @@ services:
       replicas: 3
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
       restart_policy:
         condition: on-failure
@@ -269,7 +269,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     profiles:
-      - tools  # Only started with --profile tools
+      - tools # Only started with --profile tools
 
   mailhog:
     image: mailhog/mailhog

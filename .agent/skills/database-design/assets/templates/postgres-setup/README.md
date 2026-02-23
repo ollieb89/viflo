@@ -27,12 +27,12 @@ Access PgAdmin at http://localhost:5050
 
 ### Connection Details
 
-| Setting | Value |
-|---------|-------|
-| Host | localhost |
-| Port | 5432 |
-| Database | app |
-| User | postgres |
+| Setting  | Value                |
+| -------- | -------------------- |
+| Host     | localhost            |
+| Port     | 5432                 |
+| Database | app                  |
+| User     | postgres             |
 | Password | changeme (from .env) |
 
 ### SQLAlchemy Configuration
@@ -63,6 +63,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 ## Performance Tuning
 
 The PostgreSQL configuration includes optimizations for development:
+
 - Shared buffers: 256MB
 - Work memory: 8MB
 - Effective cache size: 768MB

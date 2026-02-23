@@ -18,42 +18,51 @@ Establish a structured planning file in the repository root.
 # [Project Name] — System Design
 
 ## 1. Project Overview
+
 - One-paragraph summary of the application
 - Target users and core value proposition
 - Key constraints (budget, timeline, compliance)
 
 ## 2. Tech Stack
+
 <!-- Reference the default stack; only deviate with justification -->
 
 ## 3. Architecture
+
 - High-level system diagram (monorepo layout, service boundaries)
 - Data flow between frontend, API, and database
 
 ## 4. Database Schema
+
 - Entity definitions with relationships
 - Index strategy
 - Migration approach
 
 ## 5. API Routes
+
 - Grouped by resource/feature
 - HTTP method, path, request/response shape
 
 ## 6. Authentication & Authorization
+
 - Auth provider and flow
 - Role-based access control (if applicable)
 - Token strategy
 
 ## 7. Error Handling Strategy
+
 - Client-side error boundaries
 - API error response format
 - Logging and monitoring approach
 
 ## 8. Testing Plan
+
 - Unit, integration, and E2E test scope
 - Test tooling
 - Coverage targets
 
 ## 9. Deployment & CI/CD
+
 - Hosting target
 - Pipeline stages
 - Environment strategy (dev, staging, prod)
@@ -106,29 +115,29 @@ Only deviate from defaults when a specific requirement demands it (e.g., real-ti
 
 Specify:
 
--   **Hosting**: Vercel (serverless) vs self-hosted vs edge
--   **Database hosting**: Supabase or Neon (serverless PostgreSQL)
--   **Region / latency requirements**: geographic proximity to users
--   **Scaling expectations**: expected concurrent users, data volume
+- **Hosting**: Vercel (serverless) vs self-hosted vs edge
+- **Database hosting**: Supabase or Neon (serverless PostgreSQL)
+- **Region / latency requirements**: geographic proximity to users
+- **Scaling expectations**: expected concurrent users, data volume
 
 ### 2.3 Budget & Latency Constraints
 
 Specify:
 
--   **LLM budget ceiling**: monthly API spend cap
--   **Model latency tolerance**: acceptable response time for AI-generated artifacts
--   **Infrastructure budget**: hosting tier, database plan, storage limits
--   **Development timeline**: sprint length, milestone dates
+- **LLM budget ceiling**: monthly API spend cap
+- **Model latency tolerance**: acceptable response time for AI-generated artifacts
+- **Infrastructure budget**: hosting tier, database plan, storage limits
+- **Development timeline**: sprint length, milestone dates
 
 ### 2.4 Authentication & Security Requirements
 
 Specify:
 
--   **Auth flow**: OAuth, email/password, magic link, or SSO
--   **Provider choice**: Auth.js v5 or Clerk (from default stack)
--   **Authorization model**: role-based (RBAC), attribute-based (ABAC), or row-level security (RLS)
--   **Compliance requirements**: GDPR, HIPAA, SOC 2 (if applicable)
--   **Session strategy**: JWT vs server-side sessions
+- **Auth flow**: OAuth, email/password, magic link, or SSO
+- **Provider choice**: Auth.js v5 or Clerk (from default stack)
+- **Authorization model**: role-based (RBAC), attribute-based (ABAC), or row-level security (RLS)
+- **Compliance requirements**: GDPR, HIPAA, SOC 2 (if applicable)
+- **Session strategy**: JWT vs server-side sessions
 
 ---
 
@@ -140,20 +149,20 @@ The planning model should produce each of the following artifacts. Below is what
 
 Group by feature/resource. Include:
 
--   HTTP method and path
--   Request body / query params (with Zod types)
--   Response shape
--   Auth requirement (public, authenticated, admin)
--   Rate limiting (if applicable)
+- HTTP method and path
+- Request body / query params (with Zod types)
+- Response shape
+- Auth requirement (public, authenticated, admin)
+- Rate limiting (if applicable)
 
 **Format example:**
 
-| Method | Path              | Auth     | Description          |
-|--------|-------------------|----------|----------------------|
-| GET    | `/api/users/:id`  | Auth     | Fetch user profile   |
-| POST   | `/api/users`      | Public   | Create new user      |
-| PATCH  | `/api/users/:id`  | Auth     | Update user profile  |
-| DELETE | `/api/users/:id`  | Admin    | Delete user account  |
+| Method | Path             | Auth   | Description         |
+| ------ | ---------------- | ------ | ------------------- |
+| GET    | `/api/users/:id` | Auth   | Fetch user profile  |
+| POST   | `/api/users`     | Public | Create new user     |
+| PATCH  | `/api/users/:id` | Auth   | Update user profile |
+| DELETE | `/api/users/:id` | Admin  | Delete user account |
 
 For Next.js API Routes, specify whether each route uses the Edge Runtime or Node.js runtime.
 
@@ -161,10 +170,10 @@ For Next.js API Routes, specify whether each route uses the Edge Runtime or Node
 
 Define entities with:
 
--   Table name, columns, types
--   Primary keys, foreign keys, unique constraints
--   Indexes (specify type: btree, gin, etc.)
--   Relations (one-to-one, one-to-many, many-to-many)
+- Table name, columns, types
+- Primary keys, foreign keys, unique constraints
+- Indexes (specify type: btree, gin, etc.)
+- Relations (one-to-one, one-to-many, many-to-many)
 
 Use Prisma schema syntax or Drizzle table definitions depending on the chosen ORM. Include the migration strategy (Prisma Migrate or Drizzle Kit).
 
@@ -172,29 +181,29 @@ Use Prisma schema syntax or Drizzle table definitions depending on the chosen OR
 
 Document:
 
--   Chosen provider (Auth.js v5 or Clerk)
--   Sign-up / sign-in flows
--   Session management (JWT or database sessions)
--   Protected route patterns (Next.js middleware)
--   Role definitions and permission matrix
+- Chosen provider (Auth.js v5 or Clerk)
+- Sign-up / sign-in flows
+- Session management (JWT or database sessions)
+- Protected route patterns (Next.js middleware)
+- Role definitions and permission matrix
 
 ### 3.4 Monorepo & Service Boundaries
 
 Using Turborepo 2.0, define:
 
--   `apps/` — deployable applications (e.g., `apps/web`, `apps/api`)
--   `packages/` — shared code (e.g., `packages/ui`, `packages/db`, `packages/shared`)
--   Dependency graph between packages
--   Task definitions in `turbo.json` (build, test, lint, typecheck)
+- `apps/` — deployable applications (e.g., `apps/web`, `apps/api`)
+- `packages/` — shared code (e.g., `packages/ui`, `packages/db`, `packages/shared`)
+- Dependency graph between packages
+- Task definitions in `turbo.json` (build, test, lint, typecheck)
 
 If the project includes a Python backend (FastAPI), define it as a separate service outside the Turborepo workspace with its own dependency management (uv or Pixi).
 
 ### 3.5 Error Handling Strategy
 
--   **Client-side**: React Error Boundaries, toast notifications
--   **API layer**: Standardized error response format
--   **Validation**: Zod schema validation at API boundaries
--   **Logging**: structured logging approach (console in dev, JSON in prod)
+- **Client-side**: React Error Boundaries, toast notifications
+- **API layer**: Standardized error response format
+- **Validation**: Zod schema validation at API boundaries
+- **Logging**: structured logging approach (console in dev, JSON in prod)
 
 Standardized API error format:
 
@@ -210,18 +219,18 @@ Standardized API error format:
 
 ### 3.6 Testing Plan
 
-| Layer       | Tool          | Scope                              |
-|-------------|---------------|-------------------------------------|
-| Unit        | Vitest        | Business logic, utilities, hooks    |
-| Integration | Vitest + MSW  | API handlers with mocked externals  |
-| E2E         | Playwright    | Critical user flows                 |
-| Accessibility | jest-axe    | Component a11y compliance           |
+| Layer         | Tool         | Scope                              |
+| ------------- | ------------ | ---------------------------------- |
+| Unit          | Vitest       | Business logic, utilities, hooks   |
+| Integration   | Vitest + MSW | API handlers with mocked externals |
+| E2E           | Playwright   | Critical user flows                |
+| Accessibility | jest-axe     | Component a11y compliance          |
 
 Define:
 
--   Coverage target (e.g., 80% for business logic)
--   Test file location convention (`__tests__/` or co-located `.test.ts`)
--   CI test execution order
+- Coverage target (e.g., 80% for business logic)
+- Test file location convention (`__tests__/` or co-located `.test.ts`)
+- CI test execution order
 
 ---
 
@@ -232,9 +241,10 @@ A plan is not done on the first pass. Refine until it meets all three criteria.
 ### Refinement Criteria
 
 **Specific** — Every design element references:
--   Exact file paths (`apps/web/src/app/api/users/route.ts`)
--   Concrete types (TypeScript interfaces, Zod schemas)
--   Named dependencies with versions
+
+- Exact file paths (`apps/web/src/app/api/users/route.ts`)
+- Concrete types (TypeScript interfaces, Zod schemas)
+- Named dependencies with versions
 
 **Actionable** — Each section can be directly converted into a task for Phase 3 (Implementation) without requiring additional design decisions.
 
@@ -264,6 +274,6 @@ A plan is not done on the first pass. Refine until it meets all three criteria.
 
 The plan is ready for implementation when:
 
--   Every section of the template (Step 1) is fully populated
--   A developer can read any section and begin coding without asking questions
--   The plan has been reviewed and approved by the team lead or project owner
+- Every section of the template (Step 1) is fully populated
+- A developer can read any section and begin coding without asking questions
+- The plan has been reviewed and approved by the team lead or project owner

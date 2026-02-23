@@ -7,6 +7,7 @@
 **LOC:** ~60,775 (Markdown, JS, TS, JSON)
 
 **Key accomplishments:**
+
 - Complete 5-phase GSD methodology documentation with AGENTS.md reference guide
 - Core skills library: Frontend (React/Next.js), Backend (FastAPI), Database (PostgreSQL), E2E testing (Playwright)
 - GSD Workflow skill packaged with 12 helper scripts, reusable across projects
@@ -17,4 +18,3 @@
 **Archive:** `.planning/milestones/v1.0-ROADMAP.md`
 
 ---
-

@@ -9,7 +9,7 @@ Minimal Next.js 16 template following Viflo frontend development guidelines.
 - 🎨 Material UI v7
 - 🌐 TanStack Query for data fetching
 - 🏪 Zustand for state management
-- 📦 Path aliases (@/*)
+- 📦 Path aliases (@/\*)
 
 ## Getting Started
 

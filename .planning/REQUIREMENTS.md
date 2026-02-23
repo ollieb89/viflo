@@ -58,35 +58,37 @@ All 14 v1.0 requirements shipped and validated 2026-02-23:
 
 ## Out of Scope
 
-| Feature | Reason |
-|---------|--------|
-| IDE plugins/extensions | High complexity, not core to methodology value — revisit v1.2 |
-| AI model training/fine-tuning | Out of viflo's domain |
-| Proprietary/closed-source components | Contradicts tool-agnostic constraint |
-| Live DB provisioning (G-05) | Requires runtime infrastructure decisions not ready for v1.1 |
-| Cost dashboard UI (G-12) | Phase 5 complexity — defer until telemetry data exists |
+| Feature                              | Reason                                                        |
+| ------------------------------------ | ------------------------------------------------------------- |
+| IDE plugins/extensions               | High complexity, not core to methodology value — revisit v1.2 |
+| AI model training/fine-tuning        | Out of viflo's domain                                         |
+| Proprietary/closed-source components | Contradicts tool-agnostic constraint                          |
+| Live DB provisioning (G-05)          | Requires runtime infrastructure decisions not ready for v1.1  |
+| Cost dashboard UI (G-12)             | Phase 5 complexity — defer until telemetry data exists        |
 
 ## Traceability
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| CI-01 | Phase 5 | Pending |
-| CI-02 | Phase 5 | Pending |
-| CI-03 | Phase 5 | Pending |
-| QUAL-01 | Phase 5 | Pending |
-| QUAL-02 | Phase 5 | Pending |
-| QUAL-03 | Phase 6 | Pending |
-| QUAL-04 | Phase 6 | Pending |
-| QUAL-05 | Phase 6 | Pending |
-| CONTENT-01 | Phase 7 | Pending |
-| CONTENT-02 | Phase 7 | Pending |
-| CONTENT-03 | Phase 7 | Pending |
+| Requirement | Phase   | Status  |
+| ----------- | ------- | ------- |
+| CI-01       | Phase 5 | Pending |
+| CI-02       | Phase 5 | Pending |
+| CI-03       | Phase 5 | Pending |
+| QUAL-01     | Phase 5 | Pending |
+| QUAL-02     | Phase 5 | Pending |
+| QUAL-03     | Phase 6 | Pending |
+| QUAL-04     | Phase 6 | Pending |
+| QUAL-05     | Phase 6 | Pending |
+| CONTENT-01  | Phase 7 | Pending |
+| CONTENT-02  | Phase 7 | Pending |
+| CONTENT-03  | Phase 7 | Pending |
 
 **Coverage:**
+
 - v1.1 requirements: 11 total
 - Mapped to phases: 11
 - Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-02-23*
-*Last updated: 2026-02-23 after v1.1 roadmap created*
+
+_Requirements defined: 2026-02-23_
+_Last updated: 2026-02-23 after v1.1 roadmap created_

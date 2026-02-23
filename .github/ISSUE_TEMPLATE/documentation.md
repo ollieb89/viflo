@@ -1,9 +1,9 @@
 ---
 name: Documentation Issue
 about: Report missing, incorrect, or unclear documentation
-title: '[Docs] '
-labels: ['documentation', 'needs-triage']
-assignees: ''
+title: "[Docs] "
+labels: ["documentation", "needs-triage"]
+assignees: ""
 ---
 
 ## Documentation Location

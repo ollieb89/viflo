@@ -12,12 +12,12 @@ User → Domain Registrar → DNS → CDN/Load Balancer → Application
 
 ### Popular Registrars
 
-| Registrar | Price | Features |
-|-----------|-------|----------|
-| Cloudflare | Wholesale | Free privacy, fast DNS |
-| Namecheap | $9-15/yr | Free WHOIS privacy |
-| Google Domains | $12/yr | Simple, integrated |
-| AWS Route 53 | $12/yr | Integrated with AWS |
+| Registrar      | Price     | Features               |
+| -------------- | --------- | ---------------------- |
+| Cloudflare     | Wholesale | Free privacy, fast DNS |
+| Namecheap      | $9-15/yr  | Free WHOIS privacy     |
+| Google Domains | $12/yr    | Simple, integrated     |
+| AWS Route 53   | $12/yr    | Integrated with AWS    |
 
 ### DNS Configuration
 
@@ -53,20 +53,20 @@ Value: myapp.vercel.app
 
 ### Types
 
-| Type | Validation | Use Case |
-|------|-----------|----------|
-| DV (Domain Validated) | Domain ownership | Most websites |
-| OV (Organization Validated) | Organization | Business sites |
-| EV (Extended Validated) | Extended checks | Banks, high-trust |
+| Type                        | Validation       | Use Case          |
+| --------------------------- | ---------------- | ----------------- |
+| DV (Domain Validated)       | Domain ownership | Most websites     |
+| OV (Organization Validated) | Organization     | Business sites    |
+| EV (Extended Validated)     | Extended checks  | Banks, high-trust |
 
 ### Providers
 
-| Provider | Cost | Automation |
-|----------|------|------------|
+| Provider      | Cost | Automation    |
+| ------------- | ---- | ------------- |
 | Let's Encrypt | Free | ACME protocol |
-| Cloudflare | Free | Automatic |
-| AWS ACM | Free | Automatic |
-| DigiCert | $$$ | Manual |
+| Cloudflare    | Free | Automatic     |
+| AWS ACM       | Free | Automatic     |
+| DigiCert      | $$$  | Manual        |
 
 ## Platform-Specific SSL
 
@@ -105,6 +105,7 @@ aws acm request-certificate \
 ### www to Root (or vice versa)
 
 **Vercel (vercel.json):**
+
 ```json
 {
   "redirects": [
@@ -117,6 +118,7 @@ aws acm request-certificate \
 ```
 
 **Nginx:**
+
 ```nginx
 server {
   listen 80;
@@ -130,6 +132,7 @@ server {
 **Vercel:** Automatic
 
 **Nginx:**
+
 ```nginx
 server {
   listen 80;
@@ -141,14 +144,14 @@ server {
 
 ### Common Patterns
 
-| Subdomain | Purpose |
-|-----------|---------|
-| www | Main site |
-| app | Application |
-| api | API endpoints |
-| admin | Admin panel |
-| blog | Blog/CMS |
-| staging | Staging environment |
+| Subdomain | Purpose             |
+| --------- | ------------------- |
+| www       | Main site           |
+| app       | Application         |
+| api       | API endpoints       |
+| admin     | Admin panel         |
+| blog      | Blog/CMS            |
+| staging   | Staging environment |
 
 ### Setup
 
@@ -163,6 +166,7 @@ Value: api.myapp.com.herokudns.com
 ### DNS Propagation
 
 Check propagation:
+
 ```bash
 dig +short example.com
 nslookup example.com
@@ -174,21 +178,23 @@ Takes 24-48 hours max, usually minutes.
 ### SSL Issues
 
 **Certificate not valid:**
+
 - Check domain matches certificate
 - Verify intermediate certificates
 - Check expiration date
 
 **Mixed content:**
+
 - Ensure all resources use HTTPS
 - Update hardcoded HTTP URLs
 
 ### Common Errors
 
-| Error | Solution |
-|-------|----------|
-| DNS_PROBE_FINISHED_NXDOMAIN | DNS not propagated |
-| ERR_SSL_PROTOCOL_ERROR | SSL not configured |
-| 404 after DNS change | Check hosting configuration |
+| Error                       | Solution                    |
+| --------------------------- | --------------------------- |
+| DNS_PROBE_FINISHED_NXDOMAIN | DNS not propagated          |
+| ERR_SSL_PROTOCOL_ERROR      | SSL not configured          |
+| 404 after DNS change        | Check hosting configuration |
 
 ## Best Practices
 

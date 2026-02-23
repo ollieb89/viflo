@@ -22,10 +22,10 @@ Developer adds key → Source file updated → Extracted to TMS → Translated �
 
 ### File Ownership
 
-| File             | Owner                              |
-| ---------------- | ---------------------------------- |
-| `en/*.json`      | Developers (source of truth)       |
-| `es/*.json`, etc.| Translators (via TMS or PR)        |
+| File              | Owner                        |
+| ----------------- | ---------------------------- |
+| `en/*.json`       | Developers (source of truth) |
+| `es/*.json`, etc. | Translators (via TMS or PR)  |
 
 **Rule:** Developers own the source locale. Translators own target locales. Never manually edit a target locale in code unless it is a hotfix.
 
@@ -60,8 +60,8 @@ Configure i18next to log missing keys in development:
 ```js
 // next-i18next.config.js
 module.exports = {
-  i18n: { defaultLocale: 'en', locales: ['en', 'es'] },
-  saveMissing: process.env.NODE_ENV === 'development',
+  i18n: { defaultLocale: "en", locales: ["en", "es"] },
+  saveMissing: process.env.NODE_ENV === "development",
   missingKeyHandler: (lng, ns, key) => {
     console.warn(`Missing translation: [${lng}] ${ns}:${key}`);
   },
@@ -108,13 +108,13 @@ module.exports = {
 
 ### Namespace Conventions
 
-| Namespace    | Use for                                     |
-| ------------ | ------------------------------------------- |
-| `common`     | Nav, buttons, generic errors, status labels |
-| `auth`       | Login, register, forgot password, 2FA       |
-| `dashboard`  | Dashboard-specific content                  |
-| `[feature]`  | One namespace per major feature             |
-| `errors`     | Error pages (404, 500), form error messages |
+| Namespace   | Use for                                     |
+| ----------- | ------------------------------------------- |
+| `common`    | Nav, buttons, generic errors, status labels |
+| `auth`      | Login, register, forgot password, 2FA       |
+| `dashboard` | Dashboard-specific content                  |
+| `[feature]` | One namespace per major feature             |
+| `errors`    | Error pages (404, 500), form error messages |
 
 ---
 
@@ -142,17 +142,17 @@ npm install --save-dev i18next-scanner
 ```js
 // i18next-scanner.config.js
 module.exports = {
-  input: ['src/**/*.{ts,tsx}'],
-  output: './',
+  input: ["src/**/*.{ts,tsx}"],
+  output: "./",
   options: {
     debug: false,
-    defaultLng: 'en',
-    lngs: ['en', 'es'],
-    ns: ['common', 'home', 'auth', 'dashboard'],
-    defaultNs: 'common',
+    defaultLng: "en",
+    lngs: ["en", "es"],
+    ns: ["common", "home", "auth", "dashboard"],
+    defaultNs: "common",
     resource: {
-      loadPath: 'public/locales/{{lng}}/{{ns}}.json',
-      savePath: 'public/locales/{{lng}}/{{ns}}.json',
+      loadPath: "public/locales/{{lng}}/{{ns}}.json",
+      savePath: "public/locales/{{lng}}/{{ns}}.json",
     },
   },
 };
@@ -168,6 +168,7 @@ module.exports = {
 ```
 
 Running `npm run i18n:extract` will:
+
 - Scan all `.ts`/`.tsx` files for `t('key')` calls
 - Add missing keys to source locale files with empty values
 - Leave existing translated values untouched
@@ -181,6 +182,7 @@ Running `npm run i18n:extract` will:
 Best for large teams with dedicated translators.
 
 **Workflow:**
+
 1. Connect GitHub repository to Crowdin project
 2. Crowdin automatically opens PRs when translations are ready
 3. Set source files to `public/locales/en/*.json`
@@ -189,6 +191,7 @@ Best for large teams with dedicated translators.
 6. Crowdin opens a PR with translated files → review → merge
 
 **Key settings:**
+
 - Enable "Auto-approve" for machine translations to speed up new keys
 - Enable "Screenshots" so translators see context
 - Set "Export only approved" to prevent unreviewed strings shipping
@@ -276,17 +279,29 @@ Replace characters with visually similar extended characters to catch hardcoded 
 // Replaces English strings with visually decorated versions
 // e.g., "Hello World" → "[Héllö Wörld!!!]"
 const CHAR_MAP: Record<string, string> = {
-  a: 'à', e: 'é', i: 'í', o: 'ö', u: 'ü',
-  A: 'À', E: 'É', I: 'Í', O: 'Ö', U: 'Ü',
+  a: "à",
+  e: "é",
+  i: "í",
+  o: "ö",
+  u: "ü",
+  A: "À",
+  E: "É",
+  I: "Í",
+  O: "Ö",
+  U: "Ü",
 };
 
 export const pseudoLocalize = (str: string): string => {
-  const replaced = str.split('').map((c) => CHAR_MAP[c] ?? c).join('');
+  const replaced = str
+    .split("")
+    .map((c) => CHAR_MAP[c] ?? c)
+    .join("");
   return `[${replaced}!!!]`;
 };
 ```
 
 Run pseudo-localization on English strings to:
+
 1. Find hardcoded UI strings (they won't be decorated)
 2. Find layout issues (the `!!!` suffix adds ~30% string length)
 
@@ -312,9 +327,9 @@ Run pseudo-localization on English strings to:
 Maintain a `GLOSSARY.md` in the translations directory for domain-specific terms:
 
 ```markdown
-| English     | Spanish     | Notes                            |
-| ----------- | ----------- | -------------------------------- |
-| Dashboard   | Panel       | Do not translate as "Tablero"    |
-| Workflow    | Flujo       | Consistent across the product    |
-| Submit      | Enviar      | Use for forms, not "Confirmar"   |
+| English   | Spanish | Notes                          |
+| --------- | ------- | ------------------------------ |
+| Dashboard | Panel   | Do not translate as "Tablero"  |
+| Workflow  | Flujo   | Consistent across the product  |
+| Submit    | Enviar  | Use for forms, not "Confirmar" |
 ```

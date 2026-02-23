@@ -18,13 +18,13 @@
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
+| Layer    | Technology                   |
+| -------- | ---------------------------- |
 | Frontend | {e.g., Next.js 16, React 19} |
-| Backend | {e.g., FastAPI, Node.js} |
-| Database | {e.g., PostgreSQL, Redis} |
-| Auth | {e.g., NextAuth, Clerk} |
-| Hosting | {e.g., Vercel, AWS} |
+| Backend  | {e.g., FastAPI, Node.js}     |
+| Database | {e.g., PostgreSQL, Redis}    |
+| Auth     | {e.g., NextAuth, Clerk}      |
+| Hosting  | {e.g., Vercel, AWS}          |
 
 ## Target Users
 

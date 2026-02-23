@@ -37,13 +37,13 @@ from app.db.base import Base, TimestampMixin
 
 class User(Base, TimestampMixin):
     __tablename__ = "users"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String(255))
     is_active: Mapped[bool] = mapped_column(default=True)
     is_superuser: Mapped[bool] = mapped_column(default=False)
-    
+
     # Relationships
     items: Mapped[list["Item"]] = relationship(
         back_populates="owner",
@@ -58,7 +58,7 @@ class User(Base, TimestampMixin):
 ```python
 class User(Base):
     __tablename__ = "users"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     posts: Mapped[list["Post"]] = relationship(
         back_populates="author",
@@ -67,7 +67,7 @@ class User(Base):
 
 class Post(Base):
     __tablename__ = "posts"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     author: Mapped["User"] = relationship(back_populates="posts")
@@ -86,7 +86,7 @@ post_tags = Table(
 
 class Post(Base):
     __tablename__ = "posts"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     tags: Mapped[list["Tag"]] = relationship(
         secondary=post_tags,
@@ -95,7 +95,7 @@ class Post(Base):
 
 class Tag(Base):
     __tablename__ = "tags"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), unique=True)
     posts: Mapped[list["Post"]] = relationship(
@@ -109,14 +109,14 @@ class Tag(Base):
 ```python
 class Category(Base):
     __tablename__ = "categories"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     parent_id: Mapped[int | None] = mapped_column(
         ForeignKey("categories.id"),
         nullable=True
     )
-    
+
     parent: Mapped["Category"] = relationship(
         back_populates="children",
         remote_side=[id]
@@ -142,10 +142,10 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
-    
+
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
         return db.get(self.model, id)
-    
+
     def get_multi(
         self,
         db: Session,
@@ -155,7 +155,7 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     ) -> List[ModelType]:
         stmt = select(self.model).offset(skip).limit(limit)
         return db.execute(stmt).scalars().all()
-    
+
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         obj_data = obj_in.model_dump()
         db_obj = self.model(**obj_data)
@@ -163,7 +163,7 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
-    
+
     def update(
         self,
         db: Session,
@@ -177,13 +177,13 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
-    
+
     def remove(self, db: Session, *, id: int) -> ModelType:
         obj = db.get(self.model, id)
         db.delete(obj)
         db.commit()
         return obj
-    
+
     def count(self, db: Session) -> int:
         stmt = select(func.count()).select_from(self.model)
         return db.execute(stmt).scalar()
@@ -201,7 +201,7 @@ class UserRepository(BaseRepository[User, UserCreate, UserUpdate]):
     def get_by_email(self, db: Session, email: str) -> User | None:
         stmt = select(User).where(User.email == email)
         return db.execute(stmt).scalar_one_or_none()
-    
+
     def create_with_password(
         self,
         db: Session,
@@ -210,7 +210,7 @@ class UserRepository(BaseRepository[User, UserCreate, UserUpdate]):
         password: str
     ) -> User:
         from app.core.security import get_password_hash
-        
+
         db_obj = User(
             email=obj_in.email,
             hashed_password=get_password_hash(password),
@@ -233,16 +233,16 @@ from typing import Generator
 class UnitOfWork:
     def __init__(self, db: Session):
         self.db = db
-    
+
     def commit(self):
         self.db.commit()
-    
+
     def rollback(self):
         self.db.rollback()
-    
+
     def __enter__(self):
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type:
             self.rollback()
@@ -312,10 +312,10 @@ def downgrade():
 def upgrade():
     # Add nullable column first
     op.add_column('users', sa.Column('status', sa.String(), nullable=True))
-    
+
     # Migrate existing data
     op.execute("UPDATE users SET status = 'active'")
-    
+
     # Make column non-nullable
     op.alter_column('users', 'status', nullable=False)
 ```
@@ -328,7 +328,7 @@ from datetime import datetime
 
 class SoftDeleteMixin:
     deleted_at: Mapped[datetime | None] = mapped_column(default=None)
-    
+
     @property
     def is_deleted(self) -> bool:
         return self.deleted_at is not None
@@ -342,7 +342,7 @@ class SoftDeleteRepository(BaseRepository):
             .where(self.model.deleted_at.is_(None))
         )
         return db.execute(stmt).scalar_one_or_none()
-    
+
     def get_multi(
         self,
         db: Session,
@@ -356,7 +356,7 @@ class SoftDeleteRepository(BaseRepository):
             stmt = stmt.where(self.model.deleted_at.is_(None))
         stmt = stmt.offset(skip).limit(limit)
         return db.execute(stmt).scalars().all()
-    
+
     def remove(self, db: Session, *, id: int) -> ModelType:
         """Soft delete instead of hard delete."""
         obj = db.get(self.model, id)
@@ -364,7 +364,7 @@ class SoftDeleteRepository(BaseRepository):
         db.commit()
         db.refresh(obj)
         return obj
-    
+
     def restore(self, db: Session, *, id: int) -> ModelType:
         """Restore soft-deleted item."""
         obj = db.get(self.model, id)
@@ -372,7 +372,7 @@ class SoftDeleteRepository(BaseRepository):
         db.commit()
         db.refresh(obj)
         return obj
-    
+
     def hard_delete(self, db: Session, *, id: int) -> ModelType:
         """Permanently delete."""
         return super().remove(db, id=id)
@@ -392,14 +392,14 @@ def filter_items(
     is_active: bool | None = None
 ):
     stmt = select(Item)
-    
+
     if name:
         stmt = stmt.where(Item.name.ilike(f"%{name}%"))
     if min_price:
         stmt = stmt.where(Item.price >= min_price)
     if is_active is not None:
         stmt = stmt.where(Item.is_active == is_active)
-    
+
     return db.execute(stmt).scalars().all()
 ```
 

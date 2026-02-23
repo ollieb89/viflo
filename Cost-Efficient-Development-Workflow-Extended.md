@@ -8,7 +8,7 @@ This extended edition includes full implementation strategy, testing
 methodology, cost optimization guidance, and continuous improvement
 loops.
 
-------------------------------------------------------------------------
+---
 
 # 1. Discover and Choose the Right LLMs
 
@@ -16,56 +16,56 @@ loops.
 
 ### Gemini 3 Pro
 
--   Leading coding and reasoning benchmarks (2026)
--   \~1M token context window
--   Strong performance inside Google ecosystem
+- Leading coding and reasoning benchmarks (2026)
+- \~1M token context window
+- Strong performance inside Google ecosystem
 
 ### GPT-5.2
 
--   Excellent general-purpose reasoning
--   Strong multi-step code workflows
--   Widely supported via CLI integrations
+- Excellent general-purpose reasoning
+- Strong multi-step code workflows
+- Widely supported via CLI integrations
 
 ### Claude Opus 4.5
 
--   Deep architectural reasoning
--   Excellent for structured plans and debugging
+- Deep architectural reasoning
+- Excellent for structured plans and debugging
 
 ### Grok 4.1
 
--   Extremely long context (\~2M tokens)
--   Useful for very large repositories
+- Extremely long context (\~2M tokens)
+- Useful for very large repositories
 
 ### DeepSeek R1/R2
 
--   Budget-friendly alternative
--   Good hosted API options
+- Budget-friendly alternative
+- Good hosted API options
 
-------------------------------------------------------------------------
+---
 
 ## Open-Source Models (Cost-Optimized)
 
 ### GLM-5
 
--   Top open-source reasoning model
--   Enterprise-friendly
+- Top open-source reasoning model
+- Enterprise-friendly
 
 ### Kimi K2.5 / K2 Thinking
 
--   Strong reasoning capability
--   Higher latency trade-off
+- Strong reasoning capability
+- Higher latency trade-off
 
 ### DeepSeek V3.x
 
--   Competitive coding performance
--   Cost-efficient deployment
+- Competitive coding performance
+- Cost-efficient deployment
 
 ### Qwen Series
 
--   Excellent local deployment support
--   Privacy-first option
+- Excellent local deployment support
+- Privacy-first option
 
-------------------------------------------------------------------------
+---
 
 # 2. Planning & Architectural Design
 
@@ -88,7 +88,7 @@ model - Microservice boundaries - Error handling strategy - Testing plan
 
 Refine until the plan is: - Specific - Actionable - Granular
 
-------------------------------------------------------------------------
+---
 
 # 3. Implementation Workflow
 
@@ -100,44 +100,46 @@ Example transformation:
 
 "Build user profile feature" →
 
--   Create Next.js `/profile` component
--   Implement Express GET `/users/{id}` endpoint
--   Write Python ML processing module
--   Define S3 bucket infrastructure stack
+- Create Next.js `/profile` component
+- Implement Express GET `/users/{id}` endpoint
+- Write Python ML processing module
+- Define S3 bucket infrastructure stack
 
 Granularity enables better agent selection and cost control.
 
-------------------------------------------------------------------------
+---
 
 ## 3.2 Strategic Agent Selection
 
-  Agent             Ideal Use Case
-  ----------------- -------------------------------
-  Aider             Multi-file refactoring
-  Gemini CLI        Small focused code generation
-  Codex CLI         Multi-step repository tasks
-  Claude Code CLI   Complex reasoning tasks
-  Amazon Q CLI      AWS infrastructure
-  Qwen Code         Local/private workflows
+Agent Ideal Use Case
 
-------------------------------------------------------------------------
+---
+
+Aider Multi-file refactoring
+Gemini CLI Small focused code generation
+Codex CLI Multi-step repository tasks
+Claude Code CLI Complex reasoning tasks
+Amazon Q CLI AWS infrastructure
+Qwen Code Local/private workflows
+
+---
 
 ## 3.3 Contextual Code Generation Best Practices
 
 Always specify:
 
--   Exact file path
--   Required exports
--   Dependency requirements
--   Framework constraints
+- Exact file path
+- Required exports
+- Dependency requirements
+- Framework constraints
 
 For example:
 
--   TypeScript: specify component name and props type
--   Python: specify module location and imports
--   IaC: specify CloudFormation vs CDK and required policies
+- TypeScript: specify component name and props type
+- Python: specify module location and imports
+- IaC: specify CloudFormation vs CDK and required policies
 
-------------------------------------------------------------------------
+---
 
 ## 3.4 Human-in-the-Loop Review Cycle
 
@@ -153,7 +155,7 @@ AI output is a first draft.
 
 Instead of rewriting code manually, refine through targeted prompts.
 
-------------------------------------------------------------------------
+---
 
 # 4. Testing & Continuous Integration
 
@@ -161,12 +163,12 @@ Instead of rewriting code manually, refine through targeted prompts.
 
 Use LLMs to generate:
 
--   Jest tests (Node.js / Next.js)
--   pytest tests (Python)
+- Jest tests (Node.js / Next.js)
+- pytest tests (Python)
 
 Insert via CLI agents directly into correct directories.
 
-------------------------------------------------------------------------
+---
 
 ## 4.2 Local Code Quality Enforcement
 
@@ -174,7 +176,7 @@ JavaScript / TypeScript: - ESLint - Husky pre-commit hooks
 
 Python: - Black (formatter) - Flake8 (linting)
 
-------------------------------------------------------------------------
+---
 
 ## 4.3 CI/CD Pipeline Setup
 
@@ -189,24 +191,24 @@ Pipeline must:
 
 Free runners are typically sufficient for small projects.
 
-------------------------------------------------------------------------
+---
 
 ## 4.4 Performance & Cost Monitoring
 
 Track:
 
--   Token usage
--   API cost per task
--   Model latency
--   Human review time
+- Token usage
+- API cost per task
+- Model latency
+- Human review time
 
 Optimize for:
 
--   "Good Enough" quality
--   Lowest sustainable cost
--   Fast iteration cycles
+- "Good Enough" quality
+- Lowest sustainable cost
+- Fast iteration cycles
 
-------------------------------------------------------------------------
+---
 
 # 5. Iteration & Continuous Improvement
 
@@ -214,18 +216,18 @@ Optimize for:
 
 After each sprint:
 
--   Measure artifact quality
--   Measure LLM cost
--   Evaluate latency
--   Assess human correction effort
+- Measure artifact quality
+- Measure LLM cost
+- Evaluate latency
+- Assess human correction effort
 
 Switch models if:
 
--   Cost is unsustainable
--   Latency slows workflow
--   Quality is insufficient
+- Cost is unsustainable
+- Latency slows workflow
+- Quality is insufficient
 
-------------------------------------------------------------------------
+---
 
 ## 5.2 Continuous Model Reassessment
 
@@ -233,43 +235,42 @@ LLM landscape evolves rapidly.
 
 Implement:
 
--   Quarterly benchmarking
--   Standardized internal test suite
--   Cost-performance comparison
--   Context window efficiency analysis
+- Quarterly benchmarking
+- Standardized internal test suite
+- Cost-performance comparison
+- Context window efficiency analysis
 
 Treat model choice as a dynamic variable.
 
-------------------------------------------------------------------------
+---
 
 # Final Strategy Summary
 
 Adopt a hybrid model strategy:
 
--   Use proprietary models for planning and complex reasoning
--   Use open-source models for repetitive or privacy-sensitive tasks
--   Use CLI agents for structured execution
--   Maintain human review oversight
+- Use proprietary models for planning and complex reasoning
+- Use open-source models for repetitive or privacy-sensitive tasks
+- Use CLI agents for structured execution
+- Maintain human review oversight
 
 This approach ensures your Node.js / Next.js / Python stack remains:
 
--   Structured
--   Scalable
--   Secure
--   Testable
--   Cost-efficient
+- Structured
+- Scalable
+- Secure
+- Testable
+- Cost-efficient
 
-------------------------------------------------------------------------
+---
 
 # 6. Appendix: Tech Stack Reference
-
 
 ## **1. GeriApp (Dementia Care Platform)**
 
 ### Frontend (Web)
 
 | Category         | Technology                                          | Version/Notes       |
-|------------------|-----------------------------------------------------|---------------------|
+| ---------------- | --------------------------------------------------- | ------------------- |
 | Framework        | Next.js                                             | 16 (App Router)     |
 | React            | React                                               | 18                  |
 | Language         | TypeScript                                          | Strict mode         |
@@ -285,7 +286,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Frontend (Mobile)
 
 | Category   | Technology                  | Notes                     |
-|------------|-----------------------------|---------------------------|
+| ---------- | --------------------------- | ------------------------- |
 | Framework  | React Native                | 0.73+                     |
 | Platform   | Expo                        | \-                        |
 | Navigation | Expo Router                 | File-based routing        |
@@ -295,7 +296,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Backend Services
 
 | Service      | Technology                                  | Port | Details         |
-|--------------|---------------------------------------------|------|-----------------|
+| ------------ | ------------------------------------------- | ---- | --------------- |
 | User Service | Node.js + Express + TypeScript              | 8100 | \-              |
 | Care Service | Python 3.11 + FastAPI + SQLAlchemy          | 8101 | \-              |
 | AI Service   | Python 3.11 + FastAPI + PyTorch + MediaPipe | 8102 | Computer vision |
@@ -320,7 +321,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ## **2. GeriApp (Nuxt/Supabase Version)**
 
 | Category         | Technology                       | Notes                      |
-|------------------|----------------------------------|----------------------------|
+| ---------------- | -------------------------------- | -------------------------- |
 | Framework        | Nuxt 4                           | `app/` directory structure |
 | UI Framework     | Nuxt UI 3                        | Reka UI + Tailwind v4      |
 | Language         | TypeScript                       | \-                         |
@@ -336,7 +337,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### UI Layer (TypeScript/Node)
 
 | Category        | Technology       | Version                          |
-|-----------------|------------------|----------------------------------|
+| --------------- | ---------------- | -------------------------------- |
 | Language        | TypeScript       | 5.7.3                            |
 | Test Runner     | Vitest           | 2.1.8                            |
 | E2E Testing     | Playwright       | 1.52.0                           |
@@ -347,7 +348,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### API Layer (Python)
 
 | Category        | Technology                     | Purpose                     |
-|-----------------|--------------------------------|-----------------------------|
+| --------------- | ------------------------------ | --------------------------- |
 | Language        | Python                         | 3.11+                       |
 | Package Manager | uv                             | \-                          |
 | HTTP Client     | httpx                          | \>=0.27.0                   |
@@ -362,7 +363,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Server/Control Plane (TypeScript)
 
 | Category | Technology   | Notes                             |
-|----------|--------------|-----------------------------------|
+| -------- | ------------ | --------------------------------- |
 | Runtime  | Node.js      | Custom HTTP server (no framework) |
 | Testing  | Vitest       | 2.1.9                             |
 | Auth     | Bearer token | \-                                |
@@ -375,7 +376,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ## **4. Smart Money AI (Personal Finance Dashboard)**
 
 | Category  | Technology                               | Version/Notes             |
-|-----------|------------------------------------------|---------------------------|
+| --------- | ---------------------------------------- | ------------------------- |
 | Framework | Nuxt 4                                   | `app/` directory          |
 | Language  | TypeScript                               | 5.7.3                     |
 | UI        | Nuxt UI                                  | Components + Tailwind     |
@@ -390,7 +391,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Frontend (Monorepo)
 
 | App        | Technology            | Port | Notes                     |
-|------------|-----------------------|------|---------------------------|
+| ---------- | --------------------- | ---- | ------------------------- |
 | Dashboard  | Next.js 16 + React 19 | 3001 | Trainer admin (Turbopack) |
 | Web Portal | Next.js 16 + React 19 | 3000 | Client portal             |
 | Storybook  | \-                    | \-   | UI documentation          |
@@ -398,7 +399,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### UI System
 
 | Category   | Technology                  | Notes             |
-|------------|-----------------------------|-------------------|
+| ---------- | --------------------------- | ----------------- |
 | Styling    | Tailwind CSS 4              | \-                |
 | Components | shadcn/ui                   | In `packages/ui/` |
 | Monorepo   | Turborepo + pnpm workspaces | \-                |
@@ -407,7 +408,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Backend
 
 | Category    | Technology     | Details      |
-|-------------|----------------|--------------|
+| ----------- | -------------- | ------------ |
 | Framework   | FastAPI        | Python 3.11+ |
 | ORM         | SQLAlchemy 2.0 | \-           |
 | Database    | PostgreSQL     | \-           |
@@ -418,7 +419,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Authentication (Non-standard)
 
 | Component   | Technology                  | Flow                      |
-|-------------|-----------------------------|---------------------------|
+| ----------- | --------------------------- | ------------------------- |
 | Frontend    | NextAuth.js v5              | User login                |
 | Backend     | FastAPI JWT                 | Token generation          |
 | Integration | Custom credentials provider | Dashboard → FastAPI → JWT |
@@ -426,7 +427,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Data Fetching
 
 | Pattern           | Technology            | Use Case            |
-|-------------------|-----------------------|---------------------|
+| ----------------- | --------------------- | ------------------- |
 | Client            | useApi hook           | Authenticated fetch |
 | Server Components | lib/server/ functions | Data fetching       |
 | Server Actions    | “use server”          | Mutations           |
@@ -434,7 +435,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### Testing
 
 | Type        | Technology              | Notes               |
-|-------------|-------------------------|---------------------|
+| ----------- | ----------------------- | ------------------- |
 | E2E         | Playwright + MSW        | Mock Service Worker |
 | Unit        | Vitest                  | \-                  |
 | Backend     | pytest                  | \-                  |
@@ -444,7 +445,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ### ML Infrastructure (Submodule: ml-local)
 
 | Component   | Technology          | Notes                             |
-|-------------|---------------------|-----------------------------------|
+| ----------- | ------------------- | --------------------------------- |
 | Training    | Unsloth + LoRA      | 2x speedup, Qwen3-4B              |
 | Inference   | BitsAndBytes / vLLM | 4-bit quantization                |
 | Pipeline    | DVC                 | 11 stages                         |
@@ -454,7 +455,7 @@ This approach ensures your Node.js / Next.js / Python stack remains:
 ## **6. Pumpl AI Local (ML Infrastructure)**
 
 | Category            | Technology                         | Purpose                               |
-|---------------------|------------------------------------|---------------------------------------|
+| ------------------- | ---------------------------------- | ------------------------------------- |
 | Base Models         | Qwen3-4B, Llama 3.1 8B, Mistral 7B | LLM variants                          |
 | Fine-tuning         | Unsloth + LoRA                     | Efficient training                    |
 | Quantization        | BitsAndBytes, AWQ                  | 4-bit inference                       |

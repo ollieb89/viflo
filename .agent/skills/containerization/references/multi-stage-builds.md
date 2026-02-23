@@ -281,12 +281,12 @@ CMD ["java", "-jar", "app.jar"]
 ## Benefits Summary
 
 | Language | Single Stage | Multi-Stage | Reduction |
-|----------|-------------|-------------|-----------|
-| Python   | ~900MB      | ~100MB      | 89%       |
-| Node.js  | ~1.5GB      | ~200MB      | 87%       |
-| Go       | ~1GB        | ~10MB       | 99%       |
-| Rust     | ~2GB        | ~50MB       | 98%       |
-| Java     | ~500MB      | ~150MB      | 70%       |
+| -------- | ------------ | ----------- | --------- |
+| Python   | ~900MB       | ~100MB      | 89%       |
+| Node.js  | ~1.5GB       | ~200MB      | 87%       |
+| Go       | ~1GB         | ~10MB       | 99%       |
+| Rust     | ~2GB         | ~50MB       | 98%       |
+| Java     | ~500MB       | ~150MB      | 70%       |
 
 ## Best Practices
 

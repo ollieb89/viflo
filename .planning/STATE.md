@@ -18,7 +18,7 @@ Progress: [░░░░░░░░░░] 0% (v1.1 — 0 plans complete)
 
 ## Decisions
 
-*(None yet for v1.1)*
+_(None yet for v1.1)_
 
 ## Blockers
 

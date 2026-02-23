@@ -35,12 +35,12 @@ RUN pip install -r requirements.txt
 
 ### 1. Use Minimal Base Images
 
-| Image | Size | Use Case |
-|-------|------|----------|
-| `python:3.11` | ~900MB | Development |
-| `python:3.11-slim` | ~50MB | Production |
-| `python:3.11-alpine` | ~20MB | Minimal |
-| `distroless` | ~5MB | Go/Rust |
+| Image                | Size   | Use Case    |
+| -------------------- | ------ | ----------- |
+| `python:3.11`        | ~900MB | Development |
+| `python:3.11-slim`   | ~50MB  | Production  |
+| `python:3.11-alpine` | ~20MB  | Minimal     |
+| `distroless`         | ~5MB   | Go/Rust     |
 
 ### 2. Multi-Stage Builds
 
@@ -150,6 +150,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 ```
 
 Options:
+
 - `--interval`: Check frequency (default: 30s)
 - `--timeout`: Check timeout (default: 30s)
 - `--start-period`: Grace period for slow-starting containers
@@ -196,10 +197,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 512M
         reservations:
-          cpus: '0.25'
+          cpus: "0.25"
           memory: 128M
 ```
 
