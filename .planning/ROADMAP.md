@@ -46,6 +46,6 @@ Contributing guide, translations, community templates.
 
 - [x] Phase 0: Foundation
 - [x] Phase 1: Core Skills
-- [ ] Phase 2: Extended Skills
+- [x] Phase 2: Extended Skills
 - [ ] Phase 3: DevOps
 - [ ] Phase 4: Community
