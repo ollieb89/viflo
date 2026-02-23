@@ -7,11 +7,11 @@
 
 ## Files Created
 
-| File | Purpose |
-|------|---------|
-| `package.json` | Root workspace config with CI scripts |
-| `.nvmrc` | Node version pin (20) |
-| `.github/workflows/ci.yml` | GitHub Actions pipeline definition |
+| File                       | Purpose                               |
+| -------------------------- | ------------------------------------- |
+| `package.json`             | Root workspace config with CI scripts |
+| `.nvmrc`                   | Node version pin (20)                 |
+| `.github/workflows/ci.yml` | GitHub Actions pipeline definition    |
 
 ---
 
@@ -41,10 +41,12 @@ All scripts exit 0 in a clean CI environment without secrets.
 **Job ID:** `build` (this is the required status check name)
 
 **Triggers:**
+
 - `push` to `main`
 - `pull_request` to `main`
 
 **Steps (sequential, fail-fast):**
+
 1. Checkout repository (`actions/checkout@v4`)
 2. Setup pnpm (`pnpm/action-setup@v4`)
 3. Setup Node.js (`actions/setup-node@v4` with pnpm caching)
@@ -55,6 +57,7 @@ All scripts exit 0 in a clean CI environment without secrets.
 8. `pnpm run build`
 
 **Pinned action versions:**
+
 - `actions/checkout@v4`
 - `pnpm/action-setup@v4`
 - `actions/setup-node@v4`
@@ -86,6 +89,7 @@ Set via GitHub CLI (`gh api`):
 ## Prettier Formatting
 
 Applied `pnpm run lint:fix` to fix all existing formatting issues:
+
 - 146 markdown files reformatted
 - YAML/JSON files normalized
 - All files now pass `prettier --check`
@@ -94,13 +98,13 @@ Applied `pnpm run lint:fix` to fix all existing formatting issues:
 
 ## Decisions Made
 
-| Decision | Rationale |
-|----------|-----------|
+| Decision                    | Rationale                                                            |
+| --------------------------- | -------------------------------------------------------------------- |
 | Single job vs parallel jobs | Per 05-CONTEXT.md: "single job with sequential steps" for simplicity |
-| pnpm caching | `actions/setup-node@v4` with `cache: pnpm` for efficient installs |
-| Placeholder scripts | Documentation repo has no app to build; Phase 6 adds real test suite |
-| Prettier for linting | Standard formatter for markdown/YAML/JSON in documentation repos |
-| `lint:fix` script | Convenience for fixing formatting without manual `prettier --write` |
+| pnpm caching                | `actions/setup-node@v4` with `cache: pnpm` for efficient installs    |
+| Placeholder scripts         | Documentation repo has no app to build; Phase 6 adds real test suite |
+| Prettier for linting        | Standard formatter for markdown/YAML/JSON in documentation repos     |
+| `lint:fix` script           | Convenience for fixing formatting without manual `prettier --write`  |
 
 ---
 

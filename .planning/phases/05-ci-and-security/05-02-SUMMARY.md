@@ -7,11 +7,11 @@
 
 ## Files Created/Modified
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `.pre-commit-config.yaml` | Pre-commit hook configuration | Created |
-| `.secrets.baseline` | detect-secrets baseline file | Created |
-| `CONTRIBUTING.md` | Updated with installation instructions | Modified |
+| File                      | Purpose                                | Status   |
+| ------------------------- | -------------------------------------- | -------- |
+| `.pre-commit-config.yaml` | Pre-commit hook configuration          | Created  |
+| `.secrets.baseline`       | detect-secrets baseline file           | Created  |
+| `CONTRIBUTING.md`         | Updated with installation instructions | Modified |
 
 ---
 
@@ -28,10 +28,11 @@ repos:
     rev: v1.5.0
     hooks:
       - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
+        args: ["--baseline", ".secrets.baseline"]
 ```
 
 **Pinned versions:**
+
 - gitleaks: `v8.21.2` (latest v8.x stable)
 - detect-secrets: `v1.5.0` (matches local installation)
 
@@ -40,6 +41,7 @@ repos:
 ## Secrets Baseline
 
 Generated via:
+
 ```bash
 detect-secrets scan > .secrets.baseline
 ```
@@ -48,7 +50,7 @@ detect-secrets scan > .secrets.baseline
 **Format:** JSON with detected patterns from initial scan  
 **Version:** 1.5.0 (matches detect-secrets version)
 
-The baseline file is committed to the repo and referenced by the detect-secrets hook. It marks any existing patterns as "known good" so the hook only flags *new* potential secrets.
+The baseline file is committed to the repo and referenced by the detect-secrets hook. It marks any existing patterns as "known good" so the hook only flags _new_ potential secrets.
 
 ---
 
@@ -111,12 +113,12 @@ detect-secrets scan /tmp/fake-secret.txt
 
 ## Decisions Made
 
-| Decision | Rationale |
-|----------|-----------|
-| Both gitleaks + detect-secrets | Per 05-CONTEXT.md: "overlapping coverage is intentional" |
-| Secrets-only in pre-commit | Per 05-CONTEXT.md: "no lint or type-check in pre-commit (those run in CI)" |
-| No `pre-commit install` in automation | Developer choice; documented in CONTRIBUTING.md |
-| Baseline file committed | Required for detect-secrets to function correctly |
+| Decision                              | Rationale                                                                  |
+| ------------------------------------- | -------------------------------------------------------------------------- |
+| Both gitleaks + detect-secrets        | Per 05-CONTEXT.md: "overlapping coverage is intentional"                   |
+| Secrets-only in pre-commit            | Per 05-CONTEXT.md: "no lint or type-check in pre-commit (those run in CI)" |
+| No `pre-commit install` in automation | Developer choice; documented in CONTRIBUTING.md                            |
+| Baseline file committed               | Required for detect-secrets to function correctly                          |
 
 ---
 
