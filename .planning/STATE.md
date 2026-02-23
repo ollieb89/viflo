@@ -2,9 +2,9 @@
 
 ## Current Status
 
-**Milestone**: v1.0 Foundation  
-**Phase**: 4  
-**Status**: executing  
+**Milestone**: v1.0 Foundation
+**Phase**: 4
+**Status**: complete
 
 ## Decisions
 
@@ -23,12 +23,25 @@
 | 2026-02-23 | triggers: is standard SKILL.md frontmatter field | Consistent with backend-dev-guidelines pattern; allowed-tools: only for tool-specific skills |
 | 2026-02-23 | Create INDEX.md at .agent/skills/INDEX.md | Central discovery file for all 35+ skills with difficulty and quick selection |
 | 2026-02-23 | Defer oversized SKILL.md refactoring | Files >500 lines need modular reference file structure — requires dedicated plan |
+| 2026-02-23 | README gap closure committed | 35 skill count, i18n-implementation row, CONTRIBUTING.md as primary contributing link |
 
 ## Blockers
 
 - [x] None
 
 ## Session Memory
+
+### 2026-02-23 20:04
+
+**Phase 4**: complete - Plan 4-4 Complete
+
+Plan 4-4 (README Gap Closure) delivered:
+- Updated README skill count from 34 to 35 (Key Features + Project Structure)
+- Added i18n-implementation row to Workflows category in Available Skills table
+- Fixed Contributing section to link CONTRIBUTING.md as primary reference
+- All 5 verification checks pass: no stale 34 counts remain
+
+Stopped at: Completed 04-04-PLAN.md (README Gap Closure)
 
 ### 2026-02-23 19:08
 
