@@ -9,23 +9,23 @@ Milestone: **Dogfooding** — viflo applies its own methodology, CI templates, t
 
 ### CI — Active Continuous Integration
 
-- [ ] **CI-01**: Repository has an active GitHub Actions workflow that runs on push and PR
-- [ ] **CI-02**: CI pipeline enforces: install → lint → type-check → test → build in sequence
-- [ ] **CI-03**: CI blocks merge when any pipeline step fails
+- [x] **CI-01**: Repository has an active GitHub Actions workflow that runs on push and PR
+- [x] **CI-02**: CI pipeline enforces: install → lint → type-check → test → build in sequence
+- [x] **CI-03**: CI blocks merge when any pipeline step fails
 
 ### QUAL — Code Quality Enforcement
 
-- [ ] **QUAL-01**: Pre-commit hooks run `gitleaks` and `detect-secrets` before every commit
-- [ ] **QUAL-02**: A secret committed to the repo is blocked by the pre-commit hook
-- [ ] **QUAL-03**: `apps/web/` has a Vitest test suite with ≥1 test per utility function
-- [ ] **QUAL-04**: Vitest test suite runs in CI and fails the pipeline on test failure
-- [ ] **QUAL-05**: A coverage ratchet script enforces that coverage percentage never decreases between runs
+- [x] **QUAL-01**: Pre-commit hooks run `gitleaks` and `detect-secrets` before every commit
+- [x] **QUAL-02**: A secret committed to the repo is blocked by the pre-commit hook
+- [x] **QUAL-03**: `apps/web/` has a Vitest test suite with ≥1 test per utility function
+- [x] **QUAL-04**: Vitest test suite runs in CI and fails the pipeline on test failure
+- [x] **QUAL-05**: A coverage ratchet script enforces that coverage percentage never decreases between runs
 
 ### CONTENT — Skill & Documentation Quality
 
 - [ ] **CONTENT-01**: All SKILL.md files >500 lines are split into a primary SKILL.md + named reference sub-guides in a `references/` directory
-- [ ] **CONTENT-02**: VERIFICATION.md exists for Phases 0, 1, 2, and 3 documenting what was built and verified
-- [ ] **CONTENT-03**: A telemetry script logs each LLM call (timestamp, model, prompt_tokens, completion_tokens, task_success) and exports to CSV
+- [x] **CONTENT-02**: VERIFICATION.md exists for Phases 0, 1, 2, and 3 documenting what was built and verified
+- [x] **CONTENT-03**: A telemetry script logs each LLM call (timestamp, model, prompt_tokens, completion_tokens, task_success) and exports to CSV
 
 ## v1.0 Requirements (Validated)
 
@@ -68,19 +68,19 @@ All 14 v1.0 requirements shipped and validated 2026-02-23:
 
 ## Traceability
 
-| Requirement | Phase              | Status  |
-| ----------- | ------------------ | ------- |
-| CI-01       | Phase 5 → Phase 8  | Pending |
-| CI-02       | Phase 5 → Phase 9  | Pending |
-| CI-03       | Phase 5 → Phase 8  | Pending |
-| QUAL-01     | Phase 5 → Phase 9  | Pending |
-| QUAL-02     | Phase 5 → Phase 9  | Pending |
-| QUAL-03     | Phase 6 → Phase 8  | Pending |
-| QUAL-04     | Phase 6 → Phase 9  | Pending |
-| QUAL-05     | Phase 6 → Phase 8  | Pending |
-| CONTENT-01  | Phase 7 → Phase 8  | Pending |
-| CONTENT-02  | Phase 7 → Phase 8  | Pending |
-| CONTENT-03  | Phase 7 → Phase 8  | Pending |
+| Requirement | Phase              | Status   |
+| ----------- | ------------------ | -------- |
+| CI-01       | Phase 5 → Phase 8  | Complete |
+| CI-02       | Phase 5 → Phase 9  | Complete |
+| CI-03       | Phase 5 → Phase 8  | Complete |
+| QUAL-01     | Phase 5 → Phase 9  | Complete |
+| QUAL-02     | Phase 5 → Phase 9  | Complete |
+| QUAL-03     | Phase 6 → Phase 8  | Complete |
+| QUAL-04     | Phase 6 → Phase 9  | Complete |
+| QUAL-05     | Phase 6 → Phase 8  | Complete |
+| CONTENT-01  | Phase 7 → Phase 8  | Pending  |
+| CONTENT-02  | Phase 7 → Phase 8  | Complete |
+| CONTENT-03  | Phase 7 → Phase 8  | Complete |
 
 **Coverage:**
 
@@ -92,4 +92,4 @@ All 14 v1.0 requirements shipped and validated 2026-02-23:
 ---
 
 _Requirements defined: 2026-02-23_
-_Last updated: 2026-02-23 after v1.1 roadmap created_
+_Last updated: 2026-02-23 after Phase 8 requirements closure_
