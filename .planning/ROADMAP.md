@@ -38,7 +38,11 @@
   3. A PR with a failing pipeline step cannot be merged (branch protection enforces it)
   4. Committing a plaintext secret triggers the pre-commit hook and blocks the commit with an error message
   5. The `.pre-commit-config.yaml` and workflow file exist in the repo and are the authoritative source of these rules
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — GitHub Actions CI workflow + branch protection (CI-01, CI-02, CI-03)
+- [ ] 05-02-PLAN.md — Pre-commit secret scanning setup (QUAL-01, QUAL-02)
 
 ### Phase 6: Test Suite
 **Goal**: `apps/web/` has a live Vitest test suite that runs in CI and prevents coverage regression
