@@ -23,7 +23,7 @@
 **Milestone Goal:** Apply viflo's own methodology, CI templates, testing patterns, and security scanning to the viflo repository itself — proving the toolkit with its own toolkit.
 
 - [x] **Phase 5: CI & Security** - GitHub Actions pipeline active with pre-commit secret scanning ✅
-- [ ] **Phase 6: Test Suite** - Vitest suite live in `apps/web/` with coverage ratchet enforced in CI
+- [x] **Phase 6: Test Suite** - Vitest suite live in `apps/web/` with coverage ratchet enforced in CI ✅
 - [ ] **Phase 7: Content Hygiene** - Oversized skills modularized, VERIFICATION.md backfilled, telemetry logging in place
 
 ## Phase Details
@@ -63,8 +63,8 @@ Plans:
 
 Plans:
 
-- [ ] 06-01-PLAN.md — Vitest test suite with utility functions and tests (QUAL-03, QUAL-04)
-- [ ] 06-02-PLAN.md — Coverage ratchet script (QUAL-05)
+- [x] 06-01-PLAN.md — Vitest test suite with utility functions and tests (QUAL-03, QUAL-04) ✅
+- [x] 06-02-PLAN.md — Coverage ratchet script (QUAL-05) ✅
 
 ### Phase 7: Content Hygiene
 
@@ -89,5 +89,5 @@ Plans:
 | 3. DevOps & Deployment     | v1.0      | —              | Complete    | 2026-02-23 |
 | 4. Polish & Community      | v1.0      | 4/4            | Complete    | 2026-02-23 |
 | 5. CI & Security           | v1.1      | 2/2            | Complete    | 2026-02-23 |
-| 6. Test Suite              | v1.1      | 0/2            | Planned     | -          |
+| 6. Test Suite              | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 7. Content Hygiene         | v1.1      | 0/TBD          | Not started | -          |
