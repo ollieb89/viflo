@@ -24,7 +24,17 @@
 
 - [x] **Phase 5: CI & Security** - GitHub Actions pipeline active with pre-commit secret scanning ✅
 - [x] **Phase 6: Test Suite** - Vitest suite live in `apps/web/` with coverage ratchet enforced in CI ✅
-- [ ] **Phase 7: Content Hygiene** - Oversized skills modularized, VERIFICATION.md backfilled, telemetry logging in place
+- [x] **Phase 7: Content Hygiene** - Oversized skills modularized, VERIFICATION.md backfilled, telemetry logging in place
+- [ ] **Phase 8: Verification & Requirements Closure** - VERIFICATION.md for all v1.1 phases, CONTENT-01 fully satisfied, requirements checked off
+- [ ] **Phase 9: Workspace & Developer Tooling** - pnpm-workspace.yaml added, pre-commit install automated
+
+**Plans**: 3/3 complete (Phases 5–7)
+
+Plans (Phase 7):
+
+- [x] 07-01-PLAN.md — Skill modularization (CONTENT-01) ✅
+- [x] 07-02-PLAN.md — VERIFICATION.md backfill (CONTENT-02) ✅
+- [x] 07-03-PLAN.md — Telemetry logging (CONTENT-03) ✅
 
 ## Phase Details
 
@@ -77,7 +87,41 @@ Plans:
 2. VERIFICATION.md exists for each of Phases 0, 1, 2, and 3 documenting what was built and what was verified
 3. A telemetry script exists that, when invoked, appends a structured row (timestamp, model, prompt_tokens, completion_tokens, task_success) to a CSV file
 4. The telemetry CSV can be opened in any spreadsheet tool and shows at least one sample row demonstrating the schema
-   **Plans**: TBD
+
+**Plans**: 3/3 complete
+
+### Phase 8: Verification & Requirements Closure
+
+**Goal**: All v1.1 phases have VERIFICATION.md records, CONTENT-01 is fully satisfied, and REQUIREMENTS.md reflects true implementation status
+**Depends on**: Phase 7
+**Requirements**: CONTENT-01 (gap closure), CONTENT-02 (gap closure — Phases 5–7)
+**Gap Closure**: Closes gaps from v1.1 audit (2026-02-23)
+
+**Success Criteria** (what must be TRUE):
+
+1. `microservices-patterns/SKILL.md` is ≤500 lines with excess content extracted to `references/guides/`
+2. `05-ci-and-security/05-VERIFICATION.md` exists documenting Phase 5 artifacts and success criteria
+3. `06-test-suite/06-VERIFICATION.md` exists documenting Phase 6 artifacts and success criteria
+4. Phase 7 VERIFICATION.md exists documenting Phase 7 artifacts and success criteria
+5. All 11 v1.1 requirements in REQUIREMENTS.md are checked `[x]`
+
+**Plans**: TBD
+
+### Phase 9: Workspace & Developer Tooling
+
+**Goal**: Fresh CI clones work reliably without workarounds, and developer onboarding automates pre-commit hook installation
+**Depends on**: Phase 8
+**Requirements**: CI-02 (gap closure — workspace stability), QUAL-01, QUAL-02 (gap closure — hook automation)
+**Gap Closure**: Closes integration gaps from v1.1 audit (2026-02-23)
+
+**Success Criteria** (what must be TRUE):
+
+1. `pnpm-workspace.yaml` declares `apps/*` and `packages/*` — workspace topology explicit
+2. CI pipeline uses single `pnpm install` (no separate `apps/web` install step)
+3. `pre-commit install` is automated via a setup script or Makefile target
+4. `README.md` or `CONTRIBUTING.md` references the onboarding command
+
+**Plans**: TBD
 
 ## Progress
 
@@ -90,4 +134,6 @@ Plans:
 | 4. Polish & Community      | v1.0      | 4/4            | Complete    | 2026-02-23 |
 | 5. CI & Security           | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 6. Test Suite              | v1.1      | 2/2            | Complete    | 2026-02-23 |
-| 7. Content Hygiene         | v1.1      | 0/TBD          | Not started | -          |
+| 7. Content Hygiene         | v1.1      | 3/3            | Complete    | 2026-02-23 |
+| 8. Verification Closure    | v1.1      | TBD            | Pending     |            |
+| 9. Workspace Tooling       | v1.1      | TBD            | Pending     |            |

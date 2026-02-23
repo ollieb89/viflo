@@ -68,25 +68,26 @@ All 14 v1.0 requirements shipped and validated 2026-02-23:
 
 ## Traceability
 
-| Requirement | Phase   | Status  |
-| ----------- | ------- | ------- |
-| CI-01       | Phase 5 | Pending |
-| CI-02       | Phase 5 | Pending |
-| CI-03       | Phase 5 | Pending |
-| QUAL-01     | Phase 5 | Pending |
-| QUAL-02     | Phase 5 | Pending |
-| QUAL-03     | Phase 6 | Pending |
-| QUAL-04     | Phase 6 | Pending |
-| QUAL-05     | Phase 6 | Pending |
-| CONTENT-01  | Phase 7 | Pending |
-| CONTENT-02  | Phase 7 | Pending |
-| CONTENT-03  | Phase 7 | Pending |
+| Requirement | Phase              | Status  |
+| ----------- | ------------------ | ------- |
+| CI-01       | Phase 5 → Phase 8  | Pending |
+| CI-02       | Phase 5 → Phase 9  | Pending |
+| CI-03       | Phase 5 → Phase 8  | Pending |
+| QUAL-01     | Phase 5 → Phase 9  | Pending |
+| QUAL-02     | Phase 5 → Phase 9  | Pending |
+| QUAL-03     | Phase 6 → Phase 8  | Pending |
+| QUAL-04     | Phase 6 → Phase 9  | Pending |
+| QUAL-05     | Phase 6 → Phase 8  | Pending |
+| CONTENT-01  | Phase 7 → Phase 8  | Pending |
+| CONTENT-02  | Phase 7 → Phase 8  | Pending |
+| CONTENT-03  | Phase 7 → Phase 8  | Pending |
 
 **Coverage:**
 
 - v1.1 requirements: 11 total
 - Mapped to phases: 11
 - Unmapped: 0 ✓
+- Gap closure phases: 8 (Verification Closure), 9 (Workspace Tooling)
 
 ---
 
