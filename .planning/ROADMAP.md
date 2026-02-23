@@ -36,9 +36,17 @@ Created containerization skill (Dockerfile generator), CI/CD pipeline templates 
 
 **Goal**: Documentation, community, multi-language support
 **Requirements**: R14
-**Status**: not-started
+**Status**: executing
 
 Contributing guide, translations, community templates.
+
+**Plans**: 4 plans
+
+Plans:
+- [x] 04-01-PLAN.md — Documentation review: triggers field, README skills table, INDEX.md
+- [x] 04-02-PLAN.md — Contributing guide: CONTRIBUTING.md, issue templates, CODE_OF_CONDUCT.md
+- [x] 04-03-PLAN.md — i18n implementation skill with Next.js example and reference guides
+- [ ] 04-04-PLAN.md — Gap closure: fix README skill count (34→35) and Contributing link
 
 ---
 
