@@ -1,6 +1,11 @@
 ---
 name: architectural-design
 description: Standardized workflow for creating Detailed Implementation Plans and Architectural Blueprints (PLAN.md) and Task Backlogs (TASKS.md).
+triggers:
+  - Creating PLAN.md for a new project
+  - Generating implementation blueprints
+  - Creating task backlogs (TASKS.md)
+  - Planning-first development setup
 ---
 
 # Architectural Design Skill

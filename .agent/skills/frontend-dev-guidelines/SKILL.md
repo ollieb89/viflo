@@ -1,6 +1,13 @@
 ---
 name: frontend-dev-guidelines
 description: Frontend development guidelines for React/TypeScript applications. Modern patterns including Suspense, lazy loading, useSuspenseQuery, file organization with features directory, MUI v7 styling, TanStack Router, performance optimization, and TypeScript best practices. Use when creating components, pages, features, fetching data, styling, routing, or working with frontend code.
+triggers:
+  - Creating React components or pages
+  - Building new frontend features
+  - Fetching data with TanStack Query
+  - Styling components with MUI v7
+  - Setting up routing with TanStack Router
+  - Frontend performance optimization
 ---
 
 # Frontend Development Guidelines

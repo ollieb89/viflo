@@ -1,6 +1,10 @@
 ---
 name: github-readme-writer
 description: Creates a GitHub-optimized README.md for the current project. Use this skill when the user asks to create or improve the project's README file.
+triggers:
+  - Creating a project README
+  - Improving existing README
+  - Writing GitHub documentation
 ---
 
 # GitHub README Writer

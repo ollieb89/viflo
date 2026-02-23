@@ -1,6 +1,12 @@
 ---
 name: gsd-workflow
 description: Guide for using the Get Shit Done (GSD) spec-driven development methodology with Kimi CLI. Use when the user wants to implement structured, phase-based development with proper planning, execution, and verification. Triggers on phrases like "get shit done", "gsd", "spec-driven development", "plan phase", "execute phase", "new project with gsd", or when the user needs systematic project planning with PROJECT.md, REQUIREMENTS.md, ROADMAP.md, and PLAN.md artifacts.
+triggers:
+  - "get shit done" or "gsd" commands
+  - spec-driven development
+  - plan phase or execute phase
+  - new project with GSD
+  - Creating PROJECT.md, REQUIREMENTS.md, ROADMAP.md
 ---
 
 # GSD Workflow

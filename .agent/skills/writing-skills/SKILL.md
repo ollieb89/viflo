@@ -1,6 +1,11 @@
 ---
 name: writing-skills
 description: Use when creating new skills, editing existing skills, or verifying skills work before deployment
+triggers:
+  - Creating new skills
+  - Editing existing skills
+  - Verifying skills before deployment
+  - Test-driven skill documentation
 ---
 
 # Writing Skills

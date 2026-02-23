@@ -1,6 +1,13 @@
 ---
 name: behavioral-modes
 description: Guidelines and instructions for different operational modes of the AI agent, including brainstorming, implementation, debugging, review, shipping, orchestration, and teaching.
+triggers:
+  - /brainstorm command
+  - /enhance or /implement command
+  - /debug command
+  - /ship command
+  - /orchestrate command
+  - Setting agent operational mode
 ---
 
 # Behavioral Modes

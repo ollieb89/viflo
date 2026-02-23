@@ -1,6 +1,12 @@
 ---
 name: i18n-implementation
 description: Internationalization (i18n) and localization (l10n) patterns for web applications. Covers next-i18next setup, translation file structure, language switching, RTL support, date/number formatting, pluralization, and translation workflow. Use when adding multi-language support to Next.js apps or managing translations.
+triggers:
+  - Adding multi-language support
+  - Setting up next-i18next
+  - Managing translation files
+  - Implementing RTL support
+  - Language switcher implementation
 ---
 
 # i18n Implementation
