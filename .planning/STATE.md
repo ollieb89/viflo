@@ -2,19 +2,19 @@
 
 ## Current Status
 
-**Milestone**: v1.1 Dogfooding — ACTIVE 2026-02-23  
-**Phase**: 6 of 7 — Test Suite ✅ COMPLETE  
-**Status**: Executed and verified  
-**Last activity**: 2026-02-23 — Phase 6 executed (Vitest + coverage ratchet)
+**Milestone**: v1.1 Dogfooding — Gap Closure
+**Phase**: 8 of 9 — Verification Closure (Plan 2/2 complete)
+**Status**: Phase 8 executing — 2/2 plans done
+**Last activity**: 2026-02-23 — Phase 8 Plan 02 executed (VERIFICATION.md files + requirements closure)
 
 ## Project Reference
 
 See: .planning/PROJECT.md (updated 2026-02-23)
 
-**Core value:** A complete agentic dev environment — 35 skills, GSD methodology, proven workflows  
-**Current focus:** v1.1 — Phase 7: Content Hygiene (modularize skills + VERIFICATION + telemetry)
+**Core value:** A complete agentic dev environment — 35 skills, GSD methodology, proven workflows
+**Current focus:** v1.1 Gap Closure — Phase 8: Verification Closure (complete), Phase 9: Workspace Tooling (pending)
 
-Progress: [██████░░░░] 67% (v1.1 — 4/6 plans complete, Phase 6 done)
+Progress: [████████░░] 80% (Phase 8 complete — 2/2 plans)
 
 ## Decisions
 
@@ -23,36 +23,35 @@ Progress: [██████░░░░] 67% (v1.1 — 4/6 plans complete, Pha
 - QUAL-05: Coverage ratchet prevents regression (baseline: 98.11% lines)
 - Test utilities: skill validation, plan parsing (dogfooding viflo's own formats)
 - Coverage baseline stored in .coverage/baseline.json
+- CONTENT-01 left unchecked in REQUIREMENTS.md — microservices-patterns gap addressed by concurrent Plan 01
+- Phase 7 VERIFICATION.md placed in 08-verification-closure/ (no dedicated Phase 7 directory)
 
 ## Blockers
 
 None
 
-## Completed (Phase 6)
+## Completed (Phase 8)
 
-- ✅ `apps/web/` — Vitest package with 13 tests
-- ✅ `src/validation/skill.ts` — Skill frontmatter validation (100% test coverage)
-- ✅ `src/parsing/plan.ts` — Plan file parsing (100% test coverage)
-- ✅ `scripts/coverage-ratchet.ts` — Coverage threshold enforcement
-- ✅ `.coverage/baseline.json` — Coverage baseline (98.11% lines)
-- ✅ CI workflow updated with coverage ratchet step
-- ✅ Root package.json test scripts updated
+- [x] 08-01-PLAN.md — Fixed microservices-patterns/SKILL.md to ≤500 lines (CONTENT-01)
+- [x] 08-02-PLAN.md — Created VERIFICATION.md for Phases 5, 6, 7; checked off 10/11 requirements (CONTENT-02)
 
-## Todos (Phase 7)
+## Completed (Phase 7)
 
-- CONTENT-01: Modularize oversized SKILL.md files (>500 lines)
-- CONTENT-02: Add VERIFICATION.md for Phases 0–3
-- CONTENT-03: Telemetry logging script (timestamp, model, tokens, success)
+- [x] 07-01-PLAN.md — Modularized 12 oversized skills (CONTENT-01)
+- [x] 07-02-PLAN.md — Backfilled VERIFICATION.md for Phases 0–3 (CONTENT-02)
+- [x] 07-03-PLAN.md — Created telemetry logging script (CONTENT-03)
 
 ## Accumulated Context
 
 - v1.0 shipped 35 skills, GSD methodology, 14/14 requirements, 41 commits
 - v1.1 Phase 5 complete: CI workflow, branch protection, pre-commit secret scanning
 - v1.1 Phase 6 complete: Vitest suite with 13 tests, 98%+ coverage, coverage ratchet active
-- Remaining: Phase 7 (Content Hygiene) — 3 requirements
+- v1.1 Phase 7 complete: Skill modularization (12 skills), VERIFICATION.md backfill (Phases 0-3), telemetry
+- v1.1 Phase 8 complete: microservices-patterns fix, VERIFICATION.md for Phases 5-7, 10/11 requirements closed
+- Remaining: Phase 9 (Workspace Tooling) — pnpm-workspace.yaml, developer tooling
 
 ## Session Continuity
 
-Last session: 2026-02-23  
-Stopped at: Phase 6 complete — ready to start Phase 7 (Content Hygiene)  
+Last session: 2026-02-23
+Stopped at: Phase 8 Plan 02 complete — VERIFICATION.md files and requirements closure done
 Resume file: None

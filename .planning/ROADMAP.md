@@ -140,5 +140,5 @@ Plans:
 | 5. CI & Security           | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 6. Test Suite              | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 7. Content Hygiene         | v1.1      | 3/3            | Complete    | 2026-02-23 |
-| 8. Verification Closure    | v1.1      | TBD            | Pending     |            |
+| 8. Verification Closure    | 1/2 | In Progress|  |            |
 | 9. Workspace Tooling       | v1.1      | TBD            | Pending     |            |
