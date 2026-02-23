@@ -1,0 +1,28 @@
+# FastAPI
+fastapi==0.115.0
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+
+# Database
+sqlalchemy==2.0.36
+alembic==1.14.0
+psycopg2-binary==2.9.10
+
+# Pydantic
+pydantic==2.10.0
+pydantic-settings==2.7.0
+
+# Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Testing
+pytest==8.3.0
+pytest-asyncio==0.25.0
+httpx==0.28.0
+
+# Development
+black==24.10.0
+isort==5.13.0
+flake8==7.1.0
+mypy==1.14.0

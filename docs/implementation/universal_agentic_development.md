@@ -144,41 +144,59 @@ This phase utilizes an **Iterative Agentic Loop**: Pick a task \-\> Read Context
 
 **3.1 Monorepo Scaffold & Boilerplate Generation**
 
-* **Assigned to**: Scaffold Agent  
-* **Effort**: Low  
-* **Cost Model**: **Cheap** (Gemini 3 Flash / Qwen-Coder)  
-* **Detailed Implementation Context**: The first execution task is to erect the structure. The agent initializes the Monorepo (using Turborepo or Nx), sets up the package manager (pnpm), and configures the base TypeScript (tsconfig.json) and Linter (.eslintrc) settings. It then generates the "Boilerplate" code—the standard directory structures, empty service files, and shared UI component libraries (e.g., installing shadcn/ui).  
-* **Technical Specifics**: The agent follows the "Universal AI Development Workflow" strictures, ensuring that configuration files are strict (e.g., strict: true in TS). It creates the "Shared Types" package first, which will hold the Zod schemas defined in PLAN.md, acting as the contract between frontend and backend.  
-* **Validation**: The agent runs pnpm build to ensure the empty chassis compiles without error.
+* **Assigned to**: Scaffold Agent
+* **Effort**: Low
+* **Cost Model**: **Cheap** (Gemini 3 Flash / Qwen-Coder)
+* **Inputs**: `PLAN.md#Tech Stack`
+* **Implementation Steps**:
+    1.  **Initialize Workspace**: Identify the Monorepo Tool defined in `PLAN.md` (e.g., Turborepo, Nx). Initialize workspace structure ensuring package manager matches `PLAN.md` (pnpm, npm, bun, uv).
+    2.  **Configure Base Tooling**: Set up root config files to enforce strict standards:
+        *   **TypeScript/JS**: `tsconfig.json` (strict: true), `.eslintrc.js`.
+        *   **Python**: `ruff.toml` (strict), `pyproject.toml`.
+    3.  **Generate Shared Schema/Types Package**: Create `packages/types` (TS) or `packages/schema` (Python). Translate "Schema Definitions" from `PLAN.md` into exportable code (Zod, Pydantic).
+    4.  **Scaffold Application Directories**: Create empty app directories (Frontend/Backend) matching `PLAN.md` topology. Install framework scaffolding and UI libraries.
+* **Validation**: Run Build Command (e.g., `pnpm build`). Verify Shared Package can be imported. Commit: `chore: initial scaffold and shared types`.
 
 **3.2 Database Migration & ORM Layer Implementation**
 
-* **Assigned to**: Backend Agent  
-* **Effort**: Medium  
-* **Cost Model**: **Cheap** (Gemini 3 Flash)  
-* **Detailed Implementation Context**: The agent reads the Schema section of PLAN.md and translates it into the specific DDL or ORM migration files (e.g., Prisma schema or Drizzle migration). It then runs the migration tool to apply this to the local database container. Crucially, it also generates the "Seed Script" to populate the database with dummy data for development, facilitating immediate testing.  
-* **Technical Specifics**: This task includes the generation of the typed database client. The agent must verify that the generated types match the Zod schemas in the plan. It also implements the "Rollback" strategy—generating the down-migration script alongside the up-migration to ensure reversibility.
+* **Assigned to**: Backend Agent
+* **Effort**: Medium
+* **Cost Model**: **Cheap** (Gemini 3 Flash)
+* **Inputs**: `PLAN.md#Database Schema`, `PLAN.md#Tech Stack`
+* **Implementation Steps**:
+    1.  **Translate Schema to Code**: Read `Mermaid/SQL` schema from `PLAN.md`. Generate ORM configuration/schema file (e.g., `schema.prisma`, `drizzle.schema.ts`, `models.py`).
+    2.  **Generate Migrations & Client**: Run the migration generation command for the chosen ORM. Generate the type-safe database client/SDK.
+    3.  **Create Seeding Script**: Create a seed script to populate the DB with dummy data (minimum 10 records per primary entity) to facilitate immediate testing.
+* **Validation**: Run Migration Verification (Success). Run Seed Script (Success). Verify database contains expected dummy data. Commit: `feat: database schema and seeding`.
 
 **3.3 Feature Implementation Loop (The Core Loop)**
 
-* **Assigned to**: Coding Agent (Aider via Gemini 3 Flash / GPT-5.3-Codex-Spark)  
-* **Effort**: High (Cumulative)  
-* **Cost Model**: **Cheap/Fast** (Gemini 3 Flash / Spark)  
-* **Detailed Implementation Context**: This is the recursive task that consumes the TASKS.md list. For each task, the agent:  
-  1. Reads the task description and relevant PLAN.md section.  
-  2. Creates the implementation file (e.g., users.service.ts).  
-  3. **Simultaneously** creates the Unit Test file (e.g., users.service.test.ts).  
-  4. Runs the test. If it fails, it reads the error, self-corrects, and retries (up to 3 times).  
-  5. Once the test passes, it commits the code with a semantic commit message.  
-* **Technical Specifics**: The prompt for this agent is "Universal"—it always includes instructions to "Write the test first" (TDD) or "Write test alongside code." This prevents the accumulation of untested legacy code. The agent uses the "Cheap" model because the task is highly constrained; it doesn't need to invent the logic, only translate the requirement into syntax. **GPT-5.3-Codex-Spark** is ideal here for its real-time latency and 128k context.
+* **Assigned to**: Coding Agent (Aider via Gemini 3 Flash / GPT-5.3-Codex-Spark)
+* **Effort**: High (Cumulative)
+* **Cost Model**: **Cheap/Fast** (Gemini 3 Flash / Spark)
+* **Inputs**: `TASKS.md` (Generated in Phase 2)
+* **Execution Protocol**:
+    *   **Context Loading**: Read Task entry and referenced `PLAN.md` section. Check for Shared Schema definitions.
+    *   **Iterative Loop**:
+        1.  **Step A: Test Gen**: Write the Unit Test file *first* (TDD) using the Framework defined in `PLAN.md`.
+        2.  **Step B: Code Gen**: Write the implementation to satisfy the test. Prompt Tip: "Implement [Feature] using [Framework] as defined in PLAN.md."
+        3.  **Step C: Verify**: Run the test runners.
+        4.  **Step D: Refine**: If fail, read error -> fix code -> retry (Max 3 retries).
+        5.  **Step E: Commit**: `git commit -m "feat: implement [Task Name]"`
+* **Model Strategy**: Use **Cheap Models** (Flash) for logic. Switch to **Mid-Tier** (Sonnet/Pro) only if "Retry Loop" exceeds 3.
+* **Validation**: All new tests pass. Linting passes.
 
 **3.4 Integration Logic & Middleware Connection**
 
-* **Assigned to**: Logic Agent  
-* **Effort**: Medium  
-* **Cost Model**: **Mid-Tier** (Claude Sonnet 4.6 / Gemini 3 Pro)  
-* **Detailed Implementation Context**: Once the atomic units (components, services) are built, they must be wired together. This task involves writing the API route handlers that connect the HTTP request to the backend service, and ensuring the Auth middleware correctly intercepts these requests. This is slightly more complex than pure boilerplate, justifying a Mid-Tier model like Claude Sonnet 4.6, which excels at balanced reasoning and coding tasks.  
-* **Technical Specifics**: The agent implements the Zod validation pipes defined in the plan. It ensures that inputs are sanitized before reaching the database logic. It also writes "Integration Tests" that mock the database and verify the HTTP contract (status codes, headers).
+* **Assigned to**: Logic Agent
+* **Effort**: Medium
+* **Cost Model**: **Mid-Tier** (Claude Sonnet 4.6 / Gemini 3 Pro)
+* **Inputs**: `PLAN.md#API Surface`, `PLAN.md#Security`
+* **Implementation Steps**:
+    1.  **Implement API Route Handlers**: Wire up logical services (Task 3.3) to HTTP layer. Apply validation pipes (Zod/Pydantic).
+    2.  **Implement Auth Middleware**: Implement "Middleware Strategy" from `PLAN.md`. Ensure protected routes reject unauthenticated requests (401/403).
+    3.  **Integration Testing**: Write integration tests mocking the DB to verify status codes, headers, and auth rejection.
+* **Validation**: Test protected endpoints with/without tokens. Commit: `feat: integration logic and middleware`.
 
 **Milestones & Metrics**:
 
