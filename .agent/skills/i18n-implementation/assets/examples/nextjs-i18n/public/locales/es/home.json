@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "title": "Bienvenido a nuestra aplicación",
+    "subtitle": "Una aplicación Next.js con soporte multiidioma",
+    "cta": "Comenzar"
+  },
+  "features": {
+    "title": "Características",
+    "i18n": {
+      "title": "Internacionalización",
+      "description": "Cambia entre inglés y español sin problemas"
+    },
+    "rtl": {
+      "title": "Soporte RTL",
+      "description": "Soporte completo para idiomas de derecha a izquierda"
+    },
+    "formatting": {
+      "title": "Formato inteligente",
+      "description": "Fechas, números y monedas se adaptan a tu configuración regional"
+    }
+  },
+  "demo": {
+    "title": "Demo de configuración regional",
+    "date": "Fecha actual",
+    "number": "Número grande",
+    "currency": "Precio en USD"
+  }
+}

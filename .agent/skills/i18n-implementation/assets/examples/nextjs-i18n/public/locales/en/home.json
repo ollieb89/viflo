@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "title": "Welcome to our app",
+    "subtitle": "A Next.js app with multi-language support",
+    "cta": "Get started"
+  },
+  "features": {
+    "title": "Features",
+    "i18n": {
+      "title": "Internationalization",
+      "description": "Switch between English and Spanish seamlessly"
+    },
+    "rtl": {
+      "title": "RTL Support",
+      "description": "Full support for right-to-left languages"
+    },
+    "formatting": {
+      "title": "Smart Formatting",
+      "description": "Dates, numbers, and currencies adapt to your locale"
+    }
+  },
+  "demo": {
+    "title": "Locale Demo",
+    "date": "Current date",
+    "number": "Large number",
+    "currency": "Price in USD"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "button": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "submit": "Submit"
+  },
+  "error": {
+    "required": "This field is required",
+    "notFound": "Page not found",
+    "generic": "Something went wrong"
+  },
+  "language": {
+    "select": "Select language",
+    "en": "English",
+    "es": "Spanish"
+  }
+}
