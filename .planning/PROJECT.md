@@ -36,7 +36,15 @@ A complete agentic dev environment you can install in one command — structured
 
 ### Active
 
-*(None — next milestone requirements TBD via `/gsd:new-milestone`)*
+<!-- v1.1 Dogfooding — viflo applies its own methodology to itself -->
+
+- [ ] CI pipeline is active and blocks bad merges (G-01)
+- [ ] Pre-commit hooks enforce secret detection (G-02)
+- [ ] `apps/web/` has a live Vitest test suite enforced in CI (G-03)
+- [ ] Coverage ratchet prevents regression (G-04)
+- [ ] Basic telemetry logs LLM calls (tokens, model, success) to CSV (G-07)
+- [ ] Oversized SKILL.md files (>500 lines) are modularized with reference sub-guides (G-08)
+- [ ] VERIFICATION.md exists for Phases 0–3 (G-10)
 
 ### Out of Scope
 
@@ -100,6 +108,18 @@ Known tech debt:
 | 2026-02-23 | INDEX.md at .agent/skills/ | ✓ Good — central skill discovery |
 | 2026-02-23 | Defer oversized SKILL.md refactor | ⚠️ Revisit — needs dedicated v1.1 plan |
 
+## Current Milestone: v1.1 Dogfooding
+
+**Goal:** Apply viflo's own methodology, CI templates, testing patterns, and security scanning to the viflo repository itself — proving the toolkit with its own toolkit.
+
+**Target features:**
+- Active GitHub Actions CI pipeline (using ci-cd-pipelines skill output)
+- Pre-commit hooks with secret detection (gitleaks/detect-secrets)
+- Live Vitest test suite for `apps/web/` with coverage ratchet
+- Basic LLM telemetry logging to CSV
+- Modularized SKILL.md files for skills >500 lines
+- VERIFICATION.md backfill for Phases 0–3
+
 ---
 
-*Last updated: 2026-02-23 after v1.0 milestone*
+*Last updated: 2026-02-23 after v1.1 milestone started*
