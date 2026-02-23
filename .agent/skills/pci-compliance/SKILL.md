@@ -1,6 +1,12 @@
 ---
 name: pci-compliance
 description: Implement PCI DSS compliance requirements for secure handling of payment card data and payment systems. Use when securing payment processing, achieving PCI compliance, or implementing payment card security measures.
+triggers:
+  - Securing payment processing
+  - Achieving PCI DSS compliance
+  - Handling cardholder data
+  - Implementing payment card security
+  - Payment system audit preparation
 ---
 
 # PCI Compliance

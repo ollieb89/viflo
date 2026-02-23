@@ -1,6 +1,13 @@
 ---
 name: nodejs-backend-patterns
 description: Build production-ready Node.js backend services with Express/Fastify, implementing middleware patterns, error handling, authentication, database integration, and API design best practices. Use when creating Node.js servers, REST APIs, GraphQL backends, or microservices architectures.
+triggers:
+  - Creating Node.js REST APIs
+  - Setting up Express or Fastify
+  - Implementing Node.js authentication
+  - Building GraphQL backends
+  - Creating Node.js microservices
+  - Database integration with Node.js
 ---
 
 # Node.js Backend Patterns

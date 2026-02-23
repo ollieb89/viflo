@@ -1,6 +1,12 @@
 ---
 name: fastapi-templates
 description: Create production-ready FastAPI projects with async patterns, dependency injection, and comprehensive error handling. Use when building new FastAPI applications or setting up backend API projects.
+triggers:
+  - Starting new FastAPI projects
+  - Implementing async REST APIs
+  - Building Python web services
+  - Setting up FastAPI with PostgreSQL
+  - Creating async applications
 ---
 
 # FastAPI Project Templates

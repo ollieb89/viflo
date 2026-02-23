@@ -1,6 +1,13 @@
 ---
 name: error-handling-patterns
 description: Master error handling patterns across languages including exceptions, Result types, error propagation, and graceful degradation to build resilient applications. Use when implementing error handling, designing APIs, or improving application reliability.
+triggers:
+  - Implementing error handling
+  - Designing error-resilient APIs
+  - Improving application reliability
+  - Implementing retry and circuit breaker patterns
+  - Handling async or concurrent errors
+  - Building fault-tolerant distributed systems
 ---
 
 # Error Handling Patterns
