@@ -12,7 +12,7 @@
     "lint": "prettier --check \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
     "lint:fix": "prettier --write \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
     "type-check": "echo 'type-check: no TS sources at root (documentation repo)' && exit 0",
-    "test": "echo 'test: no test suite yet (Phase 6)' && exit 0",
+    "test": "pnpm --filter @viflo/web test",
     "build": "echo 'build: documentation repo — no build step' && exit 0"
   },
   "devDependencies": {
