@@ -7,12 +7,12 @@
 
 ## Files Created/Modified
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `apps/web/scripts/coverage-ratchet.ts` | Coverage ratchet script | Created |
-| `apps/web/.coverage/baseline.json` | Coverage baseline storage | Created |
-| `apps/web/package.json` | Updated with ratchet scripts | Modified |
-| `.github/workflows/ci.yml` | Added coverage ratchet step | Modified |
+| File                                   | Purpose                      | Status   |
+| -------------------------------------- | ---------------------------- | -------- |
+| `apps/web/scripts/coverage-ratchet.ts` | Coverage ratchet script      | Created  |
+| `apps/web/.coverage/baseline.json`     | Coverage baseline storage    | Created  |
+| `apps/web/package.json`                | Updated with ratchet scripts | Modified |
+| `.github/workflows/ci.yml`             | Added coverage ratchet step  | Modified |
 
 ---
 
@@ -40,10 +40,10 @@ pnpm run test:coverage:update
 
 ### Commands
 
-| Command | Behavior |
-|---------|----------|
+| Command           | Behavior                                          |
+| ----------------- | ------------------------------------------------- |
 | `check` (default) | Compares current vs baseline, fails on regression |
-| `update` | Updates baseline to current coverage |
+| `update`          | Updates baseline to current coverage              |
 
 ---
 

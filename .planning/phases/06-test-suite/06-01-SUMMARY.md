@@ -7,15 +7,15 @@
 
 ## Files Created
 
-| File | Purpose |
-|------|---------|
-| `apps/web/package.json` | Package configuration with Vitest scripts |
-| `apps/web/tsconfig.json` | TypeScript configuration |
-| `apps/web/vitest.config.ts` | Vitest configuration with coverage |
-| `apps/web/src/validation/skill.ts` | Skill frontmatter validation utility |
-| `apps/web/src/validation/skill.test.ts` | Tests for skill validation |
-| `apps/web/src/parsing/plan.ts` | Plan file parsing utility |
-| `apps/web/src/parsing/plan.test.ts` | Tests for plan parsing |
+| File                                    | Purpose                                   |
+| --------------------------------------- | ----------------------------------------- |
+| `apps/web/package.json`                 | Package configuration with Vitest scripts |
+| `apps/web/tsconfig.json`                | TypeScript configuration                  |
+| `apps/web/vitest.config.ts`             | Vitest configuration with coverage        |
+| `apps/web/src/validation/skill.ts`      | Skill frontmatter validation utility      |
+| `apps/web/src/validation/skill.test.ts` | Tests for skill validation                |
+| `apps/web/src/parsing/plan.ts`          | Plan file parsing utility                 |
+| `apps/web/src/parsing/plan.test.ts`     | Tests for plan parsing                    |
 
 ---
 
@@ -59,17 +59,17 @@ apps/web/
 
 ### Skill Validation (`src/validation/skill.ts`)
 
-| Function | Purpose |
-|----------|---------|
-| `validateSkillFrontmatter(content)` | Validates SKILL.md YAML frontmatter |
-| `extractTriggers(content)` | Extracts trigger array from frontmatter |
+| Function                            | Purpose                                 |
+| ----------------------------------- | --------------------------------------- |
+| `validateSkillFrontmatter(content)` | Validates SKILL.md YAML frontmatter     |
+| `extractTriggers(content)`          | Extracts trigger array from frontmatter |
 
 ### Plan Parsing (`src/parsing/plan.ts`)
 
-| Function | Purpose |
-|----------|---------|
-| `parsePlanFile(content)` | Parses PLAN.md XML structure |
-| `countTasksByType(tasks)` | Counts auto vs manual tasks |
+| Function                  | Purpose                      |
+| ------------------------- | ---------------------------- |
+| `parsePlanFile(content)`  | Parses PLAN.md XML structure |
+| `countTasksByType(tasks)` | Counts auto vs manual tasks  |
 
 ---
 
