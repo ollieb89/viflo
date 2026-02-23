@@ -256,17 +256,23 @@ skill-name/
 ├── SKILL.md          # Required: Instructions and metadata
 ├── scripts/          # Optional: Executable scripts
 ├── references/       # Optional: Documentation references
+├── resources/        # Optional: Extended guides and topic deep-dives
 └── assets/           # Optional: Templates, boilerplate
 ```
 
 ### Creating a New Skill
 
 1. Run `.agent/skills/skill-creator/scripts/init_skill.py <name> --path <dir>`
-2. Edit `SKILL.md` with proper frontmatter (`name`, `description`)
+2. Edit `SKILL.md` with proper frontmatter (`name`, `description`, `triggers`)
 3. Add scripts/references/assets as needed
 4. Package with `.agent/skills/skill-creator/scripts/package_skill.py <path>`
+5. Add entry to `.agent/skills/INDEX.md`
 
 ### Available Skills Reference
+
+See the complete index at [`.agent/skills/INDEX.md`](.agent/skills/INDEX.md) for all 35+ skills with descriptions, difficulty levels, and quick selection guide.
+
+**Most commonly used skills:**
 
 | Skill | Purpose |
 |-------|---------|
@@ -276,7 +282,12 @@ skill-name/
 | `database-design` | Schema design and migrations |
 | `api-patterns` | API design patterns (REST, GraphQL, tRPC) |
 | `frontend-dev-guidelines` | Frontend development best practices |
+| `backend-dev-guidelines` | FastAPI + SQLAlchemy backend standards |
 | `e2e-testing-patterns` | Playwright/Cypress testing patterns |
+| `containerization` | Docker best practices |
+| `ci-cd-pipelines` | GitHub Actions workflow templates |
+| `cloud-deployment` | Vercel, AWS, Railway deployment |
+| `gsd-workflow` | Get Shit Done spec-driven development |
 
 ---
 
@@ -390,6 +401,7 @@ python3 scripts/verify_env.py
 - **README.md**: Human-facing project overview
 - **docs/**: Comprehensive methodology documentation
 - **.agent/skills/**: Reusable capabilities
+- **.agent/skills/INDEX.md**: Complete index of all skills with descriptions
 - **Cost-Efficient-Development-Workflow-Extended.md**: Extended reference
 
 ---
