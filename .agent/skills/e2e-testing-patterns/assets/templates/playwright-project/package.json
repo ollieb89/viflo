@@ -1,0 +1,18 @@
+{
+  "name": "playwright-e2e-template",
+  "version": "0.1.0",
+  "description": "Playwright E2E testing template",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "test:chromium": "playwright test --project=chromium",
+    "test:report": "playwright show-report",
+    "test:generate": "python .agent/skills/e2e-testing-patterns/scripts/generate-test.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0"
+  }
+}

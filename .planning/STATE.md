@@ -4,7 +4,7 @@
 
 **Milestone**: v1.0 Foundation  
 **Phase**: 2  
-**Status**: planning  
+**Status**: executing  
 
 ## Decisions
 
@@ -21,6 +21,19 @@
 - [x] None
 
 ## Session Memory
+
+### 2026-02-23 18:55
+
+**Phase 1**: ✅ COMPLETE  
+**Phase 2**: executing - Wave 1 Started
+
+Phase 2 discussion complete. Decisions approved:
+- PostgreSQL only for database patterns
+- Playwright focus for E2E testing
+- Simple REST examples (no WebSockets)
+- Parallel execution for Wave 1
+
+Started Wave 1: Plans 2-1 (Database) and 2-2 (E2E) executing in parallel.
 
 ### 2026-02-23 18:50
 
