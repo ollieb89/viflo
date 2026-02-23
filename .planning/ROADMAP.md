@@ -25,7 +25,7 @@
 - [x] **Phase 5: CI & Security** - GitHub Actions pipeline active with pre-commit secret scanning ✅
 - [x] **Phase 6: Test Suite** - Vitest suite live in `apps/web/` with coverage ratchet enforced in CI ✅
 - [x] **Phase 7: Content Hygiene** - Oversized skills modularized, VERIFICATION.md backfilled, telemetry logging in place
-- [ ] **Phase 8: Verification & Requirements Closure** - VERIFICATION.md for all v1.1 phases, CONTENT-01 fully satisfied, requirements checked off
+- [x] **Phase 8: Verification & Requirements Closure** - VERIFICATION.md for all v1.1 phases, CONTENT-01 fully satisfied, requirements checked off (completed 2026-02-23)
 - [ ] **Phase 9: Workspace & Developer Tooling** - pnpm-workspace.yaml added, pre-commit install automated
 
 **Plans**: 3/3 complete (Phases 5–7)
@@ -140,5 +140,5 @@ Plans:
 | 5. CI & Security           | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 6. Test Suite              | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 7. Content Hygiene         | v1.1      | 3/3            | Complete    | 2026-02-23 |
-| 8. Verification Closure    | 1/2 | In Progress|  |            |
+| 8. Verification Closure    | 2/2 | Complete   | 2026-02-23 |            |
 | 9. Workspace Tooling       | v1.1      | TBD            | Pending     |            |

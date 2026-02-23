@@ -23,7 +23,7 @@ Milestone: **Dogfooding** — viflo applies its own methodology, CI templates, t
 
 ### CONTENT — Skill & Documentation Quality
 
-- [ ] **CONTENT-01**: All SKILL.md files >500 lines are split into a primary SKILL.md + named reference sub-guides in a `references/` directory
+- [x] **CONTENT-01**: All SKILL.md files >500 lines are split into a primary SKILL.md + named reference sub-guides in a `references/` directory
 - [x] **CONTENT-02**: VERIFICATION.md exists for Phases 0, 1, 2, and 3 documenting what was built and verified
 - [x] **CONTENT-03**: A telemetry script logs each LLM call (timestamp, model, prompt_tokens, completion_tokens, task_success) and exports to CSV
 
@@ -78,7 +78,7 @@ All 14 v1.0 requirements shipped and validated 2026-02-23:
 | QUAL-03     | Phase 6 → Phase 8  | Complete |
 | QUAL-04     | Phase 6 → Phase 9  | Complete |
 | QUAL-05     | Phase 6 → Phase 8  | Complete |
-| CONTENT-01  | Phase 7 → Phase 8  | Pending  |
+| CONTENT-01  | Phase 7 → Phase 8  | Complete |
 | CONTENT-02  | Phase 7 → Phase 8  | Complete |
 | CONTENT-03  | Phase 7 → Phase 8  | Complete |
 
