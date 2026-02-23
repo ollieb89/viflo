@@ -58,7 +58,13 @@ Plans:
 2. Every utility function in `apps/web/` has at least one test covering its expected behavior
 3. The CI pipeline runs the test suite and fails the build when any test fails
 4. A coverage ratchet script records the current coverage baseline and fails if a subsequent run reports a lower percentage
-   **Plans**: TBD
+
+**Plans**: 2 plans
+
+Plans:
+
+- [ ] 06-01-PLAN.md — Vitest test suite with utility functions and tests (QUAL-03, QUAL-04)
+- [ ] 06-02-PLAN.md — Coverage ratchet script (QUAL-05)
 
 ### Phase 7: Content Hygiene
 
@@ -83,5 +89,5 @@ Plans:
 | 3. DevOps & Deployment     | v1.0      | —              | Complete    | 2026-02-23 |
 | 4. Polish & Community      | v1.0      | 4/4            | Complete    | 2026-02-23 |
 | 5. CI & Security           | v1.1      | 2/2            | Complete    | 2026-02-23 |
-| 6. Test Suite              | v1.1      | 0/TBD          | Not started | -          |
+| 6. Test Suite              | v1.1      | 0/2            | Planned     | -          |
 | 7. Content Hygiene         | v1.1      | 0/TBD          | Not started | -          |
