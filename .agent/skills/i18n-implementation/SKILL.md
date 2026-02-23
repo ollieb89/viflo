@@ -323,7 +323,7 @@ export const config = {
 - Context-based translations
 - Lazy loading namespaces
 
-**[Complete Guide: references/i18n-patterns.md](references/i18n-patterns.md)**
+_(See inline content above for patterns)_
 
 ### Translation Workflow
 
@@ -353,7 +353,7 @@ export const config = {
 | Add a language switcher           | Language Switcher Component section above                             |
 | Support Arabic/Hebrew/RTL         | RTL Support section above                                             |
 | Format dates or currencies        | Date, Number, and Currency Formatting above                           |
-| Pluralization and interpolation   | [i18n-patterns.md](references/i18n-patterns.md)                      |
+| Pluralization and interpolation   | Advanced Translation Patterns section above                           |
 | Manage translations with a team   | [translation-workflow.md](references/translation-workflow.md)         |
 | See a working Next.js example     | [assets/examples/nextjs-i18n/](assets/examples/nextjs-i18n/)         |
 
