@@ -17,12 +17,32 @@
 | 2026-02-23 | Plan Phase 2 with 3 plans | Database, E2E testing, and examples |
 | 2026-02-23 | Use Contributor Covenant 2.1 for Code of Conduct | Industry standard with 4-tier enforcement system |
 | 2026-02-23 | Separate skill_suggestion from feature_request issue template | Skill contributions have unique SKILL.md structure requirements |
+| 2026-02-23 | Use next-i18next over next-intl for i18n skill | Direct integration with Next.js Pages Router built-in i18n routing |
+| 2026-02-23 | Use native Intl API for date/number/currency formatting | Zero dependencies, built into all modern browsers and Node.js |
+| 2026-02-23 | Namespace translations by domain not by component | Stable as components are refactored; auth/dashboard/common grouping |
 
 ## Blockers
 
 - [x] None
 
 ## Session Memory
+
+### 2026-02-23 20:00
+
+**Phase 4**: executing - Plan 4-3 Complete
+
+Plan 4-3 (i18n Implementation Examples) delivered:
+- i18n-implementation skill: 376-line SKILL.md covering next-i18next, RTL, Intl API, middleware
+- Next.js working example with EN/ES translations, LanguageSwitcher, LocaleDemo, middleware routing
+- translation-workflow.md: key naming, extraction tools (i18next-scanner), Crowdin/Phrase/Lokalise, QA process
+- i18n-patterns.md: pluralization, interpolation, Trans component, context-based, dynamic keys, lazy loading, testing
+
+Decisions:
+- next-i18next (not next-intl) for Pages Router compatibility
+- Native Intl API for all date/number/currency formatting (no extra deps)
+- Namespace by domain (auth, dashboard) for refactoring stability
+
+Stopped at: Completed 4-3-PLAN.md (i18n Implementation Examples)
 
 ### 2026-02-23 19:03
 
