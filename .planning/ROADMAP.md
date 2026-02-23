@@ -8,13 +8,13 @@
 
 Completed foundation documentation, AGENTS.md, and project structure.
 
-## Phase 1: Core Skills Development
+## Phase 1: Core Skills Development ✅
 
 **Goal**: Create essential development skills
 **Requirements**: R3, R4, R6, R7
-**Status**: executing-progress
+**Status**: complete
 
-Create GSD Workflow skill (complete), Frontend skill, Backend skill.
+Created GSD Workflow skill, enhanced Frontend skill (component generator + Next.js template), created Backend skill (endpoint generator + FastAPI template).
 
 ## Phase 2: Extended Skills & Examples
 
@@ -45,7 +45,7 @@ Contributing guide, translations, community templates.
 ## Completed
 
 - [x] Phase 0: Foundation
-- [ ] Phase 1: Core Skills
+- [x] Phase 1: Core Skills
 - [ ] Phase 2: Extended Skills
 - [ ] Phase 3: DevOps
 - [ ] Phase 4: Community
