@@ -16,13 +16,13 @@ Completed foundation documentation, AGENTS.md, and project structure.
 
 Created GSD Workflow skill, enhanced Frontend skill (component generator + Next.js template), created Backend skill (endpoint generator + FastAPI template).
 
-## Phase 2: Extended Skills & Examples
+## Phase 2: Extended Skills & Examples ✅
 
 **Goal**: Add database, testing skills and example projects
 **Requirements**: R8, R9, R10
-**Status**: not-started
+**Status**: complete
 
-Database design skill, E2E testing patterns, example project templates.
+Database design skill (schema generator, migration helper), E2E testing patterns (test generator, Playwright template), minimal-app example.
 
 ## Phase 3: DevOps & Deployment
 
