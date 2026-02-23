@@ -1,8 +1,12 @@
 # Viflo: Universal Agentic Development Environment
 
-## Vision
+## What This Is
 
-Viflo (Visual Flow) is a comprehensive development methodology and toolchain that standardizes and accelerates agentic software development. It provides a structured 5-phase lifecycle for hybrid AI-human development teams.
+Viflo is a comprehensive development methodology and toolchain that standardizes and accelerates agentic software development. It ships as 35 reusable skill packages, a structured 5-phase lifecycle, and GSD workflow tooling for hybrid AI-human development teams.
+
+## Core Value
+
+A complete agentic dev environment you can install in one command — structured methodology, ready-made skills, and proven workflows so teams skip setup and ship faster.
 
 ## Goals
 
@@ -11,12 +15,47 @@ Viflo (Visual Flow) is a comprehensive development methodology and toolchain tha
 3. **Improve Quality**: Built-in planning, verification, and best practices ensure high-quality output
 4. **Enable Collaboration**: Clear documentation and artifacts facilitate human-AI teamwork
 
+## Requirements
+
+### Validated
+
+- ✓ Complete 5-phase methodology documentation (R1) — v1.0
+- ✓ Agent configuration structure (skills, rules, workflows) (R2) — v1.0
+- ✓ GSD Workflow skill with helper scripts (R3) — v1.0
+- ✓ Project templates (PROJECT, REQUIREMENTS, ROADMAP, PLAN) (R4) — v1.0
+- ✓ AGENTS.md reference guide (R5) — v1.0
+- ✓ Frontend development skill (React/Next.js) (R6) — v1.0
+- ✓ Backend development skill (FastAPI) (R7) — v1.0
+- ✓ Database design skill (PostgreSQL) (R8) — v1.0
+- ✓ E2E testing skill (Playwright) (R9) — v1.0
+- ✓ Example project templates (R10) — v1.0
+- ✓ CI/CD integration guides (R11) — v1.0
+- ✓ Docker/containerization skill (R12) — v1.0
+- ✓ Cloud deployment skill (AWS/Vercel) (R13) — v1.0
+- ✓ Multi-language support (i18n) (R14) — v1.0
+
+### Active
+
+*(None — next milestone requirements TBD via `/gsd:new-milestone`)*
+
+### Out of Scope
+
+- AI model training/fine-tuning
+- Proprietary/closed-source components
+- Non-agentic development workflows
+- IDE plugins/extensions (revisit in v1.1)
+- Oversized SKILL.md refactoring >500 lines (deferred to v1.1)
+
 ## Constraints
 
 - **Documentation-First**: All methodology must be thoroughly documented
 - **Tool Agnostic**: Support multiple AI coding assistants (Claude Code, Kimi CLI, etc.)
 - **Modular**: Skills and rules should be composable and reusable
 - **Practical**: Real-world tested workflows, not theoretical
+- All skills must follow SKILL.md specification
+- Scripts must work on macOS, Linux, and WSL
+- Documentation must be AI and human readable
+- No external dependencies beyond standard tools
 
 ## Tech Stack
 
@@ -36,17 +75,31 @@ Viflo (Visual Flow) is a comprehensive development methodology and toolchain tha
 - **Small Teams**: 2-10 person teams adopting AI-assisted development
 - **AI-Native Agencies**: Teams building exclusively with AI tools
 
-## Definition of Done
+## Context
 
-- [x] Core documentation complete (5 phases)
-- [x] Agent configuration structure established
-- [x] GSD Workflow skill created and packaged
-- [ ] Additional skills library (frontend, backend, database)
-- [ ] Example project templates
-- [ ] CI/CD integration guides
-- [ ] Community contributions guide
+Shipped v1.0 with 35 skill packages, ~60,775 LOC across Markdown/JS/TS/JSON.
+Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js tooling.
+All 14 v1.0 requirements delivered in 7 days across 5 phases, 41 commits.
+
+Known tech debt:
+- SKILL.md files >500 lines need modular reference file structure
+- VERIFICATION.md missing for Phases 0–3 (predated GSD plan tracking)
+
+## Key Decisions
+
+| Date | Decision | Outcome |
+|------|----------|---------|
+| 2026-02-23 | Adopt GSD methodology | ✓ Good — structured workflow proved effective |
+| 2026-02-23 | Create gsd-workflow skill | ✓ Good — reusable across projects |
+| 2026-02-23 | Use Python for helper scripts | ✓ Good — portable, no compilation needed |
+| 2026-02-23 | Use Contributor Covenant 2.1 | ✓ Good — industry standard |
+| 2026-02-23 | next-i18next over next-intl | ✓ Good — Pages Router compatibility |
+| 2026-02-23 | Native Intl API for formatting | ✓ Good — zero dependencies |
+| 2026-02-23 | Namespace translations by domain | ✓ Good — stable under refactoring |
+| 2026-02-23 | triggers: as standard frontmatter | ✓ Good — consistent across 35 skills |
+| 2026-02-23 | INDEX.md at .agent/skills/ | ✓ Good — central skill discovery |
+| 2026-02-23 | Defer oversized SKILL.md refactor | ⚠️ Revisit — needs dedicated v1.1 plan |
 
 ---
 
-*Generated: 2026-02-23*
-*Status: GSD Initialized, Codebase Mapped*
+*Last updated: 2026-02-23 after v1.0 milestone*

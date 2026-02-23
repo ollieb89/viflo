@@ -1,59 +1,28 @@
 # Viflo Roadmap
 
-## Phase 0: Foundation ✅
+## Milestones
 
-**Goal**: Establish core methodology and documentation
-**Requirements**: R1, R2, R5
-**Status**: complete
+- ✅ **v1.0 MVP** — Phases 0–4 (shipped 2026-02-23) — [Archive](.planning/milestones/v1.0-ROADMAP.md)
 
-Completed foundation documentation, AGENTS.md, and project structure.
+## Phases
 
-## Phase 1: Core Skills Development ✅
+<details>
+<summary>✅ v1.0 MVP (Phases 0–4) — SHIPPED 2026-02-23</summary>
 
-**Goal**: Create essential development skills
-**Requirements**: R3, R4, R6, R7
-**Status**: complete
+- [x] Phase 0: Foundation — completed 2026-02-23
+- [x] Phase 1: Core Skills Development — completed 2026-02-23
+- [x] Phase 2: Extended Skills & Examples — completed 2026-02-23
+- [x] Phase 3: DevOps & Deployment — completed 2026-02-23
+- [x] Phase 4: Polish & Community (4/4 plans) — completed 2026-02-23
 
-Created GSD Workflow skill, enhanced Frontend skill (component generator + Next.js template), created Backend skill (endpoint generator + FastAPI template).
+</details>
 
-## Phase 2: Extended Skills & Examples ✅
+## Progress
 
-**Goal**: Add database, testing skills and example projects
-**Requirements**: R8, R9, R10
-**Status**: complete
-
-Database design skill (schema generator, migration helper), E2E testing patterns (test generator, Playwright template), minimal-app example.
-
-## Phase 3: DevOps & Deployment ✅
-
-**Goal**: CI/CD, containerization, cloud deployment
-**Requirements**: R11, R12, R13
-**Status**: complete
-
-Created containerization skill (Dockerfile generator), CI/CD pipeline templates (GitHub Actions), cloud deployment guides (Vercel, AWS, Railway).
-
-## Phase 4: Polish & Community
-
-**Goal**: Documentation, community, multi-language support
-**Requirements**: R14
-**Status**: executing
-
-Contributing guide, translations, community templates.
-
-**Plans**: 4 plans
-
-Plans:
-- [x] 04-01-PLAN.md — Documentation review: triggers field, README skills table, INDEX.md
-- [x] 04-02-PLAN.md — Contributing guide: CONTRIBUTING.md, issue templates, CODE_OF_CONDUCT.md
-- [x] 04-03-PLAN.md — i18n implementation skill with Next.js example and reference guides
-- [ ] 04-04-PLAN.md — Gap closure: fix README skill count (34→35) and Contributing link
-
----
-
-## Completed
-
-- [x] Phase 0: Foundation
-- [x] Phase 1: Core Skills
-- [x] Phase 2: Extended Skills
-- [x] Phase 3: DevOps
-- [x] Phase 4: Community (completed 2026-02-23)
+| Phase                      | Milestone | Plans Complete | Status   | Completed  |
+| -------------------------- | --------- | -------------- | -------- | ---------- |
+| 0. Foundation              | v1.0      | —              | Complete | 2026-02-23 |
+| 1. Core Skills Development | v1.0      | —              | Complete | 2026-02-23 |
+| 2. Extended Skills         | v1.0      | —              | Complete | 2026-02-23 |
+| 3. DevOps & Deployment     | v1.0      | —              | Complete | 2026-02-23 |
+| 4. Polish & Community      | v1.0      | 4/4            | Complete | 2026-02-23 |
