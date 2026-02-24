@@ -175,10 +175,10 @@ Use checklists for systematic reviews. See the [full review checklist](reference
 ```markdown
 ## Quick Review Checklist
 
-Security:    [ ] Input validated  [ ] SQL params  [ ] Auth checked
-Performance: [ ] No N+1 queries  [ ] Indexed     [ ] Cached
-Testing:     [ ] Happy path      [ ] Edge cases  [ ] Deterministic
-Maintainability: [ ] Clear names [ ] SRP         [ ] Comments
+Security: [ ] Input validated [ ] SQL params [ ] Auth checked
+Performance: [ ] No N+1 queries [ ] Indexed [ ] Cached
+Testing: [ ] Happy path [ ] Edge cases [ ] Deterministic
+Maintainability: [ ] Clear names [ ] SRP [ ] Comments
 ```
 
 ### Technique 2: The Question Approach

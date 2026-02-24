@@ -17,9 +17,9 @@ The script below is the complete Quick Start artifact. Run it once to set up the
 // embed-and-retrieve.ts
 // Run: npx tsx embed-and-retrieve.ts
 // Time to working output: < 15 minutes
-import OpenAI from 'openai';
-import pgvector from 'pgvector/prisma'; // pgvector-node — use toSql(), not JSON.stringify() — different wire format
-import { PrismaClient } from '@prisma/client';
+import OpenAI from "openai";
+import pgvector from "pgvector/prisma"; // pgvector-node — use toSql(), not JSON.stringify() — different wire format
+import { PrismaClient } from "@prisma/client";
 
 const openai = new OpenAI();
 const db = new PrismaClient();
@@ -52,37 +52,49 @@ const db = new PrismaClient();
 // ── 2. Embed documents ────────────────────────────────────────────────────────
 
 const documents = [
-  { sourceId: 'doc-1', content: 'pgvector enables vector similarity search inside PostgreSQL.' },
-  { sourceId: 'doc-1', content: 'HNSW indexes provide approximate nearest-neighbor search with high recall.' },
-  { sourceId: 'doc-2', content: 'Hybrid search combines vector similarity with full-text search for better precision.' },
+  {
+    sourceId: "doc-1",
+    content: "pgvector enables vector similarity search inside PostgreSQL.",
+  },
+  {
+    sourceId: "doc-1",
+    content:
+      "HNSW indexes provide approximate nearest-neighbor search with high recall.",
+  },
+  {
+    sourceId: "doc-2",
+    content:
+      "Hybrid search combines vector similarity with full-text search for better precision.",
+  },
 ];
 
 const embedResponse = await openai.embeddings.create({
-  model: 'text-embedding-3-small',
+  model: "text-embedding-3-small",
   input: documents.map((d) => d.content),
 });
 
 await db.$transaction(
-  embedResponse.data.map((item, i) =>
-    db.$executeRaw`
+  embedResponse.data.map(
+    (item, i) =>
+      db.$executeRaw`
       INSERT INTO document_chunks (source_id, content, embedding, embedding_model_version)
       VALUES (
         ${documents[i].sourceId},
         ${documents[i].content},
         ${pgvector.toSql(item.embedding)},  -- pgvector-node — use toSql(), not JSON.stringify() — different wire format
-        ${'text-embedding-3-small-v1'}
+        ${"text-embedding-3-small-v1"}
       )
-    `
-  )
+    `,
+  ),
 );
 
 console.log(`Embedded ${documents.length} documents.`);
 
 // ── 3. Retrieve ───────────────────────────────────────────────────────────────
 
-const query = 'how does approximate nearest neighbor search work?';
+const query = "how does approximate nearest neighbor search work?";
 const queryEmbedResponse = await openai.embeddings.create({
-  model: 'text-embedding-3-small',
+  model: "text-embedding-3-small",
   input: query,
 });
 const queryVector = pgvector.toSql(queryEmbedResponse.data[0].embedding);
@@ -108,10 +120,12 @@ const filtered = results.filter((r) => r.score >= 0.75); // 0.75 threshold: prev
 
 console.log(`\nQuery: "${query}"\n`);
 if (filtered.length === 0) {
-  console.log('No results above threshold 0.75. Try adding more documents.');
+  console.log("No results above threshold 0.75. Try adding more documents.");
 } else {
   filtered.forEach((r, i) => {
-    console.log(`[${i + 1}] score=${r.score.toFixed(3)}: ${r.content.slice(0, 120)}`);
+    console.log(
+      `[${i + 1}] score=${r.score.toFixed(3)}: ${r.content.slice(0, 120)}`,
+    );
   });
 }
 
@@ -138,11 +152,11 @@ Without this column, switching models (e.g. `text-embedding-3-small` to `text-em
 
 **HNSW vs IVFFlat — decision table:**
 
-| Situation | Recommendation | Why |
-|---|---|---|
-| New schema (default) | HNSW | No training step; better recall; simpler setup |
-| > 1M rows, build time is a constraint | IVFFlat | Faster index build (`lists = rows/1000`); lower recall |
-| Build time budget limited (hours acceptable) | HNSW | Higher `ef_construction` cost is a one-time cost |
+| Situation                                    | Recommendation | Why                                                    |
+| -------------------------------------------- | -------------- | ------------------------------------------------------ |
+| New schema (default)                         | HNSW           | No training step; better recall; simpler setup         |
+| > 1M rows, build time is a constraint        | IVFFlat        | Faster index build (`lists = rows/1000`); lower recall |
+| Build time budget limited (hours acceptable) | HNSW           | Higher `ef_construction` cost is a one-time cost       |
 
 **HNSW parameters:**
 
@@ -177,10 +191,10 @@ search_vector tsvector GENERATED ALWAYS AS (to_tsvector('english', content)) STO
 
 ### Strategy Decision Table
 
-| Strategy | When to Use | Chunk Size | Overlap | Tooling |
-|---|---|---|---|---|
-| Fixed-size | Default; uniform content (articles, docs, prose) | 512 tokens | 50–100 tokens (10–20%) | `tiktoken` (exact) or 0.75 chars/token (approx) |
-| Semantic | Structured content (markdown headers, legal sections, code blocks) | Variable | ~10–15% | Python: `RecursiveCharacterTextSplitter` |
+| Strategy   | When to Use                                                        | Chunk Size | Overlap                | Tooling                                         |
+| ---------- | ------------------------------------------------------------------ | ---------- | ---------------------- | ----------------------------------------------- |
+| Fixed-size | Default; uniform content (articles, docs, prose)                   | 512 tokens | 50–100 tokens (10–20%) | `tiktoken` (exact) or 0.75 chars/token (approx) |
+| Semantic   | Structured content (markdown headers, legal sections, code blocks) | Variable   | ~10–15%                | Python: `RecursiveCharacterTextSplitter`        |
 
 ### Token Budget Math
 
@@ -246,9 +260,9 @@ LIMIT 10;
 ### TypeScript Wrapper
 
 ```typescript
-import pgvector from 'pgvector/prisma';
-import { PrismaClient } from '@prisma/client';
-import OpenAI from 'openai';
+import pgvector from "pgvector/prisma";
+import { PrismaClient } from "@prisma/client";
+import OpenAI from "openai";
 
 const openai = new OpenAI();
 const db = new PrismaClient();
@@ -260,7 +274,7 @@ interface HybridResult {
 
 async function hybridSearch(query: string, topK = 10): Promise<HybridResult[]> {
   const embedResponse = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: query,
   });
   const queryVector = pgvector.toSql(embedResponse.data[0].embedding);
@@ -306,6 +320,7 @@ Before going to production, verify your pipeline meets minimum recall thresholds
 Formula: `hits / expected.length` where `hits` = number of expected chunk IDs found in the top-k result set.
 
 Thresholds:
+
 - `recall@5 > 0.8` = production-ready
 - `recall@5 < 0.6` = investigate chunking or embedding model choice
 
@@ -336,11 +351,13 @@ Without an HNSW index, every similarity query does a full sequential scan. Toler
 **Why it happens:** Developers prototype with small datasets, ship without the index, miss it until load increases.
 
 **Warning signs:**
+
 - `EXPLAIN ANALYZE` shows `Seq Scan` instead of `Index Scan using hnsw_...`
 - Query latency grows linearly with row count
 - `\d document_chunks` shows no index on the `embedding` column
 
 **Fix:**
+
 ```sql
 -- Check existing indexes
 SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'document_chunks';
@@ -357,11 +374,13 @@ Switching embedding models (e.g. `text-embedding-3-small` to `text-embedding-3-l
 **Why it happens:** The embedding column alone has no metadata about which model produced it. Mixed vectors are indistinguishable at query time.
 
 **Warning signs:**
+
 - Similarity scores cluster around 0.5 (mixed-model vectors produce ~random similarities)
 - recall@5 drops suddenly without code changes
 - Two developers embed the same document and get different `embedding` values
 
 **Fix:**
+
 ```sql
 -- Identify stale rows
 SELECT embedding_model_version, COUNT(*) FROM document_chunks GROUP BY 1;
@@ -375,12 +394,14 @@ WHERE id = $2;
 ### Gotcha 3: Chunking Pitfalls (Context Loss and Budget Overrun)
 
 Two common failure modes:
+
 1. **No overlap**: key sentence at chunk boundary is split — neither chunk contains full context. LLM hallucinates from incomplete context.
 2. **Chunks too large**: `topK=10` with `chunk_size=1024` tokens = 10,240 tokens of context. With a 16K or 32K context model, or a large system prompt, this silently truncates the prompt.
 
 **Why it happens:** Default splitters use character counts, not token counts. 512 characters ≈ 384 tokens (not 512).
 
 **Warning signs:**
+
 - LLM answers reference half-sentences or cut-off facts
 - Token usage per LLM call spikes unexpectedly
 - `tiktoken` reveals chunks are 2–3× larger than expected
@@ -394,6 +415,7 @@ HNSW is a graph structure. Deleted or updated rows leave "dead nodes" in the gra
 **Why it happens:** HNSW indices are not self-healing. Dead tuples accumulate between VACUUM runs.
 
 **Warning signs:**
+
 - recall@5 drifts downward over weeks without schema or code changes
 - `pgstattuple` shows high dead-tuple count on `document_chunks`
 - After a bulk-delete + re-embed operation, search quality noticeably drops
@@ -408,12 +430,12 @@ REINDEX INDEX CONCURRENTLY idx_document_chunks_embedding;
 
 ## Version Context
 
-| Library | Version | Notes |
-|---|---|---|
-| `pgvector` (Postgres extension) | 0.8.x | HNSW is the preferred default index (no training step, better recall); IVFFlat valid for >1M rows |
-| `openai` (npm) | 4.x | `text-embedding-3-small` (1536 dims, cost-optimal default); `text-embedding-3-large` (3072 dims, ~6× cost) |
-| `pgvector` (npm, pgvector-node) | latest | `pgvector/prisma` import — provides `toSql()` for Prisma `$executeRaw` |
-| Prisma | 5.x | pgvector requires raw SQL (`$executeRaw` / `$queryRaw`) — Prisma does not natively support the `vector` type |
+| Library                         | Version | Notes                                                                                                        |
+| ------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| `pgvector` (Postgres extension) | 0.8.x   | HNSW is the preferred default index (no training step, better recall); IVFFlat valid for >1M rows            |
+| `openai` (npm)                  | 4.x     | `text-embedding-3-small` (1536 dims, cost-optimal default); `text-embedding-3-large` (3072 dims, ~6× cost)   |
+| `pgvector` (npm, pgvector-node) | latest  | `pgvector/prisma` import — provides `toSql()` for Prisma `$executeRaw`                                       |
+| Prisma                          | 5.x     | pgvector requires raw SQL (`$executeRaw` / `$queryRaw`) — Prisma does not natively support the `vector` type |
 
 ## See Also
 

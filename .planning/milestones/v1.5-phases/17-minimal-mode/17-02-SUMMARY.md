@@ -107,5 +107,6 @@ None — no external service configuration required.
 - Ready for Phase 18 (full mode) or Phase 19 (bin wiring / shebang / npm publish)
 
 ---
-*Phase: 17-minimal-mode*
-*Completed: 2026-02-24*
+
+_Phase: 17-minimal-mode_
+_Completed: 2026-02-24_

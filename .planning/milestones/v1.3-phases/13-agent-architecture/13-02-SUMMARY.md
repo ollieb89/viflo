@@ -39,16 +39,16 @@ metrics:
 
 All 8 grep checks passed (all counts >= 1):
 
-| File | Check | Count |
-|------|-------|-------|
-| multi-agent-patterns.md | `PostgresSaver` | 11 |
-| multi-agent-patterns.md | `LangGraph 1` | 2 |
-| multi-agent-patterns.md | `create_react_agent` | 9 |
-| multi-agent-patterns.md | `recursion_limit` | 9 |
-| memory-orchestration.md | `agent_episodes` | 7 |
-| memory-orchestration.md | `embedding_model_version` | 5 |
-| memory-orchestration.md | `rag-vector-search` | 2 |
-| memory-orchestration.md | `HNSW/hnsw` | 4 |
+| File                    | Check                     | Count |
+| ----------------------- | ------------------------- | ----- |
+| multi-agent-patterns.md | `PostgresSaver`           | 11    |
+| multi-agent-patterns.md | `LangGraph 1`             | 2     |
+| multi-agent-patterns.md | `create_react_agent`      | 9     |
+| multi-agent-patterns.md | `recursion_limit`         | 9     |
+| memory-orchestration.md | `agent_episodes`          | 7     |
+| memory-orchestration.md | `embedding_model_version` | 5     |
+| memory-orchestration.md | `rag-vector-search`       | 2     |
+| memory-orchestration.md | `HNSW/hnsw`               | 4     |
 
 ## Task 1: multi-agent-patterns.md
 
@@ -119,10 +119,10 @@ None — plan executed exactly as written. Both files received targeted surgical
 
 All files found. All commits verified.
 
-| Item | Status |
-|------|--------|
-| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | FOUND |
-| `.agent/skills/agent-architecture/references/memory-orchestration.md` | FOUND |
-| `.planning/phases/13-agent-architecture/13-02-SUMMARY.md` | FOUND |
-| Commit `bd440fc` | FOUND |
-| Commit `6445b0f` | FOUND |
+| Item                                                                  | Status |
+| --------------------------------------------------------------------- | ------ |
+| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | FOUND  |
+| `.agent/skills/agent-architecture/references/memory-orchestration.md` | FOUND  |
+| `.planning/phases/13-agent-architecture/13-02-SUMMARY.md`             | FOUND  |
+| Commit `bd440fc`                                                      | FOUND  |
+| Commit `6445b0f`                                                      | FOUND  |

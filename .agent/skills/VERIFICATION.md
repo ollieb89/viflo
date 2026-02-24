@@ -6,10 +6,10 @@
 
 4/5 skills within the 500-line limit.
 
-| Skill | Line Count | Status | Note |
-|-------|------------|--------|------|
-| prompt-engineering | 286 | ✓ | |
-| auth-systems | 437 | ✓ | |
-| rag-vector-search | 421 | ✓ | |
-| agent-architecture | 503 | ✗ | 498 lines at v1.3 close + See Also section added for INFRA-03 pushed count to 503 |
-| stripe-payments | 363 | ✓ | |
+| Skill              | Line Count | Status | Note                                                                              |
+| ------------------ | ---------- | ------ | --------------------------------------------------------------------------------- |
+| prompt-engineering | 286        | ✓      |                                                                                   |
+| auth-systems       | 437        | ✓      |                                                                                   |
+| rag-vector-search  | 421        | ✓      |                                                                                   |
+| agent-architecture | 503        | ✗      | 498 lines at v1.3 close + See Also section added for INFRA-03 pushed count to 503 |
+| stripe-payments    | 363        | ✓      |                                                                                   |

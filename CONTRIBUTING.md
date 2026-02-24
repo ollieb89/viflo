@@ -98,6 +98,7 @@ We provide an automated setup script that handles all dependencies and pre-commi
 ```
 
 This script will:
+
 - Check for required tools (Node.js 20+, pnpm, Python 3, pre-commit)
 - Install all dependencies with `pnpm install`
 - Set up pre-commit hooks for secret scanning

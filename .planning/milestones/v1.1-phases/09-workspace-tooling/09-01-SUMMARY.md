@@ -2,7 +2,7 @@
 
 **Status:** ✅ COMPLETE  
 **Requirement:** CI-02 gap closure  
-**Completed:** 2026-02-23  
+**Completed:** 2026-02-23
 
 ---
 
@@ -19,10 +19,11 @@ Fixed pnpm workspace configuration to enable single `pnpm install` at root.
 ### Solution
 
 1. **Created `pnpm-workspace.yaml`** with workspace globs:
+
    ```yaml
    packages:
-     - 'apps/*'
-     - 'packages/*'
+     - "apps/*"
+     - "packages/*"
    ```
 
 2. **Updated CI workflow** (`.github/workflows/ci.yml`):
@@ -60,9 +61,9 @@ Tests       13 passed (13)
 
 ## Files Modified
 
-| File | Changes |
-|------|---------|
-| `pnpm-workspace.yaml` | Created with workspace globs |
+| File                       | Changes                              |
+| -------------------------- | ------------------------------------ |
+| `pnpm-workspace.yaml`      | Created with workspace globs         |
 | `.github/workflows/ci.yml` | Single install step, filter commands |
 
 ---
@@ -73,4 +74,4 @@ Tests       13 passed (13)
 
 ---
 
-*Part of Phase 9: Workspace & Developer Tooling (v1.1 Dogfooding)*
+_Part of Phase 9: Workspace & Developer Tooling (v1.1 Dogfooding)_

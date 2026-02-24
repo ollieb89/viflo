@@ -2,7 +2,7 @@ name: Nightly Benchmark
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: "0 2 * * *"
   workflow_dispatch:
 
 jobs:
@@ -28,5 +28,5 @@ jobs:
       - name: Run bench:sc-reflect with flaky probes
         run: pnpm run bench:sc-reflect
         env:
-          MCP_PROBE_CMD: 'true'
-          ALLOW_FLAKY_PROBES: '1'
+          MCP_PROBE_CMD: "true"
+          ALLOW_FLAKY_PROBES: "1"

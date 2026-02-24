@@ -2,12 +2,12 @@
 
 ## Memory Types
 
-| Type | Storage | Scope | Use For |
-|---|---|---|---|
-| In-context | Message array | Single session | Current task state, recent tool results |
-| External key-value | Redis / DB | Cross-session | User preferences, session tokens, counters |
-| External vector | pgvector | Cross-session | Long-form episodic memory, semantic recall |
-| Structured state | DB table | Cross-session | Workflow state, checkpoints, audit trail |
+| Type               | Storage       | Scope          | Use For                                    |
+| ------------------ | ------------- | -------------- | ------------------------------------------ |
+| In-context         | Message array | Single session | Current task state, recent tool results    |
+| External key-value | Redis / DB    | Cross-session  | User preferences, session tokens, counters |
+| External vector    | pgvector      | Cross-session  | Long-form episodic memory, semantic recall |
+| Structured state   | DB table      | Cross-session  | Workflow state, checkpoints, audit trail   |
 
 ## Episodic Memory via pgvector
 
@@ -88,6 +88,7 @@ def recall_episodes(db, query: str, top_k: int = 5) -> list[dict]:
 ```
 
 Key points:
+
 - `pgvector.encode(vector)` — not `JSON.stringify` or raw list. This produces the correct binary wire format for pgvector.
 - `embedding_model_version` filter in recall query — prevents cross-model result contamination.
 - `1 - (embedding <=> %s) AS score` — cosine similarity score (0 = unrelated, 1 = identical).
@@ -107,11 +108,18 @@ async function saveCheckpoint(checkpoint: TaskCheckpoint): Promise<void> {
   await db.taskCheckpoint.upsert({
     where: { taskId: checkpoint.taskId },
     create: checkpoint,
-    update: { step: checkpoint.step, state: checkpoint.state, completedSubtasks: checkpoint.completedSubtasks, updatedAt: new Date() },
+    update: {
+      step: checkpoint.step,
+      state: checkpoint.state,
+      completedSubtasks: checkpoint.completedSubtasks,
+      updatedAt: new Date(),
+    },
   });
 }
 
-async function resumeFromCheckpoint(taskId: string): Promise<TaskCheckpoint | null> {
+async function resumeFromCheckpoint(
+  taskId: string,
+): Promise<TaskCheckpoint | null> {
   return db.taskCheckpoint.findUnique({ where: { taskId } });
 }
 ```
@@ -130,7 +138,7 @@ function estimateTokens(messages: { content: string }[]): number {
 
 async function maybeCompressContext(
   messages: Anthropic.MessageParam[],
-  currentTokens: number
+  currentTokens: number,
 ): Promise<Anthropic.MessageParam[]> {
   if (currentTokens < TOKEN_BUDGET * SUMMARISE_THRESHOLD) return messages;
 
@@ -139,19 +147,27 @@ async function maybeCompressContext(
   const recent = messages.slice(-4);
 
   const summary = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
+    model: "claude-haiku-4-5-20251001",
     max_tokens: 1024,
     messages: [
       ...toSummarise,
-      { role: 'user', content: 'Summarise the conversation above in 200 words, preserving key decisions and facts.' },
+      {
+        role: "user",
+        content:
+          "Summarise the conversation above in 200 words, preserving key decisions and facts.",
+      },
     ],
   });
 
-  const summaryText = summary.content[0].type === 'text' ? summary.content[0].text : '';
+  const summaryText =
+    summary.content[0].type === "text" ? summary.content[0].text : "";
 
   return [
-    { role: 'user', content: `[Context summary]: ${summaryText}` },
-    { role: 'assistant', content: 'Understood. Continuing from where we left off.' },
+    { role: "user", content: `[Context summary]: ${summaryText}` },
+    {
+      role: "assistant",
+      content: "Understood. Continuing from where we left off.",
+    },
     ...recent,
   ];
 }

@@ -13,6 +13,7 @@ triggers:
 # Microservices Patterns
 
 Master microservices architecture patterns including service boundaries, inter-service communication, data management, and resilience patterns for building distributed systems.
+
 ## When to Use This Skill
 
 - Decomposing monoliths into microservices
@@ -28,16 +29,19 @@ Master microservices architecture patterns including service boundaries, inter-s
 ### 1. Service Decomposition Strategies
 
 **By Business Capability**
+
 - Organize services around business functions
 - Each service owns its domain
 - Example: OrderService, PaymentService, InventoryService
 
 **By Subdomain (DDD)**
+
 - Core domain, supporting subdomains
 - Bounded contexts map to services
 - Clear ownership and responsibility
 
 **Strangler Fig Pattern**
+
 - Gradually extract from monolith
 - New functionality as microservices
 - Proxy routes to old/new systems
@@ -45,11 +49,13 @@ Master microservices architecture patterns including service boundaries, inter-s
 ### 2. Communication Patterns
 
 **Synchronous (Request/Response)**
+
 - REST APIs
 - gRPC
 - GraphQL
 
 **Asynchronous (Events/Messages)**
+
 - Event streaming (Kafka)
 - Message queues (RabbitMQ, SQS)
 - Pub/Sub patterns
@@ -57,11 +63,13 @@ Master microservices architecture patterns including service boundaries, inter-s
 ### 3. Data Management
 
 **Database Per Service**
+
 - Each service owns its data
 - No shared databases
 - Loose coupling
 
 **Saga Pattern**
+
 - Distributed transactions
 - Compensating actions
 - Eventual consistency
@@ -69,15 +77,18 @@ Master microservices architecture patterns including service boundaries, inter-s
 ### 4. Resilience Patterns
 
 **Circuit Breaker**
+
 - Fail fast on repeated errors
 - Prevent cascade failures
 - See [Circuit Breaker Guide](references/guides/circuit-breaker.md)
 
 **Retry with Backoff**
+
 - Transient fault handling
 - Exponential backoff
 
 **Bulkhead**
+
 - Isolate resources
 - Limit impact of failures
 
@@ -473,6 +484,7 @@ class OrderFulfillmentSaga:
 The Circuit Breaker pattern prevents cascade failures by detecting when a service is failing and temporarily blocking requests to allow recovery.
 
 **Key States:**
+
 - **CLOSED**: Normal operation, requests pass through
 - **OPEN**: Failing fast, requests are rejected
 - **HALF_OPEN**: Testing if service has recovered
@@ -484,6 +496,7 @@ For detailed implementation, see [Circuit Breaker Guide](references/guides/circu
 Service discovery enables microservices to find and communicate with each other without hardcoded locations. It provides a registry where services register themselves and clients can look up service locations.
 
 **Key Implementations:**
+
 - **Consul**: Full-featured service mesh with health checks
 - **etcd**: Lightweight distributed key-value store
 - **Kubernetes**: Native DNS-based discovery for containerized apps

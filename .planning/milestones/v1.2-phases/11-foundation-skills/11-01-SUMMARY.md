@@ -2,7 +2,16 @@
 phase: 11-foundation-skills
 plan: "01"
 subsystem: skills
-tags: [prompt-engineering, anthropic-sdk, chain-of-thought, few-shot, structured-output, evaluation, golden-set]
+tags:
+  [
+    prompt-engineering,
+    anthropic-sdk,
+    chain-of-thought,
+    few-shot,
+    structured-output,
+    evaluation,
+    golden-set,
+  ]
 
 # Dependency graph
 requires: []
@@ -118,5 +127,6 @@ None — no external service configuration required. Eval.ts requires `ANTHROPIC
 All 7 files confirmed present on disk. Both task commits confirmed in git log (3d9697c, af4347b).
 
 ---
-*Phase: 11-foundation-skills*
-*Completed: 2026-02-24*
+
+_Phase: 11-foundation-skills_
+_Completed: 2026-02-24_

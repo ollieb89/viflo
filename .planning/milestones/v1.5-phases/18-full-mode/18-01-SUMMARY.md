@@ -58,6 +58,7 @@ completed: 2026-02-24
 - **Files modified:** 2
 
 ## Accomplishments
+
 - Added `writePlanningScaffold()` to writers.cjs: creates four .planning/ stubs, idempotent (skips existing files)
 - Added `writeCLAUDEmdTemplate()` to writers.cjs: richer starter template with project sections on new CLAUDE.md, sentinel-only merge on existing
 - Updated bin/viflo.cjs to accept `--full` flag as a superset of `--minimal`
@@ -74,10 +75,12 @@ Each task was committed atomically:
 **Plan metadata:** (docs commit after summary)
 
 ## Files Created/Modified
+
 - `bin/lib/writers.cjs` - Added writePlanningScaffold(), writeCLAUDEmdTemplate(), updated module.exports
 - `bin/viflo.cjs` - Added hasFullFlag detection, updated validation, added --full branch with output formatting
 
 ## Decisions Made
+
 - writePlanningScaffold uses `fs.existsSync` before `writeIfChanged` rather than relying on writeIfChanged's unchanged check. Planning files use skip-if-exists semantics (preserve user edits) vs sentinel/settings files which use overwrite-if-changed semantics.
 - writeCLAUDEmdTemplate reuses existing writeCLAUDEmd for the existing-file case — no duplicate merge logic.
 - Internal `[viflo] skipped (unchanged)` log lines remain visible in --full output (acceptable per plan, Phase 19 polish handles).
@@ -87,15 +90,19 @@ Each task was committed atomically:
 None - plan executed exactly as written.
 
 ## Issues Encountered
+
 None.
 
 ## User Setup Required
+
 None - no external service configuration required.
 
 ## Next Phase Readiness
+
 - `viflo init --full` fully functional, ready for Phase 19 polish (output cleanup, shebang wiring, npm bin registration)
 - 35/35 CLI tests passing
 
 ---
-*Phase: 18-full-mode*
-*Completed: 2026-02-24*
+
+_Phase: 18-full-mode_
+_Completed: 2026-02-24_

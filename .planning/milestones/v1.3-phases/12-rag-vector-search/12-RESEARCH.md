@@ -7,11 +7,13 @@
 ---
 
 <user_constraints>
+
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
 
 **Quick Start:**
+
 - Assumes Postgres + pgvector installed (`CREATE EXTENSION vector` is the starting point — no Docker compose, no managed DB setup)
 - Schema setup (HNSW index creation, `embedding_model_version` column) is IN the Quick Start — production-safe from the first commit, not a retrofit
 - Quick Start ends with **console output of retrieved chunks** — developer runs the script and sees results printed, no web server needed
@@ -19,12 +21,14 @@
 - 15-minute target is the constraint
 
 **Code Language & Style:**
+
 - **TypeScript primary** using Prisma `$executeRaw` (matches existing skill and viflo's Neon/Prisma stack)
 - **Python snippets** for chunking-specific patterns where Python tooling dominates (e.g. LangChain splitters)
 - **Complete, copy-pasteable functions** — includes imports, types, error handling. No incomplete snippets
 - OpenAI model hardcoded to `text-embedding-3-small` (no configurable param — opinionated default, model choice belongs in decision matrix)
 
 **Chunking Strategies:**
+
 - Coverage: fixed-size vs semantic (two fundamentals only — not recursive character or document-aware)
 - Presentation: **decision table with tradeoffs + rule-of-thumb formulas** (no full code for the chunking logic itself — that goes in references/)
 - Python snippet for LangChain RecursiveCharacterTextSplitter shown as a practical aside (Python is dominant for chunking tooling)
@@ -32,10 +36,12 @@
 - Overlap rule: stride = 10–20% of chunk size (e.g. 512-token chunk → 50–100 token overlap)
 
 **Hybrid Search (RRF Fusion):**
+
 - Required per RAG-03 — RRF fusion combining vector similarity and full-text search
 - SQL query shown inline in SKILL.md main body (not only in references/) per success criteria requirement
 
 **Evaluation Patterns (RAG-05 + EVAL-01 acceleration):**
+
 - **Full `eval.ts`** as a standalone runnable file at `.agent/skills/rag-vector-search/eval.ts`
 - Golden set: hardcoded test queries + expected chunk IDs (3–5 queries, no DB seeding required)
 - SKILL.md links to eval.ts and explains how to run it
@@ -43,6 +49,7 @@
 - Covers both recall@k and MRR metrics with explanation
 
 **Claude's Discretion:**
+
 - Exact formatting of the decision matrix (rows, columns, table style)
 - Specific RRF SQL query implementation details (weights, normalization)
 - How existing `references/` files are updated or extended (researcher should investigate current state)
@@ -54,20 +61,22 @@
 - Pinecone escape-hatch documentation (ADV-01) — future phase
 - Multimodal RAG patterns (ADV-02) — future phase
 - LangChain deep dives — explicitly out of scope (500-line budget)
-</user_constraints>
+  </user_constraints>
 
 ---
 
 <phase_requirements>
+
 ## Phase Requirements
 
-| ID | Description | Research Support |
-|----|-------------|-----------------|
-| RAG-01 | User can follow a Quick Start to embed and retrieve documents with pgvector in under 15 minutes | Schema + HNSW index + embed + retrieve code patterns fully verified; pgvector-node toSql() confirmed as standard approach |
-| RAG-02 | Skill documents chunking strategies (fixed-size vs semantic, overlap rules, token budgets) | Fixed-size and semantic chunking tradeoffs researched; LangChain RecursiveCharacterTextSplitter confirmed as Python standard; token budget math formula documented |
-| RAG-03 | Skill includes HNSW index setup and hybrid search with RRF fusion (vector + full-text) | HNSW index SQL (vector_cosine_ops) verified from pgvector official docs; RRF CTE pattern verified from pgvector official docs and multiple community implementations |
-| RAG-04 | Skill documents 3 named Gotchas with warning signs and fixes (chunking pitfalls, missing HNSW index, embedding model drift) | All 3 named pitfalls researched and documented with production evidence; HNSW maintenance gotcha (index fragmentation) is an additional verified production concern |
-| RAG-05 | Skill includes embedding model version column schema and retrieval evaluation patterns (recall@k, MRR) | `embedding_model_version` column already in existing references/; recall@k and MRR definitions, formulas, and threshold benchmarks researched and verified |
+| ID     | Description                                                                                                                 | Research Support                                                                                                                                                     |
+| ------ | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| RAG-01 | User can follow a Quick Start to embed and retrieve documents with pgvector in under 15 minutes                             | Schema + HNSW index + embed + retrieve code patterns fully verified; pgvector-node toSql() confirmed as standard approach                                            |
+| RAG-02 | Skill documents chunking strategies (fixed-size vs semantic, overlap rules, token budgets)                                  | Fixed-size and semantic chunking tradeoffs researched; LangChain RecursiveCharacterTextSplitter confirmed as Python standard; token budget math formula documented   |
+| RAG-03 | Skill includes HNSW index setup and hybrid search with RRF fusion (vector + full-text)                                      | HNSW index SQL (vector_cosine_ops) verified from pgvector official docs; RRF CTE pattern verified from pgvector official docs and multiple community implementations |
+| RAG-04 | Skill documents 3 named Gotchas with warning signs and fixes (chunking pitfalls, missing HNSW index, embedding model drift) | All 3 named pitfalls researched and documented with production evidence; HNSW maintenance gotcha (index fragmentation) is an additional verified production concern  |
+| RAG-05 | Skill includes embedding model version column schema and retrieval evaluation patterns (recall@k, MRR)                      | `embedding_model_version` column already in existing references/; recall@k and MRR definitions, formulas, and threshold benchmarks researched and verified           |
+
 </phase_requirements>
 
 ---
@@ -88,30 +97,31 @@ The key architectural decisions are locked: production-safe schema (HNSW index +
 
 ### Core
 
-| Library | Version | Purpose | Why Standard |
-|---------|---------|---------|--------------|
-| `pgvector` (Postgres extension) | 0.8.x | Vector storage, ANN indexing (HNSW/IVFFlat), cosine/L2/inner-product operators | Native Postgres — zero extra infrastructure; SQL joins with metadata; tsvector hybrid search in same query |
-| `openai` (npm) | 4.x | `text-embedding-3-small` embeddings (1536 dims) | Project already uses OpenAI; `text-embedding-3-small` is cost-optimal at 1536 dims; batch API supports up to 2048 inputs |
-| `pgvector` (npm, `pgvector-node`) | latest | `toSql()` / `fromSql()` helpers for Prisma `$executeRaw` | Handles PostgreSQL vector literal format; prevents serialization bugs; TypeScript-friendly |
-| Prisma | 5.x | ORM; raw SQL via `$executeRaw` / `$queryRaw` for vector operations | Prisma does not natively support `vector` type — raw SQL is required; `pgvector-node` bridges the gap |
+| Library                           | Version | Purpose                                                                        | Why Standard                                                                                                             |
+| --------------------------------- | ------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `pgvector` (Postgres extension)   | 0.8.x   | Vector storage, ANN indexing (HNSW/IVFFlat), cosine/L2/inner-product operators | Native Postgres — zero extra infrastructure; SQL joins with metadata; tsvector hybrid search in same query               |
+| `openai` (npm)                    | 4.x     | `text-embedding-3-small` embeddings (1536 dims)                                | Project already uses OpenAI; `text-embedding-3-small` is cost-optimal at 1536 dims; batch API supports up to 2048 inputs |
+| `pgvector` (npm, `pgvector-node`) | latest  | `toSql()` / `fromSql()` helpers for Prisma `$executeRaw`                       | Handles PostgreSQL vector literal format; prevents serialization bugs; TypeScript-friendly                               |
+| Prisma                            | 5.x     | ORM; raw SQL via `$executeRaw` / `$queryRaw` for vector operations             | Prisma does not natively support `vector` type — raw SQL is required; `pgvector-node` bridges the gap                    |
 
 ### Supporting
 
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| `langchain-text-splitters` (Python) | latest | `RecursiveCharacterTextSplitter` — the de-facto standard Python chunking utility | Use in Python ingestion pipelines; referenced as a practical aside in SKILL.md chunking section |
-| `tiktoken` (Python/npm) | latest | Token-accurate chunk size measurement | When exact token counts matter (vs. character-based approximations); mention in SKILL.md as "for precision" |
+| Library                             | Version | Purpose                                                                          | When to Use                                                                                                 |
+| ----------------------------------- | ------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `langchain-text-splitters` (Python) | latest  | `RecursiveCharacterTextSplitter` — the de-facto standard Python chunking utility | Use in Python ingestion pipelines; referenced as a practical aside in SKILL.md chunking section             |
+| `tiktoken` (Python/npm)             | latest  | Token-accurate chunk size measurement                                            | When exact token counts matter (vs. character-based approximations); mention in SKILL.md as "for precision" |
 
 ### Alternatives Considered
 
-| Instead of | Could Use | Tradeoff |
-|------------|-----------|----------|
-| pgvector HNSW | IVFFlat | IVFFlat requires training (`lists` parameter, typically `rows/1000`); HNSW has no training step, better recall, preferred for new schemas. IVFFlat only wins on build time for very large datasets (>1M rows). |
-| `pgvector-node` toSql() | `JSON.stringify(array)::vector` | JSON.stringify approach works but produces non-standard format; `pgvector-node` uses the native bracket format `[1,2,3]` which is the pgvector canonical wire format |
-| RRF fusion (CTE approach) | Weighted score addition (`0.7 * vector_score + 0.3 * ts_rank`) | Weighted addition requires normalizing incompatible score scales; RRF works on ranks (not scores) so no normalization needed. Existing retrieval-patterns.md uses weighted addition — this should be upgraded to RRF in Phase 12. |
-| OpenAI `text-embedding-3-small` | `text-embedding-3-large` | 3-large produces 3072 dims (higher quality) but costs ~6x more; 3-small is correct default for production RAG at scale |
+| Instead of                      | Could Use                                                      | Tradeoff                                                                                                                                                                                                                          |
+| ------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| pgvector HNSW                   | IVFFlat                                                        | IVFFlat requires training (`lists` parameter, typically `rows/1000`); HNSW has no training step, better recall, preferred for new schemas. IVFFlat only wins on build time for very large datasets (>1M rows).                    |
+| `pgvector-node` toSql()         | `JSON.stringify(array)::vector`                                | JSON.stringify approach works but produces non-standard format; `pgvector-node` uses the native bracket format `[1,2,3]` which is the pgvector canonical wire format                                                              |
+| RRF fusion (CTE approach)       | Weighted score addition (`0.7 * vector_score + 0.3 * ts_rank`) | Weighted addition requires normalizing incompatible score scales; RRF works on ranks (not scores) so no normalization needed. Existing retrieval-patterns.md uses weighted addition — this should be upgraded to RRF in Phase 12. |
+| OpenAI `text-embedding-3-small` | `text-embedding-3-large`                                       | 3-large produces 3072 dims (higher quality) but costs ~6x more; 3-small is correct default for production RAG at scale                                                                                                            |
 
 **Installation:**
+
 ```bash
 npm install openai pgvector
 ```
@@ -143,6 +153,7 @@ pip install langchain-text-splitters tiktoken
 **When to use:** This is the ONLY schema introduced in Phase 12. The developer runs this once and is production-safe from commit 1.
 
 **Example:**
+
 ```sql
 -- Source: https://github.com/pgvector/pgvector/blob/master/README.md + pgvector Context7 docs
 CREATE EXTENSION IF NOT EXISTS vector;
@@ -175,32 +186,36 @@ CREATE INDEX ON document_chunks (embedding_model_version);
 **When to use:** All embedding ingestion. The `pgvector-node` library is required — `JSON.stringify` produces a different format that is technically valid but non-idiomatic.
 
 **Example:**
+
 ```typescript
 // Source: https://github.com/pgvector/pgvector-node (Prisma section)
-import OpenAI from 'openai';
-import pgvector from 'pgvector/prisma';
-import { db } from '@/lib/db';  // Prisma client
+import OpenAI from "openai";
+import pgvector from "pgvector/prisma";
+import { db } from "@/lib/db"; // Prisma client
 
 const openai = new OpenAI();
 
-async function embedAndStore(chunks: { content: string; sourceId: string }[]): Promise<void> {
+async function embedAndStore(
+  chunks: { content: string; sourceId: string }[],
+): Promise<void> {
   const response = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: chunks.map((c) => c.content),
   });
 
   await db.$transaction(
-    response.data.map((item, i) =>
-      db.$executeRaw`
+    response.data.map(
+      (item, i) =>
+        db.$executeRaw`
         INSERT INTO document_chunks (source_id, content, embedding, embedding_model_version)
         VALUES (
           ${chunks[i].sourceId},
           ${chunks[i].content},
           ${pgvector.toSql(item.embedding)},
-          ${'text-embedding-3-small-v1'}
+          ${"text-embedding-3-small-v1"}
         )
-      `
-    )
+      `,
+    ),
   );
 }
 ```
@@ -212,9 +227,10 @@ async function embedAndStore(chunks: { content: string; sourceId: string }[]): P
 **When to use:** Every retrieval call. The threshold is mandatory (per CONTEXT.md locked decision).
 
 **Example:**
+
 ```typescript
 // Source: verified against pgvector Context7 docs (cosine distance operator <=>)
-import pgvector from 'pgvector/prisma';
+import pgvector from "pgvector/prisma";
 
 interface Chunk {
   id: string;
@@ -222,9 +238,13 @@ interface Chunk {
   score: number;
 }
 
-async function retrieve(query: string, topK = 5, minScore = 0.75): Promise<Chunk[]> {
+async function retrieve(
+  query: string,
+  topK = 5,
+  minScore = 0.75,
+): Promise<Chunk[]> {
   const response = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: query,
   });
   const queryVector = pgvector.toSql(response.data[0].embedding);
@@ -241,7 +261,11 @@ async function retrieve(query: string, topK = 5, minScore = 0.75): Promise<Chunk
   `;
 
   const filtered = results.filter((r) => r.score >= minScore);
-  filtered.forEach((r, i) => console.log(`[${i + 1}] score=${r.score.toFixed(3)}: ${r.content.slice(0, 120)}`));
+  filtered.forEach((r, i) =>
+    console.log(
+      `[${i + 1}] score=${r.score.toFixed(3)}: ${r.content.slice(0, 120)}`,
+    ),
+  );
   return filtered;
 }
 ```
@@ -253,6 +277,7 @@ async function retrieve(query: string, topK = 5, minScore = 0.75): Promise<Chunk
 **When to use:** Main body of SKILL.md (not only in references/). This is the production retrieval pattern.
 
 **Example:**
+
 ```sql
 -- Source: https://github.com/pgvector/pgvector (pgvector Context7 official docs)
 -- and verified by DEV.to hybrid search implementation
@@ -284,12 +309,14 @@ Note: Existing `references/retrieval-patterns.md` uses weighted score addition (
 **What:** Decision table with concrete formulas. Code lives in references/ per locked decision.
 
 **Fixed-size (default):**
+
 - Chunk: 512 tokens, overlap: 50–100 tokens (10–20% of chunk size — verified by multiple sources)
 - Rule: `stride = chunk_size × 0.85` (advance 85% per window)
 - Token budget: `chunk_tokens × topK ≤ model_context_limit − system_prompt_tokens`
 - Example with gpt-4o (128K context, ~1K system prompt): 512 × 10 = 5,120 tokens used — well within budget
 
 **Semantic (when to upgrade):**
+
 - Use when documents have strong structural boundaries (markdown headers, legal paragraphs, code blocks)
 - LangChain `RecursiveCharacterTextSplitter` is the Python standard — respects `\n\n`, `\n`, ` ` hierarchy
 - Adds complexity: requires sentence boundary detection or header parsing
@@ -321,13 +348,13 @@ chunks = splitter.split_text(document_text)
 
 ## Don't Hand-Roll
 
-| Problem | Don't Build | Use Instead | Why |
-|---------|-------------|-------------|-----|
-| Vector serialization for Prisma | Custom `toSql()` / JSON stringify helper | `pgvector-node` (`pgvector/prisma`) | Vector literal format `[1,2,3]` vs JSON `[1,2,3]` — both work today but `pgvector-node` is the canonical library and handles edge cases (NaN, infinity) |
-| Chunking logic from scratch | Custom word-splitting with manual overlap | `RecursiveCharacterTextSplitter` (Python) or existing `chunkText` in references/ | Sentence boundary edge cases (abbreviations, quoted strings) are numerous; LangChain handles them |
-| Token counting | `text.length / 4` approximation | `tiktoken` | Approximation error compounds over long documents; tiktoken is the exact tokenizer for OpenAI models |
-| Batch embed retry | Custom exponential backoff | Pattern already in `references/embedding-pipelines.md` | Extend what exists — batch-of-100 with 3-attempt backoff is already documented and correct |
-| Score normalization for hybrid search | Normalize cosine to ts_rank scale | RRF (rank-based fusion) | Normalization requires knowing min/max scores at query time — impractical; RRF works on ordinal rank |
+| Problem                               | Don't Build                               | Use Instead                                                                      | Why                                                                                                                                                     |
+| ------------------------------------- | ----------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vector serialization for Prisma       | Custom `toSql()` / JSON stringify helper  | `pgvector-node` (`pgvector/prisma`)                                              | Vector literal format `[1,2,3]` vs JSON `[1,2,3]` — both work today but `pgvector-node` is the canonical library and handles edge cases (NaN, infinity) |
+| Chunking logic from scratch           | Custom word-splitting with manual overlap | `RecursiveCharacterTextSplitter` (Python) or existing `chunkText` in references/ | Sentence boundary edge cases (abbreviations, quoted strings) are numerous; LangChain handles them                                                       |
+| Token counting                        | `text.length / 4` approximation           | `tiktoken`                                                                       | Approximation error compounds over long documents; tiktoken is the exact tokenizer for OpenAI models                                                    |
+| Batch embed retry                     | Custom exponential backoff                | Pattern already in `references/embedding-pipelines.md`                           | Extend what exists — batch-of-100 with 3-attempt backoff is already documented and correct                                                              |
+| Score normalization for hybrid search | Normalize cosine to ts_rank scale         | RRF (rank-based fusion)                                                          | Normalization requires knowing min/max scores at query time — impractical; RRF works on ordinal rank                                                    |
 
 **Key insight:** The existing `references/` files already cover batch embedding and the chunking function. Phase 12 promotes patterns into the main body and adds the production schema + eval — it does not start from scratch.
 
@@ -344,11 +371,13 @@ chunks = splitter.split_text(document_text)
 **How to avoid:** Create HNSW index in the Quick Start schema — before any data is inserted. This is the core principle of "production-safe from the first commit."
 
 **Warning signs:**
+
 - `EXPLAIN ANALYZE` on a similarity query shows `Seq Scan` instead of `Index Scan using hnsw`
 - Query latency grows linearly with row count
 - pgvector was installed but `\d document_chunks` shows no index on the `embedding` column
 
 **Fix:**
+
 ```sql
 -- Check existing indexes
 SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'document_chunks';
@@ -366,11 +395,13 @@ CREATE INDEX CONCURRENTLY ON document_chunks
 **How to avoid:** The `embedding_model_version` column is mandatory in the Quick Start schema. Every query includes `WHERE embedding_model_version = 'text-embedding-3-small-v1'`. When changing models, re-embed all rows and update `embedding_model_version`.
 
 **Warning signs:**
+
 - Similarity scores cluster around 0.5 (mixed-model vectors produce random similarities)
 - Recall@5 drops suddenly without code changes
 - Two developers embed the same document and get different `embedding` vectors
 
 **Fix:**
+
 ```sql
 -- Identify how many rows need re-embedding
 SELECT embedding_model_version, COUNT(*) FROM document_chunks GROUP BY 1;
@@ -382,17 +413,20 @@ WHERE id IN (/* re-embedded batch IDs */);
 ### Pitfall 3: Chunking Pitfalls (Context Loss and Budget Overrun)
 
 **What goes wrong:** Two common failure modes:
+
 1. **No overlap**: A key sentence at a chunk boundary gets split — neither chunk contains the full context. The LLM retrieves a chunk that ends mid-thought and produces a hallucinated answer.
 2. **Chunks too large**: `topK=10` with `chunk_size=1024` tokens = 10,240 tokens of context. With a 4K context model (or large system prompt), this blows the budget and truncates the prompt silently.
 
 **Why it happens:** Default splitters often use character counts, not token counts. 512 characters ≠ 512 tokens.
 
 **How to avoid:**
+
 - Use token-precise chunking: `tiktoken` for OpenAI models, or approximate at 0.75 tokens/character
 - Enforce overlap rule: stride = 10–20% of chunk size
 - Token budget check before embedding: `chunk_tokens × topK + system_prompt_tokens < model_context_limit`
 
 **Warning signs:**
+
 - LLM answers reference half-sentences or cut-off facts from retrieved context
 - Token usage per LLM call spikes unexpectedly
 - Retrieved chunks contain complete sentences in isolation but answers lack coherence
@@ -406,6 +440,7 @@ WHERE id IN (/* re-embedded batch IDs */);
 **How to avoid:** Run `VACUUM ANALYZE document_chunks` regularly (pg auto-vacuum covers this for most workloads). If re-embedding a large fraction of rows, `REINDEX INDEX CONCURRENTLY` afterward.
 
 **Warning signs:**
+
 - Recall@5 drifts downward over weeks without schema or code changes
 - `pgstattuple` shows high dead-tuple count on `document_chunks`
 - After a bulk-delete + re-embed operation, search quality drops noticeably
@@ -421,9 +456,9 @@ Verified patterns from official sources:
 ```typescript
 // Source: patterns verified from pgvector Context7 docs + openai-node Context7 docs
 // Run: npx tsx embed-and-retrieve.ts
-import OpenAI from 'openai';
-import pgvector from 'pgvector/prisma';
-import { PrismaClient } from '@prisma/client';
+import OpenAI from "openai";
+import pgvector from "pgvector/prisma";
+import { PrismaClient } from "@prisma/client";
 
 const openai = new OpenAI();
 const db = new PrismaClient();
@@ -444,30 +479,50 @@ const db = new PrismaClient();
 
 // --- 2. Embed documents ---
 const documents = [
-  { sourceId: 'doc-1', content: 'pgvector enables vector similarity search inside PostgreSQL.' },
-  { sourceId: 'doc-1', content: 'HNSW indexes provide approximate nearest-neighbor search with high recall.' },
-  { sourceId: 'doc-2', content: 'Hybrid search combines vector similarity with full-text search for better precision.' },
+  {
+    sourceId: "doc-1",
+    content: "pgvector enables vector similarity search inside PostgreSQL.",
+  },
+  {
+    sourceId: "doc-1",
+    content:
+      "HNSW indexes provide approximate nearest-neighbor search with high recall.",
+  },
+  {
+    sourceId: "doc-2",
+    content:
+      "Hybrid search combines vector similarity with full-text search for better precision.",
+  },
 ];
 
 const embedResponse = await openai.embeddings.create({
-  model: 'text-embedding-3-small',
+  model: "text-embedding-3-small",
   input: documents.map((d) => d.content),
 });
 
 await db.$transaction(
-  embedResponse.data.map((item, i) =>
-    db.$executeRaw`
+  embedResponse.data.map(
+    (item, i) =>
+      db.$executeRaw`
       INSERT INTO document_chunks (source_id, content, embedding, embedding_model_version)
-      VALUES (${documents[i].sourceId}, ${documents[i].content}, ${pgvector.toSql(item.embedding)}, ${'text-embedding-3-small-v1'})
-    `
-  )
+      VALUES (${documents[i].sourceId}, ${documents[i].content}, ${pgvector.toSql(item.embedding)}, ${"text-embedding-3-small-v1"})
+    `,
+  ),
 );
 
 // --- 3. Retrieve ---
-const query = 'how does approximate nearest neighbor search work?';
-const queryEmbedding = (await openai.embeddings.create({ model: 'text-embedding-3-small', input: query })).data[0].embedding;
+const query = "how does approximate nearest neighbor search work?";
+const queryEmbedding = (
+  await openai.embeddings.create({
+    model: "text-embedding-3-small",
+    input: query,
+  })
+).data[0].embedding;
 
-interface Chunk { content: string; score: number; }
+interface Chunk {
+  content: string;
+  score: number;
+}
 
 const results = await db.$queryRaw<Chunk[]>`
   SELECT content, 1 - (embedding <=> ${pgvector.toSql(queryEmbedding)}) AS score
@@ -479,7 +534,9 @@ const results = await db.$queryRaw<Chunk[]>`
 
 const filtered = results.filter((r) => r.score >= 0.75);
 console.log(`Query: "${query}"\n`);
-filtered.forEach((r, i) => console.log(`[${i + 1}] score=${r.score.toFixed(3)}: ${r.content}`));
+filtered.forEach((r, i) =>
+  console.log(`[${i + 1}] score=${r.score.toFixed(3)}: ${r.content}`),
+);
 
 await db.$disconnect();
 ```
@@ -499,8 +556,8 @@ await db.$disconnect();
 
 const GOLDEN_SET = [
   {
-    query: 'how does approximate nearest neighbor search work?',
-    expectedChunkIds: ['<UUID from Quick Start insert>'],
+    query: "how does approximate nearest neighbor search work?",
+    expectedChunkIds: ["<UUID from Quick Start insert>"],
   },
   // ... 2–4 more
 ];
@@ -551,15 +608,16 @@ SET hnsw.ef_search = 100;  -- must be >= LIMIT value for full recall
 
 ## State of the Art
 
-| Old Approach | Current Approach | When Changed | Impact |
-|--------------|------------------|--------------|--------|
-| IVFFlat as default index | HNSW as preferred default | pgvector 0.5.0 (May 2023) | HNSW has no training step, better recall, simpler setup; IVFFlat still valid for >1M rows where build time matters |
-| Weighted score fusion (0.7 × cosine + 0.3 × ts_rank) | RRF CTE (rank-based fusion) | Community adoption accelerated 2024–2025 | RRF requires no score normalization; more principled; existing `references/retrieval-patterns.md` should be updated |
-| No model version column | `embedding_model_version` column mandatory | Production lessons from 2023–2024 | Model drift is now considered a critical production concern; versioning enables clean re-embed workflows |
-| Similarity search without threshold | `score >= 0.75` filter required | Widespread adoption ~2024 | Prevents garbage context from reaching LLM; fail-fast is preferable to confident wrong answers |
-| Chunking by character count | Token-precise chunking (tiktoken) | As context windows and pricing became critical 2024 | Character estimates (÷4 approximation) break token budget math; tiktoken is exact |
+| Old Approach                                         | Current Approach                           | When Changed                                        | Impact                                                                                                              |
+| ---------------------------------------------------- | ------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| IVFFlat as default index                             | HNSW as preferred default                  | pgvector 0.5.0 (May 2023)                           | HNSW has no training step, better recall, simpler setup; IVFFlat still valid for >1M rows where build time matters  |
+| Weighted score fusion (0.7 × cosine + 0.3 × ts_rank) | RRF CTE (rank-based fusion)                | Community adoption accelerated 2024–2025            | RRF requires no score normalization; more principled; existing `references/retrieval-patterns.md` should be updated |
+| No model version column                              | `embedding_model_version` column mandatory | Production lessons from 2023–2024                   | Model drift is now considered a critical production concern; versioning enables clean re-embed workflows            |
+| Similarity search without threshold                  | `score >= 0.75` filter required            | Widespread adoption ~2024                           | Prevents garbage context from reaching LLM; fail-fast is preferable to confident wrong answers                      |
+| Chunking by character count                          | Token-precise chunking (tiktoken)          | As context windows and pricing became critical 2024 | Character estimates (÷4 approximation) break token budget math; tiktoken is exact                                   |
 
 **Deprecated/outdated:**
+
 - **IVFFlat as default recommendation:** Still valid for datasets >1M rows for faster index builds, but HNSW is now the default in pgvector docs and community practice for new schemas.
 - **Weighted score hybrid search in `references/retrieval-patterns.md`:** The existing file uses `(1 - (embedding <=> $1::vector)) * 0.7 + ts_rank(...) * 0.3`. This should be extended to include the RRF CTE pattern as the recommended production approach. The weighted approach can remain as a simpler alternative.
 
@@ -569,13 +627,14 @@ SET hnsw.ef_search = 100;  -- must be >= LIMIT value for full recall
 
 Current state of files to upgrade:
 
-| File | Lines | Gap to Close |
-|------|-------|-------------|
-| `SKILL.md` | 92 | Missing Quick Start, numbered sections, Gotchas, eval section — all core content in references/ |
-| `references/embedding-pipelines.md` | 93 | Good batch embed + chunking patterns; schema uses IVFFlat (outdated); should note HNSW preferred |
-| `references/retrieval-patterns.md` | 69 | Hybrid search uses weighted addition (not RRF); RRF CTE should be added; re-ranking pattern is good |
+| File                                | Lines | Gap to Close                                                                                        |
+| ----------------------------------- | ----- | --------------------------------------------------------------------------------------------------- |
+| `SKILL.md`                          | 92    | Missing Quick Start, numbered sections, Gotchas, eval section — all core content in references/     |
+| `references/embedding-pipelines.md` | 93    | Good batch embed + chunking patterns; schema uses IVFFlat (outdated); should note HNSW preferred    |
+| `references/retrieval-patterns.md`  | 69    | Hybrid search uses weighted addition (not RRF); RRF CTE should be added; re-ranking pattern is good |
 
 **Strategy:**
+
 1. SKILL.md gets a full rewrite from ~92 lines to ~437 lines
 2. `references/embedding-pipelines.md` — update schema to HNSW, note IVFFlat as fallback; keep chunking code
 3. `references/retrieval-patterns.md` — add RRF CTE as primary pattern, demote weighted addition to "simpler alternative"
@@ -604,6 +663,7 @@ Current state of files to upgrade:
 ## Sources
 
 ### Primary (HIGH confidence)
+
 - `/pgvector/pgvector` (Context7) — HNSW index SQL, RRF CTE hybrid search pattern, cosine distance operator
 - `/openai/openai-node` (Context7) — `embeddings.create()` API, batch embedding, `text-embedding-3-small` 1536 dims
 - https://github.com/pgvector/pgvector-node — `pgvector.toSql()` / `pgvector/prisma` import path
@@ -611,12 +671,14 @@ Current state of files to upgrade:
 - https://www.crunchydata.com/blog/hnsw-indexes-with-postgres-and-pgvector — ef_search=40 default, index memory requirements, build timing
 
 ### Secondary (MEDIUM confidence — verified with official sources or multiple sources)
+
 - https://dev.to/lpossamai/building-hybrid-search-for-rag-combining-pgvector-and-full-text-search-with-reciprocal-rank-fusion-6nk — RRF SQL with FULL OUTER JOIN, k=60 citation from Cormack et al.
 - https://weaviate.io/blog/chunking-strategies-for-rag — fixed-size vs semantic comparison, 9% recall improvement for semantic
 - https://www.firecrawl.dev/blog/best-chunking-strategies-rag-2025 — 512-token chunk, 50–100 token overlap as default
 - https://langcopilot.com/posts/2025-09-17-rag-evaluation-101-from-recall-k-to-answer-faithfulness — recall@k vs MRR definitions and use cases
 
 ### Tertiary (LOW confidence — WebSearch, single source)
+
 - Medium blog (Engineering @ Layers, Dec 2025) — HNSW index fragmentation / dead tuple issue. Pattern is logical and consistent with HNSW graph theory, but the specific "signal-driven monitoring" implementation detail should not be prescriptive in SKILL.md.
 
 ---
@@ -624,6 +686,7 @@ Current state of files to upgrade:
 ## Metadata
 
 **Confidence breakdown:**
+
 - Standard stack: HIGH — verified from Context7 (pgvector official, openai-node official) and official GitHub
 - Architecture patterns: HIGH — HNSW SQL and RRF SQL directly from Context7 pgvector docs; Prisma pattern from official pgvector-node repo
 - Pitfalls: HIGH for Pitfalls 1–3 (verified from multiple sources); MEDIUM for Pitfall 4 (HNSW fragmentation — logical but fewer authoritative sources)

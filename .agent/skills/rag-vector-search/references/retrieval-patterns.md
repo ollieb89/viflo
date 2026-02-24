@@ -59,7 +59,7 @@ async function buildRagPrompt(userQuery: string): Promise<string> {
     return userQuery; // fall back to direct LLM — no context injected
   }
 
-  const context = results.map((r, i) => `[${i + 1}] ${r.content}`).join('\n\n');
+  const context = results.map((r, i) => `[${i + 1}] ${r.content}`).join("\n\n");
 
   return `Answer the question using only the context below. If the answer is not in the context, say "I don't know."
 
@@ -94,6 +94,11 @@ const results = await db.$queryRaw<{ content: string; score: number }[]>`
   FROM document_chunks ORDER BY score DESC LIMIT 20
 `;
 
-console.table(results.map((r) => ({ score: r.score.toFixed(3), preview: r.content.slice(0, 80) })));
+console.table(
+  results.map((r) => ({
+    score: r.score.toFixed(3),
+    preview: r.content.slice(0, 80),
+  })),
+);
 // Start at 0.75; lower if too few results, raise if results are irrelevant
 ```

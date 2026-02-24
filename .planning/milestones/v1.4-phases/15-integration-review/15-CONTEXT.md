@@ -14,18 +14,21 @@ Make the skill library coherent, discoverable, and cross-referenced — closing 
 ## Implementation Decisions
 
 ### INDEX.md structure
+
 - Flat markdown table format (not grouped, not a bullet list)
 - Each entry: skill name + one-line description only — no status column, no file paths
 - Brief 1–2 sentence intro paragraph at the top explaining what the index covers
 - Filename: `INDEX.md` (matches roadmap success criteria)
 
 ### Cross-reference style
+
 - Dedicated **"See Also"** section at the bottom of each skill file
 - Seam is named explicitly in the link text — e.g. `[Agent Architecture](../agent-architecture/SKILL.md) — episodic memory pattern`
 - Links are bidirectional: both skills reference each other at their shared seam
 - Format: relative markdown links (clickable in editors and GitHub)
 
 ### VERIFICATION.md format
+
 - Table columns: `Skill | Line Count | Status`
 - Status values: `✓` (≤500) or `✗` (>500)
 - Summary line at the top or bottom: e.g. `5/5 skills within limit`
@@ -33,11 +36,13 @@ Make the skill library coherent, discoverable, and cross-referenced — closing 
 - Over-limit skills get a brief note column entry explaining why (e.g. "includes extended examples")
 
 ### Over-limit handling
+
 - If a skill exceeds 500 lines: flag it with `✗` in VERIFICATION.md, do NOT trim or restructure
 - Phase succeeds as long as VERIFICATION.md is complete — over-limit is noted, not a phase blocker
 - Limit applies to each SKILL.md file individually (not transitive/referenced content)
 
 ### Claude's Discretion
+
 - Exact prose wording of INDEX.md intro
 - Order of skills in the INDEX.md table (alphabetical is fine)
 - Whether "See Also" section uses a sub-header or a plain bold label
@@ -61,5 +66,5 @@ None — discussion stayed within phase scope.
 
 ---
 
-*Phase: 15-integration-review*
-*Context gathered: 2026-02-24*
+_Phase: 15-integration-review_
+_Context gathered: 2026-02-24_

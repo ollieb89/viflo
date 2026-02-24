@@ -1,6 +1,7 @@
 ## Backlog checkpoint: G-02, G-03, G-04 complete
 
 Completed:
+
 - G-02 local secret-prevention wiring:
   - Added root scripts: `prepare` (husky) and `precommit:secrets`.
   - Added executable `scripts/precommit-secrets.sh` with `gitleaks protect --staged --config .gitleaks.toml`.
@@ -18,6 +19,7 @@ Completed:
     - Baseline updates remain explicit via `test:coverage:update`.
 
 Validation evidence:
+
 - `pnpm run validate:sc-prompts` PASS
 - `pnpm run bench:sc-reflect` PASS
 - `pnpm run test:cli` PASS
@@ -25,5 +27,6 @@ Validation evidence:
 - `pnpm --filter @viflo/web run test:coverage:ratchet` PASS (coverage improved above baseline)
 
 Notes:
+
 - Coverage baseline is intentionally not auto-updated in check mode; run update command when intentionally ratcheting baseline.
 - GitHub-side required-check configuration remains branch protection/ruleset settings, outside repository files.

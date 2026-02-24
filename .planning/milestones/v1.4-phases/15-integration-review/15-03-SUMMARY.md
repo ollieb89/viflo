@@ -91,5 +91,6 @@ None - no external service configuration required.
 - Phase 16 (CLI Foundation) can begin: all skill content is final, all cross-references are in place
 
 ---
-*Phase: 15-integration-review*
-*Completed: 2026-02-24*
+
+_Phase: 15-integration-review_
+_Completed: 2026-02-24_

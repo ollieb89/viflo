@@ -46,36 +46,38 @@ A **skill** is a reference guide for proven techniques, patterns, or tools. Skil
 
 ### TDD Mapping for Skills
 
-| TDD Concept | Skill Creation |
-|-------------|----------------|
-| **Test case** | Pressure scenario with subagent |
-| **Production code** | Skill document (SKILL.md) |
-| **Test fails (RED)** | Agent violates rule without skill (baseline) |
-| **Test passes (GREEN)** | Agent complies with skill present |
-| **Refactor** | Close loopholes while maintaining compliance |
-| **Write test first** | Run baseline scenario BEFORE writing skill |
-| **Watch it fail** | Document exact rationalizations agent uses |
-| **Minimal code** | Write skill addressing those specific violations |
-| **Watch it pass** | Verify agent now complies |
-| **Refactor cycle** | Find new rationalizations → plug → re-verify |
+| TDD Concept             | Skill Creation                                   |
+| ----------------------- | ------------------------------------------------ |
+| **Test case**           | Pressure scenario with subagent                  |
+| **Production code**     | Skill document (SKILL.md)                        |
+| **Test fails (RED)**    | Agent violates rule without skill (baseline)     |
+| **Test passes (GREEN)** | Agent complies with skill present                |
+| **Refactor**            | Close loopholes while maintaining compliance     |
+| **Write test first**    | Run baseline scenario BEFORE writing skill       |
+| **Watch it fail**       | Document exact rationalizations agent uses       |
+| **Minimal code**        | Write skill addressing those specific violations |
+| **Watch it pass**       | Verify agent now complies                        |
+| **Refactor cycle**      | Find new rationalizations → plug → re-verify     |
 
 ### Skill Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| **Technique** | Concrete method with steps | condition-based-waiting, root-cause-tracing |
-| **Pattern** | Way of thinking about problems | flatten-with-flags, test-invariants |
-| **Reference** | API docs, syntax guides | office docs, library documentation |
+| Type          | Description                    | Example                                     |
+| ------------- | ------------------------------ | ------------------------------------------- |
+| **Technique** | Concrete method with steps     | condition-based-waiting, root-cause-tracing |
+| **Pattern**   | Way of thinking about problems | flatten-with-flags, test-invariants         |
+| **Reference** | API docs, syntax guides        | office docs, library documentation          |
 
 ### When to Create a Skill
 
 **Create when:**
+
 - Technique wasn't intuitively obvious to you
 - You'd reference this again across projects
 - Pattern applies broadly (not project-specific)
 - Others would benefit
 
 **Don't create for:**
+
 - One-off solutions
 - Standard practices well-documented elsewhere
 - Project-specific conventions (put in CLAUDE.md)
@@ -113,15 +115,19 @@ Agent found new rationalization? Add explicit counter. Re-test until bulletproof
 ## Detailed Guides
 
 ### [Prompt Engineering & CSO](references/guides/prompt-engineering.md)
+
 Claude Search Optimization, description writing, keyword coverage, naming conventions, token efficiency
 
 ### [Documentation Standards](references/guides/documentation-standards.md)
+
 SKILL.md structure, flowcharts, code examples, file organization, anti-patterns
 
 ### [Skill Templates](references/examples/skill-templates.md)
+
 SKILL.md templates, TDD mapping, skill types, discovery workflow
 
 ### [Skill Review Checklist](references/checklists/skill-review.md)
+
 RED/GREEN/REFACTOR phases, quality checks, bulletproofing against rationalization, testing by skill type
 
 ## STOP: Before Moving to Next Skill

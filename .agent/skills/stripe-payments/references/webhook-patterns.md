@@ -8,26 +8,31 @@ Complete handler with raw body extraction, async headers (Next.js 15), and atomi
 
 ```typescript
 // app/api/webhooks/stripe/route.ts
-import Stripe from 'stripe';
-import { headers } from 'next/headers';
-import { pool } from '@/lib/db'; // your pg.Pool instance
+import Stripe from "stripe";
+import { headers } from "next/headers";
+import { pool } from "@/lib/db"; // your pg.Pool instance
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-01-28.clover', // stripe@20.3.1
+  apiVersion: "2026-01-28.clover", // stripe@20.3.1
 });
 
 export async function POST(req: Request) {
   const body = await req.text(); // MUST be first — raw bytes for HMAC verification
-  const sig = (await headers()).get('stripe-signature'); // await headers() — Next.js 15 async API
+  const sig = (await headers()).get("stripe-signature"); // await headers() — Next.js 15 async API
 
-  if (!sig) return new Response('Missing stripe-signature header', { status: 400 });
+  if (!sig)
+    return new Response("Missing stripe-signature header", { status: 400 });
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!,
+    );
   } catch (err) {
-    console.error('Webhook signature verification failed:', err);
-    return new Response('Invalid signature', { status: 400 });
+    console.error("Webhook signature verification failed:", err);
+    return new Response("Invalid signature", { status: 400 });
   }
 
   // Atomic idempotency — INSERT fails silently on duplicate; no race window
@@ -37,10 +42,11 @@ export async function POST(req: Request) {
      ON CONFLICT (stripe_event_id) DO NOTHING`,
     [event.id, event.type],
   );
-  if (result.rowCount === 0) return new Response('Already processed', { status: 200 });
+  if (result.rowCount === 0)
+    return new Response("Already processed", { status: 200 });
 
   switch (event.type) {
-    case 'checkout.session.completed': {
+    case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.userId;
       if (userId && session.subscription) {
@@ -53,8 +59,8 @@ export async function POST(req: Request) {
       }
       break;
     }
-    case 'customer.subscription.created':
-    case 'customer.subscription.updated': {
+    case "customer.subscription.created":
+    case "customer.subscription.updated": {
       const sub = event.data.object as Stripe.Subscription;
       await pool.query(
         `UPDATE users
@@ -64,7 +70,7 @@ export async function POST(req: Request) {
       );
       break;
     }
-    case 'customer.subscription.deleted': {
+    case "customer.subscription.deleted": {
       const sub = event.data.object as Stripe.Subscription;
       await pool.query(
         `UPDATE users
@@ -74,7 +80,7 @@ export async function POST(req: Request) {
       );
       break;
     }
-    case 'invoice.payment_failed': {
+    case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
       await pool.query(
         `UPDATE users SET subscription_status = 'past_due' WHERE stripe_subscription_id = $1`,
@@ -86,7 +92,7 @@ export async function POST(req: Request) {
     }
   }
 
-  return new Response('OK');
+  return new Response("OK");
 }
 ```
 

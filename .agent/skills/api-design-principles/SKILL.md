@@ -84,6 +84,7 @@ Accept: application/vnd.api+json; version=1
 REST APIs follow resource-oriented patterns with standard HTTP methods. See [REST Best Practices](references/guides/rest-best-practices.md) for detailed implementation patterns.
 
 Key patterns include:
+
 - **Resource Collection Design**: Plural nouns, nested resources
 - **Pagination and Filtering**: Cursor or offset-based pagination
 - **Error Handling**: Consistent error responses with proper status codes
@@ -94,6 +95,7 @@ Key patterns include:
 GraphQL uses schema-first development with single endpoint architecture. See [API Examples](references/examples/api-examples.md) for complete code samples.
 
 Key patterns include:
+
 - **Schema Design**: Types, queries, mutations, subscriptions
 - **Resolver Design**: Field resolvers with DataLoader batching
 - **N+1 Prevention**: DataLoader pattern for efficient fetching

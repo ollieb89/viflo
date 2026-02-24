@@ -145,17 +145,12 @@ export const idParamSchema = Joi.object({
 ```typescript
 export const userSchema = Joi.object({
   body: Joi.object({
-    username: Joi.string()
-      .alphanum()
-      .min(3)
-      .max(30)
-      .required()
-      .messages({
-        "string.alphanum": "Username must only contain letters and numbers",
-        "string.min": "Username must be at least 3 characters",
-        "string.max": "Username cannot exceed 30 characters",
-        "any.required": "Username is required",
-      }),
+    username: Joi.string().alphanum().min(3).max(30).required().messages({
+      "string.alphanum": "Username must only contain letters and numbers",
+      "string.min": "Username must be at least 3 characters",
+      "string.max": "Username cannot exceed 30 characters",
+      "any.required": "Username is required",
+    }),
     email: Joi.string().email().required().messages({
       "string.email": "Please provide a valid email address",
       "any.required": "Email is required",
@@ -316,13 +311,15 @@ const batchSchemaJoi = Joi.object({
 
 ```typescript
 // Zod
-const dateRangeSchema = z.object({
-  startDate: z.coerce.date(),
-  endDate: z.coerce.date(),
-}).refine((data) => data.endDate > data.startDate, {
-  message: "End date must be after start date",
-  path: ["endDate"],
-});
+const dateRangeSchema = z
+  .object({
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
+  })
+  .refine((data) => data.endDate > data.startDate, {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
 
 // Joi
 const dateRangeSchemaJoi = Joi.object({

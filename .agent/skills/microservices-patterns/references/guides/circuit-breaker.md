@@ -109,11 +109,11 @@ async def call_payment_service(payment_data: dict):
 
 ## Configuration Guidelines
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `failure_threshold` | 5 | Number of failures before opening circuit |
-| `recovery_timeout` | 30 | Seconds to wait before trying again |
-| `success_threshold` | 2 | Successful calls in HALF_OPEN to close circuit |
+| Parameter           | Default | Description                                    |
+| ------------------- | ------- | ---------------------------------------------- |
+| `failure_threshold` | 5       | Number of failures before opening circuit      |
+| `recovery_timeout`  | 30      | Seconds to wait before trying again            |
+| `success_threshold` | 2       | Successful calls in HALF_OPEN to close circuit |
 
 ## Best Practices
 

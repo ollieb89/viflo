@@ -30,15 +30,15 @@ print(response.content[0].text)
 
 ```typescript
 // TypeScript
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from "@anthropic-ai/sdk";
 const client = new Anthropic();
 const response = await client.messages.create({
-  model: 'claude-sonnet-4-6',
+  model: "claude-sonnet-4-6",
   max_tokens: 1024,
-  messages: [{ role: 'user', content: 'What is the capital of France?' }],
+  messages: [{ role: "user", content: "What is the capital of France?" }],
 });
 const block = response.content[0];
-console.log(block.type === 'text' ? block.text : '');
+console.log(block.type === "text" ? block.text : "");
 ```
 
 ### Step 2: Tool-Using Agent with Guardrails
@@ -112,29 +112,33 @@ print(run_agent("Fetch https://example.com and summarise it."))
 
 ```typescript
 // TypeScript
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from "@anthropic-ai/sdk";
 
-const MAX_TURNS = 10;               // REQUIRED: hard limit on agent iterations
-const MAX_TOKENS_PER_RUN = 4096;    // REQUIRED: caps per-call output tokens
+const MAX_TURNS = 10; // REQUIRED: hard limit on agent iterations
+const MAX_TOKENS_PER_RUN = 4096; // REQUIRED: caps per-call output tokens
 
 const client = new Anthropic();
 
 const tools: Anthropic.Tool[] = [
   {
-    name: 'fetch_url',
-    description: 'Fetch the content of a URL and return the text (first 2000 chars)',
+    name: "fetch_url",
+    description:
+      "Fetch the content of a URL and return the text (first 2000 chars)",
     input_schema: {
-      type: 'object',
+      type: "object",
       properties: {
-        url: { type: 'string', description: 'The URL to fetch' },
+        url: { type: "string", description: "The URL to fetch" },
       },
-      required: ['url'],
+      required: ["url"],
     },
   },
 ];
 
-async function executeTool(name: string, input: { url: string }): Promise<string> {
-  if (name === 'fetch_url') {
+async function executeTool(
+  name: string,
+  input: { url: string },
+): Promise<string> {
+  if (name === "fetch_url") {
     const res = await fetch(input.url);
     return (await res.text()).slice(0, 2000);
   }
@@ -142,42 +146,49 @@ async function executeTool(name: string, input: { url: string }): Promise<string
 }
 
 async function runAgent(userMessage: string): Promise<string> {
-  const messages: Anthropic.MessageParam[] = [{ role: 'user', content: userMessage }];
+  const messages: Anthropic.MessageParam[] = [
+    { role: "user", content: userMessage },
+  ];
 
   for (let turn = 0; turn < MAX_TURNS; turn++) {
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: "claude-sonnet-4-6",
       max_tokens: MAX_TOKENS_PER_RUN,
       tools,
       messages,
     });
 
-    if (response.stop_reason === 'end_turn') {
-      const text = response.content.find((b) => b.type === 'text');
-      return text?.type === 'text' ? text.text : '';
+    if (response.stop_reason === "end_turn") {
+      const text = response.content.find((b) => b.type === "text");
+      return text?.type === "text" ? text.text : "";
     }
 
-    if (response.stop_reason === 'tool_use') {
-      messages.push({ role: 'assistant', content: response.content });
+    if (response.stop_reason === "tool_use") {
+      messages.push({ role: "assistant", content: response.content });
 
       const toolResults: Anthropic.ToolResultBlockParam[] = await Promise.all(
         response.content
-          .filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use')
+          .filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use")
           .map(async (toolUse) => ({
-            type: 'tool_result' as const,
+            type: "tool_result" as const,
             tool_use_id: toolUse.id,
-            content: await executeTool(toolUse.name, toolUse.input as { url: string }),
-          }))
+            content: await executeTool(
+              toolUse.name,
+              toolUse.input as { url: string },
+            ),
+          })),
       );
 
-      messages.push({ role: 'user', content: toolResults });
+      messages.push({ role: "user", content: toolResults });
     }
   }
 
-  throw new Error(`Agent exceeded MAX_TURNS (${MAX_TURNS}). Aborting to prevent runaway costs.`);
+  throw new Error(
+    `Agent exceeded MAX_TURNS (${MAX_TURNS}). Aborting to prevent runaway costs.`,
+  );
 }
 
-console.log(await runAgent('Fetch https://example.com and summarise it.'));
+console.log(await runAgent("Fetch https://example.com and summarise it."));
 ```
 
 > **Shortcut:** `client.beta.messages.tool_runner()` (Python) / `client.beta.messages.toolRunner()` (TypeScript) handle the loop automatically. The manual loop above is the better teaching pattern because guardrail placement is explicit and auditable.
@@ -186,10 +197,10 @@ console.log(await runAgent('Fetch https://example.com and summarise it.'));
 
 Every tool-use loop must define `MAX_TURNS` and `MAX_TOKENS_PER_RUN` as named constants before the first call. These are not suggestions — cost runaway is the primary production failure mode for agents. At $3–15 per million output tokens, an unguarded 100-turn loop can accumulate hundreds of dollars before anyone notices.
 
-| Constant | Recommended Default | Effect |
-|---|---|---|
-| `MAX_TURNS` | 10 | Aborts loop after N iterations — raise `RuntimeError` / `Error` on breach |
-| `MAX_TOKENS_PER_RUN` | 4096 | Caps output tokens per call — set on every `messages.create()` call |
+| Constant             | Recommended Default | Effect                                                                    |
+| -------------------- | ------------------- | ------------------------------------------------------------------------- |
+| `MAX_TURNS`          | 10                  | Aborts loop after N iterations — raise `RuntimeError` / `Error` on breach |
+| `MAX_TOKENS_PER_RUN` | 4096                | Caps output tokens per call — set on every `messages.create()` call       |
 
 **Why named constants?** Magic numbers inline (`range(10)`, `max_tokens=4096`) are invisible in code review. Named constants are grep-able, auditable, and communicate intent. `max_tokens` must be set explicitly on every `messages.create()` call — SDK defaults vary by version.
 
@@ -235,8 +246,8 @@ Proxy through a Next.js API route using `@ai-sdk/anthropic` — avoids CORS and 
 
 ```typescript
 // app/api/chat/route.ts
-import { streamText, convertToModelMessages, UIMessage } from 'ai';
-import { createAnthropic } from '@ai-sdk/anthropic';
+import { streamText, convertToModelMessages, UIMessage } from "ai";
+import { createAnthropic } from "@ai-sdk/anthropic";
 
 const anthropic = createAnthropic(); // reads ANTHROPIC_API_KEY from env
 export const maxDuration = 30;
@@ -245,7 +256,7 @@ export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
   const result = streamText({
-    model: anthropic('claude-sonnet-4-6'),
+    model: anthropic("claude-sonnet-4-6"),
     messages: await convertToModelMessages(messages),
   });
 
@@ -317,12 +328,12 @@ result = agent.invoke(
 print(result["messages"][-1].content)
 ```
 
-| Situation | Pattern |
-|---|---|
-| Task fits in one context window | Single agent + tools |
-| Requires parallelism | Orchestrator + parallel subagents |
-| Exceeds context window | Orchestrator + sequential subagents |
-| Long-running with human checkpoints | LangGraph with `PostgresSaver` |
+| Situation                           | Pattern                             |
+| ----------------------------------- | ----------------------------------- |
+| Task fits in one context window     | Single agent + tools                |
+| Requires parallelism                | Orchestrator + parallel subagents   |
+| Exceeds context window              | Orchestrator + sequential subagents |
+| Long-running with human checkpoints | LangGraph with `PostgresSaver`      |
 
 `InMemorySaver` is for development only — state is lost on restart. Use `PostgresSaver` from `langgraph-checkpoint-postgres` in production.
 
@@ -380,6 +391,7 @@ MCP is an open standard introduced by Anthropic in November 2024, now governed b
 ### Gotcha 1: Runaway Costs (Agent Loop Without Termination)
 
 **Warning signs:**
+
 - API cost spikes on dashboards with no corresponding feature launch
 - Agent "spinning" — same or similar tool calls repeated across turns
 - Simple queries taking many seconds or minutes to respond
@@ -419,6 +431,7 @@ raise RuntimeError(
 ### Gotcha 2: Untyped Sub-Agent Handoffs
 
 **Warning signs:**
+
 - Sub-agent returns answers that reference fields not in the original task
 - Different runs of the same pipeline produce structurally different outputs
 - Adding a new orchestrator output field breaks one sub-agent but not others
@@ -427,8 +440,8 @@ raise RuntimeError(
 
 ```typescript
 // BAD: untyped string handoff — downstream agent can't validate input
-const result = await orchestratorAgent(task);  // returns string
-const subResult = await subAgent(result);       // what schema does subAgent expect?
+const result = await orchestratorAgent(task); // returns string
+const subResult = await subAgent(result); // what schema does subAgent expect?
 ```
 
 ```typescript
@@ -441,8 +454,10 @@ interface SearchHandoff {
 
 function validateHandoff(raw: unknown): SearchHandoff {
   const h = raw as SearchHandoff;
-  if (typeof h.query !== 'string') throw new Error('Invalid handoff: missing query');
-  if (typeof h.maxResults !== 'number') throw new Error('Invalid handoff: missing maxResults');
+  if (typeof h.query !== "string")
+    throw new Error("Invalid handoff: missing query");
+  if (typeof h.maxResults !== "number")
+    throw new Error("Invalid handoff: missing maxResults");
   return h;
 }
 
@@ -454,6 +469,7 @@ const subResult = await subAgent(handoff);
 ### Gotcha 3: Bag-of-Agents Error Multiplication
 
 **Warning signs:**
+
 - Final output quality is worse than a single-agent approach on the same task
 - Early-stage agent errors appear in final outputs with greater confidence
 - Removing an agent from the pipeline improves output quality
@@ -485,17 +501,17 @@ if not validate_stage(result_2, schema=SummarySchema):
 
 ## Version Context
 
-| Library | Version | Notes |
-|---|---|---|
-| `@anthropic-ai/sdk` | 0.37.x | TypeScript — `tool_use` stop reason pattern |
-| `anthropic` | 0.40.x | Python equivalent |
-| `ai` (Vercel AI SDK) | 6.x (6.0.97) | `useChat`, `streamText`, `convertToModelMessages` |
-| `@ai-sdk/anthropic` | latest | `createAnthropic()` — breaking change from `new Anthropic()` |
-| `@ai-sdk/react` | 6.x | `useChat` hook with `parts` API |
-| `langgraph` | 1.x | Stable since October 2025, zero breaking changes |
-| `langgraph-checkpoint-postgres` | 1.x | `PostgresSaver` for production checkpointing |
-| `langchain-anthropic` | latest | `ChatAnthropic` model provider for LangGraph |
-| `fastapi` | 0.115+ | `StreamingResponse` + async generator for SSE |
+| Library                         | Version      | Notes                                                        |
+| ------------------------------- | ------------ | ------------------------------------------------------------ |
+| `@anthropic-ai/sdk`             | 0.37.x       | TypeScript — `tool_use` stop reason pattern                  |
+| `anthropic`                     | 0.40.x       | Python equivalent                                            |
+| `ai` (Vercel AI SDK)            | 6.x (6.0.97) | `useChat`, `streamText`, `convertToModelMessages`            |
+| `@ai-sdk/anthropic`             | latest       | `createAnthropic()` — breaking change from `new Anthropic()` |
+| `@ai-sdk/react`                 | 6.x          | `useChat` hook with `parts` API                              |
+| `langgraph`                     | 1.x          | Stable since October 2025, zero breaking changes             |
+| `langgraph-checkpoint-postgres` | 1.x          | `PostgresSaver` for production checkpointing                 |
+| `langchain-anthropic`           | latest       | `ChatAnthropic` model provider for LangGraph                 |
+| `fastapi`                       | 0.115+       | `StreamingResponse` + async generator for SSE                |
 
 ## See Also
 

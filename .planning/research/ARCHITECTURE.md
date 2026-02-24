@@ -24,19 +24,19 @@
 
 ### Component Responsibilities
 
-| Component | Responsibility | Typical Implementation |
-|-----------|----------------|------------------------|
+| Component            | Responsibility                                                          | Typical Implementation                                                          |
+| -------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | SKILL.md frontmatter | Trigger matching — agent reads this to decide whether to load the skill | YAML with `name` and `description`; description doubles as "when to use" signal |
-| SKILL.md body | Core instructions, quick-reference patterns, links to references | Markdown ≤500 lines; cross-references via skill name, not @ syntax |
-| references/ | Detailed content loaded lazily when Claude determines it is needed | One file per sub-topic |
-| assets/ | Boilerplate copied into user projects, not read into context | Templates, example configs, starter code |
-| INDEX.md | Skill discovery — the top-level table of contents for all skills | Markdown tables by category; updated whenever a skill is added |
+| SKILL.md body        | Core instructions, quick-reference patterns, links to references        | Markdown ≤500 lines; cross-references via skill name, not @ syntax              |
+| references/          | Detailed content loaded lazily when Claude determines it is needed      | One file per sub-topic                                                          |
+| assets/              | Boilerplate copied into user projects, not read into context            | Templates, example configs, starter code                                        |
+| INDEX.md             | Skill discovery — the top-level table of contents for all skills        | Markdown tables by category; updated whenever a skill is added                  |
 
 ---
 
 ## Part 2: Domain Integration Architecture
 
-This section answers: *how do Stripe Payments, RAG/Vector Search, and Agent Architecture integrate into a Next.js + FastAPI + PostgreSQL stack?* Each domain introduces specific new components, data flows, and database changes.
+This section answers: _how do Stripe Payments, RAG/Vector Search, and Agent Architecture integrate into a Next.js + FastAPI + PostgreSQL stack?_ Each domain introduces specific new components, data flows, and database changes.
 
 ### 2A: Stripe Payments Integration
 
@@ -156,12 +156,12 @@ CREATE TABLE processed_webhook_events (
 
 #### Integration Points with Existing Stack
 
-| Existing Component | Change | Why |
-|-------------------|--------|-----|
-| `auth-systems` skill | **Prerequisite** — Stripe requires authenticated user_id to associate charges | Cannot bill anonymously |
-| `backend-dev-guidelines` | Add billing router, webhook endpoint, raw body middleware | New FastAPI routes |
-| `pci-compliance` | No change needed — Stripe Checkout handles card data | Your scope is SAQ A |
-| `database-design` | Add 3 new tables (customers, subscriptions, webhook events) | Stripe state mirror |
+| Existing Component       | Change                                                                        | Why                     |
+| ------------------------ | ----------------------------------------------------------------------------- | ----------------------- |
+| `auth-systems` skill     | **Prerequisite** — Stripe requires authenticated user_id to associate charges | Cannot bill anonymously |
+| `backend-dev-guidelines` | Add billing router, webhook endpoint, raw body middleware                     | New FastAPI routes      |
+| `pci-compliance`         | No change needed — Stripe Checkout handles card data                          | Your scope is SAQ A     |
+| `database-design`        | Add 3 new tables (customers, subscriptions, webhook events)                   | Stripe state mirror     |
 
 ---
 
@@ -283,12 +283,12 @@ class DocumentChunk(Base):
 
 #### Integration Points with Existing Stack
 
-| Existing Component | Change | Why |
-|-------------------|--------|-----|
-| `database-design` skill | **Prerequisite** — pgvector is a PostgreSQL extension; migrations add vector columns | Core data model change |
-| `postgresql` skill | Add `CREATE EXTENSION vector` to migration; HNSW index syntax | New index type |
-| `backend-dev-guidelines` | Add search + ingest routers; async background worker pattern | New FastAPI routes |
-| `api-patterns` | SSE streaming for generation responses | LLM output is streamed, not buffered |
+| Existing Component       | Change                                                                               | Why                                  |
+| ------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------ |
+| `database-design` skill  | **Prerequisite** — pgvector is a PostgreSQL extension; migrations add vector columns | Core data model change               |
+| `postgresql` skill       | Add `CREATE EXTENSION vector` to migration; HNSW index syntax                        | New index type                       |
+| `backend-dev-guidelines` | Add search + ingest routers; async background worker pattern                         | New FastAPI routes                   |
+| `api-patterns`           | SSE streaming for generation responses                                               | LLM output is streamed, not buffered |
 
 ---
 
@@ -448,12 +448,12 @@ CREATE INDEX ON agent_memories USING hnsw (embedding vector_cosine_ops)
 
 #### Integration Points with Existing Stack
 
-| Existing Component | Change | Why |
-|-------------------|--------|-----|
-| `prompt-engineering` skill | **Prerequisite** — agent system prompts require structured prompt design | Agent behavior is entirely prompt-driven |
-| `rag-vector-search` skill | **Synergistic** — agents use RAG as a tool; episodic memory reuses pgvector | Shared infrastructure |
-| `workflow-orchestration-patterns` | Reference for durable multi-step agent loops | Temporal patterns apply to long-running agents |
-| `backend-dev-guidelines` | Add agent router + SSE streaming endpoint | New FastAPI patterns |
+| Existing Component                | Change                                                                      | Why                                            |
+| --------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------- |
+| `prompt-engineering` skill        | **Prerequisite** — agent system prompts require structured prompt design    | Agent behavior is entirely prompt-driven       |
+| `rag-vector-search` skill         | **Synergistic** — agents use RAG as a tool; episodic memory reuses pgvector | Shared infrastructure                          |
+| `workflow-orchestration-patterns` | Reference for durable multi-step agent loops                                | Temporal patterns apply to long-running agents |
+| `backend-dev-guidelines`          | Add agent router + SSE streaming endpoint                                   | New FastAPI patterns                           |
 
 ---
 
@@ -565,6 +565,7 @@ Total: **4 modified files**
 **When to use:** Whenever a skill assumes prerequisite knowledge from another skill.
 
 **Example (agent-architecture SKILL.md):**
+
 ```markdown
 ## Prerequisites
 
@@ -579,6 +580,7 @@ Total: **4 modified files**
 **When to use:** Skills covering mutually exclusive provider variants or major independent sub-domains.
 
 **Example (stripe-payments):**
+
 ```
 references/
 ├── checkout-sessions.md   # One-time payments
@@ -596,7 +598,7 @@ references/
 
 **Why it's wrong:** The redirect fires even for failed/abandoned payments in some edge cases. Network drops after payment mean the user never reaches the success page.
 
-**Do this instead:** Use `checkout.session.completed` webhook as the single source of truth. The redirect page should *read* subscription status from the DB, not *write* it.
+**Do this instead:** Use `checkout.session.completed` webhook as the single source of truth. The redirect page should _read_ subscription status from the DB, not _write_ it.
 
 ### Anti-Pattern 2: Parsing JSON Before Webhook Signature Verification
 
@@ -651,10 +653,11 @@ references/
 
 ---
 
-*Architecture research for: viflo v1.3 Expert Skills (Stripe, RAG, Agent Architecture)*
-*Researched: 2026-02-24*
+_Architecture research for: viflo v1.3 Expert Skills (Stripe, RAG, Agent Architecture)_
+_Researched: 2026-02-24_
 
 ---
+
 ---
 
 # Architecture Research — v1.4 Addition: `viflo init` CLI
@@ -698,11 +701,11 @@ references/
 
 **Recommendation: Option B — `bin/viflo.cjs` with package.json bin field.**
 
-| Option | Verdict | Rationale |
-|--------|---------|-----------|
-| A: `scripts/viflo-init.sh` | Reject | Cannot safely manipulate JSON. No cross-platform guarantee for sed/awk between BSD and GNU. No test path. |
-| B: `bin/viflo.cjs` | **Choose this** | Matches gsd-tools.cjs pattern already proven in this ecosystem. Node.js is already the runtime. JSON.parse/stringify is native and safe. Testable via Vitest. `__dirname` gives self-referential path resolution. |
-| C: `packages/cli/` | Defer | Adds TypeScript compilation, build pipeline, and workspace publish step before the CLI shape is proven. Premature complexity. Extract here in a future milestone if warranted. |
+| Option                     | Verdict         | Rationale                                                                                                                                                                                                         |
+| -------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A: `scripts/viflo-init.sh` | Reject          | Cannot safely manipulate JSON. No cross-platform guarantee for sed/awk between BSD and GNU. No test path.                                                                                                         |
+| B: `bin/viflo.cjs`         | **Choose this** | Matches gsd-tools.cjs pattern already proven in this ecosystem. Node.js is already the runtime. JSON.parse/stringify is native and safe. Testable via Vitest. `__dirname` gives self-referential path resolution. |
+| C: `packages/cli/`         | Defer           | Adds TypeScript compilation, build pipeline, and workspace publish step before the CLI shape is proven. Premature complexity. Extract here in a future milestone if warranted.                                    |
 
 ## Recommended Project Structure
 
@@ -730,12 +733,12 @@ viflo/
 
 ## Component Responsibilities
 
-| Component | Responsibility | Communicates With |
-|-----------|----------------|-------------------|
-| `bin/viflo.cjs` | Argument parsing, subcommand routing, user-facing stdout | bin/lib/init.cjs |
-| `bin/lib/init.cjs` | Orchestrates --minimal and --full flows, idempotency logic | paths.cjs, writers.cjs |
-| `bin/lib/paths.cjs` | Self-referential viflo root resolution via `__dirname`, OS-agnostic path construction | Node.js `path`, `os` |
-| `bin/lib/writers.cjs` | CLAUDE.md sentinel-aware merge, settings.json JSON merge, .planning/ scaffold | Node.js `fs` |
+| Component             | Responsibility                                                                        | Communicates With      |
+| --------------------- | ------------------------------------------------------------------------------------- | ---------------------- |
+| `bin/viflo.cjs`       | Argument parsing, subcommand routing, user-facing stdout                              | bin/lib/init.cjs       |
+| `bin/lib/init.cjs`    | Orchestrates --minimal and --full flows, idempotency logic                            | paths.cjs, writers.cjs |
+| `bin/lib/paths.cjs`   | Self-referential viflo root resolution via `__dirname`, OS-agnostic path construction | Node.js `path`, `os`   |
+| `bin/lib/writers.cjs` | CLAUDE.md sentinel-aware merge, settings.json JSON merge, .planning/ scaffold         | Node.js `fs`           |
 
 ## Architectural Patterns
 
@@ -749,27 +752,27 @@ viflo/
 
 ```javascript
 // bin/lib/paths.cjs
-const path = require('path');
+const path = require("path");
 
 function getVifloRoot() {
   // bin/lib/paths.cjs → up two levels to repo root
-  return path.resolve(__dirname, '..', '..');
+  return path.resolve(__dirname, "..", "..");
 }
 
 function getSkillsDir() {
-  return path.join(getVifloRoot(), '.agent', 'skills');
+  return path.join(getVifloRoot(), ".agent", "skills");
 }
 
 function getTargetClaudeSettingsPath(targetDir) {
   // Project-level: <target>/.claude/settings.json
   // Per Claude Code docs: https://code.claude.com/docs/en/settings
-  return path.join(targetDir, '.claude', 'settings.json');
+  return path.join(targetDir, ".claude", "settings.json");
 }
 
 function getTargetClaudeMdPath(targetDir) {
   // Write to CLAUDE.md at project root (most visible, most conventional)
   // Claude Code also supports .claude/CLAUDE.md but root is preferred
-  return path.join(targetDir, 'CLAUDE.md');
+  return path.join(targetDir, "CLAUDE.md");
 }
 ```
 
@@ -783,8 +786,8 @@ function getTargetClaudeMdPath(targetDir) {
 
 ```javascript
 // bin/lib/writers.cjs
-const VIFLO_SENTINEL_START = '<!-- viflo:start -->';
-const VIFLO_SENTINEL_END = '<!-- viflo:end -->';
+const VIFLO_SENTINEL_START = "<!-- viflo:start -->";
+const VIFLO_SENTINEL_END = "<!-- viflo:end -->";
 
 function mergeClaudeMd(existingContent, vifloStanza) {
   const wrappedStanza = `${VIFLO_SENTINEL_START}\n${vifloStanza}\n${VIFLO_SENTINEL_END}`;
@@ -793,12 +796,12 @@ function mergeClaudeMd(existingContent, vifloStanza) {
     // Replace existing viflo block in-place (idempotent re-run)
     const pattern = new RegExp(
       `${VIFLO_SENTINEL_START}[\\s\\S]*?${VIFLO_SENTINEL_END}`,
-      'g'
+      "g",
     );
     return existingContent.replace(pattern, wrappedStanza);
   }
   // First run: append to existing content (preserves all non-viflo content)
-  return existingContent.trimEnd() + '\n\n' + wrappedStanza + '\n';
+  return existingContent.trimEnd() + "\n\n" + wrappedStanza + "\n";
 }
 ```
 
@@ -809,13 +812,16 @@ function mergeClaudeMd(existingContent, vifloStanza) {
 **When to use:** This is the primary integration mechanism. It makes viflo skills available in any target project without copying files.
 
 **Trade-offs:**
+
 - Absolute paths tie the stanza to the current viflo install location. If the user moves the viflo repo, the stanza breaks. `viflo init` is idempotent (re-running updates the stanza with the new path).
 - Claude Code shows a one-time approval dialog when it first encounters `@` imports from an external absolute path. This is documented behavior. The CLI should warn the user about this with a note in stdout.
 - Imports are not evaluated inside markdown code spans or code blocks — the sentinel HTML comments do not interfere.
 
 **Example output written to target project CLAUDE.md:**
+
 ```markdown
 <!-- viflo:start -->
+
 ## Viflo Skills
 
 Access the full viflo skill library:
@@ -824,6 +830,7 @@ Access the full viflo skill library:
 @/home/user/tools/viflo/.agent/skills/frontend/SKILL.md
 @/home/user/tools/viflo/.agent/skills/backend-dev-guidelines/SKILL.md
 @/home/user/tools/viflo/.agent/skills/database-design/SKILL.md
+
 <!-- viflo:end -->
 ```
 
@@ -860,7 +867,7 @@ function mergeClaudeSettings(existingJson, vifloRoot) {
   }
   merged.permissions.allow = [...currentAllow];
 
-  return JSON.stringify(merged, null, 2) + '\n';
+  return JSON.stringify(merged, null, 2) + "\n";
 }
 ```
 
@@ -869,13 +876,13 @@ function mergeClaudeSettings(existingJson, vifloRoot) {
 **Confidence: HIGH.** Sourced from [Claude Code official docs](https://code.claude.com/docs/en/settings) and [memory docs](https://code.claude.com/docs/en/memory), verified 2026-02-24.
 
 | Platform | Global user settings (DO NOT write here) | Project settings (viflo init writes here) |
-|----------|------------------------------------------|-------------------------------------------|
-| Linux | `~/.claude/settings.json` | `<target>/.claude/settings.json` |
-| macOS | `~/.claude/settings.json` | `<target>/.claude/settings.json` |
-| Windows | `~/.claude/settings.json` | `<target>/.claude/settings.json` |
+| -------- | ---------------------------------------- | ----------------------------------------- |
+| Linux    | `~/.claude/settings.json`                | `<target>/.claude/settings.json`          |
+| macOS    | `~/.claude/settings.json`                | `<target>/.claude/settings.json`          |
+| Windows  | `~/.claude/settings.json`                | `<target>/.claude/settings.json`          |
 
-| Platform | CLAUDE.md project location (viflo init writes here) |
-|----------|-----------------------------------------------------|
+| Platform                | CLAUDE.md project location (viflo init writes here)              |
+| ----------------------- | ---------------------------------------------------------------- |
 | Linux / macOS / Windows | `<target>/CLAUDE.md` (preferred) or `<target>/.claude/CLAUDE.md` |
 
 `viflo init` writes only to project-level files in `process.cwd()`. It never touches `~/.claude/settings.json` or `~/.claude/CLAUDE.md`.
@@ -943,30 +950,30 @@ stdout:
 
 ### New Files in Viflo Repo
 
-| File | Type | Purpose |
-|------|------|---------|
-| `bin/viflo.cjs` | NEW | CLI entry point with argument parsing |
-| `bin/lib/init.cjs` | NEW | --minimal/--full orchestration, idempotency logic |
-| `bin/lib/paths.cjs` | NEW | Path resolution — viflo root, skills dir, target paths |
-| `bin/lib/writers.cjs` | NEW | File write/merge — CLAUDE.md sentinel merge, settings.json JSON merge |
+| File                  | Type | Purpose                                                               |
+| --------------------- | ---- | --------------------------------------------------------------------- |
+| `bin/viflo.cjs`       | NEW  | CLI entry point with argument parsing                                 |
+| `bin/lib/init.cjs`    | NEW  | --minimal/--full orchestration, idempotency logic                     |
+| `bin/lib/paths.cjs`   | NEW  | Path resolution — viflo root, skills dir, target paths                |
+| `bin/lib/writers.cjs` | NEW  | File write/merge — CLAUDE.md sentinel merge, settings.json JSON merge |
 
 ### Modified Files in Viflo Repo
 
-| File | Change | Why |
-|------|--------|-----|
-| `package.json` | Add `"bin": { "viflo": "bin/viflo.cjs" }` | Registers CLI as npm executable |
+| File           | Change                                         | Why                                |
+| -------------- | ---------------------------------------------- | ---------------------------------- |
+| `package.json` | Add `"bin": { "viflo": "bin/viflo.cjs" }`      | Registers CLI as npm executable    |
 | `package.json` | Add `"files": ["bin/", ".agent/", "scripts/"]` | Ensures skills ship in npm package |
 
 ### Files Written to Target Project by viflo init
 
-| File | Mode | Action |
-|------|------|--------|
-| `CLAUDE.md` | --minimal + --full | Sentinel merge: adds/updates viflo @import block |
+| File                    | Mode               | Action                                            |
+| ----------------------- | ------------------ | ------------------------------------------------- |
+| `CLAUDE.md`             | --minimal + --full | Sentinel merge: adds/updates viflo @import block  |
 | `.claude/settings.json` | --minimal + --full | JSON merge: adds viflo permissions to allow array |
-| `.planning/PROJECT.md` | --full only | Create-if-absent: GSD project stub |
-| `.planning/ROADMAP.md` | --full only | Create-if-absent: GSD roadmap stub |
-| `.planning/STATE.md` | --full only | Create-if-absent: GSD state stub |
-| `.planning/config.json` | --full only | Create-if-absent: GSD config with model defaults |
+| `.planning/PROJECT.md`  | --full only        | Create-if-absent: GSD project stub                |
+| `.planning/ROADMAP.md`  | --full only        | Create-if-absent: GSD roadmap stub                |
+| `.planning/STATE.md`    | --full only        | Create-if-absent: GSD state stub                  |
+| `.planning/config.json` | --full only        | Create-if-absent: GSD config with model defaults  |
 
 ### Files Never Modified by viflo init
 
@@ -1060,12 +1067,12 @@ viflo init --full
 
 ## Scaling Considerations
 
-| Scenario | Adjustment Needed |
-|----------|-------------------|
-| Single developer, local clone | Current design is complete. `npm link` for development use. |
-| Team with shared viflo fork | Add optional `--skills-dir <path>` flag to override. Low effort addition. |
-| Distributed npm package | Ensure `.agent/` is in `"files"` in package.json. `__dirname` resolves to npm install location. Skills ship with the package. No change to core logic. |
-| Multiple viflo versions in use | Extend sentinel to `<!-- viflo:v1.4:start -->` for version-aware updates. Defer until needed. |
+| Scenario                       | Adjustment Needed                                                                                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Single developer, local clone  | Current design is complete. `npm link` for development use.                                                                                            |
+| Team with shared viflo fork    | Add optional `--skills-dir <path>` flag to override. Low effort addition.                                                                              |
+| Distributed npm package        | Ensure `.agent/` is in `"files"` in package.json. `__dirname` resolves to npm install location. Skills ship with the package. No change to core logic. |
+| Multiple viflo versions in use | Extend sentinel to `<!-- viflo:v1.4:start -->` for version-aware updates. Defer until needed.                                                          |
 
 ## Sources
 
@@ -1077,5 +1084,5 @@ viflo init --full
 
 ---
 
-*Architecture research for: viflo init CLI (v1.4)*
-*Researched: 2026-02-24*
+_Architecture research for: viflo init CLI (v1.4)_
+_Researched: 2026-02-24_

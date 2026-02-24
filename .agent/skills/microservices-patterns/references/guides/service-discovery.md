@@ -249,14 +249,14 @@ class KubernetesServiceDiscovery:
 
 ## Comparison
 
-| Feature | Consul | etcd | Kubernetes |
-|---------|--------|------|------------|
-| **Type** | Full-featured service mesh | Key-value store | Container orchestrator |
-| **Health Checks** | Built-in HTTP/TCP/Script | Requires custom implementation | Built-in readiness/liveness |
-| **Key-Value Store** | Yes | Yes (primary) | ConfigMaps/Secrets |
-| **Multi-Datacenter** | Native support | Via clustering | Via federation |
-| **Learning Curve** | Medium | Low | Low (if using K8s) |
-| **Best For** | Complex multi-service architectures | Simple, fast discovery | K8s-native applications |
+| Feature              | Consul                              | etcd                           | Kubernetes                  |
+| -------------------- | ----------------------------------- | ------------------------------ | --------------------------- |
+| **Type**             | Full-featured service mesh          | Key-value store                | Container orchestrator      |
+| **Health Checks**    | Built-in HTTP/TCP/Script            | Requires custom implementation | Built-in readiness/liveness |
+| **Key-Value Store**  | Yes                                 | Yes (primary)                  | ConfigMaps/Secrets          |
+| **Multi-Datacenter** | Native support                      | Via clustering                 | Via federation              |
+| **Learning Curve**   | Medium                              | Low                            | Low (if using K8s)          |
+| **Best For**         | Complex multi-service architectures | Simple, fast discovery         | K8s-native applications     |
 
 ## Best Practices
 

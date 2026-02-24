@@ -54,6 +54,7 @@ completed: 2026-02-24
 - **Files modified:** 1
 
 ## Accomplishments
+
 - Added `describe('viflo init --full', ...)` block with 10 test cases to viflo.test.js
 - Tests cover all INIT-03 and INIT-04 requirements: scaffold file creation, config.json validity, CLAUDE.md template vs sentinel-only merge on existing files, per-file idempotency, summary output format, first-run nudge presence/absence
 - --minimal regression guard confirms .planning/ is never created by --minimal flag
@@ -68,9 +69,11 @@ Each task was committed atomically:
 **Plan metadata:** (docs commit after summary)
 
 ## Files Created/Modified
+
 - `bin/lib/__tests__/viflo.test.js` - Added 10-test describe block for viflo init --full
 
 ## Decisions Made
+
 - Used existing file-scope `beforeEach`/`afterEach` hooks — no duplication needed in the new describe block, vitest applies them to all sibling describe blocks in the file
 - CLAUDE.md existing-file test uses `expect(content).not.toContain('## Tech Stack')` as the sentinel for "template not written" — matches the exact marker used in writeCLAUDEmdTemplate
 
@@ -79,15 +82,19 @@ Each task was committed atomically:
 None - plan executed exactly as written.
 
 ## Issues Encountered
+
 None.
 
 ## User Setup Required
+
 None - no external service configuration required.
 
 ## Next Phase Readiness
+
 - Full integration test coverage for both --minimal and --full modes complete
 - 45/45 tests passing, ready for Phase 19 polish (output cleanup, shebang wiring, npm bin registration)
 
 ---
-*Phase: 18-full-mode*
-*Completed: 2026-02-24*
+
+_Phase: 18-full-mode_
+_Completed: 2026-02-24_

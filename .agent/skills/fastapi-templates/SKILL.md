@@ -170,6 +170,7 @@ async def get_db() -> AsyncSession:
 For complete CRUD implementation including Repository, Service, and Endpoint patterns, see:
 
 📄 **[CRUD Template](references/examples/crud-template.md)** - Full CRUD implementation with:
+
 - Generic base repository with type safety
 - Service layer for business logic
 - API endpoints with dependency injection
@@ -180,6 +181,7 @@ For complete CRUD implementation including Repository, Service, and Endpoint pat
 For JWT-based authentication implementation, see:
 
 📄 **[Auth Template](references/examples/auth-template.md)** - Complete auth setup with:
+
 - JWT token generation and validation
 - Password hashing with bcrypt
 - OAuth2 dependency for protected routes

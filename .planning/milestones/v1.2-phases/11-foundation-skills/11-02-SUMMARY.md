@@ -2,7 +2,8 @@
 phase: 11-foundation-skills
 plan: 02
 subsystem: auth
-tags: [clerk, better-auth, nextjs, middleware, oauth, webhooks, svix, typescript]
+tags:
+  [clerk, better-auth, nextjs, middleware, oauth, webhooks, svix, typescript]
 
 # Dependency graph
 requires: []
@@ -11,11 +12,13 @@ provides:
   - "better-auth-patterns.md: complete Better Auth reference (setup, middleware, session access, OAuth, client-side usage)"
   - "clerk-patterns.md upgraded: DAL pattern, version context table, failure modes"
   - "authjs-patterns.md replaced with deprecation stub"
-affects: [stripe-payments, agent-architecture, any phase using auth-systems skill]
+affects:
+  [stripe-payments, agent-architecture, any phase using auth-systems skill]
 
 # Tech tracking
 tech-stack:
-  added: [better-auth, better-auth/cookies, better-auth/next-js, better-auth/react]
+  added:
+    [better-auth, better-auth/cookies, better-auth/next-js, better-auth/react]
   patterns:
     - "DAL pattern: wrap auth calls in React cache() for memoization and defence-in-depth"
     - "Better Auth fast middleware path: getSessionCookie() for cookie check without DB round trip"
@@ -109,5 +112,6 @@ None — no external service configuration required. Skill is documentation only
 - No blockers
 
 ---
-*Phase: 11-foundation-skills*
-*Completed: 2026-02-24*
+
+_Phase: 11-foundation-skills_
+_Completed: 2026-02-24_

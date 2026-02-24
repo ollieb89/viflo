@@ -74,25 +74,28 @@ Master proven backend architecture patterns including Clean Architecture, Hexago
 
 ## Pattern Comparison
 
-| Pattern | Focus | Best For | Complexity |
-|---------|-------|----------|------------|
-| Clean Architecture | Layer dependencies | Enterprise apps, long-term maintainability | Medium |
-| Hexagonal Architecture | Ports & adapters | Testing, swapping implementations | Medium |
-| DDD | Domain modeling | Complex business logic | High |
+| Pattern                | Focus              | Best For                                   | Complexity |
+| ---------------------- | ------------------ | ------------------------------------------ | ---------- |
+| Clean Architecture     | Layer dependencies | Enterprise apps, long-term maintainability | Medium     |
+| Hexagonal Architecture | Ports & adapters   | Testing, swapping implementations          | Medium     |
+| DDD                    | Domain modeling    | Complex business logic                     | High       |
 
 ## When to Use Which Pattern
 
 ### Use Clean Architecture when:
+
 - Building enterprise applications with long lifecycles
 - Multiple UI interfaces (web, mobile, CLI) share the same backend
 - Framework independence is critical
 
 ### Use Hexagonal Architecture when:
+
 - Frequent swapping of external services (payment gateways, email providers)
 - Heavy emphasis on testing with mocks
 - Microservices with clear external boundaries
 
 ### Use DDD when:
+
 - Domain complexity is high
 - Business rules are central to the application
 - Domain experts collaborate closely with developers

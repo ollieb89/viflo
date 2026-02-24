@@ -5,23 +5,27 @@
 **Confidence:** HIGH
 
 <user_constraints>
+
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
 
 #### INDEX.md structure
+
 - Flat markdown table format (not grouped, not a bullet list)
 - Each entry: skill name + one-line description only — no status column, no file paths
 - Brief 1–2 sentence intro paragraph at the top explaining what the index covers
 - Filename: `INDEX.md` (matches roadmap success criteria)
 
 #### Cross-reference style
+
 - Dedicated **"See Also"** section at the bottom of each skill file
 - Seam is named explicitly in the link text — e.g. `[Agent Architecture](../agent-architecture/SKILL.md) — episodic memory pattern`
 - Links are bidirectional: both skills reference each other at their shared seam
 - Format: relative markdown links (clickable in editors and GitHub)
 
 #### VERIFICATION.md format
+
 - Table columns: `Skill | Line Count | Status`
 - Status values: `✓` (≤500) or `✗` (>500)
 - Summary line at the top or bottom: e.g. `5/5 skills within limit`
@@ -29,28 +33,33 @@
 - Over-limit skills get a brief note column entry explaining why (e.g. "includes extended examples")
 
 #### Over-limit handling
+
 - If a skill exceeds 500 lines: flag it with `✗` in VERIFICATION.md, do NOT trim or restructure
 - Phase succeeds as long as VERIFICATION.md is complete — over-limit is noted, not a phase blocker
 - Limit applies to each SKILL.md file individually (not transitive/referenced content)
 
 ### Claude's Discretion
+
 - Exact prose wording of INDEX.md intro
 - Order of skills in the INDEX.md table (alphabetical is fine)
 - Whether "See Also" section uses a sub-header or a plain bold label
 - Exact note text for over-limit skills in VERIFICATION.md
 
 ### Deferred Ideas (OUT OF SCOPE)
+
 None — discussion stayed within phase scope.
 </user_constraints>
 
 <phase_requirements>
+
 ## Phase Requirements
 
-| ID | Description | Research Support |
-|----|-------------|-----------------|
-| INFRA-01 | INDEX.md is updated with entries for prompt-engineering, auth-systems, rag-vector-search, agent-architecture, and stripe-payments skills | Current INDEX.md already has entries for all five skills in the AI/LLM, Authentication, and Payments sections; they must be migrated to the flat table format decided in CONTEXT.md |
-| INFRA-02 | All new/updated SKILL.md files are verified ≤500 lines with line counts recorded in VERIFICATION.md | Line counts observed: prompt-engineering 281, auth-systems 437, rag-vector-search 416, agent-architecture 498, stripe-payments 363 — all five are within the 500-line limit |
-| INFRA-03 | Cross-reference links are added between RAG, Agent Architecture, and prompt-engineering at their integration seams | Three seams identified: (1) RAG ↔ Agent Architecture at episodic memory/pgvector; (2) Agent Architecture ↔ RAG at pgvector pattern; (3) RAG and Agent Architecture ↔ prompt-engineering at system-prompt design |
+| ID       | Description                                                                                                                              | Research Support                                                                                                                                                                                                |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| INFRA-01 | INDEX.md is updated with entries for prompt-engineering, auth-systems, rag-vector-search, agent-architecture, and stripe-payments skills | Current INDEX.md already has entries for all five skills in the AI/LLM, Authentication, and Payments sections; they must be migrated to the flat table format decided in CONTEXT.md                             |
+| INFRA-02 | All new/updated SKILL.md files are verified ≤500 lines with line counts recorded in VERIFICATION.md                                      | Line counts observed: prompt-engineering 281, auth-systems 437, rag-vector-search 416, agent-architecture 498, stripe-payments 363 — all five are within the 500-line limit                                     |
+| INFRA-03 | Cross-reference links are added between RAG, Agent Architecture, and prompt-engineering at their integration seams                       | Three seams identified: (1) RAG ↔ Agent Architecture at episodic memory/pgvector; (2) Agent Architecture ↔ RAG at pgvector pattern; (3) RAG and Agent Architecture ↔ prompt-engineering at system-prompt design |
+
 </phase_requirements>
 
 ---
@@ -72,16 +81,18 @@ The five SKILL.md files created in v1.3 (prompt-engineering, auth-systems, rag-v
 This phase has no software dependencies. All tools are built-in shell utilities.
 
 ### Core
-| Tool | Version | Purpose | Why Standard |
-|------|---------|---------|--------------|
-| `wc -l` | built-in | Count lines in SKILL.md files | Canonical line count for VERIFICATION.md |
-| Markdown | n/a | All output format | Project convention for skill library |
-| Relative paths | n/a | Cross-reference links | Clickable in editors and GitHub |
+
+| Tool           | Version  | Purpose                       | Why Standard                             |
+| -------------- | -------- | ----------------------------- | ---------------------------------------- |
+| `wc -l`        | built-in | Count lines in SKILL.md files | Canonical line count for VERIFICATION.md |
+| Markdown       | n/a      | All output format             | Project convention for skill library     |
+| Relative paths | n/a      | Cross-reference links         | Clickable in editors and GitHub          |
 
 ### Supporting
-| Tool | Version | Purpose | When to Use |
-|------|---------|---------|-------------|
-| `cat -n` / Read tool | n/a | Verify file content after edits | Confirming "See Also" sections land at file bottom |
+
+| Tool                 | Version | Purpose                         | When to Use                                        |
+| -------------------- | ------- | ------------------------------- | -------------------------------------------------- |
+| `cat -n` / Read tool | n/a     | Verify file content after edits | Confirming "See Also" sections land at file bottom |
 
 **Installation:** None required.
 
@@ -110,6 +121,7 @@ The existing INDEX.md uses a grouped/categorized format. The CONTEXT.md decision
 **Correct interpretation:** The five skills already appear in the existing INDEX.md grouped tables (AI/LLM, Authentication, Payments categories). The CONTEXT.md flat table decision applies to the _form_ of the entry (name + one-line description only) — the executor must verify the existing descriptions are accurate and update if needed. No wholesale restructuring is required.
 
 **Example row format (flat table):**
+
 ```markdown
 | prompt-engineering | Prompt templates, evaluation, chain-of-thought, anti-patterns |
 | auth-systems | Clerk and Better Auth authentication, sessions, RBAC, CVE-2025-29927 pattern |
@@ -162,13 +174,13 @@ The three integration seams are:
 
 5/5 skills within the 500-line limit.
 
-| Skill | Line Count | Status |
-|-------|------------|--------|
-| prompt-engineering | 281 | ✓ |
-| auth-systems | 437 | ✓ |
-| rag-vector-search | 416 | ✓ |
-| agent-architecture | 498 | ✓ |
-| stripe-payments | 363 | ✓ |
+| Skill              | Line Count | Status |
+| ------------------ | ---------- | ------ |
+| prompt-engineering | 281        | ✓      |
+| auth-systems       | 437        | ✓      |
+| rag-vector-search  | 416        | ✓      |
+| agent-architecture | 498        | ✓      |
+| stripe-payments    | 363        | ✓      |
 ```
 
 Note: The executor must run `wc -l` at execution time to get the actual counts (the "See Also" additions in INFRA-03 will add ~4–6 lines to each of the three edited skill files, so final counts will differ from the pre-edit numbers).
@@ -184,10 +196,10 @@ Note: The executor must run `wc -l` at execution time to get the actual counts (
 
 ## Don't Hand-Roll
 
-| Problem | Don't Build | Use Instead | Why |
-|---------|-------------|-------------|-----|
-| Line counting | Custom scripts | `wc -l <file>` | wc -l is the canonical tool; output is an integer, trivially verified |
-| Link validation | Link checker script | Manual read + relative path inspection | Phase is small (3 files, 6 links); automated validation is overkill |
+| Problem         | Don't Build         | Use Instead                            | Why                                                                   |
+| --------------- | ------------------- | -------------------------------------- | --------------------------------------------------------------------- |
+| Line counting   | Custom scripts      | `wc -l <file>`                         | wc -l is the canonical tool; output is an integer, trivially verified |
+| Link validation | Link checker script | Manual read + relative path inspection | Phase is small (3 files, 6 links); automated validation is overkill   |
 
 **Key insight:** This is a documentation phase. The work is authoring, not engineering. Invest effort in getting the prose and link text right, not in tooling.
 
@@ -239,6 +251,7 @@ wc -l /home/ollie/Development/Tools/viflo/.agent/skills/stripe-payments/SKILL.md
 ```
 
 Pre-edit baseline (2026-02-24, before "See Also" additions):
+
 - prompt-engineering: 281 lines
 - auth-systems: 437 lines
 - rag-vector-search: 416 lines
@@ -250,31 +263,37 @@ Pre-edit baseline (2026-02-24, before "See Also" additions):
 Files live at: `.agent/skills/<skill-name>/SKILL.md`
 
 When linking from `rag-vector-search/SKILL.md` to `agent-architecture/SKILL.md`:
+
 ```markdown
 [Agent Architecture](../agent-architecture/SKILL.md) — episodic memory pattern
 ```
 
 When linking from `agent-architecture/SKILL.md` to `rag-vector-search/SKILL.md`:
+
 ```markdown
 [RAG / Vector Search](../rag-vector-search/SKILL.md) — pgvector pattern
 ```
 
 When linking from `rag-vector-search/SKILL.md` to `prompt-engineering/SKILL.md`:
+
 ```markdown
 [Prompt Engineering](../prompt-engineering/SKILL.md) — system-prompt design for RAG assembly
 ```
 
 When linking from `agent-architecture/SKILL.md` to `prompt-engineering/SKILL.md`:
+
 ```markdown
 [Prompt Engineering](../prompt-engineering/SKILL.md) — system-prompt design for agent instructions
 ```
 
 When linking from `prompt-engineering/SKILL.md` to `rag-vector-search/SKILL.md`:
+
 ```markdown
 [RAG / Vector Search](../rag-vector-search/SKILL.md) — RAG prompt assembly and retrieval context injection
 ```
 
 When linking from `prompt-engineering/SKILL.md` to `agent-architecture/SKILL.md`:
+
 ```markdown
 [Agent Architecture](../agent-architecture/SKILL.md) — system-prompt design for tool-using agents
 ```
@@ -285,11 +304,11 @@ When linking from `prompt-engineering/SKILL.md` to `agent-architecture/SKILL.md`
 
 This phase has no evolving technology stack. The "current approach" for all items is standard markdown.
 
-| Area | Current Approach | Notes |
-|------|-----------------|-------|
-| Skill cross-references | Relative markdown links in "See Also" section | Established by CONTEXT.md decision; no alternative needed |
-| Line count verification | wc -l | Canonical; output matches what editors/GitHub count |
-| Index format | Flat markdown table (name + description) | Chosen over grouped/categorized format for simplicity |
+| Area                    | Current Approach                              | Notes                                                     |
+| ----------------------- | --------------------------------------------- | --------------------------------------------------------- |
+| Skill cross-references  | Relative markdown links in "See Also" section | Established by CONTEXT.md decision; no alternative needed |
+| Line count verification | wc -l                                         | Canonical; output matches what editors/GitHub count       |
+| Index format            | Flat markdown table (name + description)      | Chosen over grouped/categorized format for simplicity     |
 
 ---
 
@@ -315,16 +334,19 @@ This phase has no evolving technology stack. The "current approach" for all item
 ## Sources
 
 ### Primary (HIGH confidence)
+
 - Direct file reads of `.agent/skills/*/SKILL.md` — content, structure, existing references
 - Direct file read of `.agent/skills/INDEX.md` — current format and existing entries
 - `wc -l` output on all five SKILL.md files — observed line counts
 - `.planning/phases/15-integration-review/15-CONTEXT.md` — all format decisions
 
 ### Secondary (MEDIUM confidence)
+
 - `.planning/REQUIREMENTS.md` — INFRA-01, INFRA-02, INFRA-03 requirement text
 - `.planning/STATE.md` — phase ordering rationale and accumulated decisions
 
 ### Tertiary (LOW confidence)
+
 - None.
 
 ---
@@ -332,6 +354,7 @@ This phase has no evolving technology stack. The "current approach" for all item
 ## Metadata
 
 **Confidence breakdown:**
+
 - What files to edit: HIGH — directly observed from file system
 - Line counts: HIGH — directly measured with wc -l
 - Cross-reference seams: HIGH — confirmed by reading all three SKILL.md files

@@ -14,7 +14,12 @@ affects: [17-minimal-mode, 18-write-phase, 19-polish-phase]
 # Tech tracking
 tech-stack:
   added: []
-  patterns: ["TDD red-green with vitest globals", "lazy require pattern in tests", "ENOENT-safe fs.readdirSync with withFileTypes"]
+  patterns:
+    [
+      "TDD red-green with vitest globals",
+      "lazy require pattern in tests",
+      "ENOENT-safe fs.readdirSync with withFileTypes",
+    ]
 
 key-files:
   created:
@@ -51,7 +56,8 @@ completed: 2026-02-24
 - **Files modified:** 2
 
 ## Accomplishments
-- Created bin/lib/__tests__/skills.test.js with 5 test cases covering all specified edge cases
+
+- Created bin/lib/**tests**/skills.test.js with 5 test cases covering all specified edge cases
 - Confirmed RED phase: all 5 tests fail before implementation (MODULE_NOT_FOUND)
 - Created bin/lib/skills.cjs implementing scanSkills with ENOENT handling, directory filtering, and alphabetical sort
 - Confirmed GREEN phase: all 28 tests pass (23 existing + 5 new scanSkills tests)
@@ -66,10 +72,12 @@ Each task was committed atomically:
 _Note: TDD task produced two commits (test RED phase → feat GREEN phase)_
 
 ## Files Created/Modified
+
 - `bin/lib/__tests__/skills.test.js` - 5 vitest test cases for scanSkills covering ENOENT, empty dir, single skill, multi-skill sort, and file filtering
 - `bin/lib/skills.cjs` - scanSkills(rootDir) function using fs.readdirSync with withFileTypes, ENOENT guard, directory filter, and alphabetical sort
 
 ## Decisions Made
+
 - scanSkills accepts rootDir explicitly rather than calling resolveViFloRoot() internally — keeps the function pure, easy to test with any temp directory, and decouples it from the install path
 - ENOENT returns [] rather than throwing — new projects without a .agent/skills/ directory are a normal expected state, not an error
 - Non-ENOENT errors are re-thrown — any unexpected filesystem errors should surface immediately to the caller
@@ -87,10 +95,12 @@ None.
 None - no external service configuration required.
 
 ## Next Phase Readiness
+
 - scanSkills is ready for use in the viflo CLI entry point (bin/viflo.cjs)
 - Caller pattern: `const lines = scanSkills(resolveViFloRoot())`
 - Plan 17-02 can proceed immediately
 
 ---
-*Phase: 17-minimal-mode*
-*Completed: 2026-02-24*
+
+_Phase: 17-minimal-mode_
+_Completed: 2026-02-24_

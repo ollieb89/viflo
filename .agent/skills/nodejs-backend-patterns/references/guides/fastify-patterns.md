@@ -113,14 +113,10 @@ const createUserSchema = {
   },
 };
 
-fastify.post(
-  "/users",
-  { schema: createUserSchema },
-  async (request, reply) => {
-    const user = await userService.create(request.body);
-    reply.status(201).send(user);
-  },
-);
+fastify.post("/users", { schema: createUserSchema }, async (request, reply) => {
+  const user = await userService.create(request.body);
+  reply.status(201).send(user);
+});
 ```
 
 ## Authentication Hook
@@ -206,7 +202,7 @@ fastify.setErrorHandler(
 export default async function apiRoutes(fastify, opts) {
   // User routes
   fastify.register(import("./users"), { prefix: "/users" });
-  
+
   // Order routes
   fastify.register(import("./orders"), { prefix: "/orders" });
 }

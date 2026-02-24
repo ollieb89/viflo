@@ -31,12 +31,12 @@ Build resilient applications with robust error handling strategies that graceful
 
 **Exceptions vs Result Types:**
 
-| Approach | Description | Best For |
-|----------|-------------|----------|
-| **Exceptions** | Traditional try-catch, disrupts control flow | Unexpected errors, exceptional conditions |
-| **Result Types** | Explicit success/failure, functional approach | Expected errors, validation failures |
-| **Error Codes** | C-style, requires discipline | Low-level systems, performance-critical code |
-| **Option/Maybe** | For nullable values | Handling missing values without exceptions |
+| Approach         | Description                                   | Best For                                     |
+| ---------------- | --------------------------------------------- | -------------------------------------------- |
+| **Exceptions**   | Traditional try-catch, disrupts control flow  | Unexpected errors, exceptional conditions    |
+| **Result Types** | Explicit success/failure, functional approach | Expected errors, validation failures         |
+| **Error Codes**  | C-style, requires discipline                  | Low-level systems, performance-critical code |
+| **Option/Maybe** | For nullable values                           | Handling missing values without exceptions   |
 
 **When to Use Each:**
 
@@ -61,12 +61,12 @@ Build resilient applications with robust error handling strategies that graceful
 
 ## Language Comparison
 
-| Language | Primary Pattern | Key Features |
-|----------|-----------------|--------------|
-| **Python** | Exceptions | Custom hierarchies, context managers, decorators |
-| **TypeScript** | Exceptions + Result types | Custom error classes, discriminated unions |
-| **Rust** | Result + Option types | `?` operator, explicit error handling |
-| **Go** | Explicit error returns | Sentinel errors, error wrapping/unwrapping |
+| Language       | Primary Pattern           | Key Features                                     |
+| -------------- | ------------------------- | ------------------------------------------------ |
+| **Python**     | Exceptions                | Custom hierarchies, context managers, decorators |
+| **TypeScript** | Exceptions + Result types | Custom error classes, discriminated unions       |
+| **Rust**       | Result + Option types     | `?` operator, explicit error handling            |
+| **Go**         | Explicit error returns    | Sentinel errors, error wrapping/unwrapping       |
 
 📚 **Detailed implementations**: See [references/guides/language-specific.md](references/guides/language-specific.md)
 
@@ -74,12 +74,12 @@ Build resilient applications with robust error handling strategies that graceful
 
 ### Key Patterns Overview
 
-| Pattern | Purpose | Use Case |
-|---------|---------|----------|
-| **Circuit Breaker** | Prevent cascading failures | External API calls, distributed systems |
-| **Error Aggregation** | Collect multiple validation errors | Form validation, batch processing |
-| **Graceful Degradation** | Provide fallback functionality | Cache failures, optional features |
-| **Retry with Backoff** | Handle transient failures | Network requests, rate-limited APIs |
+| Pattern                  | Purpose                            | Use Case                                |
+| ------------------------ | ---------------------------------- | --------------------------------------- |
+| **Circuit Breaker**      | Prevent cascading failures         | External API calls, distributed systems |
+| **Error Aggregation**    | Collect multiple validation errors | Form validation, batch processing       |
+| **Graceful Degradation** | Provide fallback functionality     | Cache failures, optional features       |
+| **Retry with Backoff**   | Handle transient failures          | Network requests, rate-limited APIs     |
 
 📚 **Full examples**: See [references/examples/retry-logic.md](references/examples/retry-logic.md)
 
@@ -142,32 +142,37 @@ def process_order(order_id: str) -> Order:
 
 ## Common Pitfalls
 
-| Pitfall | Why It's Bad | Solution |
-|---------|--------------|----------|
-| **Catching Too Broadly** | `except Exception` hides bugs | Catch specific exceptions |
-| **Empty Catch Blocks** | Silently swallowing errors | Always log or re-throw |
-| **Logging and Re-throwing** | Creates duplicate log entries | Do one or the other |
-| **Not Cleaning Up** | Forgetting to close files, connections | Use context managers |
-| **Poor Error Messages** | "Error occurred" is not helpful | Explain what and how to fix |
-| **Returning Error Codes** | Easy to ignore, no stack trace | Use exceptions or Result types |
-| **Ignoring Async Errors** | Unhandled promise rejections | Always attach catch handlers |
+| Pitfall                     | Why It's Bad                           | Solution                       |
+| --------------------------- | -------------------------------------- | ------------------------------ |
+| **Catching Too Broadly**    | `except Exception` hides bugs          | Catch specific exceptions      |
+| **Empty Catch Blocks**      | Silently swallowing errors             | Always log or re-throw         |
+| **Logging and Re-throwing** | Creates duplicate log entries          | Do one or the other            |
+| **Not Cleaning Up**         | Forgetting to close files, connections | Use context managers           |
+| **Poor Error Messages**     | "Error occurred" is not helpful        | Explain what and how to fix    |
+| **Returning Error Codes**   | Easy to ignore, no stack trace         | Use exceptions or Result types |
+| **Ignoring Async Errors**   | Unhandled promise rejections           | Always attach catch handlers   |
 
 ## Resources
 
 ### Guides
+
 - [references/guides/language-specific.md](references/guides/language-specific.md) - Detailed Python, TypeScript, Rust, Go implementations
 
 ### Examples
+
 - [references/examples/retry-logic.md](references/examples/retry-logic.md) - Circuit breaker, retry logic, graceful degradation patterns
 
 ### Additional References
+
 - **references/exception-hierarchy-design.md**: Designing error class hierarchies
 - **references/error-recovery-strategies.md**: Recovery patterns for different scenarios
 - **references/async-error-handling.md**: Handling errors in concurrent code
 
 ### Assets
+
 - **assets/error-handling-checklist.md**: Review checklist for error handling
 - **assets/error-message-guide.md**: Writing helpful error messages
 
 ### Scripts
+
 - **scripts/error-analyzer.py**: Analyze error patterns in logs

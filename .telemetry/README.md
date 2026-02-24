@@ -5,6 +5,7 @@ LLM usage telemetry for the viflo project.
 ## Purpose
 
 Track LLM usage to understand:
+
 - Token consumption by model and task type
 - Task success rates
 - Duration patterns
@@ -12,16 +13,16 @@ Track LLM usage to understand:
 
 ## Schema
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `timestamp` | ISO 8601 | When the task was completed (UTC) |
-| `model` | string | LLM model name (e.g., "claude-3-opus", "gpt-4") |
-| `prompt_tokens` | integer | Tokens in the prompt |
-| `completion_tokens` | integer | Tokens in the completion |
-| `task_success` | boolean | Whether the task completed successfully |
-| `task_type` | enum | plan \| execute \| verify \| discuss \| quick |
-| `duration_ms` | integer | Task duration in milliseconds |
-| `notes` | string | Optional context or notes |
+| Field               | Type     | Description                                     |
+| ------------------- | -------- | ----------------------------------------------- |
+| `timestamp`         | ISO 8601 | When the task was completed (UTC)               |
+| `model`             | string   | LLM model name (e.g., "claude-3-opus", "gpt-4") |
+| `prompt_tokens`     | integer  | Tokens in the prompt                            |
+| `completion_tokens` | integer  | Tokens in the completion                        |
+| `task_success`      | boolean  | Whether the task completed successfully         |
+| `task_type`         | enum     | plan \| execute \| verify \| discuss \| quick   |
+| `duration_ms`       | integer  | Task duration in milliseconds                   |
+| `notes`             | string   | Optional context or notes                       |
 
 ## Usage
 
@@ -39,6 +40,7 @@ Track LLM usage to understand:
 ```
 
 Arguments:
+
 1. Model name
 2. Prompt tokens
 3. Completion tokens

@@ -20,10 +20,10 @@ Initialize the Stripe client once in a shared module — all route handlers impo
 
 ```typescript
 // lib/stripe.ts
-import Stripe from 'stripe';
+import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-01-28.clover',
+  apiVersion: "2026-01-28.clover",
 });
 ```
 
@@ -44,13 +44,13 @@ NEXT_PUBLIC_APP_URL=https://yourapp.com
 
 ```typescript
 // app/api/checkout/route.ts
-import { stripe } from '@/lib/stripe';
+import { stripe } from "@/lib/stripe";
 
 export async function POST(req: Request) {
   const { priceId, userId } = await req.json();
 
   const session = await stripe.checkout.sessions.create({
-    mode: 'payment',
+    mode: "payment",
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
@@ -64,8 +64,8 @@ export async function POST(req: Request) {
 **Step 2 — Client: redirect to Stripe's hosted page**
 
 ```typescript
-const res = await fetch('/api/checkout', {
-  method: 'POST',
+const res = await fetch("/api/checkout", {
+  method: "POST",
   body: JSON.stringify({ priceId, userId }),
 });
 const { url } = await res.json();
@@ -84,22 +84,27 @@ Parsing the body with `req.json()`, `req.formData()`, or any middleware (e.g., E
 
 ```typescript
 // app/api/webhooks/stripe/route.ts
-import { stripe } from '@/lib/stripe';
-import { headers } from 'next/headers';
-import { pool } from '@/lib/db'; // your pg.Pool instance
+import { stripe } from "@/lib/stripe";
+import { headers } from "next/headers";
+import { pool } from "@/lib/db"; // your pg.Pool instance
 
 export async function POST(req: Request) {
   const body = await req.text(); // MUST be first — raw bytes for HMAC verification
-  const sig = (await headers()).get('stripe-signature');
+  const sig = (await headers()).get("stripe-signature");
 
-  if (!sig) return new Response('Missing stripe-signature header', { status: 400 });
+  if (!sig)
+    return new Response("Missing stripe-signature header", { status: 400 });
 
-  let event: import('stripe').Stripe.Event;
+  let event: import("stripe").Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!,
+    );
   } catch (err) {
-    console.error('Webhook signature verification failed:', err);
-    return new Response('Invalid signature', { status: 400 });
+    console.error("Webhook signature verification failed:", err);
+    return new Response("Invalid signature", { status: 400 });
   }
 
   // Atomic idempotency — INSERT fails silently if already processed
@@ -109,11 +114,13 @@ export async function POST(req: Request) {
      ON CONFLICT (stripe_event_id) DO NOTHING`,
     [event.id, event.type],
   );
-  if (result.rowCount === 0) return new Response('Already processed', { status: 200 });
+  if (result.rowCount === 0)
+    return new Response("Already processed", { status: 200 });
 
   switch (event.type) {
-    case 'checkout.session.completed': {
-      const session = event.data.object as import('stripe').Stripe.Checkout.Session;
+    case "checkout.session.completed": {
+      const session = event.data
+        .object as import("stripe").Stripe.Checkout.Session;
       const userId = session.metadata?.userId;
       if (userId && session.subscription) {
         await pool.query(
@@ -125,9 +132,9 @@ export async function POST(req: Request) {
       }
       break;
     }
-    case 'customer.subscription.created':
-    case 'customer.subscription.updated': {
-      const sub = event.data.object as import('stripe').Stripe.Subscription;
+    case "customer.subscription.created":
+    case "customer.subscription.updated": {
+      const sub = event.data.object as import("stripe").Stripe.Subscription;
       await pool.query(
         `UPDATE users
          SET subscription_status = $1, stripe_subscription_id = $2
@@ -136,8 +143,8 @@ export async function POST(req: Request) {
       );
       break;
     }
-    case 'customer.subscription.deleted': {
-      const sub = event.data.object as import('stripe').Stripe.Subscription;
+    case "customer.subscription.deleted": {
+      const sub = event.data.object as import("stripe").Stripe.Subscription;
       await pool.query(
         `UPDATE users
          SET subscription_status = 'canceled', stripe_subscription_id = NULL
@@ -146,8 +153,8 @@ export async function POST(req: Request) {
       );
       break;
     }
-    case 'invoice.payment_failed': {
-      const invoice = event.data.object as import('stripe').Stripe.Invoice;
+    case "invoice.payment_failed": {
+      const invoice = event.data.object as import("stripe").Stripe.Invoice;
       await pool.query(
         `UPDATE users SET subscription_status = 'past_due' WHERE stripe_subscription_id = $1`,
         [invoice.subscription],
@@ -158,7 +165,7 @@ export async function POST(req: Request) {
     }
   }
 
-  return new Response('OK');
+  return new Response("OK");
 }
 ```
 
@@ -195,12 +202,12 @@ ALTER TABLE users
 
 Store Stripe's status strings directly — no app-specific enum mapping. The four critical events are shown in the webhook handler above. Summary of update logic:
 
-| Event | DB Update |
-|---|---|
+| Event                           | DB Update                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------- |
 | `customer.subscription.created` | SET `subscription_status = sub.status`, `stripe_subscription_id = sub.id` |
 | `customer.subscription.updated` | SET `subscription_status = sub.status`, `stripe_subscription_id = sub.id` |
-| `customer.subscription.deleted` | SET `subscription_status = 'canceled'`, `stripe_subscription_id = NULL` |
-| `invoice.payment_failed` | SET `subscription_status = 'past_due'` |
+| `customer.subscription.deleted` | SET `subscription_status = 'canceled'`, `stripe_subscription_id = NULL`   |
+| `invoice.payment_failed`        | SET `subscription_status = 'past_due'`                                    |
 
 **Failed payment recovery:** Handle `invoice.payment_failed` by marking users `past_due`, then point to Stripe Smart Retries (Stripe Dashboard > Settings > Billing > Automatic collection). No custom dunning needed — Stripe retries on an intelligent schedule and transitions the subscription to `canceled` if all retries fail.
 
@@ -212,13 +219,13 @@ export async function POST(req: Request) {
   const { priceId, userId } = await req.json();
 
   const session = await stripe.checkout.sessions.create({
-    mode: 'subscription',
+    mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
     metadata: { userId },
     allow_promotion_codes: true,
-    payment_settings: { save_default_payment_method: 'on_subscription' },
+    payment_settings: { save_default_payment_method: "on_subscription" },
   });
 
   return Response.json({ url: session.url });
@@ -230,10 +237,10 @@ export async function POST(req: Request) {
 ```typescript
 async function getUserSubscriptionStatus(userId: string) {
   const result = await pool.query(
-    'SELECT subscription_status FROM users WHERE id = $1',
+    "SELECT subscription_status FROM users WHERE id = $1",
     [userId],
   );
-  return result.rows[0]?.subscription_status ?? 'free';
+  return result.rows[0]?.subscription_status ?? "free";
 }
 ```
 
@@ -245,22 +252,23 @@ Lets users manage their own subscriptions (upgrades, downgrades, cancellations, 
 
 ```typescript
 // app/api/billing-portal/route.ts
-import { stripe } from '@/lib/stripe';
-import { pool } from '@/lib/db';
-import { auth } from '@/lib/auth'; // your auth helper
+import { stripe } from "@/lib/stripe";
+import { pool } from "@/lib/db";
+import { auth } from "@/lib/auth"; // your auth helper
 
 export async function POST(req: Request) {
   const session = await auth();
-  if (!session) return new Response('Unauthorized', { status: 401 });
+  if (!session) return new Response("Unauthorized", { status: 401 });
 
   // Always look up customerId from your database using the authenticated user's ID
   // — never trust client-provided customerId
   const result = await pool.query(
-    'SELECT stripe_customer_id FROM users WHERE id = $1',
+    "SELECT stripe_customer_id FROM users WHERE id = $1",
     [session.user.id],
   );
   const customerId = result.rows[0]?.stripe_customer_id;
-  if (!customerId) return new Response('No Stripe customer found', { status: 404 });
+  if (!customerId)
+    return new Response("No Stripe customer found", { status: 404 });
 
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: customerId,
@@ -279,7 +287,7 @@ Add `subscription_data.trial_period_days` to a subscription-mode Checkout Sessio
 
 ```typescript
 const session = await stripe.checkout.sessions.create({
-  mode: 'subscription',
+  mode: "subscription",
   line_items: [{ price: priceId, quantity: 1 }],
   success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
   cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
@@ -287,10 +295,10 @@ const session = await stripe.checkout.sessions.create({
   subscription_data: {
     trial_period_days: 14,
     trial_settings: {
-      end_behavior: { missing_payment_method: 'cancel' }, // or 'pause'
+      end_behavior: { missing_payment_method: "cancel" }, // or 'pause'
     },
   },
-  payment_method_collection: 'if_required', // no card required to start trial
+  payment_method_collection: "if_required", // no card required to start trial
 });
 ```
 
@@ -302,14 +310,14 @@ When the trial ends, Stripe fires `customer.subscription.trial_will_end` (3 days
 // Upgrade: immediate proration — customer sees prorated charge now
 await stripe.subscriptions.update(subscriptionId, {
   items: [{ id: currentItemId, price: newPriceId }],
-  proration_behavior: 'create_prorations',
+  proration_behavior: "create_prorations",
 });
 
 // Downgrade: apply at end of billing period — avoids confusing immediate invoice
 await stripe.subscriptions.update(subscriptionId, {
   items: [{ id: currentItemId, price: newPriceId }],
-  proration_behavior: 'none',
-  billing_cycle_anchor: 'unchanged',
+  proration_behavior: "none",
+  billing_cycle_anchor: "unchanged",
 });
 ```
 
@@ -356,8 +364,8 @@ Fix: `stripe listen --forward-to localhost:3000/api/webhooks/stripe` — handles
 
 ## Version Context
 
-| Library | Version | Notes |
-|---|---|---|
-| stripe (npm) | 20.3.1 | Official Node.js SDK |
-| Next.js | 15.x | App Router Route Handlers; `await headers()` is async in Next.js 15 |
-| Stripe API version | 2026-01-28.clover | Current as of 2026-02-24; set in `new Stripe()` constructor |
+| Library            | Version           | Notes                                                               |
+| ------------------ | ----------------- | ------------------------------------------------------------------- |
+| stripe (npm)       | 20.3.1            | Official Node.js SDK                                                |
+| Next.js            | 15.x              | App Router Route Handlers; `await headers()` is async in Next.js 15 |
+| Stripe API version | 2026-01-28.clover | Current as of 2026-02-24; set in `new Stripe()` constructor         |

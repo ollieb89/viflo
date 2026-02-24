@@ -39,7 +39,6 @@
 
 ---
 
-
 ## v1.2 Foundation Skills (Shipped: 2026-02-24)
 
 **Phases completed:** 1 phase (Phase 11), 3 plans
@@ -49,6 +48,7 @@
 **Git range:** feat(11-01): rewrite SKILL.md → docs(phase-11): complete phase execution
 
 **Key accomplishments:**
+
 - Rewrote prompt-engineering skill to v1.2 depth — quick-start, numbered sections, applies-to schema for model-specific pattern tagging, 5-pattern anti-pattern catalogue with Before/After TypeScript code blocks, and golden-set evaluation architecture (eval.ts + 3 .md test cases)
 - Rewrote auth-systems skill — Clerk quick-start, Better Auth as primary self-hosted alternative, side-by-side middleware patterns, DAL pattern with React cache(), CVE-2025-29927 documentation, Clerk webhook receiver for user lifecycle sync
 - Fixed Anthropic SDK structured output API surface throughout prompt-engineering skill — replaced OpenAI-compatible `response_format` and `choices[0].message.parsed` with `output_config: { format: zodOutputFormat(...) }` and `.parsed_output`
@@ -59,7 +59,6 @@
 
 ---
 
-
 ## v1.3 Expert Skills (Shipped: 2026-02-24)
 
 **Phases completed:** 3 phases (12–14), 6 plans, 28 commits
@@ -68,6 +67,7 @@
 **Git range:** feat(12-01): rewrite SKILL.md → fix(tech-debt): resolve v1.0 audit documentation accuracy items
 
 **Key accomplishments:**
+
 - RAG/Vector Search SKILL.md expanded 92 → 416 lines: HNSW schema, RRF hybrid search SQL inline, 4 named Gotchas, and runnable eval.ts with recall@5/MRR golden-set evaluation
 - RAG reference files updated: embedding-pipelines.md to `document_chunks` schema with HNSW+GIN indexes; retrieval-patterns.md with RRF CTE as recommended Option B
 - Agent Architecture SKILL.md expanded 81 → 498 lines: MAX_TURNS/MAX_TOKENS_PER_RUN guardrails in every example, FastAPI SSE streaming to Next.js AI SDK v6, LangGraph 1.x, episodic memory via pgvector, MCP overview
@@ -76,6 +76,7 @@
 - Stripe reference files updated to stripe@20.3.1 / 2026-01-28.clover / Next.js 15: atomic SQL idempotency replacing Prisma P2002, all four subscription events in standalone handler
 
 **Known gaps (deferred to v1.4):**
+
 - INFRA-01: INDEX.md not updated with new skills
 - INFRA-02: 500-line compliance not formally verified for new skills
 - INFRA-03: Cross-skill references between RAG ↔ Agent ↔ prompt-engineering not added
@@ -83,7 +84,6 @@
 **Archive:** `.planning/milestones/v1.3-ROADMAP.md`
 
 ---
-
 
 ## v1.4 Project Tooling (Shipped: 2026-02-24)
 
@@ -93,6 +93,7 @@
 **Git range:** feat(15-01): update INDEX.md → feat(16-02): create writers unit tests
 
 **Key accomplishments:**
+
 - Updated INDEX.md with intro paragraph and accurate v1.4 skill descriptions (Better Auth for auth-systems, HNSW hybrid search for rag-vector-search)
 - Added bidirectional See Also cross-reference links across rag-vector-search, agent-architecture, and prompt-engineering skills at three named integration seams
 - Created VERIFICATION.md with post-edit wc -l audit for all five v1.4 SKILL.md files (4/5 within 500-line limit; agent-architecture 503 lines accepted per locked decision)
@@ -103,6 +104,7 @@
 **Scope note:** Scoped to Phases 15–16 (Integration Review + CLI Foundation). Phases 17–19 (viflo init --minimal, --full, polish) deferred to v1.5.
 
 **Known tech debt:**
+
 - writeIfChanged helper not exported from writers.cjs — Phase 17+ must extend writers.cjs or duplicate idempotency logic
 - resolveViFloRoot() exported and tested but not yet called within bin/ tree — correctly deferred to Phase 17+
 - ROADMAP.md Phase 17 success criterion still uses stale sentinel format (viflo:start/end); must update before Phase 17 planning
@@ -111,7 +113,6 @@
 **Archive:** `.planning/milestones/v1.4-ROADMAP.md`
 
 ---
-
 
 ## v1.5 viflo init CLI (Shipped: 2026-02-24)
 
@@ -122,6 +123,7 @@
 **Git range:** feat(17-01): implement scanSkills → docs(phase-19): complete phase execution
 
 **Key accomplishments:**
+
 - `scanSkills` runtime scanner — reads `.agent/skills/`, returns sorted `@`-import lines, ENOENT-safe for new projects without skills directory
 - `viflo init --minimal` CLI — writes CLAUDE.md sentinel block with `@`-imports and `.claude/settings.json` in one command, fully idempotent on re-run
 - `viflo init --full` — scaffolds `.planning/` with 4 stub files + richer CLAUDE.md template; each file independently skip-if-exists to preserve user edits
@@ -132,4 +134,3 @@
 **Archive:** `.planning/milestones/v1.5-ROADMAP.md`
 
 ---
-

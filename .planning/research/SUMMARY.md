@@ -24,6 +24,7 @@ The stack is minimal by design. A single CJS file (`bin/viflo.cjs`) with a `#!/u
 See `.planning/research/STACK.md` for the full version compatibility matrix and package structure.
 
 **Core technologies:**
+
 - **Node.js >=20.0.0**: Runtime — already required by repo; provides all needed `fs` built-ins including `cpSync` and recursive `mkdirSync`
 - **CommonJS `.cjs`**: Module format — `__dirname` only works in CJS (needed for self-referential path resolution); matches gsd-tools.cjs precedent; no build step required
 - **`node:fs` / `node:path` / `node:os` / `node:readline`**: All file I/O and path construction — zero external dependencies; `os.homedir()` is the only safe cross-platform home directory resolver
@@ -31,6 +32,7 @@ See `.planning/research/STACK.md` for the full version compatibility matrix and 
 - **Vitest**: Testing — already in repo; mock `node:fs` via `vi.mock` for unit tests; integration tests must run from temp directories to validate `process.cwd()` vs `__dirname` separation
 
 **Implementation patterns (from STACK.md):**
+
 - Sentinel-based CLAUDE.md merge: `<!-- viflo:start -->` / `<!-- viflo:end -->` HTML comment markers; detect on read, replace in-place on write
 - Settings.json merge: build a JavaScript object, call `JSON.stringify(obj, null, 2)` — never construct JSON by string concatenation; use `Set` for array deduplication
 - `.planning/` scaffold: `mkdirSync({recursive: true})` is idempotent; per-file `existsSync` check before each write
@@ -44,6 +46,7 @@ See `.planning/research/STACK.md` for the full version compatibility matrix and 
 See `.planning/research/FEATURES.md` for the full feature table, dependency graph, idempotency patterns, and comparison with analogous init CLIs.
 
 **Must have (P1 — required for INIT-01 through INIT-04):**
+
 - Resolve viflo install path via `__dirname` — required before any writes; fail fast with clear message if resolution fails
 - Write CLAUDE.md sentinel block with `@` import lines pointing to all viflo skills — append-or-replace, idempotent
 - Write `.claude/settings.json` with safe default `permissions.allow` — create-if-absent or deep-merge (deduplicated array union) if file exists
@@ -53,16 +56,19 @@ See `.planning/research/FEATURES.md` for the full feature table, dependency grap
 - Human-readable per-file output — log each file action (`created / updated / skipped / merged`) with the resolved absolute path
 
 **Should have (P2 — add once core is stable):**
+
 - `--dry-run` flag — preview without writing (requires write layer abstracted from day one; low cost if designed in)
 - `--force` flag — replace sentinel block without change detection, with explicit `--yes` confirmation
 - Verification pass — after writing, confirm all injected `@` import paths resolve on disk; emit warnings for missing references
 
 **Defer (v2+):**
+
 - Stack-aware skill selection — detect project stack and inject a curated skill subset; high complexity, requires skill taxonomy
 - Interactive wizard mode — only if flag-based API proves confusing in practice
 - npm publish / global install — deferred; tool only needs to run from monorepo at v1.4
 
 **Explicit anti-features (do not build):**
+
 - Full project scaffolding (package.json, git init, Makefile) — out of scope; viflo init is config injection only
 - Semantic CLAUDE.md merge (section matching) — fragile and unpredictable; sentinel block is the correct approach
 - Writing to `settings.local.json` — gitignored by convention; project writes go to `settings.json`
@@ -76,6 +82,7 @@ The CLI decomposes into four single-concern modules with a clear bottom-up depen
 See `.planning/research/ARCHITECTURE.md` for the full component diagrams, data flow for `--minimal` and `--full` modes, integration points, anti-patterns, and invocation reference.
 
 **Major components:**
+
 1. `bin/viflo.cjs` — CLI entry point: `process.argv` parsing, routes to `init.cjs`; thin, no business logic
 2. `bin/lib/init.cjs` — Orchestrates `--minimal` / `--full` flows; idempotency checks; per-file stdout reporting
 3. `bin/lib/paths.cjs` — Self-referential viflo root via `__dirname`; all target-project paths via `process.cwd()` passed as `cwd` parameter; OS-agnostic path construction with `os.homedir()` for user-home paths
@@ -83,16 +90,17 @@ See `.planning/research/ARCHITECTURE.md` for the full component diagrams, data f
 
 **Files written to target projects:**
 
-| File | Mode | Action |
-|------|------|--------|
-| `CLAUDE.md` | both | Sentinel append-or-replace; never touches content outside markers |
-| `.claude/settings.json` | both | JSON merge; deduplicated `permissions.allow` array |
-| `.planning/PROJECT.md` | --full only | Create-if-absent |
-| `.planning/ROADMAP.md` | --full only | Create-if-absent |
-| `.planning/STATE.md` | --full only | Create-if-absent |
-| `.planning/config.json` | --full only | Create-if-absent |
+| File                    | Mode        | Action                                                            |
+| ----------------------- | ----------- | ----------------------------------------------------------------- |
+| `CLAUDE.md`             | both        | Sentinel append-or-replace; never touches content outside markers |
+| `.claude/settings.json` | both        | JSON merge; deduplicated `permissions.allow` array                |
+| `.planning/PROJECT.md`  | --full only | Create-if-absent                                                  |
+| `.planning/ROADMAP.md`  | --full only | Create-if-absent                                                  |
+| `.planning/STATE.md`    | --full only | Create-if-absent                                                  |
+| `.planning/config.json` | --full only | Create-if-absent                                                  |
 
 **Files the CLI never modifies:**
+
 - `~/.claude/settings.json` (user scope — out of scope for project init)
 - Any CLAUDE.md content outside the `<!-- viflo:start -->` / `<!-- viflo:end -->` sentinel markers
 - Any existing `.planning/` file (create-if-absent, never overwrite)
@@ -185,9 +193,11 @@ The implementation maps naturally onto the four active requirements (INIT-01 thr
 ### Research Flags
 
 Phases needing deeper research during planning:
+
 - **Phase 4 (scope clarification):** Re-verify Claude Code user-scope `permissions.allow` bug status (#5140) against the installed version — behavior may have been fixed upstream since research was conducted.
 
 Phases with standard patterns (skip research-phase):
+
 - **Phase 1:** `os.homedir()`, `fs`, `path`, `JSON.parse/stringify` — stable Node.js built-ins, HIGH confidence, no research needed
 - **Phase 2:** Sentinel block pattern, `process.argv` parsing, settings.json merge — well-established patterns
 - **Phase 3:** File existence checks, directory scaffolding — trivial Node.js patterns
@@ -196,12 +206,12 @@ Phases with standard patterns (skip research-phase):
 
 ## Confidence Assessment
 
-| Area | Confidence | Notes |
-|------|------------|-------|
-| Stack | HIGH | Versions verified against npm registry 2026-02-24; CJS pattern validated against working gsd-tools.cjs in production; Node 20 built-ins confirmed sufficient |
-| Features | HIGH | CLAUDE.md `@` import syntax and settings.json schema verified against official Claude Code docs; init CLI patterns cross-referenced against docker init, arc init, npm init behavior |
-| Architecture | HIGH | Derived from direct codebase inspection of gsd-tools.cjs and viflo repo structure; `__dirname` / `process.cwd()` behaviors are stable Node.js semantics; Claude Code settings paths verified from official docs |
-| Pitfalls | HIGH (path/idempotency) / MEDIUM (WSL2, scope bug) | Path and idempotency pitfalls verified from official docs and GSD codebase patterns; WSL2 scenarios partially inferred (Linux/macOS confirmed); user-scope permissions bug is documented but may be version-specific |
+| Area         | Confidence                                         | Notes                                                                                                                                                                                                                |
+| ------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stack        | HIGH                                               | Versions verified against npm registry 2026-02-24; CJS pattern validated against working gsd-tools.cjs in production; Node 20 built-ins confirmed sufficient                                                         |
+| Features     | HIGH                                               | CLAUDE.md `@` import syntax and settings.json schema verified against official Claude Code docs; init CLI patterns cross-referenced against docker init, arc init, npm init behavior                                 |
+| Architecture | HIGH                                               | Derived from direct codebase inspection of gsd-tools.cjs and viflo repo structure; `__dirname` / `process.cwd()` behaviors are stable Node.js semantics; Claude Code settings paths verified from official docs      |
+| Pitfalls     | HIGH (path/idempotency) / MEDIUM (WSL2, scope bug) | Path and idempotency pitfalls verified from official docs and GSD codebase patterns; WSL2 scenarios partially inferred (Linux/macOS confirmed); user-scope permissions bug is documented but may be version-specific |
 
 **Overall confidence:** HIGH
 
@@ -220,6 +230,7 @@ Phases with standard patterns (skip research-phase):
 ## Sources
 
 ### Primary (HIGH confidence)
+
 - [Claude Code Settings Reference](https://code.claude.com/docs/en/settings) — Settings file scope hierarchy, `permissions.allow` format, project vs user scope paths (verified 2026-02-24)
 - [Claude Code Memory / CLAUDE.md docs](https://code.claude.com/docs/en/memory) — `@` import syntax, file inclusion behavior, CLAUDE.md precedence (verified 2026-02-24)
 - [Claude Code Permissions docs](https://code.claude.com/docs/en/permissions) — Full permissions system, allow/deny/ask rules, settings.json schema (verified 2026-02-24)
@@ -229,6 +240,7 @@ Phases with standard patterns (skip research-phase):
 - [npm docs — bin field](https://docs.npmjs.com/cli/v7/configuring-npm/package-json#bin) — `#!/usr/bin/env node` shebang requirement, bin map format
 
 ### Secondary (MEDIUM confidence)
+
 - [arc init idempotency docs](https://arc.codes/docs/en/reference/cli/init) — Skip-if-exists design; closest analogous pattern to viflo's `.planning/` scaffold approach
 - [npm init additive behavior](https://docs.npmjs.com/cli/init) — Strictly additive, never removes existing values
 - [GitHub issue #5140 — user-scope permissions not enforced](https://github.com/anthropics/claude-code/issues/5140) — Active bug; project-scope workaround documented
@@ -236,10 +248,11 @@ Phases with standard patterns (skip research-phase):
 - Developer guide to Claude Code settings.json (eesel.ai) — Project vs user scope distinction, example structures
 
 ### Tertiary (LOW confidence / needs validation)
+
 - WSL2 path detection via `process.env.WSL_DISTRO_NAME` — inferred from Microsoft docs; not tested in WSL2 environment
 - Claude Code `@` import one-time approval dialog behavior — documented in community sources (GitHub issues), not in official docs
 
 ---
 
-*Research completed: 2026-02-24*
-*Ready for roadmap: yes*
+_Research completed: 2026-02-24_
+_Ready for roadmap: yes_

@@ -50,29 +50,30 @@ The existing 92-line RAG skill was a thin shell pointing to `references/` files.
 
 ## Verification Results
 
-| Check | Expected | Result | Status |
-|-------|----------|--------|--------|
-| Line count | >= 380 | 416 | PASS |
-| HNSW index SQL | present | 4 occurrences | PASS |
-| pgvector.toSql() | present | 3 occurrences | PASS |
-| score >= 0.75 filter | present | 1 occurrence | PASS |
-| rrf_score inline | present | 5 occurrences | PASS |
-| Gotcha count | 4 | 4 | PASS |
-| recall@5 > 0.8 threshold | present | 1 occurrence | PASS |
-| chunk_tokens budget math | present | 2 occurrences | PASS |
+| Check                    | Expected | Result        | Status |
+| ------------------------ | -------- | ------------- | ------ |
+| Line count               | >= 380   | 416           | PASS   |
+| HNSW index SQL           | present  | 4 occurrences | PASS   |
+| pgvector.toSql()         | present  | 3 occurrences | PASS   |
+| score >= 0.75 filter     | present  | 1 occurrence  | PASS   |
+| rrf_score inline         | present  | 5 occurrences | PASS   |
+| Gotcha count             | 4        | 4             | PASS   |
+| recall@5 > 0.8 threshold | present  | 1 occurrence  | PASS   |
+| chunk_tokens budget math | present  | 2 occurrences | PASS   |
 
 ## Commits
 
-| Task | Description | Commit | Files |
-|------|-------------|--------|-------|
-| 1 | Rewrite SKILL.md to 416 lines | e208d2d | `.agent/skills/rag-vector-search/SKILL.md` |
-| 2 | Create eval.ts evaluation script | 45f53f7 | `.agent/skills/rag-vector-search/eval.ts` |
+| Task | Description                      | Commit  | Files                                      |
+| ---- | -------------------------------- | ------- | ------------------------------------------ |
+| 1    | Rewrite SKILL.md to 416 lines    | e208d2d | `.agent/skills/rag-vector-search/SKILL.md` |
+| 2    | Create eval.ts evaluation script | 45f53f7 | `.agent/skills/rag-vector-search/eval.ts`  |
 
 ## Deviations from Plan
 
 ### Auto-added Missing Critical Functionality
 
 **[Rule 2 - Missing] Created eval.ts referenced in SKILL.md**
+
 - **Found during:** Post-Task 1 verification
 - **Issue:** SKILL.md contains a markdown link to `eval.ts` and a run command (`npx tsx .agent/skills/rag-vector-search/eval.ts`). The plan's `key_links` frontmatter explicitly requires this link to resolve. The file did not exist.
 - **Fix:** Created `.agent/skills/rag-vector-search/eval.ts` with golden set, `recallAtK()`, `reciprocalRank()`, pass/warn/fail output, and `$disconnect()` at end. Matches the eval.ts structure specified in RESEARCH.md.
@@ -85,13 +86,13 @@ The existing 92-line RAG skill was a thin shell pointing to `references/` files.
 
 ## Requirements Addressed
 
-| Requirement | Description | Status |
-|-------------|-------------|--------|
-| RAG-01 | Quick Start embed-and-retrieve in under 15 minutes with console output | Complete |
-| RAG-02 | Chunking strategies with fixed-size vs semantic table and token budget math | Complete |
-| RAG-03 | HNSW index setup and hybrid search with RRF fusion SQL inline | Complete |
-| RAG-04 | 4 named Gotchas with warning signs and fixes | Complete |
-| RAG-05 | embedding_model_version column schema and recall@k / MRR evaluation patterns | Complete |
+| Requirement | Description                                                                  | Status   |
+| ----------- | ---------------------------------------------------------------------------- | -------- |
+| RAG-01      | Quick Start embed-and-retrieve in under 15 minutes with console output       | Complete |
+| RAG-02      | Chunking strategies with fixed-size vs semantic table and token budget math  | Complete |
+| RAG-03      | HNSW index setup and hybrid search with RRF fusion SQL inline                | Complete |
+| RAG-04      | 4 named Gotchas with warning signs and fixes                                 | Complete |
+| RAG-05      | embedding_model_version column schema and recall@k / MRR evaluation patterns | Complete |
 
 ## Self-Check: PASSED
 

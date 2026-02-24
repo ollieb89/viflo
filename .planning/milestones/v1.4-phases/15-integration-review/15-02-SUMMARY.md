@@ -2,7 +2,15 @@
 phase: 15-integration-review
 plan: 02
 subsystem: infra
-tags: [skill-library, cross-references, navigation, rag, agent-architecture, prompt-engineering]
+tags:
+  [
+    skill-library,
+    cross-references,
+    navigation,
+    rag,
+    agent-architecture,
+    prompt-engineering,
+  ]
 
 # Dependency graph
 requires:
@@ -106,5 +114,6 @@ None - no external service configuration required.
 - The See Also pattern is now established and could be applied to other skill pairs in future phases if needed
 
 ---
-*Phase: 15-integration-review*
-*Completed: 2026-02-24*
+
+_Phase: 15-integration-review_
+_Completed: 2026-02-24_

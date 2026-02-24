@@ -15,19 +15,19 @@ Phase 5 implemented active continuous integration and pre-commit secret scanning
 
 ### Artifacts Created
 
-| Artifact | Location | Purpose |
-|----------|----------|---------|
-| CI workflow | `.github/workflows/ci.yml` | GitHub Actions pipeline with 8-step sequential job |
-| Node version pin | `.nvmrc` | Pins Node.js to version 20 for consistent builds |
-| Pre-commit config | `.pre-commit-config.yaml` | Configures gitleaks + detect-secrets hooks |
-| Secrets baseline | `.secrets.baseline` | detect-secrets baseline marking known patterns |
-| Contributing guide | `CONTRIBUTING.md` | Updated with pre-commit install instructions |
+| Artifact           | Location                   | Purpose                                            |
+| ------------------ | -------------------------- | -------------------------------------------------- |
+| CI workflow        | `.github/workflows/ci.yml` | GitHub Actions pipeline with 8-step sequential job |
+| Node version pin   | `.nvmrc`                   | Pins Node.js to version 20 for consistent builds   |
+| Pre-commit config  | `.pre-commit-config.yaml`  | Configures gitleaks + detect-secrets hooks         |
+| Secrets baseline   | `.secrets.baseline`        | detect-secrets baseline marking known patterns     |
+| Contributing guide | `CONTRIBUTING.md`          | Updated with pre-commit install instructions       |
 
 ### Files Modified
 
-| File | Changes |
-|------|---------|
-| `package.json` | Added root-level CI scripts: lint, type-check, test, build, lint:fix |
+| File              | Changes                                                               |
+| ----------------- | --------------------------------------------------------------------- |
+| `package.json`    | Added root-level CI scripts: lint, type-check, test, build, lint:fix  |
 | `CONTRIBUTING.md` | Added "Pre-commit Hooks (Secret Scanning)" section with install steps |
 
 ---
@@ -60,15 +60,15 @@ Phase 5 implemented active continuous integration and pre-commit secret scanning
 
 ## Key Decisions
 
-| Decision | Rationale |
-|----------|-----------|
+| Decision                             | Rationale                                                                      |
+| ------------------------------------ | ------------------------------------------------------------------------------ |
 | **Single job with sequential steps** | Per 05-CONTEXT.md: simplicity over parallel execution for a documentation repo |
-| **Prettier for linting** | Standard formatter for markdown/YAML/JSON in documentation repositories |
-| **Both gitleaks + detect-secrets** | Per 05-CONTEXT.md: overlapping coverage is intentional — defense in depth |
-| **Placeholder test/build scripts** | Documentation repo has no app; Phase 6 adds the real Vitest suite |
-| **No lint/type-check in pre-commit** | Per 05-CONTEXT.md: those checks run in CI, pre-commit is secrets-only |
-| **Secrets baseline committed** | Required for detect-secrets to mark existing patterns as known-good |
-| **pnpm caching in CI** | `actions/setup-node@v4` with `cache: pnpm` for efficient dependency installs |
+| **Prettier for linting**             | Standard formatter for markdown/YAML/JSON in documentation repositories        |
+| **Both gitleaks + detect-secrets**   | Per 05-CONTEXT.md: overlapping coverage is intentional — defense in depth      |
+| **Placeholder test/build scripts**   | Documentation repo has no app; Phase 6 adds the real Vitest suite              |
+| **No lint/type-check in pre-commit** | Per 05-CONTEXT.md: those checks run in CI, pre-commit is secrets-only          |
+| **Secrets baseline committed**       | Required for detect-secrets to mark existing patterns as known-good            |
+| **pnpm caching in CI**               | `actions/setup-node@v4` with `cache: pnpm` for efficient dependency installs   |
 
 ---
 
@@ -94,9 +94,9 @@ detect-secrets scan /tmp/fake-secret.txt
 
 ## Issues Encountered
 
-| Issue | Resolution |
-|-------|------------|
-| None | Plan executed without issues |
+| Issue | Resolution                   |
+| ----- | ---------------------------- |
+| None  | Plan executed without issues |
 
 ---
 
@@ -109,4 +109,4 @@ Phase 5 commits from git log (2026-02-23):
 
 ---
 
-*Verification completed as part of v1.1 Dogfooding milestone.*
+_Verification completed as part of v1.1 Dogfooding milestone._

@@ -3,6 +3,7 @@
 ## Current State: v1.6 Planning
 
 `viflo init` CLI is fully functional. Developers can wire any project to viflo in one command:
+
 - `viflo init --minimal` — CLAUDE.md sentinel + `.claude/settings.json` permissions
 - `viflo init --full` — also scaffolds `.planning/` with GSD stubs + starter CLAUDE.md template
 - `viflo init --dry-run` — filesystem-safe preview of all file actions with resolved absolute paths
@@ -14,6 +15,7 @@
 **Goal:** Operationalize and harden repository-level quality/safety gates so contributors cannot merge insecure or unverified changes.
 
 **Target features:**
+
 - CI/CD gate hardening (live GitHub Actions with enforced lint/typecheck/test/build checks)
 - Security enforcement hardening (pre-commit secret scanning + consistent bootstrap/install path)
 - Testing reliability hardening (web Vitest baseline + coverage ratchet enforcement)
@@ -145,6 +147,7 @@ Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js/CommonJS CLI 
 CLI: 574 lines of CJS (bin/viflo.cjs, bin/lib/writers.cjs, bin/lib/skills.cjs, bin/lib/paths.cjs).
 
 Known tech debt:
+
 - Makefile `make setup` target (09-CONTEXT.md specified Makefile; execution used `scripts/setup-dev.sh` instead — different mechanism, same function)
 - 07-VERIFICATION.md checked off telemetry commit before verifying against `git ls-files` — future verifications should use `git ls-files` to confirm committed state
 - agent-architecture SKILL.md is 503 lines (over 500-line limit) — accepted per locked Phase 15 decision; 4/5 skills within limit is the accepted outcome
@@ -152,46 +155,46 @@ Known tech debt:
 
 ## Key Decisions
 
-| Date       | Decision                          | Outcome                                       |
-| ---------- | --------------------------------- | --------------------------------------------- |
-| 2026-02-23 | Adopt GSD methodology             | ✓ Good — structured workflow proved effective |
-| 2026-02-23 | Create gsd-workflow skill         | ✓ Good — reusable across projects             |
-| 2026-02-23 | Use Python for helper scripts     | ✓ Good — portable, no compilation needed      |
-| 2026-02-23 | Use Contributor Covenant 2.1      | ✓ Good — industry standard                    |
-| 2026-02-23 | next-i18next over next-intl       | ✓ Good — Pages Router compatibility           |
-| 2026-02-23 | Native Intl API for formatting    | ✓ Good — zero dependencies                    |
-| 2026-02-23 | Namespace translations by domain  | ✓ Good — stable under refactoring             |
-| 2026-02-23 | triggers: as standard frontmatter | ✓ Good — consistent across 35 skills          |
-| 2026-02-23 | INDEX.md at .agent/skills/        | ✓ Good — central skill discovery              |
-| 2026-02-23 | Defer oversized SKILL.md refactor | ✓ Resolved — completed in v1.1 Phase 7/8      |
-| 2026-02-23 | Vitest for web unit testing       | ✓ Good — fast, TypeScript-native, CI-friendly |
-| 2026-02-23 | pnpm workspace topology           | ✓ Good — single install, filter-based CI      |
-| 2026-02-23 | gitleaks + detect-secrets         | ✓ Good — dual scanner catches more patterns   |
-| 2026-02-23 | CSV for telemetry output          | ✓ Good — zero-dep, spreadsheet-compatible     |
-| 2026-02-24 | setup-dev.sh instead of Makefile  | ⚠️ Revisit — CONTEXT.md specified Makefile    |
-| 2026-02-24 | Phase 10 gap-closure pattern      | ✓ Good — explicit commit-and-verify phase prevents disk/committed drift |
-| 2026-02-24 | Better Auth replaces Auth.js      | ✓ Good — Auth.js is maintenance-mode since Sept 2025; Better Auth is the active project |
-| 2026-02-24 | applies-to frontmatter schema     | ✓ Good — model-specific technique tagging proven useful in prompt-engineering skill |
-| 2026-02-24 | Scope v1.2 to Phase 11 only       | ✓ Good — foundation skills independently valuable; AI/LLM + Stripe deferred to v1.3 |
-| 2026-02-24 | HNSW as default pgvector index     | ✓ Good — no training step, better recall than IVFFlat; pattern adopted in both RAG and Agent skills |
-| 2026-02-24 | RRF rank-based hybrid search fusion | ✓ Good — no score normalization needed; SQL inline in SKILL.md body (not only in references/) |
-| 2026-02-24 | MAX_TURNS/MAX_TOKENS_PER_RUN as named constants | ✓ Good — guardrails in every agent example; grep-able, explicit, non-optional |
-| 2026-02-24 | Next.js API route proxy for SSE streaming | ✓ Good — keeps API key server-side, avoids CORS, simpler than direct FastAPI-to-useChat bridge |
-| 2026-02-24 | pg.Pool raw SQL for Stripe idempotency | ✓ Good — atomic ON CONFLICT DO NOTHING preferred over Prisma P2002 try/catch; consistent across SKILL.md and references/ |
-| 2026-02-24 | Defer Phase 15 (INFRA) to v1.4    | ✓ Good — 15/18 requirements satisfied; INDEX.md/compliance/cross-refs are housekeeping, not blockers |
-| 2026-02-24 | Scope v1.4 to Phases 15–16 only    | ✓ Good — Phases 17–19 (viflo init CLI) deferred to v1.5; library layer ships independently as a clean foundation |
-| 2026-02-24 | Sentinel format: `<!-- BEGIN VIFLO -->` / `<!-- END VIFLO -->` | ✓ Good — HTML comment delimiters safe in any Markdown context; indexOf+slice avoids regex escaping pitfalls |
-| 2026-02-24 | resolveViFloRoot() uses `__dirname` not `process.cwd()` | ✓ Good — deterministic regardless of where node is invoked from |
-| 2026-02-24 | existing-first Set spread for array dedup in settings.json merge | ✓ Good — stable ordering preserves user entries at front |
-| 2026-02-24 | vitest installed at workspace root (not apps/web) | ✓ Good — `pnpm exec vitest` resolves from repo root; web app tests unaffected |
-| 2026-02-24 | Real temp directories (fs.mkdtempSync) for writers tests | ✓ Good — real I/O is what the tests are designed to verify; filesystem mocking would defeat the purpose |
-| 2026-02-24 | agent-architecture 503 lines accepted, trimming ruled out | ✓ Good — See Also section addition was post-baseline; 4/5 within limit is valid pass state |
-| 2026-02-24 | Named seam annotations in See Also links (not just destination) | ✓ Good — "episodic memory pattern (pgvector-backed recall)" tells readers what they'll find, not just where |
-| 2026-02-24 | scanSkills accepts rootDir explicitly — caller passes resolveViFloRoot() | ✓ Good — pure function, easy to test with any temp directory, decoupled from install path |
-| 2026-02-24 | writePlanningScaffold uses fs.existsSync (skip-if-exists) not writeIfChanged | ✓ Good — planning files preserve user edits; writers.cjs skip-if-unchanged semantics differ by file type |
-| 2026-02-24 | `merged` label at CLI call-site (not in writers) — writers return `updated`, CLI maps to `merged` | ✓ Good — writers.cjs stays single-responsibility; CLI applies semantic context |
-| 2026-02-24 | No shebang required — npm bin wiring uses node implicitly for .cjs files | ✓ Good — bin field alone sufficient; fewer moving parts |
-| 2026-02-24 | User-scope ~/.claude/settings.json writes deferred (bug #5140) | — Pending — re-evaluate at v1.6 planning |
+| Date       | Decision                                                                                          | Outcome                                                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 2026-02-23 | Adopt GSD methodology                                                                             | ✓ Good — structured workflow proved effective                                                                            |
+| 2026-02-23 | Create gsd-workflow skill                                                                         | ✓ Good — reusable across projects                                                                                        |
+| 2026-02-23 | Use Python for helper scripts                                                                     | ✓ Good — portable, no compilation needed                                                                                 |
+| 2026-02-23 | Use Contributor Covenant 2.1                                                                      | ✓ Good — industry standard                                                                                               |
+| 2026-02-23 | next-i18next over next-intl                                                                       | ✓ Good — Pages Router compatibility                                                                                      |
+| 2026-02-23 | Native Intl API for formatting                                                                    | ✓ Good — zero dependencies                                                                                               |
+| 2026-02-23 | Namespace translations by domain                                                                  | ✓ Good — stable under refactoring                                                                                        |
+| 2026-02-23 | triggers: as standard frontmatter                                                                 | ✓ Good — consistent across 35 skills                                                                                     |
+| 2026-02-23 | INDEX.md at .agent/skills/                                                                        | ✓ Good — central skill discovery                                                                                         |
+| 2026-02-23 | Defer oversized SKILL.md refactor                                                                 | ✓ Resolved — completed in v1.1 Phase 7/8                                                                                 |
+| 2026-02-23 | Vitest for web unit testing                                                                       | ✓ Good — fast, TypeScript-native, CI-friendly                                                                            |
+| 2026-02-23 | pnpm workspace topology                                                                           | ✓ Good — single install, filter-based CI                                                                                 |
+| 2026-02-23 | gitleaks + detect-secrets                                                                         | ✓ Good — dual scanner catches more patterns                                                                              |
+| 2026-02-23 | CSV for telemetry output                                                                          | ✓ Good — zero-dep, spreadsheet-compatible                                                                                |
+| 2026-02-24 | setup-dev.sh instead of Makefile                                                                  | ⚠️ Revisit — CONTEXT.md specified Makefile                                                                               |
+| 2026-02-24 | Phase 10 gap-closure pattern                                                                      | ✓ Good — explicit commit-and-verify phase prevents disk/committed drift                                                  |
+| 2026-02-24 | Better Auth replaces Auth.js                                                                      | ✓ Good — Auth.js is maintenance-mode since Sept 2025; Better Auth is the active project                                  |
+| 2026-02-24 | applies-to frontmatter schema                                                                     | ✓ Good — model-specific technique tagging proven useful in prompt-engineering skill                                      |
+| 2026-02-24 | Scope v1.2 to Phase 11 only                                                                       | ✓ Good — foundation skills independently valuable; AI/LLM + Stripe deferred to v1.3                                      |
+| 2026-02-24 | HNSW as default pgvector index                                                                    | ✓ Good — no training step, better recall than IVFFlat; pattern adopted in both RAG and Agent skills                      |
+| 2026-02-24 | RRF rank-based hybrid search fusion                                                               | ✓ Good — no score normalization needed; SQL inline in SKILL.md body (not only in references/)                            |
+| 2026-02-24 | MAX_TURNS/MAX_TOKENS_PER_RUN as named constants                                                   | ✓ Good — guardrails in every agent example; grep-able, explicit, non-optional                                            |
+| 2026-02-24 | Next.js API route proxy for SSE streaming                                                         | ✓ Good — keeps API key server-side, avoids CORS, simpler than direct FastAPI-to-useChat bridge                           |
+| 2026-02-24 | pg.Pool raw SQL for Stripe idempotency                                                            | ✓ Good — atomic ON CONFLICT DO NOTHING preferred over Prisma P2002 try/catch; consistent across SKILL.md and references/ |
+| 2026-02-24 | Defer Phase 15 (INFRA) to v1.4                                                                    | ✓ Good — 15/18 requirements satisfied; INDEX.md/compliance/cross-refs are housekeeping, not blockers                     |
+| 2026-02-24 | Scope v1.4 to Phases 15–16 only                                                                   | ✓ Good — Phases 17–19 (viflo init CLI) deferred to v1.5; library layer ships independently as a clean foundation         |
+| 2026-02-24 | Sentinel format: `<!-- BEGIN VIFLO -->` / `<!-- END VIFLO -->`                                    | ✓ Good — HTML comment delimiters safe in any Markdown context; indexOf+slice avoids regex escaping pitfalls              |
+| 2026-02-24 | resolveViFloRoot() uses `__dirname` not `process.cwd()`                                           | ✓ Good — deterministic regardless of where node is invoked from                                                          |
+| 2026-02-24 | existing-first Set spread for array dedup in settings.json merge                                  | ✓ Good — stable ordering preserves user entries at front                                                                 |
+| 2026-02-24 | vitest installed at workspace root (not apps/web)                                                 | ✓ Good — `pnpm exec vitest` resolves from repo root; web app tests unaffected                                            |
+| 2026-02-24 | Real temp directories (fs.mkdtempSync) for writers tests                                          | ✓ Good — real I/O is what the tests are designed to verify; filesystem mocking would defeat the purpose                  |
+| 2026-02-24 | agent-architecture 503 lines accepted, trimming ruled out                                         | ✓ Good — See Also section addition was post-baseline; 4/5 within limit is valid pass state                               |
+| 2026-02-24 | Named seam annotations in See Also links (not just destination)                                   | ✓ Good — "episodic memory pattern (pgvector-backed recall)" tells readers what they'll find, not just where              |
+| 2026-02-24 | scanSkills accepts rootDir explicitly — caller passes resolveViFloRoot()                          | ✓ Good — pure function, easy to test with any temp directory, decoupled from install path                                |
+| 2026-02-24 | writePlanningScaffold uses fs.existsSync (skip-if-exists) not writeIfChanged                      | ✓ Good — planning files preserve user edits; writers.cjs skip-if-unchanged semantics differ by file type                 |
+| 2026-02-24 | `merged` label at CLI call-site (not in writers) — writers return `updated`, CLI maps to `merged` | ✓ Good — writers.cjs stays single-responsibility; CLI applies semantic context                                           |
+| 2026-02-24 | No shebang required — npm bin wiring uses node implicitly for .cjs files                          | ✓ Good — bin field alone sufficient; fewer moving parts                                                                  |
+| 2026-02-24 | User-scope ~/.claude/settings.json writes deferred (bug #5140)                                    | — Pending — re-evaluate at v1.6 planning                                                                                 |
 
 ---
 

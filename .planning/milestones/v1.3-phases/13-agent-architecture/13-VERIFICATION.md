@@ -26,18 +26,18 @@ human_verification:
 
 ### Observable Truths
 
-| # | Truth | Status | Evidence |
-|---|-------|--------|----------|
-| 1 | Developer can follow the Quick Start and have a tool-using Claude agent running via Anthropic SDK in under 15 minutes | VERIFIED | Step 1 (no tools, 10 lines Python + 8 lines TypeScript) and Step 2 (fetch_url tool with MAX_TURNS/MAX_TOKENS_PER_RUN loop) both present and complete in both languages |
-| 2 | Every agent code example includes hard MAX_TURNS and MAX_TOKENS_PER_RUN constants — no example ships without guardrails | VERIFIED | MAX_TURNS appears 14 times in SKILL.md; MAX_TOKENS_PER_RUN appears 11 times; Guardrails section explicitly states "these are not suggestions" with cost runaway context |
-| 3 | Developer can follow the streaming section and understand how to wire SSE from FastAPI StreamingResponse to a Next.js client via Vercel AI SDK v6 | VERIFIED | Section 2 contains complete FastAPI async generator + StreamingResponse server code and complete Next.js API route (streamText, convertToModelMessages, toUIMessageStreamResponse) + React component (useChat, parts API) |
-| 4 | Developer can read the LangGraph section and understand stateful multi-agent graphs with the LangGraph 1.x stability note | VERIFIED | Section 3 opens with "LangGraph 1.x (stable since October 2025, zero breaking changes)"; create_react_agent, InMemorySaver vs PostgresSaver distinction, recursion_limit: MAX_TURNS all present |
-| 5 | Developer can read episodic memory via pgvector with a cross-reference to the RAG skill and a 1-paragraph MCP overview | VERIFIED | Section 4 contains store_episode/recall_episodes with pgvector.encode, embedding_model_version, and cross-reference "See the rag-vector-search skill"; MCP paragraph is verbatim and complete |
-| 6 | The Gotchas section names at least 3 pitfalls with warning signs, why-it-happens, anti-pattern code, and fix code | VERIFIED | Pitfall 1 (Runaway Costs), Pitfall 2 (Untyped Handoffs), Pitfall 3 (Bag-of-Agents) — each has 3 warning sign bullets, why-it-happens explanation, BAD: code block, GOOD: code block |
-| 7 | A "When NOT to use agents" callout is visually distinct and appears before or at the top of Gotchas | VERIFIED | "## When NOT to Use Agents" section (line 367) precedes "## Gotchas" (line 378); rendered as markdown blockquote with "> **Before reaching for an agent, check these criteria:**" |
-| 8 | references/multi-agent-patterns.md is aligned with LangGraph 1.x patterns (create_react_agent, PostgresSaver, recursion_limit) | VERIFIED | File contains LangGraph 1.x version header, Option A (StateGraph) / Option B (create_react_agent) convention, full Checkpointing section with PostgresSaver Option B, Human-in-the-Loop interrupt() section, recursion_limit in every invocation |
-| 9 | references/memory-orchestration.md is aligned with pgvector episodic memory (agent_episodes schema, embedding_model_version column) | VERIFIED | File contains full SQL schema (agent_episodes with embedding_model_version NOT NULL, HNSW index), store_episode/recall_episodes implementation with pgvector.encode, embedding_model_version filter, and 2 cross-references to rag-vector-search |
-| 10 | Both reference files follow the Option A (not recommended) / Option B (recommended) convention from Phase 12 | VERIFIED | multi-agent-patterns.md: Option A (StateGraph) / Option B (create_react_agent); memory-orchestration.md: Option A (in-context) / Option B (pgvector episodic store) |
+| #   | Truth                                                                                                                                             | Status   | Evidence                                                                                                                                                                                                                                         |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Developer can follow the Quick Start and have a tool-using Claude agent running via Anthropic SDK in under 15 minutes                             | VERIFIED | Step 1 (no tools, 10 lines Python + 8 lines TypeScript) and Step 2 (fetch_url tool with MAX_TURNS/MAX_TOKENS_PER_RUN loop) both present and complete in both languages                                                                           |
+| 2   | Every agent code example includes hard MAX_TURNS and MAX_TOKENS_PER_RUN constants — no example ships without guardrails                           | VERIFIED | MAX_TURNS appears 14 times in SKILL.md; MAX_TOKENS_PER_RUN appears 11 times; Guardrails section explicitly states "these are not suggestions" with cost runaway context                                                                          |
+| 3   | Developer can follow the streaming section and understand how to wire SSE from FastAPI StreamingResponse to a Next.js client via Vercel AI SDK v6 | VERIFIED | Section 2 contains complete FastAPI async generator + StreamingResponse server code and complete Next.js API route (streamText, convertToModelMessages, toUIMessageStreamResponse) + React component (useChat, parts API)                        |
+| 4   | Developer can read the LangGraph section and understand stateful multi-agent graphs with the LangGraph 1.x stability note                         | VERIFIED | Section 3 opens with "LangGraph 1.x (stable since October 2025, zero breaking changes)"; create_react_agent, InMemorySaver vs PostgresSaver distinction, recursion_limit: MAX_TURNS all present                                                  |
+| 5   | Developer can read episodic memory via pgvector with a cross-reference to the RAG skill and a 1-paragraph MCP overview                            | VERIFIED | Section 4 contains store_episode/recall_episodes with pgvector.encode, embedding_model_version, and cross-reference "See the rag-vector-search skill"; MCP paragraph is verbatim and complete                                                    |
+| 6   | The Gotchas section names at least 3 pitfalls with warning signs, why-it-happens, anti-pattern code, and fix code                                 | VERIFIED | Pitfall 1 (Runaway Costs), Pitfall 2 (Untyped Handoffs), Pitfall 3 (Bag-of-Agents) — each has 3 warning sign bullets, why-it-happens explanation, BAD: code block, GOOD: code block                                                              |
+| 7   | A "When NOT to use agents" callout is visually distinct and appears before or at the top of Gotchas                                               | VERIFIED | "## When NOT to Use Agents" section (line 367) precedes "## Gotchas" (line 378); rendered as markdown blockquote with "> **Before reaching for an agent, check these criteria:**"                                                                |
+| 8   | references/multi-agent-patterns.md is aligned with LangGraph 1.x patterns (create_react_agent, PostgresSaver, recursion_limit)                    | VERIFIED | File contains LangGraph 1.x version header, Option A (StateGraph) / Option B (create_react_agent) convention, full Checkpointing section with PostgresSaver Option B, Human-in-the-Loop interrupt() section, recursion_limit in every invocation |
+| 9   | references/memory-orchestration.md is aligned with pgvector episodic memory (agent_episodes schema, embedding_model_version column)               | VERIFIED | File contains full SQL schema (agent_episodes with embedding_model_version NOT NULL, HNSW index), store_episode/recall_episodes implementation with pgvector.encode, embedding_model_version filter, and 2 cross-references to rag-vector-search |
+| 10  | Both reference files follow the Option A (not recommended) / Option B (recommended) convention from Phase 12                                      | VERIFIED | multi-agent-patterns.md: Option A (StateGraph) / Option B (create_react_agent); memory-orchestration.md: Option A (in-context) / Option B (pgvector episodic store)                                                                              |
 
 **Score:** 10/10 truths verified
 
@@ -47,51 +47,51 @@ human_verification:
 
 ### Plan 01 Artifacts
 
-| Artifact | Expected | Status | Details |
-|----------|----------|--------|---------|
-| `.agent/skills/agent-architecture/SKILL.md` | Complete skill at auth-systems depth | VERIFIED | 498 lines (within 380–500 target) |
-| `.agent/skills/agent-architecture/SKILL.md` | Contains MAX_TURNS | VERIFIED | 14 occurrences |
-| `.agent/skills/agent-architecture/SKILL.md` | Contains MAX_TOKENS_PER_RUN | VERIFIED | 11 occurrences |
-| `.agent/skills/agent-architecture/SKILL.md` | Contains LangGraph 1.x | VERIFIED | 1 occurrence ("LangGraph 1.x (stable since October 2025, zero breaking changes)") |
-| `.agent/skills/agent-architecture/SKILL.md` | Contains StreamingResponse | VERIFIED | 4 occurrences |
-| `.agent/skills/agent-architecture/SKILL.md` | Contains Model Context Protocol | VERIFIED | 1 occurrence (full paragraph) |
+| Artifact                                    | Expected                             | Status   | Details                                                                           |
+| ------------------------------------------- | ------------------------------------ | -------- | --------------------------------------------------------------------------------- |
+| `.agent/skills/agent-architecture/SKILL.md` | Complete skill at auth-systems depth | VERIFIED | 498 lines (within 380–500 target)                                                 |
+| `.agent/skills/agent-architecture/SKILL.md` | Contains MAX_TURNS                   | VERIFIED | 14 occurrences                                                                    |
+| `.agent/skills/agent-architecture/SKILL.md` | Contains MAX_TOKENS_PER_RUN          | VERIFIED | 11 occurrences                                                                    |
+| `.agent/skills/agent-architecture/SKILL.md` | Contains LangGraph 1.x               | VERIFIED | 1 occurrence ("LangGraph 1.x (stable since October 2025, zero breaking changes)") |
+| `.agent/skills/agent-architecture/SKILL.md` | Contains StreamingResponse           | VERIFIED | 4 occurrences                                                                     |
+| `.agent/skills/agent-architecture/SKILL.md` | Contains Model Context Protocol      | VERIFIED | 1 occurrence (full paragraph)                                                     |
 
 ### Plan 02 Artifacts
 
-| Artifact | Expected | Status | Details |
-|----------|----------|--------|---------|
-| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains PostgresSaver | VERIFIED | 11 occurrences |
-| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains LangGraph 1.x | VERIFIED | 2 occurrences |
-| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains create_react_agent | VERIFIED | 9 occurrences |
-| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains recursion_limit | VERIFIED | 9 occurrences |
-| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains agent_episodes | VERIFIED | 7 occurrences |
-| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains embedding_model_version | VERIFIED | 5 occurrences |
-| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains rag-vector-search | VERIFIED | 2 occurrences |
-| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains HNSW/hnsw | VERIFIED | 4 occurrences |
+| Artifact                                                              | Expected                         | Status   | Details        |
+| --------------------------------------------------------------------- | -------------------------------- | -------- | -------------- |
+| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains PostgresSaver           | VERIFIED | 11 occurrences |
+| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains LangGraph 1.x           | VERIFIED | 2 occurrences  |
+| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains create_react_agent      | VERIFIED | 9 occurrences  |
+| `.agent/skills/agent-architecture/references/multi-agent-patterns.md` | Contains recursion_limit         | VERIFIED | 9 occurrences  |
+| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains agent_episodes          | VERIFIED | 7 occurrences  |
+| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains embedding_model_version | VERIFIED | 5 occurrences  |
+| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains rag-vector-search       | VERIFIED | 2 occurrences  |
+| `.agent/skills/agent-architecture/references/memory-orchestration.md` | Contains HNSW/hnsw               | VERIFIED | 4 occurrences  |
 
 ---
 
 ## Key Link Verification
 
-| From | To | Via | Status | Details |
-|------|----|-----|--------|---------|
-| `SKILL.md` | `.agent/skills/rag-vector-search/SKILL.md` | "See the rag-vector-search skill" | WIRED | Line 361: "See the rag-vector-search skill for HNSW index setup, chunking strategies, and eval patterns." |
-| `SKILL.md` | `references/multi-agent-patterns.md` | "> See references/multi-agent-patterns.md" | WIRED | Lines 8–9: frontmatter reference block present |
-| `SKILL.md` | `references/memory-orchestration.md` | "> See references/memory-orchestration.md" | WIRED | Lines 8–9: frontmatter reference block present |
-| `references/multi-agent-patterns.md` | `SKILL.md` | "create_react_agent" alignment | WIRED | create_react_agent appears in both files with identical signature and Option B designation |
-| `references/memory-orchestration.md` | `rag-vector-search/references/embedding-pipelines.md` | "embedding_model_version mirrors document_chunks" | WIRED | memory-orchestration.md line 50: "same pattern as document_chunks in the RAG skill" |
+| From                                 | To                                                    | Via                                               | Status | Details                                                                                                   |
+| ------------------------------------ | ----------------------------------------------------- | ------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------- |
+| `SKILL.md`                           | `.agent/skills/rag-vector-search/SKILL.md`            | "See the rag-vector-search skill"                 | WIRED  | Line 361: "See the rag-vector-search skill for HNSW index setup, chunking strategies, and eval patterns." |
+| `SKILL.md`                           | `references/multi-agent-patterns.md`                  | "> See references/multi-agent-patterns.md"        | WIRED  | Lines 8–9: frontmatter reference block present                                                            |
+| `SKILL.md`                           | `references/memory-orchestration.md`                  | "> See references/memory-orchestration.md"        | WIRED  | Lines 8–9: frontmatter reference block present                                                            |
+| `references/multi-agent-patterns.md` | `SKILL.md`                                            | "create_react_agent" alignment                    | WIRED  | create_react_agent appears in both files with identical signature and Option B designation                |
+| `references/memory-orchestration.md` | `rag-vector-search/references/embedding-pipelines.md` | "embedding_model_version mirrors document_chunks" | WIRED  | memory-orchestration.md line 50: "same pattern as document_chunks in the RAG skill"                       |
 
 ---
 
 ## Requirements Coverage
 
-| Requirement | Source Plan | Description | Status | Evidence |
-|-------------|------------|-------------|--------|----------|
-| AGENT-01 | 13-01 | User can follow a Quick Start to build a tool-using agent with Anthropic SDK in under 15 minutes | SATISFIED | SKILL.md Quick Start: Step 1 (no-tool agent, <10 lines) + Step 2 (fetch_url tool with guardrails loop) — complete Python and TypeScript |
-| AGENT-02 | 13-01 | Skill documents max_turns and max_tokens guardrails as required (not optional), with cost runaway context | SATISFIED | Section 1 "Guardrails (Required, Not Optional)" with cost runaway framing ($3–15 per million tokens), constants table, and named constant rationale |
-| AGENT-03 | 13-01 | Skill covers streaming output via SSE (FastAPI StreamingResponse) and Vercel AI SDK v6 (Next.js client) | SATISFIED | Section 2: FastAPI StreamingResponse + async generator server (Python), Next.js API route with streamText/convertToModelMessages/toUIMessageStreamResponse, React useChat with parts API |
-| AGENT-04 | 13-01, 13-02 | Skill covers LangGraph stateful multi-agent graphs with v1.1.5 stability note | SATISFIED | Section 3: LangGraph 1.x stability note, create_react_agent, InMemorySaver vs PostgresSaver, recursion_limit: MAX_TURNS; multi-agent-patterns.md has full human-in-the-loop interrupt() section |
-| AGENT-05 | 13-01, 13-02 | Skill covers episodic memory via pgvector (cross-reference to RAG skill) and includes 1-paragraph MCP overview | SATISFIED | Section 4: store_episode/recall_episodes with pgvector.encode + embedding_model_version filter, rag-vector-search cross-reference, full MCP paragraph |
+| Requirement | Source Plan  | Description                                                                                                    | Status    | Evidence                                                                                                                                                                                        |
+| ----------- | ------------ | -------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AGENT-01    | 13-01        | User can follow a Quick Start to build a tool-using agent with Anthropic SDK in under 15 minutes               | SATISFIED | SKILL.md Quick Start: Step 1 (no-tool agent, <10 lines) + Step 2 (fetch_url tool with guardrails loop) — complete Python and TypeScript                                                         |
+| AGENT-02    | 13-01        | Skill documents max_turns and max_tokens guardrails as required (not optional), with cost runaway context      | SATISFIED | Section 1 "Guardrails (Required, Not Optional)" with cost runaway framing ($3–15 per million tokens), constants table, and named constant rationale                                             |
+| AGENT-03    | 13-01        | Skill covers streaming output via SSE (FastAPI StreamingResponse) and Vercel AI SDK v6 (Next.js client)        | SATISFIED | Section 2: FastAPI StreamingResponse + async generator server (Python), Next.js API route with streamText/convertToModelMessages/toUIMessageStreamResponse, React useChat with parts API        |
+| AGENT-04    | 13-01, 13-02 | Skill covers LangGraph stateful multi-agent graphs with v1.1.5 stability note                                  | SATISFIED | Section 3: LangGraph 1.x stability note, create_react_agent, InMemorySaver vs PostgresSaver, recursion_limit: MAX_TURNS; multi-agent-patterns.md has full human-in-the-loop interrupt() section |
+| AGENT-05    | 13-01, 13-02 | Skill covers episodic memory via pgvector (cross-reference to RAG skill) and includes 1-paragraph MCP overview | SATISFIED | Section 4: store_episode/recall_episodes with pgvector.encode + embedding_model_version filter, rag-vector-search cross-reference, full MCP paragraph                                           |
 
 **Note on AGENT-04 wording:** REQUIREMENTS.md says "v1.1.5 stability note" but SKILL.md documents "LangGraph 1.x (stable since October 2025, zero breaking changes)" without a patch version. This is intentional per the 13-01 SUMMARY (avoids stale version pins). The stability guarantee is communicated — this is a documentation decision, not a gap.
 
@@ -101,11 +101,11 @@ human_verification:
 
 ## Anti-Patterns Found
 
-| File | Pattern | Severity | Assessment |
-|------|---------|----------|------------|
-| All 3 files | TODO / FIXME / PLACEHOLDER | None found | Clean |
-| All 3 files | Empty returns / stubs | None found | All code blocks are substantive implementations |
-| All 3 files | Console.log-only handlers | None found | All handlers perform real operations |
+| File        | Pattern                    | Severity   | Assessment                                      |
+| ----------- | -------------------------- | ---------- | ----------------------------------------------- |
+| All 3 files | TODO / FIXME / PLACEHOLDER | None found | Clean                                           |
+| All 3 files | Empty returns / stubs      | None found | All code blocks are substantive implementations |
+| All 3 files | Console.log-only handlers  | None found | All handlers perform real operations            |
 
 No anti-patterns found across SKILL.md, multi-agent-patterns.md, or memory-orchestration.md.
 
@@ -119,10 +119,10 @@ SKILL.md: 498 lines — within the ≤500 line limit mandated by INFRA-02.
 
 ## Commit Verification
 
-| Commit | Message | Status |
-|--------|---------|--------|
-| `adecdf7` | feat(13-01): rewrite agent-architecture SKILL.md to auth-systems depth | VERIFIED |
-| `bd440fc` | feat(13-02): update multi-agent-patterns.md for LangGraph 1.x | VERIFIED |
+| Commit    | Message                                                                  | Status   |
+| --------- | ------------------------------------------------------------------------ | -------- |
+| `adecdf7` | feat(13-01): rewrite agent-architecture SKILL.md to auth-systems depth   | VERIFIED |
+| `bd440fc` | feat(13-02): update multi-agent-patterns.md for LangGraph 1.x            | VERIFIED |
 | `6445b0f` | feat(13-02): update memory-orchestration.md for pgvector episodic memory | VERIFIED |
 
 ---

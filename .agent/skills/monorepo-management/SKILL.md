@@ -47,11 +47,11 @@ Build efficient, scalable monorepos that enable code sharing, consistent tooling
 
 ### 2. Monorepo Tools Comparison
 
-| Tool | Best For | Complexity | Features |
-|------|----------|------------|----------|
-| **Turborepo** | Most projects | Low | Task pipelines, remote caching, great DX |
-| **Nx** | Enterprise/complex | High | Graph visualization, plugins, code generators |
-| **pnpm workspaces** | Package management | Low | Efficient disk usage, workspace protocol |
+| Tool                | Best For           | Complexity | Features                                      |
+| ------------------- | ------------------ | ---------- | --------------------------------------------- |
+| **Turborepo**       | Most projects      | Low        | Task pipelines, remote caching, great DX      |
+| **Nx**              | Enterprise/complex | High       | Graph visualization, plugins, code generators |
+| **pnpm workspaces** | Package management | Low        | Efficient disk usage, workspace protocol      |
 
 See the [reference guides](./references/guides/) for detailed setup instructions.
 
@@ -264,7 +264,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # For affected commands
+          fetch-depth: 0 # For affected commands
 
       - uses: pnpm/action-setup@v2
         with:

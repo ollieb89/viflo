@@ -7,6 +7,7 @@
 ---
 
 <user_constraints>
+
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
@@ -38,15 +39,17 @@ None — discussion stayed within phase scope.
 ---
 
 <phase_requirements>
+
 ## Phase Requirements
 
-| ID | Description | Research Support |
-|----|-------------|-----------------|
-| AGENT-01 | User can follow a Quick Start to build a tool-using agent with Anthropic SDK in under 15 minutes | Anthropic SDK tool use loop documented — both Python and TypeScript patterns verified via Context7 and official docs |
-| AGENT-02 | Skill documents max_turns and max_tokens guardrails as required (not optional), with cost runaway context | Pattern exists: manual loop counter + `max_tokens` on every `messages.create` call; named constants `MAX_TURNS`/`MAX_TOKENS_PER_RUN` enforced by convention |
-| AGENT-03 | Skill covers streaming output via SSE (FastAPI StreamingResponse) and Vercel AI SDK v6 (Next.js client) | FastAPI async generator + `StreamingResponse(media_type="text/event-stream")` → `useChat` hook via `@ai-sdk/react`. Vercel AI SDK v6 (6.0.97) confirmed current. |
-| AGENT-04 | Skill covers LangGraph stateful multi-agent graphs with v1.1.5 stability note | LangGraph 1.0 released October 2025 — stable, zero breaking changes. Current PyPI version is in 1.x series. `create_react_agent`, `StateGraph`, `InMemorySaver`/`PostgresSaver` all verified. |
+| ID       | Description                                                                                                    | Research Support                                                                                                                                                                                               |
+| -------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AGENT-01 | User can follow a Quick Start to build a tool-using agent with Anthropic SDK in under 15 minutes               | Anthropic SDK tool use loop documented — both Python and TypeScript patterns verified via Context7 and official docs                                                                                           |
+| AGENT-02 | Skill documents max_turns and max_tokens guardrails as required (not optional), with cost runaway context      | Pattern exists: manual loop counter + `max_tokens` on every `messages.create` call; named constants `MAX_TURNS`/`MAX_TOKENS_PER_RUN` enforced by convention                                                    |
+| AGENT-03 | Skill covers streaming output via SSE (FastAPI StreamingResponse) and Vercel AI SDK v6 (Next.js client)        | FastAPI async generator + `StreamingResponse(media_type="text/event-stream")` → `useChat` hook via `@ai-sdk/react`. Vercel AI SDK v6 (6.0.97) confirmed current.                                               |
+| AGENT-04 | Skill covers LangGraph stateful multi-agent graphs with v1.1.5 stability note                                  | LangGraph 1.0 released October 2025 — stable, zero breaking changes. Current PyPI version is in 1.x series. `create_react_agent`, `StateGraph`, `InMemorySaver`/`PostgresSaver` all verified.                  |
 | AGENT-05 | Skill covers episodic memory via pgvector (cross-reference to RAG skill) and includes 1-paragraph MCP overview | pgvector episodic memory: pattern maps directly to RAG skill. MCP: open standard introduced November 2024, now Linux Foundation/AAIF-governed, 97M+ monthly downloads, universal AI-tool integration protocol. |
+
 </phase_requirements>
 
 ---
@@ -57,7 +60,7 @@ Phase 13 produces a SKILL.md covering Claude agent patterns — not a production
 
 The core Anthropic tool-use loop is extremely stable: define tools with JSON schema, call `messages.create()`, check `stop_reason === 'tool_use'`, execute the tool, append `tool_result` to messages, loop. This pattern is identical in Python and TypeScript, and both SDKs now offer high-level abstractions (`tool_runner()` / `beta.messages.toolRunner()`) that handle the loop automatically. For the skill doc, the manual loop is the better teaching tool because it makes guardrails explicit.
 
-The biggest research flag from STATE.md was: *"LangGraph 1.1.5 checkpointing and human-in-the-loop patterns may have shifted from 0.x to 1.0 (released October 2025)."* This is now resolved: LangGraph 1.0 shipped October 2025 with zero breaking changes. Core graph primitives (`StateGraph`, `add_node`, `add_edge`, `compile`) are unchanged. The `prebuilt` module (`create_react_agent`) is confirmed available. For production checkpointing, `PostgresSaver` is the correct recommendation (not `InMemorySaver`). The stability note in the SKILL.md should reference "LangGraph 1.x (stable since October 2025)."
+The biggest research flag from STATE.md was: _"LangGraph 1.1.5 checkpointing and human-in-the-loop patterns may have shifted from 0.x to 1.0 (released October 2025)."_ This is now resolved: LangGraph 1.0 shipped October 2025 with zero breaking changes. Core graph primitives (`StateGraph`, `add_node`, `add_edge`, `compile`) are unchanged. The `prebuilt` module (`create_react_agent`) is confirmed available. For production checkpointing, `PostgresSaver` is the correct recommendation (not `InMemorySaver`). The stability note in the SKILL.md should reference "LangGraph 1.x (stable since October 2025)."
 
 Vercel AI SDK v6 (6.0.97 as of February 2026) is the current version. The streaming pattern uses `useChat` from `@ai-sdk/react` on the Next.js client. For the FastAPI → Next.js SSE bridge: FastAPI produces `text/event-stream` via async generator, and the Next.js route proxies it (or calls FastAPI directly from the API route). The CONTEXT.md stack is correct and current.
 
@@ -68,33 +71,37 @@ Vercel AI SDK v6 (6.0.97 as of February 2026) is the current version. The stream
 ## Standard Stack
 
 ### Core
-| Library | Version | Purpose | Why Standard |
-|---------|---------|---------|--------------|
-| `@anthropic-ai/sdk` | 0.37.x | Anthropic API access, tool use loop, streaming | Official SDK; `tool_use` stop reason pattern is the canonical agent primitive |
-| `anthropic` (Python) | 0.40.x | Python equivalent | Official SDK; identical tool-use semantics |
-| `fastapi` | 0.115+ | SSE streaming server | Async-native; `StreamingResponse` + async generator = idiomatic SSE |
-| `@ai-sdk/anthropic` | latest | Vercel AI SDK Anthropic provider | `createAnthropic` is the standard import; required with Vercel AI SDK v6 |
-| `ai` | 6.x (6.0.97 current) | Vercel AI SDK core — `streamText`, `useChat`, `convertToModelMessages` | Current stable version; AI SDK 6 is the active major version |
-| `@ai-sdk/react` | 6.x | Next.js client hooks — `useChat` | Required for Next.js client streaming |
-| `langgraph` | 1.x (1.0 released Oct 2025) | Stateful multi-agent graphs | 1.0 is first stable major release; no breaking changes until 2.0 |
-| `langgraph-checkpoint-postgres` | 1.x | Production checkpointing | `PostgresSaver` for production; `InMemorySaver` for development only |
+
+| Library                         | Version                     | Purpose                                                                | Why Standard                                                                  |
+| ------------------------------- | --------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `@anthropic-ai/sdk`             | 0.37.x                      | Anthropic API access, tool use loop, streaming                         | Official SDK; `tool_use` stop reason pattern is the canonical agent primitive |
+| `anthropic` (Python)            | 0.40.x                      | Python equivalent                                                      | Official SDK; identical tool-use semantics                                    |
+| `fastapi`                       | 0.115+                      | SSE streaming server                                                   | Async-native; `StreamingResponse` + async generator = idiomatic SSE           |
+| `@ai-sdk/anthropic`             | latest                      | Vercel AI SDK Anthropic provider                                       | `createAnthropic` is the standard import; required with Vercel AI SDK v6      |
+| `ai`                            | 6.x (6.0.97 current)        | Vercel AI SDK core — `streamText`, `useChat`, `convertToModelMessages` | Current stable version; AI SDK 6 is the active major version                  |
+| `@ai-sdk/react`                 | 6.x                         | Next.js client hooks — `useChat`                                       | Required for Next.js client streaming                                         |
+| `langgraph`                     | 1.x (1.0 released Oct 2025) | Stateful multi-agent graphs                                            | 1.0 is first stable major release; no breaking changes until 2.0              |
+| `langgraph-checkpoint-postgres` | 1.x                         | Production checkpointing                                               | `PostgresSaver` for production; `InMemorySaver` for development only          |
 
 ### Supporting
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| `zod` | 3.x | Tool input schema validation (TypeScript) | When using `betaZodTool` / `toolRunner` shortcut |
-| `langchain-anthropic` | latest | Anthropic model provider for LangGraph | Required when using LangGraph with Claude (`ChatAnthropic`) |
-| `uvicorn` | 0.30+ | ASGI server for FastAPI | FastAPI production server |
+
+| Library               | Version | Purpose                                   | When to Use                                                 |
+| --------------------- | ------- | ----------------------------------------- | ----------------------------------------------------------- |
+| `zod`                 | 3.x     | Tool input schema validation (TypeScript) | When using `betaZodTool` / `toolRunner` shortcut            |
+| `langchain-anthropic` | latest  | Anthropic model provider for LangGraph    | Required when using LangGraph with Claude (`ChatAnthropic`) |
+| `uvicorn`             | 0.30+   | ASGI server for FastAPI                   | FastAPI production server                                   |
 
 ### Alternatives Considered
-| Instead of | Could Use | Tradeoff |
-|------------|-----------|----------|
-| Manual loop | `tool_runner()` / `betaZodTool` | High-level helper eliminates boilerplate but hides the guardrail logic — bad for teaching |
-| LangGraph | LangChain agents | LangGraph is the graph-first approach; LangChain agents are deprecated in favour of LangGraph |
-| FastAPI SSE | Next.js API route + AI SDK `streamText` | All-Next.js approach is simpler if not using Python backend; FastAPI is locked by CONTEXT.md |
-| Vercel AI SDK | Raw `fetch` + SSE | AI SDK v6 `useChat` handles reconnection, message state, and part rendering — worth the dependency |
+
+| Instead of    | Could Use                               | Tradeoff                                                                                           |
+| ------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Manual loop   | `tool_runner()` / `betaZodTool`         | High-level helper eliminates boilerplate but hides the guardrail logic — bad for teaching          |
+| LangGraph     | LangChain agents                        | LangGraph is the graph-first approach; LangChain agents are deprecated in favour of LangGraph      |
+| FastAPI SSE   | Next.js API route + AI SDK `streamText` | All-Next.js approach is simpler if not using Python backend; FastAPI is locked by CONTEXT.md       |
+| Vercel AI SDK | Raw `fetch` + SSE                       | AI SDK v6 `useChat` handles reconnection, message state, and part rendering — worth the dependency |
 
 **Installation:**
+
 ```bash
 # TypeScript (Next.js client)
 npm install ai @ai-sdk/anthropic @ai-sdk/react @anthropic-ai/sdk
@@ -108,6 +115,7 @@ pip install anthropic fastapi uvicorn langgraph langchain-anthropic langgraph-ch
 ## Architecture Patterns
 
 ### Recommended Project Structure (for SKILL.md examples)
+
 ```
 agent-quickstart/
 ├── agent.ts              # Quick Start — TypeScript tool-using agent
@@ -128,69 +136,78 @@ agent-quickstart/
 **When to use:** Always for the teaching example. Makes guardrails explicit and auditable.
 
 **TypeScript:**
+
 ```typescript
 // Source: Context7 /anthropics/anthropic-sdk-typescript + official docs
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from "@anthropic-ai/sdk";
 
-const MAX_TURNS = 10;               // REQUIRED: hard limit on agent iterations
-const MAX_TOKENS_PER_RUN = 4096;    // REQUIRED: caps per-call output tokens
+const MAX_TURNS = 10; // REQUIRED: hard limit on agent iterations
+const MAX_TOKENS_PER_RUN = 4096; // REQUIRED: caps per-call output tokens
 
 const client = new Anthropic();
 
 const tools: Anthropic.Tool[] = [
   {
-    name: 'fetch_url',
-    description: 'Fetch the content of a URL and return the text',
+    name: "fetch_url",
+    description: "Fetch the content of a URL and return the text",
     input_schema: {
-      type: 'object',
+      type: "object",
       properties: {
-        url: { type: 'string', description: 'The URL to fetch' },
+        url: { type: "string", description: "The URL to fetch" },
       },
-      required: ['url'],
+      required: ["url"],
     },
   },
 ];
 
 async function runAgent(userMessage: string): Promise<string> {
   const messages: Anthropic.MessageParam[] = [
-    { role: 'user', content: userMessage },
+    { role: "user", content: userMessage },
   ];
 
   for (let turn = 0; turn < MAX_TURNS; turn++) {
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: "claude-sonnet-4-6",
       max_tokens: MAX_TOKENS_PER_RUN,
       tools,
       messages,
     });
 
-    if (response.stop_reason === 'end_turn') {
-      const textBlock = response.content.find((b) => b.type === 'text');
-      return textBlock?.text ?? '';
+    if (response.stop_reason === "end_turn") {
+      const textBlock = response.content.find((b) => b.type === "text");
+      return textBlock?.text ?? "";
     }
 
-    if (response.stop_reason === 'tool_use') {
-      messages.push({ role: 'assistant', content: response.content });
+    if (response.stop_reason === "tool_use") {
+      messages.push({ role: "assistant", content: response.content });
 
       const toolResults: Anthropic.ToolResultBlockParam[] = await Promise.all(
         response.content
-          .filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use')
+          .filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use")
           .map(async (toolUse) => ({
-            type: 'tool_result' as const,
+            type: "tool_result" as const,
             tool_use_id: toolUse.id,
-            content: await executeTool(toolUse.name, toolUse.input as { url: string }),
-          }))
+            content: await executeTool(
+              toolUse.name,
+              toolUse.input as { url: string },
+            ),
+          })),
       );
 
-      messages.push({ role: 'user', content: toolResults });
+      messages.push({ role: "user", content: toolResults });
     }
   }
 
-  throw new Error(`Agent exceeded MAX_TURNS (${MAX_TURNS}). Aborting to prevent runaway costs.`);
+  throw new Error(
+    `Agent exceeded MAX_TURNS (${MAX_TURNS}). Aborting to prevent runaway costs.`,
+  );
 }
 
-async function executeTool(name: string, input: { url: string }): Promise<string> {
-  if (name === 'fetch_url') {
+async function executeTool(
+  name: string,
+  input: { url: string },
+): Promise<string> {
+  if (name === "fetch_url") {
     const res = await fetch(input.url);
     const text = await res.text();
     return text.slice(0, 2000); // truncate to avoid context bloat
@@ -200,6 +217,7 @@ async function executeTool(name: string, input: { url: string }): Promise<string
 ```
 
 **Python:**
+
 ```python
 # Source: Context7 /anthropics/anthropic-sdk-python + official docs
 import anthropic
@@ -268,6 +286,7 @@ def run_agent(user_message: str) -> str:
 **When to use:** Python backend + Next.js frontend architecture.
 
 **Server (Python FastAPI):**
+
 ```python
 # Source: Anthropic official streaming docs + FastAPI async generator pattern
 from fastapi import FastAPI
@@ -305,6 +324,7 @@ async def chat(request: dict):
 ```
 
 **Client (Next.js + Vercel AI SDK v6):**
+
 ```typescript
 // Source: Context7 /vercel/ai — useChat hook pattern (AI SDK v6)
 'use client';
@@ -347,10 +367,11 @@ export default function AgentChat() {
 ```
 
 **Next.js API route (proxy to FastAPI):**
+
 ```typescript
 // app/api/chat/route.ts — Source: AI SDK v6 streamText pattern
-import { streamText, convertToModelMessages, UIMessage } from 'ai';
-import { createAnthropic } from '@ai-sdk/anthropic';
+import { streamText, convertToModelMessages, UIMessage } from "ai";
+import { createAnthropic } from "@ai-sdk/anthropic";
 
 const anthropic = createAnthropic();
 export const maxDuration = 30;
@@ -359,7 +380,7 @@ export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
   const result = streamText({
-    model: anthropic('claude-sonnet-4-6'),
+    model: anthropic("claude-sonnet-4-6"),
     messages: await convertToModelMessages(messages),
   });
 
@@ -376,6 +397,7 @@ export async function POST(req: Request) {
 **When to use:** Multi-step workflows that exceed a single context window, require parallel execution, or need resumability after server restart.
 
 **Python:**
+
 ```python
 # Source: Context7 /langchain-ai/langgraph — LangGraph 1.x (stable since October 2025)
 from langchain_anthropic import ChatAnthropic
@@ -430,13 +452,13 @@ result = agent.invoke(
 
 ## Don't Hand-Roll
 
-| Problem | Don't Build | Use Instead | Why |
-|---------|-------------|-------------|-----|
-| Automatic tool execution loop | Custom `while True` dispatcher | `client.beta.messages.toolRunner()` (TS) / `client.beta.messages.tool_runner()` (Py) | SDK handles tool dispatch, message accumulation, and loop termination — use after teaching the manual pattern |
-| ReAct agent graph | Custom `StateGraph` with tool router | `create_react_agent` from `langgraph.prebuilt` | LangGraph 1.x prebuilt handles the ReAct loop, tool calling, and streaming natively |
-| SSE serialization | Manual `f"data: {text}\n\n"` for everything | Anthropic SDK `client.messages.stream()` context manager | SDK handles `content_block_delta` event types, partial JSON accumulation for tool inputs, ping events |
-| Checkpoint serialization | Custom DB schema for agent state | `PostgresSaver` from `langgraph-checkpoint-postgres` | Handles state graph snapshots, thread IDs, and time-travel debugging |
-| Token counting for context budget | Character-count heuristics | `response.usage.input_tokens + response.usage.output_tokens` | Anthropic API returns exact token counts in every response — no estimation needed |
+| Problem                           | Don't Build                                 | Use Instead                                                                          | Why                                                                                                           |
+| --------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| Automatic tool execution loop     | Custom `while True` dispatcher              | `client.beta.messages.toolRunner()` (TS) / `client.beta.messages.tool_runner()` (Py) | SDK handles tool dispatch, message accumulation, and loop termination — use after teaching the manual pattern |
+| ReAct agent graph                 | Custom `StateGraph` with tool router        | `create_react_agent` from `langgraph.prebuilt`                                       | LangGraph 1.x prebuilt handles the ReAct loop, tool calling, and streaming natively                           |
+| SSE serialization                 | Manual `f"data: {text}\n\n"` for everything | Anthropic SDK `client.messages.stream()` context manager                             | SDK handles `content_block_delta` event types, partial JSON accumulation for tool inputs, ping events         |
+| Checkpoint serialization          | Custom DB schema for agent state            | `PostgresSaver` from `langgraph-checkpoint-postgres`                                 | Handles state graph snapshots, thread IDs, and time-travel debugging                                          |
+| Token counting for context budget | Character-count heuristics                  | `response.usage.input_tokens + response.usage.output_tokens`                         | Anthropic API returns exact token counts in every response — no estimation needed                             |
 
 **Key insight:** The Anthropic tool-use protocol has two layers: the raw API (check `stop_reason`, parse `tool_use` blocks, return `tool_result`) and SDK helpers (`tool_runner`). Teach the raw API first so guardrails are explicit, then mention the shortcut.
 
@@ -451,11 +473,13 @@ result = agent.invoke(
 **Why it happens:** Developers test with small prompts that terminate in 1–2 turns. The loop never runs long in dev, so no one adds a guard.
 
 **Warning signs:**
+
 - API cost spikes on dashboards with no corresponding feature launch
 - Agent "spinning" — same or similar tool calls repeated across turns
 - Response to simple queries takes many seconds / minutes
 
 **Anti-pattern:**
+
 ```python
 # BAD: no termination guard
 while True:
@@ -466,6 +490,7 @@ while True:
 ```
 
 **Fix:**
+
 ```python
 # GOOD: hard named constant, throws on breach
 MAX_TURNS = 10
@@ -485,18 +510,21 @@ raise RuntimeError(f"Exceeded MAX_TURNS ({MAX_TURNS}). Check tool logic for infi
 **Why it happens:** Multi-agent systems are prototyped with string handoffs because it's easy. When the output format changes (even a field rename), downstream agents break without raising an exception.
 
 **Warning signs:**
+
 - Sub-agent returns answers that reference fields not in the original task
 - Different runs of the same pipeline produce structurally different outputs
 - Adding a new orchestrator output breaks one sub-agent but not others
 
 **Anti-pattern:**
+
 ```typescript
 // BAD: untyped string handoff
-const result = await orchestratorAgent(task);  // returns string
-const subResult = await subAgent(result);      // what schema does subAgent expect?
+const result = await orchestratorAgent(task); // returns string
+const subResult = await subAgent(result); // what schema does subAgent expect?
 ```
 
 **Fix:**
+
 ```typescript
 // GOOD: typed contract at the handoff boundary
 interface SearchHandoff {
@@ -507,14 +535,14 @@ interface SearchHandoff {
 
 function validateHandoff(raw: unknown): SearchHandoff {
   // Use zod or manual validation
-  if (typeof (raw as SearchHandoff).query !== 'string') {
-    throw new Error('Invalid handoff: missing query field');
+  if (typeof (raw as SearchHandoff).query !== "string") {
+    throw new Error("Invalid handoff: missing query field");
   }
   return raw as SearchHandoff;
 }
 
 const rawHandoff = await orchestratorAgent(task);
-const handoff = validateHandoff(JSON.parse(rawHandoff));  // throws on bad schema
+const handoff = validateHandoff(JSON.parse(rawHandoff)); // throws on bad schema
 const subResult = await subAgent(handoff);
 ```
 
@@ -525,11 +553,13 @@ const subResult = await subAgent(handoff);
 **Why it happens:** Developers treat agent accuracy as an additive property ("5 agents, each good at their task"). It's multiplicative. Errors compound.
 
 **Warning signs:**
+
 - Final output quality is worse than a single-agent approach on the same task
 - Early-stage agent errors appear in final outputs with greater confidence
 - Removing an agent from the pipeline improves output quality
 
 **Anti-pattern:**
+
 ```python
 # BAD: no output validation between agents
 result_1 = agent_1(user_input)    # 90% reliable
@@ -540,6 +570,7 @@ final    = agent_5(result_4)      # 59% — worse than single agent
 ```
 
 **Fix:**
+
 ```python
 # GOOD: validate at each stage; abort early if confidence drops
 result_1 = agent_1(user_input)
@@ -576,22 +607,25 @@ print(response.content[0].text)
 
 ```typescript
 // Source: Anthropic official docs
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic();
 
 const response = await client.messages.create({
-  model: 'claude-sonnet-4-6',
+  model: "claude-sonnet-4-6",
   max_tokens: 1024,
-  messages: [{ role: 'user', content: 'What is the capital of France?' }],
+  messages: [{ role: "user", content: "What is the capital of France?" }],
 });
 
-console.log(response.content[0].type === 'text' ? response.content[0].text : '');
+console.log(
+  response.content[0].type === "text" ? response.content[0].text : "",
+);
 ```
 
 ### SSE Event Flow (for streaming section reference)
 
 From official Anthropic docs, a streamed response produces events in this order:
+
 1. `message_start` — message object with empty content
 2. `content_block_start` — new content block begins
 3. `content_block_delta` (`text_delta` or `input_json_delta` for tools)
@@ -606,17 +640,17 @@ For tool use: `stop_reason` in `message_delta` will be `"tool_use"`. The `input_
 ```typescript
 // Source: Context7 /vercel/ai — AI SDK v6 confirmed current (6.0.97, Feb 2026)
 // app/api/chat/route.ts
-import { streamText, convertToModelMessages, UIMessage } from 'ai';
-import { createAnthropic } from '@ai-sdk/anthropic';
+import { streamText, convertToModelMessages, UIMessage } from "ai";
+import { createAnthropic } from "@ai-sdk/anthropic";
 
-const anthropic = createAnthropic();  // reads ANTHROPIC_API_KEY from env
+const anthropic = createAnthropic(); // reads ANTHROPIC_API_KEY from env
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
   const result = streamText({
-    model: anthropic('claude-sonnet-4-6'),
+    model: anthropic("claude-sonnet-4-6"),
     messages: await convertToModelMessages(messages),
   });
 
@@ -702,15 +736,16 @@ def recall_episodes(db, query: str, top_k: int = 5) -> list[dict]:
 
 ## State of the Art
 
-| Old Approach | Current Approach | When Changed | Impact |
-|--------------|------------------|--------------|--------|
-| LangGraph 0.x (prebuilt unstable) | LangGraph 1.x (stable, production-ready) | October 2025 | Zero breaking changes; `create_react_agent` confirmed stable; `PostgresSaver` is the production checkpointing recommendation |
-| Vercel AI SDK v4/v5 | Vercel AI SDK v6 (current: 6.0.97) | 2025 | New `ToolLoopAgent`, human-in-the-loop tool approval, `useChat` with `parts` API, `convertToModelMessages` |
-| `new Anthropic()` (AI SDK) | `createAnthropic()` from `@ai-sdk/anthropic` | AI SDK v4.0 | Breaking change already shipped — use `createAnthropic` |
-| LangChain agents (deprecated) | LangGraph `create_react_agent` | 2024–2025 | LangChain agents are superseded; LangGraph is the current recommendation |
-| MCP (niche/beta) | MCP (Linux Foundation / AAIF, 97M+ monthly downloads) | December 2025 | MCP is now mainstream; ChatGPT, Claude, Cursor all support it |
+| Old Approach                      | Current Approach                                      | When Changed  | Impact                                                                                                                       |
+| --------------------------------- | ----------------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| LangGraph 0.x (prebuilt unstable) | LangGraph 1.x (stable, production-ready)              | October 2025  | Zero breaking changes; `create_react_agent` confirmed stable; `PostgresSaver` is the production checkpointing recommendation |
+| Vercel AI SDK v4/v5               | Vercel AI SDK v6 (current: 6.0.97)                    | 2025          | New `ToolLoopAgent`, human-in-the-loop tool approval, `useChat` with `parts` API, `convertToModelMessages`                   |
+| `new Anthropic()` (AI SDK)        | `createAnthropic()` from `@ai-sdk/anthropic`          | AI SDK v4.0   | Breaking change already shipped — use `createAnthropic`                                                                      |
+| LangChain agents (deprecated)     | LangGraph `create_react_agent`                        | 2024–2025     | LangChain agents are superseded; LangGraph is the current recommendation                                                     |
+| MCP (niche/beta)                  | MCP (Linux Foundation / AAIF, 97M+ monthly downloads) | December 2025 | MCP is now mainstream; ChatGPT, Claude, Cursor all support it                                                                |
 
 **Deprecated/outdated:**
+
 - LangChain `initialize_agent()` / `AgentExecutor`: Replaced by LangGraph `create_react_agent`. Do not teach.
 - Vercel AI SDK `experimental_StreamData`: Replaced by `toUIMessageStreamResponse()` and parts API in v5+.
 - `new Anthropic()` constructor in `@ai-sdk/anthropic`: Replaced by `createAnthropic()`.
@@ -739,6 +774,7 @@ def recall_episodes(db, query: str, top_k: int = 5) -> list[dict]:
 ## Sources
 
 ### Primary (HIGH confidence)
+
 - Context7 `/anthropics/anthropic-sdk-typescript` — tool use loop, toolRunner, stop_reason handling
 - Context7 `/anthropics/anthropic-sdk-python` — Python tool use, streaming, @beta_tool decorator
 - Context7 `/langchain-ai/langgraph` (version 1.0.3) — StateGraph, create_react_agent, InMemorySaver, PostgresSaver, human-in-the-loop interrupt
@@ -746,6 +782,7 @@ def recall_episodes(db, query: str, top_k: int = 5) -> list[dict]:
 - [Anthropic official streaming docs](https://platform.claude.com/docs/en/build-with-claude/streaming) — SSE event types, tool_use streaming, message_delta stop_reason
 
 ### Secondary (MEDIUM confidence)
+
 - [LangGraph 1.0 release blog — LangChain](https://blog.langchain.com/langchain-langgraph-1dot0/) — confirmed October 2025 stable release, zero breaking changes
 - [Medium: LangGraph 1.0 summary](https://medium.com/@romerorico.hugo/langgraph-1-0-released-no-breaking-changes-all-the-hard-won-lessons-8939d500ca7c) — confirms backward compatibility and stability guarantees
 - [Vercel AI SDK 6 blog](https://vercel.com/blog/ai-sdk-6) — ToolLoopAgent, human-in-the-loop, current version confirmed 6.0.97
@@ -753,6 +790,7 @@ def recall_episodes(db, query: str, top_k: int = 5) -> list[dict]:
 - [MCP spec (Nov 2025)](https://modelcontextprotocol.io/specification/2025-11-25) — current spec version, Linux Foundation governance
 
 ### Tertiary (LOW confidence)
+
 - WebSearch result: "FastAPI + Anthropic SSE streaming" — pattern confirmed as viable; specific implementation verified via official Anthropic streaming docs and FastAPI docs
 
 ---
@@ -760,6 +798,7 @@ def recall_episodes(db, query: str, top_k: int = 5) -> list[dict]:
 ## Metadata
 
 **Confidence breakdown:**
+
 - Standard stack: HIGH — verified via Context7 (Anthropic SDK, LangGraph, Vercel AI SDK), official docs
 - Architecture: HIGH — manual tool-use loop is canonical and stable; LangGraph 1.x confirmed stable
 - Pitfalls: HIGH — all 3 required pitfalls verified against known failure modes; error multiplication is well-documented

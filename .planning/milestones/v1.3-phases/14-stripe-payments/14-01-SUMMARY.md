@@ -2,7 +2,8 @@
 phase: 14-stripe-payments
 plan: "01"
 subsystem: payments
-tags: [stripe, typescript, nextjs, postgres, webhooks, subscriptions, checkout, pci]
+tags:
+  [stripe, typescript, nextjs, postgres, webhooks, subscriptions, checkout, pci]
 
 # Dependency graph
 requires: []
@@ -79,17 +80,17 @@ completed: 2026-02-24
 
 All automated checks passed:
 
-| Check | Result |
-|---|---|
-| Line count | PASS: 363 lines (350-500 range) |
-| `await req.text()` | 3 occurrences |
-| `ON CONFLICT (stripe_event_id) DO NOTHING` | 2 occurrences |
-| `invoice.payment_failed` | 3 occurrences |
-| `billingPortal.sessions.create` | 1 occurrence |
-| `trial_period_days` | 2 occurrences |
-| PCI | 2 occurrences |
-| `2026-01-28` | 2 occurrences |
-| `Quick Start` | 1 occurrence |
+| Check                                      | Result                          |
+| ------------------------------------------ | ------------------------------- |
+| Line count                                 | PASS: 363 lines (350-500 range) |
+| `await req.text()`                         | 3 occurrences                   |
+| `ON CONFLICT (stripe_event_id) DO NOTHING` | 2 occurrences                   |
+| `invoice.payment_failed`                   | 3 occurrences                   |
+| `billingPortal.sessions.create`            | 1 occurrence                    |
+| `trial_period_days`                        | 2 occurrences                   |
+| PCI                                        | 2 occurrences                   |
+| `2026-01-28`                               | 2 occurrences                   |
+| `Quick Start`                              | 1 occurrence                    |
 
 ## Files Created/Modified
 
@@ -120,5 +121,6 @@ None - no external service configuration required (skill documentation only).
 - No blockers
 
 ---
-*Phase: 14-stripe-payments*
-*Completed: 2026-02-24*
+
+_Phase: 14-stripe-payments_
+_Completed: 2026-02-24_

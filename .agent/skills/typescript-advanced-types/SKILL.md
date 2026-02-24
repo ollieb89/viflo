@@ -79,6 +79,7 @@ const merged = merge({ name: "John" }, { age: 30 });
 See the detailed guide: [Conditional Types](./references/guides/conditional-types.md)
 
 Quick example:
+
 ```typescript
 type IsString<T> = T extends string ? true : false;
 type A = IsString<string>; // true
@@ -91,6 +92,7 @@ type A = IsString<string>; // true
 See the detailed guide: [Mapped Types](./references/guides/mapped-types.md)
 
 Quick example:
+
 ```typescript
 type Readonly<T> = {
   readonly [P in keyof T]: T[P];
@@ -104,6 +106,7 @@ type Readonly<T> = {
 See the detailed guide: [Template Literal Types](./references/guides/template-literal-types.md)
 
 Quick example:
+
 ```typescript
 type EventName = "click" | "focus" | "blur";
 type EventHandler = `on${Capitalize<EventName>}`;
@@ -147,14 +150,14 @@ type PageInfo = Record<"home" | "about", { title: string }>;
 
 See detailed examples and challenges: [Type Challenges](./references/examples/type-challenges.md)
 
-| Pattern | Description |
-|---------|-------------|
-| Type-Safe Event Emitter | Generic event system with typed payloads |
-| Type-Safe API Client | HTTP client with endpoint type inference |
-| Builder Pattern | Fluent API with compile-time completeness checking |
-| Deep Readonly/Partial | Recursive type transformations |
-| Form Validation | Type-safe validation rules and errors |
-| Discriminated Unions | Type narrowing with tagged unions |
+| Pattern                 | Description                                        |
+| ----------------------- | -------------------------------------------------- |
+| Type-Safe Event Emitter | Generic event system with typed payloads           |
+| Type-Safe API Client    | HTTP client with endpoint type inference           |
+| Builder Pattern         | Fluent API with compile-time completeness checking |
+| Deep Readonly/Partial   | Recursive type transformations                     |
+| Form Validation         | Type-safe validation rules and errors              |
+| Discriminated Unions    | Type narrowing with tagged unions                  |
 
 ## Type Inference Techniques
 

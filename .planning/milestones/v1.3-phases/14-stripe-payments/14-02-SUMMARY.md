@@ -2,7 +2,17 @@
 phase: 14-stripe-payments
 plan: "02"
 subsystem: payments
-tags: [stripe, typescript, nextjs, postgres, webhooks, subscriptions, billing-portal, trials]
+tags:
+  [
+    stripe,
+    typescript,
+    nextjs,
+    postgres,
+    webhooks,
+    subscriptions,
+    billing-portal,
+    trials,
+  ]
 
 # Dependency graph
 requires:
@@ -76,19 +86,19 @@ Each task was committed atomically:
 
 All automated checks passed:
 
-| Check | File | Result |
-|---|---|---|
-| `2026-01-28` | webhook-patterns.md | 2 occurrences |
-| `await req.text()` | webhook-patterns.md | 1 occurrence |
-| `ON CONFLICT (stripe_event_id) DO NOTHING` | webhook-patterns.md | 2 occurrences |
-| `await headers()` | webhook-patterns.md | 1 occurrence |
-| `2025-01-27` (stale) | webhook-patterns.md | 0 (PASS) |
-| `2026-01-28` | subscription-patterns.md | 1 occurrence |
-| `invoice.payment_failed` | subscription-patterns.md | 2 occurrences |
-| `billingPortal.sessions.create` | subscription-patterns.md | 1 occurrence |
-| `trial_period_days` | subscription-patterns.md | 2 occurrences |
-| `subscription_status` | subscription-patterns.md | 11 occurrences |
-| `2025-01-27` (stale) | subscription-patterns.md | 0 (PASS) |
+| Check                                      | File                     | Result         |
+| ------------------------------------------ | ------------------------ | -------------- |
+| `2026-01-28`                               | webhook-patterns.md      | 2 occurrences  |
+| `await req.text()`                         | webhook-patterns.md      | 1 occurrence   |
+| `ON CONFLICT (stripe_event_id) DO NOTHING` | webhook-patterns.md      | 2 occurrences  |
+| `await headers()`                          | webhook-patterns.md      | 1 occurrence   |
+| `2025-01-27` (stale)                       | webhook-patterns.md      | 0 (PASS)       |
+| `2026-01-28`                               | subscription-patterns.md | 1 occurrence   |
+| `invoice.payment_failed`                   | subscription-patterns.md | 2 occurrences  |
+| `billingPortal.sessions.create`            | subscription-patterns.md | 1 occurrence   |
+| `trial_period_days`                        | subscription-patterns.md | 2 occurrences  |
+| `subscription_status`                      | subscription-patterns.md | 11 occurrences |
+| `2025-01-27` (stale)                       | subscription-patterns.md | 0 (PASS)       |
 
 ## Files Created/Modified
 
@@ -119,5 +129,6 @@ None - no external service configuration required (skill documentation only).
 - No blockers
 
 ---
-*Phase: 14-stripe-payments*
-*Completed: 2026-02-24*
+
+_Phase: 14-stripe-payments_
+_Completed: 2026-02-24_

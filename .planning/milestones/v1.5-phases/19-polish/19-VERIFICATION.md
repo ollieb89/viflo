@@ -17,43 +17,43 @@ re_verification: false
 
 ### Observable Truths
 
-| #   | Truth                                                                                                                 | Status     | Evidence                                                                                                     |
-| --- | --------------------------------------------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------ |
-| 1   | `viflo init --dry-run --minimal /path` prints every planned file action with resolved absolute path, exits 0, no files written | ✓ VERIFIED | `runDryRun()` in `bin/viflo.cjs` lines 69–92; smoke test confirmed empty dir after run; 2 tests in suite    |
-| 2   | `viflo init --dry-run --full /path` prints every planned file action with resolved absolute path, exits 0, no files written    | ✓ VERIFIED | Same `runDryRun(targetDir, true)` path covers scaffold files; confirmed by 2 integration tests               |
+| #   | Truth                                                                                                                          | Status     | Evidence                                                                                                      |
+| --- | ------------------------------------------------------------------------------------------------------------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------- |
+| 1   | `viflo init --dry-run --minimal /path` prints every planned file action with resolved absolute path, exits 0, no files written | ✓ VERIFIED | `runDryRun()` in `bin/viflo.cjs` lines 69–92; smoke test confirmed empty dir after run; 2 tests in suite      |
+| 2   | `viflo init --dry-run --full /path` prints every planned file action with resolved absolute path, exits 0, no files written    | ✓ VERIFIED | Same `runDryRun(targetDir, true)` path covers scaffold files; confirmed by 2 integration tests                |
 | 3   | Every real-run file action prints a labelled result (`created`, `updated`, `skipped`, or `merged`) with resolved absolute path | ✓ VERIFIED | `printResult()` called for all writers in both `--minimal` (lines 127–128) and `--full` (lines 156–159) paths |
-| 4   | The `[viflo]` internal skip log in `writeIfChanged` is removed — no internal log lines appear in output              | ✓ VERIFIED | No `console.log('[viflo]'` in `writers.cjs`; grep confirms zero matches                                      |
-| 5   | Integration tests verify `--dry-run` writes no files and output contains `[dry-run]` with absolute paths             | ✓ VERIFIED | 5 INIT-06 tests in `viflo.test.js` lines 221–263; all pass                                                  |
-| 6   | Integration tests verify all four canonical labels (`created`, `skipped`, `merged`) appear with absolute paths       | ✓ VERIFIED | 5 INIT-07 tests in `viflo.test.js` lines 269–306; all pass                                                  |
-| 7   | `package.json` has `"bin": { "viflo": "bin/viflo.cjs" }` field                                                      | ✓ VERIFIED | `package.json` line 11–13 confirmed; key link pattern `"viflo": "bin/viflo.cjs"` matches                    |
+| 4   | The `[viflo]` internal skip log in `writeIfChanged` is removed — no internal log lines appear in output                        | ✓ VERIFIED | No `console.log('[viflo]'` in `writers.cjs`; grep confirms zero matches                                       |
+| 5   | Integration tests verify `--dry-run` writes no files and output contains `[dry-run]` with absolute paths                       | ✓ VERIFIED | 5 INIT-06 tests in `viflo.test.js` lines 221–263; all pass                                                    |
+| 6   | Integration tests verify all four canonical labels (`created`, `skipped`, `merged`) appear with absolute paths                 | ✓ VERIFIED | 5 INIT-07 tests in `viflo.test.js` lines 269–306; all pass                                                    |
+| 7   | `package.json` has `"bin": { "viflo": "bin/viflo.cjs" }` field                                                                 | ✓ VERIFIED | `package.json` line 11–13 confirmed; key link pattern `"viflo": "bin/viflo.cjs"` matches                      |
 
 **Score:** 7/7 truths verified
 
 ### Required Artifacts
 
-| Artifact                                    | Expected                                                                          | Status     | Details                                                                        |
-| ------------------------------------------- | --------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------ |
-| `bin/viflo.cjs`                             | `--dry-run` flag handling, unified labelled output with absolute paths            | ✓ VERIFIED | 183 lines (min 80 required); `hasDryRunFlag`, `runDryRun()`, `printResult()` all present |
-| `bin/lib/writers.cjs`                       | Writer functions return `{ written, reason, filePath }`, internal log removed     | ✓ VERIFIED | 318 lines; all writers return `filePath`; no `console.log('[viflo]')` present |
-| `bin/lib/__tests__/viflo.test.js`           | Integration tests for `--dry-run`, labelled output, absolute path assertions      | ✓ VERIFIED | 307 lines (min 230 required); 10 new tests in `describe('viflo init polish...')` block |
-| `package.json`                              | `"bin"` field present mapping `viflo` to `bin/viflo.cjs`                         | ✓ VERIFIED | Contains `"bin": { "viflo": "bin/viflo.cjs" }`                                |
+| Artifact                          | Expected                                                                      | Status     | Details                                                                                  |
+| --------------------------------- | ----------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------- |
+| `bin/viflo.cjs`                   | `--dry-run` flag handling, unified labelled output with absolute paths        | ✓ VERIFIED | 183 lines (min 80 required); `hasDryRunFlag`, `runDryRun()`, `printResult()` all present |
+| `bin/lib/writers.cjs`             | Writer functions return `{ written, reason, filePath }`, internal log removed | ✓ VERIFIED | 318 lines; all writers return `filePath`; no `console.log('[viflo]')` present            |
+| `bin/lib/__tests__/viflo.test.js` | Integration tests for `--dry-run`, labelled output, absolute path assertions  | ✓ VERIFIED | 307 lines (min 230 required); 10 new tests in `describe('viflo init polish...')` block   |
+| `package.json`                    | `"bin"` field present mapping `viflo` to `bin/viflo.cjs`                      | ✓ VERIFIED | Contains `"bin": { "viflo": "bin/viflo.cjs" }`                                           |
 
 ### Key Link Verification
 
-| From                              | To                    | Via                                          | Status     | Details                                                                                         |
-| --------------------------------- | --------------------- | -------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
-| `bin/viflo.cjs`                   | `bin/lib/writers.cjs` | writer results used via `result.filePath`    | ✓ WIRED    | `claudeResult.filePath`, `settingsResult.filePath`, `r.filePath` used at lines 127–128, 156–159 |
-| `bin/viflo.cjs`                   | stdout                | `printResult()` helper with padded labels    | ✓ WIRED    | Smoke test confirms `  created  /abs/path` format; pattern `created\s+/` confirmed              |
-| `bin/lib/__tests__/viflo.test.js` | `bin/viflo.cjs`       | `spawnSync` child process invocation with `--dry-run` | ✓ WIRED | 5 `spawnSync` calls with `--dry-run` at lines 222, 231, 239, 248, 258                         |
-| `package.json`                    | `bin/viflo.cjs`       | `"bin"` field                                | ✓ WIRED    | `"viflo": "bin/viflo.cjs"` at line 12                                                          |
+| From                              | To                    | Via                                                   | Status  | Details                                                                                         |
+| --------------------------------- | --------------------- | ----------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `bin/viflo.cjs`                   | `bin/lib/writers.cjs` | writer results used via `result.filePath`             | ✓ WIRED | `claudeResult.filePath`, `settingsResult.filePath`, `r.filePath` used at lines 127–128, 156–159 |
+| `bin/viflo.cjs`                   | stdout                | `printResult()` helper with padded labels             | ✓ WIRED | Smoke test confirms `  created  /abs/path` format; pattern `created\s+/` confirmed              |
+| `bin/lib/__tests__/viflo.test.js` | `bin/viflo.cjs`       | `spawnSync` child process invocation with `--dry-run` | ✓ WIRED | 5 `spawnSync` calls with `--dry-run` at lines 222, 231, 239, 248, 258                           |
+| `package.json`                    | `bin/viflo.cjs`       | `"bin"` field                                         | ✓ WIRED | `"viflo": "bin/viflo.cjs"` at line 12                                                           |
 
 ### Requirements Coverage
 
-| Requirement | Source Plans    | Description                                                                                                     | Status      | Evidence                                                                                    |
-| ----------- | --------------- | --------------------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------- |
-| INIT-06     | 19-01, 19-02    | `viflo init --dry-run` prints every planned file action with resolved absolute path — no files written          | ✓ SATISFIED | `runDryRun()` implementation; 5 integration tests; smoke test confirms empty dir after run  |
-| INIT-07     | 19-01, 19-02    | Every file action in a real run emits a labelled result with resolved absolute path on stdout                   | ✓ SATISFIED | `printResult()` helper; all 4 label values (`created`/`updated`/`skipped`/`merged`) in code; 5 tests |
-| INIT-08     | 19-02           | `package.json` has `"bin": { "viflo": "bin/viflo.cjs" }` — CLI invocable via `npx` or `pnpm exec viflo`        | ✓ SATISFIED | `package.json` lines 11–13 confirmed present                                                |
+| Requirement | Source Plans | Description                                                                                             | Status      | Evidence                                                                                             |
+| ----------- | ------------ | ------------------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| INIT-06     | 19-01, 19-02 | `viflo init --dry-run` prints every planned file action with resolved absolute path — no files written  | ✓ SATISFIED | `runDryRun()` implementation; 5 integration tests; smoke test confirms empty dir after run           |
+| INIT-07     | 19-01, 19-02 | Every file action in a real run emits a labelled result with resolved absolute path on stdout           | ✓ SATISFIED | `printResult()` helper; all 4 label values (`created`/`updated`/`skipped`/`merged`) in code; 5 tests |
+| INIT-08     | 19-02        | `package.json` has `"bin": { "viflo": "bin/viflo.cjs" }` — CLI invocable via `npx` or `pnpm exec viflo` | ✓ SATISFIED | `package.json` lines 11–13 confirmed present                                                         |
 
 All three requirement IDs from both plan frontmatters are accounted for. No orphaned requirements.
 

@@ -5,7 +5,8 @@ subsystem: skills
 tags: [content, skills, microservices, modularization]
 dependency_graph:
   requires: []
-  provides: [microservices-patterns/SKILL.md ≤500 lines, best-practices reference guide]
+  provides:
+    [microservices-patterns/SKILL.md ≤500 lines, best-practices reference guide]
   affects: [REQUIREMENTS.md CONTENT-01]
 tech_stack:
   added: []
@@ -32,10 +33,10 @@ Extracted Best Practices and Common Pitfalls from `microservices-patterns/SKILL.
 
 ## Tasks Completed
 
-| Task | Name | Commit | Files |
-|------|------|--------|-------|
-| 1 | Extract Best Practices and Common Pitfalls to reference guide | e22cc4b | `.agent/skills/microservices-patterns/references/guides/best-practices.md` |
-| 2 | Trim SKILL.md to ≤500 lines with link to reference guide | f35f8ac | `.agent/skills/microservices-patterns/SKILL.md` |
+| Task | Name                                                          | Commit  | Files                                                                      |
+| ---- | ------------------------------------------------------------- | ------- | -------------------------------------------------------------------------- |
+| 1    | Extract Best Practices and Common Pitfalls to reference guide | e22cc4b | `.agent/skills/microservices-patterns/references/guides/best-practices.md` |
+| 2    | Trim SKILL.md to ≤500 lines with link to reference guide      | f35f8ac | `.agent/skills/microservices-patterns/SKILL.md`                            |
 
 ## Verification Output
 
@@ -65,6 +66,7 @@ $ grep -n "references/guides/" .agent/skills/microservices-patterns/SKILL.md
 The following content was extracted from SKILL.md and preserved verbatim in `references/guides/best-practices.md`:
 
 **Best Practices (8 items):**
+
 1. Service Boundaries: Align with business capabilities
 2. Database Per Service: No shared databases
 3. API Contracts: Versioned, backward compatible
@@ -75,6 +77,7 @@ The following content was extracted from SKILL.md and preserved verbatim in `ref
 8. Health Checks: Liveness and readiness probes
 
 **Common Pitfalls (8 items):**
+
 - Distributed Monolith, Chatty Services, Shared Databases, No Circuit Breakers
 - Synchronous Everything, Premature Microservices, Ignoring Network Failures, No Compensation Logic
 
@@ -91,6 +94,7 @@ This plan closes CONTENT-01: all 12 modularized skills are now ≤500 lines.
 The plan estimated the two section replacements would bring the file to ~524 lines, but the actual result was 517 lines. The plan correctly anticipated this might happen and provided instructions to trim blank lines if still over 500.
 
 **Additional trimming applied (not in original plan estimate):**
+
 - Removed blank lines after bold headings in Core Concepts section (10 lines)
 - Removed redundant comment `# E-commerce example` in Pattern 1 code (2 lines)
 - Removed `# Usage` comment and `# Step implementations` inline comment (2 lines)

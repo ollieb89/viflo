@@ -112,16 +112,17 @@ test("successful login", async ({ page }) => {
 
 ## Framework Comparison
 
-| Feature | Playwright | Cypress |
-|---------|------------|---------|
-| **Browsers** | Chromium, Firefox, WebKit | Chromium, Firefox, WebKit (partial) |
-| **Speed** | Faster (parallel by default) | Fast (single-threaded) |
-| **API** | Async/await | Chainable commands |
-| **Mobile** | Device emulation built-in | Viewport only |
-| **Trace** | Built-in trace viewer | Screenshots/videos |
-| **Best For** | Large suites, cross-browser | Component testing, DX |
+| Feature      | Playwright                   | Cypress                             |
+| ------------ | ---------------------------- | ----------------------------------- |
+| **Browsers** | Chromium, Firefox, WebKit    | Chromium, Firefox, WebKit (partial) |
+| **Speed**    | Faster (parallel by default) | Fast (single-threaded)              |
+| **API**      | Async/await                  | Chainable commands                  |
+| **Mobile**   | Device emulation built-in    | Viewport only                       |
+| **Trace**    | Built-in trace viewer        | Screenshots/videos                  |
+| **Best For** | Large suites, cross-browser  | Component testing, DX               |
 
 **Detailed guides:**
+
 - [Playwright Setup and Patterns](./references/guides/playwright-setup.md)
 - [Cypress Setup and Patterns](./references/guides/cypress-setup.md)
 
@@ -195,9 +196,9 @@ Key configurations for reliable CI runs:
 ```typescript
 // playwright.config.ts
 export default defineConfig({
-  forbidOnly: !!process.env.CI,  // Fail on .only in CI
-  retries: process.env.CI ? 2 : 0,  // Retry in CI
-  workers: process.env.CI ? 1 : undefined,  // Limit workers in CI
+  forbidOnly: !!process.env.CI, // Fail on .only in CI
+  retries: process.env.CI ? 2 : 0, // Retry in CI
+  workers: process.env.CI ? 1 : undefined, // Limit workers in CI
   reporter: [["html"], ["junit", { outputFile: "results.xml" }]],
 });
 ```

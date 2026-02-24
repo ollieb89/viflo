@@ -11,7 +11,7 @@ requires:
 provides:
   - "Integration tests for INIT-06 (dry-run: no files written, [dry-run] prefixed output with absolute paths)"
   - "Integration tests for INIT-07 (labelled output: created/skipped/merged with absolute paths)"
-  - "package.json bin field: { \"viflo\": \"bin/viflo.cjs\" } — INIT-08 satisfied"
+  - 'package.json bin field: { "viflo": "bin/viflo.cjs" } — INIT-08 satisfied'
 affects: []
 
 # Tech tracking
@@ -97,5 +97,6 @@ None - no external service configuration required.
 - No blockers
 
 ---
-*Phase: 19-polish*
-*Completed: 2026-02-24*
+
+_Phase: 19-polish_
+_Completed: 2026-02-24_

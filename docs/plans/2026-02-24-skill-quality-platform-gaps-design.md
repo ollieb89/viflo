@@ -15,12 +15,12 @@ Two compounding issues limit Viflo's real-world value:
 
 The shallowness problem manifests in four failure modes:
 
-| Failure Mode | Description |
-|---|---|
-| **Abstraction Trap** | Principles without concrete code — "draw the rest of the owl" |
-| **Happy Path Bias** | Ignores race conditions, error states, and edge cases |
+| Failure Mode           | Description                                                      |
+| ---------------------- | ---------------------------------------------------------------- |
+| **Abstraction Trap**   | Principles without concrete code — "draw the rest of the owl"    |
+| **Happy Path Bias**    | Ignores race conditions, error states, and edge cases            |
 | **Analysis Paralysis** | Lists options without trade-off reasoning to choose between them |
-| **Technical Rot** | Correct patterns tied to deprecated APIs or old library versions |
+| **Technical Rot**      | Correct patterns tied to deprecated APIs or old library versions |
 
 ---
 
@@ -37,6 +37,7 @@ The shallowness problem manifests in four failure modes:
 **Deliverable 1: `skill-depth-standard` meta-skill**
 
 A new skill at `.agent/skills/skill-depth-standard/` containing:
+
 - Definitions of the four failure modes
 - A self-evaluation checklist agents can run against any skill
 - A Gap Report template for systematic audits
@@ -47,16 +48,17 @@ This becomes the system prompt for automated audits in v1.3.
 
 Four new mandatory sections added to the standard template:
 
-| Section | Purpose |
-|---|---|
-| `## Implementation Patterns` | Working code, not prose |
-| `## Failure Modes & Edge Cases` | What breaks, race conditions, null/edge inputs |
-| `## Decision Matrix` | When to use X vs Y with explicit trade-off reasoning |
-| `## Version Context` | Last verified library versions, known breaking changes |
+| Section                         | Purpose                                                |
+| ------------------------------- | ------------------------------------------------------ |
+| `## Implementation Patterns`    | Working code, not prose                                |
+| `## Failure Modes & Edge Cases` | What breaks, race conditions, null/edge inputs         |
+| `## Decision Matrix`            | When to use X vs Y with explicit trade-off reasoning   |
+| `## Version Context`            | Last verified library versions, known breaking changes |
 
 **Deliverable 3: Auth as the Reference Skill**
 
 The Auth skill (Clerk + Auth.js/NextAuth) is built first, explicitly to the new template. It serves as:
+
 - The stress-test for the meta-skill and template (complex domain: OAuth flows, session handling, edge cases)
 - The `SKILL.md` exemplar for contributors
 - The benchmark when the v1.3 audit runs
@@ -70,6 +72,7 @@ The remaining four v1.2 skills (Stripe, RAG, Agent Architecture, Prompt Engineer
 **New Skill 1: `multi-tenancy-billing`**
 
 Full lifecycle of SaaS org isolation and monetization:
+
 - Workspace/org data isolation patterns with decision matrix (row-level security vs. schema-per-tenant vs. database-per-tenant)
 - Seat-based and usage-metered billing with Stripe
 - Upgrade/downgrade flows with prorated amounts
@@ -80,13 +83,15 @@ Full lifecycle of SaaS org isolation and monetization:
 
 Two sub-domains packaged together (often solved simultaneously in real apps):
 
-*Real-time:*
+_Real-time:_
+
 - WebSocket lifecycle management
 - SSE as a simpler alternative (with decision matrix vs. WebSockets)
 - Presence and broadcast patterns
 - Reconnection handling
 
-*Background jobs:*
+_Background jobs:_
+
 - Queue selection guide: BullMQ (self-hosted) vs. Inngest/Trigger.dev (managed) — with trade-off matrix
 - Job retry strategies
 - Idempotency patterns
@@ -102,13 +107,13 @@ Two sub-domains packaged together (often solved simultaneously in real apps):
 
 ## Proposed Phase Sequence
 
-| Phase | Milestone | Action | Output |
-|---|---|---|---|
-| 1 | v1.2 | Create `skill-depth-standard` meta-skill | Rubric + audit template |
-| 2 | v1.2 | Update `SKILL.md` template | New mandatory sections |
-| 3 | v1.2 | Build Auth skill (reference) | Gold standard exemplar |
-| 4 | v1.2 | Build Stripe, RAG, Agent Arch, Prompt Eng | 4 deep skills |
-| 5 | v1.3 | AI audit → Gap Report | Prioritized deepening list |
-| 6 | v1.3 | Build `multi-tenancy-billing` skill | New platform skill |
-| 7 | v1.3 | Build `realtime-background-jobs` skill | New platform skill |
-| 8 | v1.3 | Deepen top 10 existing skills | Elevated library quality |
+| Phase | Milestone | Action                                    | Output                     |
+| ----- | --------- | ----------------------------------------- | -------------------------- |
+| 1     | v1.2      | Create `skill-depth-standard` meta-skill  | Rubric + audit template    |
+| 2     | v1.2      | Update `SKILL.md` template                | New mandatory sections     |
+| 3     | v1.2      | Build Auth skill (reference)              | Gold standard exemplar     |
+| 4     | v1.2      | Build Stripe, RAG, Agent Arch, Prompt Eng | 4 deep skills              |
+| 5     | v1.3      | AI audit → Gap Report                     | Prioritized deepening list |
+| 6     | v1.3      | Build `multi-tenancy-billing` skill       | New platform skill         |
+| 7     | v1.3      | Build `realtime-background-jobs` skill    | New platform skill         |
+| 8     | v1.3      | Deepen top 10 existing skills             | Elevated library quality   |

@@ -38,12 +38,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```typescript
 // middleware.ts — protect /dashboard and all sub-routes
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/webhooks(.*)',
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/webhooks(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -54,8 +54,8 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
   ],
 };
 ```
@@ -73,6 +73,7 @@ npm install @clerk/nextjs svix
 ```
 
 **Env vars** (from Clerk Dashboard -> API Keys):
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
 CLERK_SECRET_KEY=sk_...
@@ -82,6 +83,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 ```
 
 **Wrap layout with ClerkProvider:**
+
 ```typescript
 // app/layout.tsx
 import { ClerkProvider } from '@clerk/nextjs';
@@ -108,6 +110,7 @@ npm install better-auth
 > **Database adapter:** Uses raw `pg.Pool` in this quick-start (zero extra deps). If you use Prisma: `npm install @better-auth/prisma` and replace `Pool` with the Better Auth Prisma adapter.
 
 **Env vars:**
+
 ```bash
 DATABASE_URL=postgresql://...
 BETTER_AUTH_SECRET=                     # generate: openssl rand -base64 32
@@ -119,10 +122,11 @@ GOOGLE_CLIENT_SECRET=...
 ```
 
 **Core config:**
+
 ```typescript
 // lib/auth.ts
-import { betterAuth } from 'better-auth';
-import { Pool } from 'pg';
+import { betterAuth } from "better-auth";
+import { Pool } from "pg";
 
 export const auth = betterAuth({
   database: new Pool({ connectionString: process.env.DATABASE_URL }),
@@ -141,15 +145,17 @@ export const auth = betterAuth({
 ```
 
 **Route handler:**
+
 ```typescript
 // app/api/auth/[...all]/route.ts
-import { auth } from '@/lib/auth';
-import { toNextJsHandler } from 'better-auth/next-js';
+import { auth } from "@/lib/auth";
+import { toNextJsHandler } from "better-auth/next-js";
 
 export const { POST, GET } = toNextJsHandler(auth);
 ```
 
 **Run schema migration:**
+
 ```bash
 npx @better-auth/cli generate
 npx @better-auth/cli migrate
@@ -162,14 +168,15 @@ npx @better-auth/cli migrate
 ### Protected Routes (Side-by-Side)
 
 **Clerk:**
+
 ```typescript
 // middleware.ts
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/webhooks(.*)',
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/webhooks(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -180,8 +187,8 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
   ],
 };
 ```
@@ -197,21 +204,21 @@ Two approaches — choose based on your needs:
 
 ```typescript
 // middleware.ts — Approach A (recommended for most apps)
-import { NextRequest, NextResponse } from 'next/server';
-import { getSessionCookie } from 'better-auth/cookies';
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
-  if (!sessionCookie && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+  if (!sessionCookie && request.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
   ],
 };
 ```
@@ -255,22 +262,22 @@ export default async function DashboardPage() {
 
 ```typescript
 // Server action
-import { auth } from '@clerk/nextjs/server';
+import { auth } from "@clerk/nextjs/server";
 
 export async function deletePost(postId: string) {
   const { userId } = await auth();
-  if (!userId) throw new Error('Unauthorized');
+  if (!userId) throw new Error("Unauthorized");
   // ... action logic
 }
 ```
 
 ```typescript
 // API route handler
-import { auth } from '@clerk/nextjs/server';
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
   const { userId } = await auth();
-  if (!userId) return new Response('Unauthorized', { status: 401 });
+  if (!userId) return new Response("Unauthorized", { status: 401 });
   return Response.json({ userId });
 }
 ```
@@ -294,23 +301,23 @@ export default async function DashboardPage() {
 
 ```typescript
 // Server action
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export async function deletePost(postId: string) {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) throw new Error('Unauthorized');
+  if (!session) throw new Error("Unauthorized");
   // ... action logic
 }
 ```
 
 ```typescript
 // API route handler
-import { auth } from '@/lib/auth';
+import { auth } from "@/lib/auth";
 
 export async function GET(request: Request) {
   const session = await auth.api.getSession({ headers: request.headers });
-  if (!session) return new Response('Unauthorized', { status: 401 });
+  if (!session) return new Response("Unauthorized", { status: 401 });
   return Response.json({ userId: session.user.id });
 }
 ```
@@ -321,41 +328,41 @@ Sync Clerk user events (`user.created`, `user.updated`, `user.deleted`) to your 
 
 ```typescript
 // app/api/webhooks/clerk/route.ts
-import { Webhook } from 'svix';
-import { headers } from 'next/headers';
-import { WebhookEvent } from '@clerk/nextjs/server';
+import { Webhook } from "svix";
+import { headers } from "next/headers";
+import { WebhookEvent } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
-  if (!WEBHOOK_SECRET) throw new Error('CLERK_WEBHOOK_SECRET not set');
+  if (!WEBHOOK_SECRET) throw new Error("CLERK_WEBHOOK_SECRET not set");
 
   const headerPayload = await headers();
-  const svixId = headerPayload.get('svix-id');
-  const svixTimestamp = headerPayload.get('svix-timestamp');
-  const svixSignature = headerPayload.get('svix-signature');
+  const svixId = headerPayload.get("svix-id");
+  const svixTimestamp = headerPayload.get("svix-timestamp");
+  const svixSignature = headerPayload.get("svix-signature");
 
   if (!svixId || !svixTimestamp || !svixSignature) {
-    return new Response('Missing svix headers', { status: 400 });
+    return new Response("Missing svix headers", { status: 400 });
   }
 
   const body = await req.text();
   let event: WebhookEvent;
   try {
     event = new Webhook(WEBHOOK_SECRET).verify(body, {
-      'svix-id': svixId,
-      'svix-timestamp': svixTimestamp,
-      'svix-signature': svixSignature,
+      "svix-id": svixId,
+      "svix-timestamp": svixTimestamp,
+      "svix-signature": svixSignature,
     }) as WebhookEvent;
   } catch {
-    return new Response('Invalid signature', { status: 400 });
+    return new Response("Invalid signature", { status: 400 });
   }
 
   // Idempotency: reject duplicate deliveries (store svix-id in DB)
   const existing = await db.webhookEvent.findUnique({ where: { svixId } });
-  if (existing) return new Response('Already processed', { status: 200 });
+  if (existing) return new Response("Already processed", { status: 200 });
   await db.webhookEvent.create({ data: { svixId } });
 
-  if (event.type === 'user.created') {
+  if (event.type === "user.created") {
     await db.user.create({
       data: {
         clerkId: event.data.id,
@@ -363,17 +370,17 @@ export async function POST(req: Request) {
       },
     });
   }
-  if (event.type === 'user.updated') {
+  if (event.type === "user.updated") {
     await db.user.update({
       where: { clerkId: event.data.id },
       data: { email: event.data.email_addresses[0].email_address },
     });
   }
-  if (event.type === 'user.deleted' && event.data.id) {
+  if (event.type === "user.deleted" && event.data.id) {
     await db.user.delete({ where: { clerkId: event.data.id } });
   }
 
-  return new Response('OK');
+  return new Response("OK");
 }
 ```
 
@@ -414,6 +421,7 @@ export default async function DashboardPage() {
 **Requirement:** Next.js 15.2.3+ (patches CVE-2025-29927). Check: `npx next --version`
 
 **Warning signs:**
+
 - Auth only in middleware, no re-verification in data functions
 - No `cache()` wrapper on `getUser` or similar DAL functions
 - Next.js version below 15.2.3

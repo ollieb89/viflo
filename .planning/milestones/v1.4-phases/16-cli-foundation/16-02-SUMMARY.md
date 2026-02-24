@@ -83,7 +83,7 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `bin/vitest.config.cjs` - Vitest config with globals:true, scoped to bin/lib/__tests__/
+- `bin/vitest.config.cjs` - Vitest config with globals:true, scoped to bin/lib/**tests**/
 - `bin/lib/__tests__/paths.test.js` - 10 unit tests for paths module
 - `bin/lib/__tests__/writers.test.js` - 13 unit tests for writers module
 - `package.json` - Added test:cli script and vitest ^1.0.0 devDependency
@@ -100,6 +100,7 @@ Each task was committed atomically:
 ### Auto-fixed Issues
 
 **1. [Rule 3 - Blocking] Installed vitest at workspace root**
+
 - **Found during:** Task 1 (vitest config creation)
 - **Issue:** `pnpm exec vitest` returned `ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL Command "vitest" not found` — vitest only existed in `apps/web/node_modules`, not resolvable from repo root
 - **Fix:** Ran `pnpm add -D -w vitest@^1.0.0` to install vitest at workspace root
@@ -108,10 +109,11 @@ Each task was committed atomically:
 - **Committed in:** `8307250` (included in Task 2 commit)
 
 **2. [Rule 1 - Bug] Switched to vitest globals mode for CJS test files**
+
 - **Found during:** Task 1 (first test run attempt)
 - **Issue:** `require('vitest')` with explicit `vi` destructure caused "Cannot access 'vi' before initialization" when combined with `vi.mock()` hoisting — standard CJS import pattern conflicts with vitest's hoisting mechanism
 - **Fix:** Added `globals: true` to vitest config; test files use `vi`, `describe`, `it`, `expect`, `beforeEach`, `afterEach` as globals without explicit import
-- **Files modified:** bin/vitest.config.cjs, bin/lib/__tests__/paths.test.js
+- **Files modified:** bin/vitest.config.cjs, bin/lib/**tests**/paths.test.js
 - **Verification:** All 23 tests pass with `pnpm run test:cli`
 - **Committed in:** `3e97bc2` (Task 1 commit)
 
@@ -135,5 +137,6 @@ None - no external service configuration required.
 - Web app tests unaffected — `pnpm test` still runs only `apps/web` tests via filter
 
 ---
-*Phase: 16-cli-foundation*
-*Completed: 2026-02-24*
+
+_Phase: 16-cli-foundation_
+_Completed: 2026-02-24_

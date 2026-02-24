@@ -3,7 +3,7 @@
 **Phase:** 3  
 **Name:** DevOps & Deployment  
 **Date Completed:** 2026-02-21  
-**Requirements:** R11, R12, R13  
+**Requirements:** R11, R12, R13
 
 ---
 
@@ -11,21 +11,23 @@
 
 ### DevOps Skills
 
-| Skill | Purpose | Templates |
-|-------|---------|-----------|
-| `containerization` | Docker best practices | Multi-stage Dockerfile templates |
-| `ci-cd-pipelines` | GitHub Actions workflows | Python, Node.js, full-stack |
-| `cloud-deployment` | Platform deployment guides | Vercel, AWS, Railway |
+| Skill              | Purpose                    | Templates                        |
+| ------------------ | -------------------------- | -------------------------------- |
+| `containerization` | Docker best practices      | Multi-stage Dockerfile templates |
+| `ci-cd-pipelines`  | GitHub Actions workflows   | Python, Node.js, full-stack      |
+| `cloud-deployment` | Platform deployment guides | Vercel, AWS, Railway             |
 
 ### Templates Created
 
 #### Containerization
+
 - Multi-stage Dockerfile (Node.js)
 - Multi-stage Dockerfile (Python)
 - docker-compose.yml templates
 - .dockerignore templates
 
 #### CI/CD Pipelines
+
 - `python-ci.yml` — pytest, mypy, black
 - `node-ci.yml` — jest, eslint, build
 - `fullstack-ci.yml` — Combined pipeline
@@ -33,6 +35,7 @@
 - `deploy-aws.yml` — AWS ECS deployment
 
 #### Cloud Deployment
+
 - Vercel deployment guide
 - AWS deployment (ECS + RDS)
 - Railway deployment guide
@@ -69,12 +72,12 @@
 
 ## Key Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| **Template approach** | Copy-paste ready for quick setup |
-| **Multi-stage Docker builds** | Smaller images, better security |
-| **GitHub Actions focus** | Most common, free for public repos |
-| **Environment parity** | Dev/prod similarity reduces bugs |
+| Decision                      | Rationale                          |
+| ----------------------------- | ---------------------------------- |
+| **Template approach**         | Copy-paste ready for quick setup   |
+| **Multi-stage Docker builds** | Smaller images, better security    |
+| **GitHub Actions focus**      | Most common, free for public repos |
+| **Environment parity**        | Dev/prod similarity reduces bugs   |
 
 ---
 
@@ -99,9 +102,9 @@ yamllint .github/workflows/*.yml
 
 ## Issues Encountered
 
-| Issue | Resolution |
-|-------|------------|
-| AWS complexity | Split into progressive steps |
+| Issue             | Resolution                      |
+| ----------------- | ------------------------------- |
+| AWS complexity    | Split into progressive steps    |
 | Secret management | Documented GitHub Secrets setup |
 
 ---
@@ -115,4 +118,4 @@ yamllint .github/workflows/*.yml
 
 ---
 
-*Verification completed as part of v1.0 MVP milestone.*
+_Verification completed as part of v1.0 MVP milestone._

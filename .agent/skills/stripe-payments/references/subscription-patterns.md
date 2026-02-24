@@ -17,14 +17,14 @@ ALTER TABLE users
 
 Store raw Stripe status strings — no app-specific enum mapping. Stripe owns the state machine.
 
-| Stripe Status | Meaning | Typical Action |
-|---|---|---|
-| `active` | Paid and current | Full access |
-| `trialing` | In free trial | Full access (trial) |
-| `past_due` | Payment failed, retrying | Limited access + payment nudge |
-| `canceled` | Subscription ended | Downgrade to free tier |
-| `incomplete` | Checkout not completed | No access |
-| `paused` | Paused by user or Stripe | No access |
+| Stripe Status | Meaning                  | Typical Action                 |
+| ------------- | ------------------------ | ------------------------------ |
+| `active`      | Paid and current         | Full access                    |
+| `trialing`    | In free trial            | Full access (trial)            |
+| `past_due`    | Payment failed, retrying | Limited access + payment nudge |
+| `canceled`    | Subscription ended       | Downgrade to free tier         |
+| `incomplete`  | Checkout not completed   | No access                      |
+| `paused`      | Paused by user or Stripe | No access                      |
 
 ## Four Subscription Lifecycle Events
 
@@ -75,12 +75,12 @@ case 'invoice.payment_failed': {
 
 **Event summary table:**
 
-| Event | DB Update |
-|---|---|
+| Event                           | DB Update                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------- |
 | `customer.subscription.created` | SET `subscription_status = sub.status`, `stripe_subscription_id = sub.id` |
 | `customer.subscription.updated` | SET `subscription_status = sub.status`, `stripe_subscription_id = sub.id` |
-| `customer.subscription.deleted` | SET `subscription_status = 'canceled'`, `stripe_subscription_id = NULL` |
-| `invoice.payment_failed` | SET `subscription_status = 'past_due'` |
+| `customer.subscription.deleted` | SET `subscription_status = 'canceled'`, `stripe_subscription_id = NULL`   |
+| `invoice.payment_failed`        | SET `subscription_status = 'past_due'`                                    |
 
 ## Checking Subscription Status Server-Side
 
@@ -90,15 +90,16 @@ Always read from your database — webhooks keep it in sync. Call the Stripe API
 // DB-first (use this 99% of the time)
 async function getUserSubscriptionStatus(userId: string) {
   const result = await pool.query(
-    'SELECT subscription_status FROM users WHERE id = $1',
+    "SELECT subscription_status FROM users WHERE id = $1",
     [userId],
   );
-  return result.rows[0]?.subscription_status ?? 'free';
+  return result.rows[0]?.subscription_status ?? "free";
 }
 
 // Stripe API drift check — for reconciliation jobs only, not per-request
 async function verifyStatusFromStripe(stripeSubscriptionId: string) {
-  const subscription = await stripe.subscriptions.retrieve(stripeSubscriptionId);
+  const subscription =
+    await stripe.subscriptions.retrieve(stripeSubscriptionId);
   return subscription.status; // raw Stripe string
 }
 ```
@@ -111,22 +112,23 @@ Lets users manage their own subscriptions (upgrades, downgrades, cancellations, 
 
 ```typescript
 // app/api/billing-portal/route.ts
-import { stripe } from '@/lib/stripe';
-import { pool } from '@/lib/db';
-import { auth } from '@/lib/auth'; // your auth helper
+import { stripe } from "@/lib/stripe";
+import { pool } from "@/lib/db";
+import { auth } from "@/lib/auth"; // your auth helper
 
 export async function POST(req: Request) {
   const session = await auth();
-  if (!session) return new Response('Unauthorized', { status: 401 });
+  if (!session) return new Response("Unauthorized", { status: 401 });
 
   // Always look up customerId from your database using the authenticated user's ID
   // — never trust client-provided customerId
   const result = await pool.query(
-    'SELECT stripe_customer_id FROM users WHERE id = $1',
+    "SELECT stripe_customer_id FROM users WHERE id = $1",
     [session.user.id],
   );
   const customerId = result.rows[0]?.stripe_customer_id;
-  if (!customerId) return new Response('No Stripe customer found', { status: 404 });
+  if (!customerId)
+    return new Response("No Stripe customer found", { status: 404 });
 
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: customerId,
@@ -145,7 +147,7 @@ Add `subscription_data.trial_period_days` to a subscription-mode Checkout Sessio
 
 ```typescript
 const session = await stripe.checkout.sessions.create({
-  mode: 'subscription',
+  mode: "subscription",
   line_items: [{ price: priceId, quantity: 1 }],
   success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
   cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
@@ -153,10 +155,10 @@ const session = await stripe.checkout.sessions.create({
   subscription_data: {
     trial_period_days: 14,
     trial_settings: {
-      end_behavior: { missing_payment_method: 'cancel' }, // or 'pause'
+      end_behavior: { missing_payment_method: "cancel" }, // or 'pause'
     },
   },
-  payment_method_collection: 'if_required', // no card required to start the trial
+  payment_method_collection: "if_required", // no card required to start the trial
 });
 ```
 
@@ -172,14 +174,14 @@ const session = await stripe.checkout.sessions.create({
 // Upgrade: immediate proration — customer sees prorated charge now
 await stripe.subscriptions.update(subscriptionId, {
   items: [{ id: currentItemId, price: newPriceId }],
-  proration_behavior: 'create_prorations',
+  proration_behavior: "create_prorations",
 });
 
 // Downgrade: apply at end of billing period — avoids confusing immediate invoice
 await stripe.subscriptions.update(subscriptionId, {
   items: [{ id: currentItemId, price: newPriceId }],
-  proration_behavior: 'none',
-  billing_cycle_anchor: 'unchanged', // don't reset billing date
+  proration_behavior: "none",
+  billing_cycle_anchor: "unchanged", // don't reset billing date
 });
 ```
 

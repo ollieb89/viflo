@@ -10,18 +10,18 @@ metadata:
 
 # Skill Depth Standard
 
-> **Scope:** This standard applies to *technical implementation skills* (skills that teach how to build something with specific libraries or APIs). For process/workflow skills (e.g., `brainstorming`, `gsd-workflow`), adapt the checklist: replace "working code" with "concrete step-by-step procedures" and mark `## Version Context` as N/A when no external dependencies exist.
+> **Scope:** This standard applies to _technical implementation skills_ (skills that teach how to build something with specific libraries or APIs). For process/workflow skills (e.g., `brainstorming`, `gsd-workflow`), adapt the checklist: replace "working code" with "concrete step-by-step procedures" and mark `## Version Context` as N/A when no external dependencies exist.
 
 ## The Four Failure Modes
 
 Every shallow skill fails in one or more of these ways:
 
-| Failure Mode | Symptom | Fix |
-|---|---|---|
-| **Abstraction Trap** | Principles without working code ("use a queue") | Add `## Implementation Patterns` with runnable examples |
-| **Happy Path Bias** | No error states, race conditions, or edge inputs covered | Add `## Failure Modes & Edge Cases` section |
-| **Analysis Paralysis** | Lists options without helping you choose | Add `## Decision Matrix` with explicit trade-off reasoning |
-| **Technical Rot** | No version pinning; patterns may be deprecated | Add `## Version Context` with last-verified library versions |
+| Failure Mode           | Symptom                                                  | Fix                                                          |
+| ---------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
+| **Abstraction Trap**   | Principles without working code ("use a queue")          | Add `## Implementation Patterns` with runnable examples      |
+| **Happy Path Bias**    | No error states, race conditions, or edge inputs covered | Add `## Failure Modes & Edge Cases` section                  |
+| **Analysis Paralysis** | Lists options without helping you choose                 | Add `## Decision Matrix` with explicit trade-off reasoning   |
+| **Technical Rot**      | No version pinning; patterns may be deprecated           | Add `## Version Context` with last-verified library versions |
 
 ## Self-Evaluation Checklist
 

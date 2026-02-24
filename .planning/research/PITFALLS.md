@@ -20,20 +20,21 @@ Shell expansion of `~` to `$HOME` happens at the shell parsing layer before the 
 Always construct user-home paths with `os.homedir()`:
 
 ```javascript
-const os = require('os');
-const path = require('path');
+const os = require("os");
+const path = require("path");
 
 // CORRECT
-const claudeSettingsPath = path.join(os.homedir(), '.claude', 'settings.json');
+const claudeSettingsPath = path.join(os.homedir(), ".claude", "settings.json");
 
 // WRONG — do not do this
-const claudeSettingsPath = '~/.claude/settings.json';
-const claudeSettingsPath = path.join('~', '.claude', 'settings.json');
+const claudeSettingsPath = "~/.claude/settings.json";
+const claudeSettingsPath = path.join("~", ".claude", "settings.json");
 ```
 
 `os.homedir()` reads `$HOME` (Linux/macOS) or the appropriate Windows registry key. It is the only reliable cross-platform home directory resolver in Node.js. The GSD codebase already uses this pattern correctly in `config.cjs` and `init.cjs` — viflo's CLI must follow the same convention.
 
 **Warning signs:**
+
 - Any string in the implementation containing a literal `~` passed to `fs.*` functions.
 - `path.join('~', ...)` anywhere in the CLI code.
 - A test that only verifies success when run from the user's shell but doesn't mock `os.homedir()`.
@@ -55,13 +56,14 @@ The file-exists check uses one path, the write uses a differently-resolved path.
 Use a single path variable derived from `os.homedir()` without any `realpathSync` call for user-facing config writes. Do not mix resolved and unresolved paths in the same check-then-write sequence. Store the path once at the top of the operation:
 
 ```javascript
-const CLAUDE_DIR = path.join(os.homedir(), '.claude');
-const SETTINGS_PATH = path.join(CLAUDE_DIR, 'settings.json');
+const CLAUDE_DIR = path.join(os.homedir(), ".claude");
+const SETTINGS_PATH = path.join(CLAUDE_DIR, "settings.json");
 
 // Use SETTINGS_PATH for both existsSync check and writeFileSync
 ```
 
 **Warning signs:**
+
 - Code that calls `fs.realpathSync` on user home paths before writing.
 - Separate variables derived from `os.homedir()` and `process.env.HOME` in the same function.
 
@@ -83,12 +85,13 @@ Establish a strict convention at the module boundary: all project-relative paths
 
 ```javascript
 function writeClaudeMdStanza(cwd, vifloSkillsPath) {
-  const targetPath = path.join(cwd, 'CLAUDE.md');
+  const targetPath = path.join(cwd, "CLAUDE.md");
   // ...
 }
 ```
 
 **Warning signs:**
+
 - Any `path.join(__dirname, ...)` that produces an output file (as opposed to reading a bundled template from the package).
 - CLI tests that only pass when run from the viflo repo root.
 
@@ -116,21 +119,24 @@ Read-modify-write with a deep array merge:
 function mergeSettingsJson(existingPath, viFloEntries) {
   let existing = {};
   if (fs.existsSync(existingPath)) {
-    existing = JSON.parse(fs.readFileSync(existingPath, 'utf-8'));
+    existing = JSON.parse(fs.readFileSync(existingPath, "utf-8"));
   }
   const existingAllow = existing?.permissions?.allow ?? [];
   const merged = {
     ...existing,
     permissions: {
       ...existing.permissions,
-      allow: [...new Set([...existingAllow, ...viFloEntries.permissions.allow])],
+      allow: [
+        ...new Set([...existingAllow, ...viFloEntries.permissions.allow]),
+      ],
     },
   };
-  fs.writeFileSync(existingPath, JSON.stringify(merged, null, 2), 'utf-8');
+  fs.writeFileSync(existingPath, JSON.stringify(merged, null, 2), "utf-8");
 }
 ```
 
 **Warning signs:**
+
 - `fs.writeFileSync(settingsPath, JSON.stringify(FULL_DEFAULT_SETTINGS))` without an existence check.
 - No test case for "run viflo init twice" or "run viflo init on a project with existing `.claude/settings.json`".
 - `--force` flag added as a shortcut to skip the merge (removes the safety net).
@@ -149,11 +155,13 @@ Claude Code silently ignores a malformed `settings.json` (invalid JSON, trailing
 String interpolation or manual JSON construction produces invalid JSON (trailing comma after the last array element, missing closing bracket). Template literals with conditionally-included entries are especially prone to this. The issue also appears when the read-modify-write merge produces a corrupt file if the existing settings.json is malformed (parse error on read followed by a write of an empty object).
 
 **How to avoid:**
+
 - Never construct JSON by string concatenation. Always build a JavaScript object and call `JSON.stringify(obj, null, 2)`.
 - If reading an existing file, wrap `JSON.parse` in a try/catch and abort (do not overwrite) if the existing file is malformed. Surface the error to the user: "Existing `.claude/settings.json` is not valid JSON. Fix it manually and re-run `viflo init`."
 - Validate the outgoing JSON by parsing it before writing: `JSON.parse(JSON.stringify(result))` — any object that survives this round-trip is valid JSON.
 
 **Warning signs:**
+
 - Template literals used to build JSON output.
 - No `try/catch` around `JSON.parse` when reading existing settings.json.
 - No post-write validation step.
@@ -176,17 +184,22 @@ Use a block-based update strategy rather than full-file replacement:
 
 1. If CLAUDE.md does not exist: write the full starter template.
 2. If CLAUDE.md exists: scan for a viflo-managed block delimited by sentinel markers:
+
    ```markdown
    <!-- viflo:start -->
+
    @.agent/skills/... (import stanza content)
+
    <!-- viflo:end -->
    ```
+
 3. If the sentinel markers are present: replace only the content between them with the updated viflo import stanza. Leave everything outside the markers untouched.
 4. If CLAUDE.md exists but has no sentinel markers: append the viflo import stanza at the end with the sentinels, never modify existing content.
 
 This is the same pattern used by tools like `mise`, `direnv`, and shell profile managers that add entries to `.bashrc` / `.zshrc`.
 
 **Warning signs:**
+
 - `fs.writeFileSync(claudeMdPath, FULL_TEMPLATE)` without an existence check.
 - No test case for "CLAUDE.md already exists with user content."
 - `--force` flag that skips sentinel detection (acceptable for explicit user opt-in, but must be clearly documented as destructive).
@@ -200,6 +213,7 @@ Implementation phase (INIT-03 for `--full` mode CLAUDE.md write; INIT-04 for ide
 
 **What goes wrong:**
 Claude Code has three settings file scopes:
+
 - `~/.claude/settings.json` — user scope (applies to all projects)
 - `.claude/settings.json` in the project root — project scope (should be committed)
 - `.claude/settings.local.json` in the project root — local scope (gitignored)
@@ -213,12 +227,14 @@ The distinction between user scope and project scope is easy to miss. New develo
 
 **How to avoid:**
 Make the target scope explicit in the CLI's design and documentation:
+
 - `viflo init --minimal` → writes to `~/.claude/settings.json` (user scope). Warn the user: "This will apply viflo skill references to all your Claude Code projects."
 - `viflo init --full` → writes to `.claude/settings.json` (project scope). Warn the user: "This file will be committed to your repository."
 
 Add a `--scope user|project` flag if both modes need to support both scopes. Never infer the scope silently.
 
 **Warning signs:**
+
 - Documentation or code that refers to "settings.json" without specifying which scope.
 - `--minimal` mode that writes to project scope.
 - No user-facing message explaining which file was written and what scope it applies to.
@@ -239,11 +255,13 @@ Additionally, the merge strategy for hooks at different scopes is undocumented. 
 The Claude Code settings system is evolving. Documentation lags implementation. Community workarounds (write to project scope) work but are not official.
 
 **How to avoid:**
+
 - Verify the permissions.allow scope behavior against the installed Claude Code version before writing to user scope only.
 - At minimum, document the known limitation in `viflo init`'s output: "Note: user-scope permission rules may require Claude Code ≥ [version]. If Claude Code still prompts for tool approval after running `viflo init`, re-run with `--scope project`."
 - Consider writing to `.claude/settings.local.json` (project local) for `--minimal` mode as a pragmatic workaround — this is gitignored, so it doesn't pollute the user's repo, and project scope is reliably enforced.
 
 **Warning signs:**
+
 - No mention of the scope bug in the CLI's README or output.
 - No test that actually invokes Claude Code and verifies permissions are applied.
 - Implementation assumes user-scope permissions always work.
@@ -262,12 +280,14 @@ Under WSL2, `os.homedir()` returns the WSL Linux home (e.g., `/home/username`). 
 Most developers test on native Linux or macOS. The WSL2 split between Linux home and Windows home is a niche case that requires deliberate detection. `os.homedir()` correctly returns the Linux home from within WSL — it cannot know that the user intends to target the Windows Claude Code installation.
 
 **How to avoid:**
+
 - Detect WSL2 by checking `process.env.WSL_DISTRO_NAME` or reading `/proc/version` for `Microsoft`.
 - If WSL2 is detected, check whether `~/.claude/settings.json` exists in the Linux home AND whether `/mnt/c/Users/*/. claude/settings.json` exists.
 - If only the Windows path exists, warn the user: "WSL2 detected. Your Claude Code installation appears to be on Windows at `/mnt/c/Users/...`. Run `viflo init` from the Windows terminal or specify `--claude-dir /mnt/c/Users/<you>/.claude`."
 - Document the WSL2 constraint in the README.
 
 **Warning signs:**
+
 - No WSL2 detection code in the CLI.
 - Tests that pass on Linux but are never run in a WSL2 environment.
 - No `--claude-dir` escape hatch for non-standard Claude Code installation paths.
@@ -286,6 +306,7 @@ Implementation phase (INIT-01) — WSL2 detection is a first-class concern given
 The `--full` mode is tested on fresh directories. The brownfield case (existing `.planning/` with live content) is not in the test matrix. The failure mode mirrors the CLAUDE.md clobber pitfall but is worse because `.planning/` files are not easily reconstructed.
 
 **How to avoid:**
+
 - Check for existing `.planning/` before writing any scaffold files.
 - If `.planning/` exists, default to "skip all existing files, write only missing ones." Log each skipped file: "Skipped `.planning/STATE.md` — already exists."
 - If a file exists that conflicts with a required scaffold stub, surface a clear message: "`.planning/ROADMAP.md` already exists. To overwrite, use `viflo init --full --force`."
@@ -301,6 +322,7 @@ Writing only missing scaffold files...
 ```
 
 **Warning signs:**
+
 - `fs.mkdirSync` + `fs.writeFileSync` for every scaffold file without existence checks.
 - No test case for "run `viflo init --full` on a project already using GSD methodology."
 - `--full` documentation that doesn't explicitly state which files are safe to re-run.
@@ -333,6 +355,7 @@ Lock the `--full` spec before implementation starts and treat it as a hard bound
 Nothing else. Any additional behavior requires a new flag or a separate command. If a feature is requested during implementation that doesn't fit either mode, add it to the `v1.5` backlog, not to `--full`.
 
 **Warning signs:**
+
 - Implementation PR description includes "also added X because it seemed useful."
 - `--full` mode that runs `git` commands or modifies files outside `CLAUDE.md`, `.claude/`, and `.planning/`.
 - No explicit written spec for what `--full` does and doesn't do before implementation begins.
@@ -344,29 +367,29 @@ Design phase (before implementation starts) — write a one-paragraph "what --fu
 
 ## Technical Debt Patterns
 
-| Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
-|----------|-------------------|----------------|-----------------|
-| Use hardcoded string `"~/.claude"` instead of `os.homedir()` | Simpler code | Silently writes to wrong path; `ENOENT` in Node.js | Never |
-| Skip the read-modify-write for settings.json; just overwrite | Simpler code | Destroys user's existing Claude Code permissions on re-run | Never |
-| Write full CLAUDE.md template unconditionally | Simpler code | Destroys user's project-specific CLAUDE.md customizations | Never |
-| Skip WSL2 detection; document as "run from Windows terminal" | Saves dev time | Users run from WSL2 terminal, report "viflo init doesn't work" | Acceptable as v1.4 cut if clearly documented with a workaround |
-| Write to `.claude/settings.json` (project scope) instead of `~/.claude/settings.json` (user scope) for `--minimal` | Avoids user-scope permission bug | File gets committed to user repos; not the intent of `--minimal` | Acceptable as a workaround for the user-scope bug if communicated |
-| Add `--force` to skip all safety checks | Easy escape hatch | Users accidentally destroy existing config | Acceptable only with `--yes` confirmation flag and clear destructive-action warning |
-| Scaffold all `.planning/` files without checking existence | Simpler loop | Clobbers live planning documents on re-run | Never |
+| Shortcut                                                                                                           | Immediate Benefit                | Long-term Cost                                                   | When Acceptable                                                                     |
+| ------------------------------------------------------------------------------------------------------------------ | -------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Use hardcoded string `"~/.claude"` instead of `os.homedir()`                                                       | Simpler code                     | Silently writes to wrong path; `ENOENT` in Node.js               | Never                                                                               |
+| Skip the read-modify-write for settings.json; just overwrite                                                       | Simpler code                     | Destroys user's existing Claude Code permissions on re-run       | Never                                                                               |
+| Write full CLAUDE.md template unconditionally                                                                      | Simpler code                     | Destroys user's project-specific CLAUDE.md customizations        | Never                                                                               |
+| Skip WSL2 detection; document as "run from Windows terminal"                                                       | Saves dev time                   | Users run from WSL2 terminal, report "viflo init doesn't work"   | Acceptable as v1.4 cut if clearly documented with a workaround                      |
+| Write to `.claude/settings.json` (project scope) instead of `~/.claude/settings.json` (user scope) for `--minimal` | Avoids user-scope permission bug | File gets committed to user repos; not the intent of `--minimal` | Acceptable as a workaround for the user-scope bug if communicated                   |
+| Add `--force` to skip all safety checks                                                                            | Easy escape hatch                | Users accidentally destroy existing config                       | Acceptable only with `--yes` confirmation flag and clear destructive-action warning |
+| Scaffold all `.planning/` files without checking existence                                                         | Simpler loop                     | Clobbers live planning documents on re-run                       | Never                                                                               |
 
 ---
 
 ## Integration Gotchas
 
-| Integration | Common Mistake | Correct Approach |
-|-------------|----------------|------------------|
-| Claude Code settings.json | Writing to wrong scope (`~/.claude/` vs `.claude/`) for the intended use case | `--minimal` targets user scope; `--full` targets project scope; document both clearly |
+| Integration               | Common Mistake                                                                                | Correct Approach                                                                         |
+| ------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Claude Code settings.json | Writing to wrong scope (`~/.claude/` vs `.claude/`) for the intended use case                 | `--minimal` targets user scope; `--full` targets project scope; document both clearly    |
 | Claude Code settings.json | Assuming `permissions.allow` entries from user scope are enforced in all Claude Code versions | Check for the open scope enforcement bug; offer `--scope project` or `.local` workaround |
-| Claude Code settings.json | String-building JSON with template literals | Build JS objects, call `JSON.stringify(obj, null, 2)` always |
-| CLAUDE.md | Full file overwrite on re-run | Sentinel marker strategy — only update the viflo-managed block |
-| .planning/ scaffold | Writing all stub files unconditionally | Check existence of each file; skip existing files and report what was skipped |
-| WSL2 | `os.homedir()` returns Linux home but user's Claude Code is the Windows installation | Detect `WSL_DISTRO_NAME`; warn if Windows Claude Code config path exists |
-| Existing viflo project | Running `viflo init --full` after the project already uses GSD methodology | Existence-check every file before writing; never clobber planning documents |
+| Claude Code settings.json | String-building JSON with template literals                                                   | Build JS objects, call `JSON.stringify(obj, null, 2)` always                             |
+| CLAUDE.md                 | Full file overwrite on re-run                                                                 | Sentinel marker strategy — only update the viflo-managed block                           |
+| .planning/ scaffold       | Writing all stub files unconditionally                                                        | Check existence of each file; skip existing files and report what was skipped            |
+| WSL2                      | `os.homedir()` returns Linux home but user's Claude Code is the Windows installation          | Detect `WSL_DISTRO_NAME`; warn if Windows Claude Code config path exists                 |
+| Existing viflo project    | Running `viflo init --full` after the project already uses GSD methodology                    | Existence-check every file before writing; never clobber planning documents              |
 
 ---
 
@@ -378,11 +401,11 @@ Not applicable at the scale of a CLI init tool — the tool runs once (or occasi
 
 ## Security Mistakes
 
-| Mistake | Risk | Prevention |
-|---------|------|------------|
-| Writing to paths derived from user-supplied CLI arguments without sanitization | Path traversal: `viflo init --claude-dir ../../../../etc/` writes to system directories | Validate `--claude-dir` is an absolute path inside the user's home directory; reject paths containing `..` |
-| Committing `.claude/settings.local.json` to the user's repo | Exposes local Claude Code permissions, API keys set via `env` key | Use project scope (`.claude/settings.json`) for commitable config; document that `settings.local.json` should be in `.gitignore` |
-| Writing viflo skill paths as absolute paths in settings.json | If viflo moves or the user's home directory changes, all skill references break | Write paths relative to `~` using a `$HOME`-based pattern, or write the `@` import stanza in CLAUDE.md rather than absolute paths in settings.json |
+| Mistake                                                                        | Risk                                                                                    | Prevention                                                                                                                                         |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Writing to paths derived from user-supplied CLI arguments without sanitization | Path traversal: `viflo init --claude-dir ../../../../etc/` writes to system directories | Validate `--claude-dir` is an absolute path inside the user's home directory; reject paths containing `..`                                         |
+| Committing `.claude/settings.local.json` to the user's repo                    | Exposes local Claude Code permissions, API keys set via `env` key                       | Use project scope (`.claude/settings.json`) for commitable config; document that `settings.local.json` should be in `.gitignore`                   |
+| Writing viflo skill paths as absolute paths in settings.json                   | If viflo moves or the user's home directory changes, all skill references break         | Write paths relative to `~` using a `$HOME`-based pattern, or write the `@` import stanza in CLAUDE.md rather than absolute paths in settings.json |
 
 ---
 
@@ -403,61 +426,67 @@ Not applicable at the scale of a CLI init tool — the tool runs once (or occasi
 
 ## Recovery Strategies
 
-| Pitfall | Recovery Cost | Recovery Steps |
-|---------|---------------|----------------|
-| User's `~/.claude/settings.json` overwritten | MEDIUM | Check `~/.claude/` for backup created by viflo (if implemented); restore from git if user has `~/.claude/` in a dotfiles repo; manually re-add lost entries |
-| User's `CLAUDE.md` overwritten | MEDIUM | Restore from `git diff HEAD~1 CLAUDE.md` if project is under git; if not, user must re-add customizations manually |
-| User's `.planning/` documents overwritten | HIGH | Restore from git history (`git log --oneline -- .planning/`); if no git, files may be unrecoverable |
-| Files written to wrong path (tilde not expanded) | LOW | Delete the `~` directory that was created; re-run after fix |
-| Invalid JSON written to settings.json | LOW | Delete the file; re-run `viflo init`; Claude Code resumes using defaults |
-| WSL2 user writes to Linux home instead of Windows Claude path | LOW | Manually copy `~/.claude/settings.json` to `/mnt/c/Users/<username>/.claude/settings.json` |
+| Pitfall                                                       | Recovery Cost | Recovery Steps                                                                                                                                              |
+| ------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User's `~/.claude/settings.json` overwritten                  | MEDIUM        | Check `~/.claude/` for backup created by viflo (if implemented); restore from git if user has `~/.claude/` in a dotfiles repo; manually re-add lost entries |
+| User's `CLAUDE.md` overwritten                                | MEDIUM        | Restore from `git diff HEAD~1 CLAUDE.md` if project is under git; if not, user must re-add customizations manually                                          |
+| User's `.planning/` documents overwritten                     | HIGH          | Restore from git history (`git log --oneline -- .planning/`); if no git, files may be unrecoverable                                                         |
+| Files written to wrong path (tilde not expanded)              | LOW           | Delete the `~` directory that was created; re-run after fix                                                                                                 |
+| Invalid JSON written to settings.json                         | LOW           | Delete the file; re-run `viflo init`; Claude Code resumes using defaults                                                                                    |
+| WSL2 user writes to Linux home instead of Windows Claude path | LOW           | Manually copy `~/.claude/settings.json` to `/mnt/c/Users/<username>/.claude/settings.json`                                                                  |
 
 ---
 
 ## Pitfall-to-Phase Mapping
 
-| Pitfall | Prevention Phase | Verification |
-|---------|------------------|--------------|
-| Tilde expansion failure | INIT-01 implementation — path utilities | Unit test: mock `os.homedir()` to a temp dir; verify no `~` in written paths |
-| Symlinked home directory confusion | INIT-01 implementation — single path variable pattern | Code review: one path variable per target file, never re-derived |
-| `process.cwd()` vs `__dirname` | INIT-01 implementation — cwd parameter convention | Integration test run from a temp directory outside the viflo repo |
-| settings.json clobber on re-run | INIT-04 idempotency — read-modify-write with merge | Test: run twice; assert user's existing `allow` entries survive the second run |
-| Invalid JSON write | INIT-01 implementation — JSON utilities | Test: corrupt existing settings.json; assert CLI errors, not overwrites |
-| CLAUDE.md clobber | INIT-03 + INIT-04 — sentinel marker strategy | Test: run with pre-existing CLAUDE.md; assert only sentinel block updated |
-| settings.json scope confusion | Design phase before INIT-01 | Documentation + CLI output review: output must state which file path was written |
-| permissions.allow scope bug | INIT-01 implementation — scope workaround | Manual test: verify Claude Code applies the written permissions |
-| WSL2 home path mismatch | INIT-01 implementation — WSL2 detection | Test in WSL2 environment or mock `WSL_DISTRO_NAME` |
-| .planning/ scaffold clobber | INIT-02 + INIT-04 | Test: run `--full` on a project with existing `.planning/`; assert no files overwritten |
-| Scope creep in `--full` mode | Design phase — written spec before INIT-02 | Acceptance: INIT-02 completion review checks implementation against spec |
+| Pitfall                            | Prevention Phase                                      | Verification                                                                            |
+| ---------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Tilde expansion failure            | INIT-01 implementation — path utilities               | Unit test: mock `os.homedir()` to a temp dir; verify no `~` in written paths            |
+| Symlinked home directory confusion | INIT-01 implementation — single path variable pattern | Code review: one path variable per target file, never re-derived                        |
+| `process.cwd()` vs `__dirname`     | INIT-01 implementation — cwd parameter convention     | Integration test run from a temp directory outside the viflo repo                       |
+| settings.json clobber on re-run    | INIT-04 idempotency — read-modify-write with merge    | Test: run twice; assert user's existing `allow` entries survive the second run          |
+| Invalid JSON write                 | INIT-01 implementation — JSON utilities               | Test: corrupt existing settings.json; assert CLI errors, not overwrites                 |
+| CLAUDE.md clobber                  | INIT-03 + INIT-04 — sentinel marker strategy          | Test: run with pre-existing CLAUDE.md; assert only sentinel block updated               |
+| settings.json scope confusion      | Design phase before INIT-01                           | Documentation + CLI output review: output must state which file path was written        |
+| permissions.allow scope bug        | INIT-01 implementation — scope workaround             | Manual test: verify Claude Code applies the written permissions                         |
+| WSL2 home path mismatch            | INIT-01 implementation — WSL2 detection               | Test in WSL2 environment or mock `WSL_DISTRO_NAME`                                      |
+| .planning/ scaffold clobber        | INIT-02 + INIT-04                                     | Test: run `--full` on a project with existing `.planning/`; assert no files overwritten |
+| Scope creep in `--full` mode       | Design phase — written spec before INIT-02            | Acceptance: INIT-02 completion review checks implementation against spec                |
 
 ---
 
 ## Sources
 
 **Official Claude Code Documentation**
+
 - [Claude Code Settings Reference](https://code.claude.com/docs/en/settings) — Scope hierarchy, all valid top-level keys, managed settings paths (verified 2026-02-24)
 
 **Known Bugs and Limitations**
+
 - [User-level permissions in `~/.claude/settings.json` not enforced (GitHub #5140)](https://github.com/anthropics/claude-code/issues/5140) — Active bug: user-scope `permissions.allow` shown as loaded but not enforced; workaround is project scope
 
 **Path Handling in Node.js**
+
 - [Node.js `os.homedir()` Method](https://www.geeksforgeeks.org/node-js/node-js-os-homedir-method/) — Cross-platform home directory resolution
 - [Tilde Expansion Fails in Environment Variables in Shell Scripts](https://linuxvox.com/blog/tilde-expansion-in-environment-variable/) — Why `~` is not expanded outside shell parsing layer
 - [Symlink Resolution in Node.js (nodejs/node #3402)](https://github.com/nodejs/node/issues/3402) — Node.js resolves symlinks in `require` but not in user-supplied paths
 
 **WSL2 Path Considerations**
+
 - [Install Node.js on WSL2 (Microsoft Docs)](https://learn.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl) — `os.homedir()` behavior in WSL2 Linux context
 - [wsl-path npm package](https://www.npmjs.com/package/wsl-path) — Utility for converting WSL POSIX paths to Windows paths
 
 **Idempotency Patterns**
+
 - [How to Write Idempotent Bash Scripts](https://arslan.io/2019/07/03/how-to-write-idempotent-bash-scripts/) — Check-then-act patterns; grep-based sentinel detection
 - GSD codebase `config.cjs` — `cmdConfigEnsureSection` demonstrates the correct read-check-write pattern for config files in this repo
 
 **Claude Code settings.json Schema**
+
 - [claude-code-settings-schema.json (community gist)](https://gist.github.com/xdannyrobertsx/0a395c59b1ef09508e52522289bd5bf6) — Community-documented schema reference
 - [A developer's guide to settings.json in Claude Code](https://www.eesel.ai/blog/settings-json-claude-code) — Array merge behavior, scope precedence
 
 ---
 
-*Pitfalls research for: viflo init CLI — config file writing, idempotency, cross-platform path resolution*
-*Researched: 2026-02-24*
+_Pitfalls research for: viflo init CLI — config file writing, idempotency, cross-platform path resolution_
+_Researched: 2026-02-24_

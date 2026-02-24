@@ -2,7 +2,7 @@
 
 **Status:** ✅ COMPLETE  
 **Requirements:** QUAL-01, QUAL-02 gap closure  
-**Completed:** 2026-02-23  
+**Completed:** 2026-02-23
 
 ---
 
@@ -74,11 +74,11 @@ $ ./scripts/setup-dev.sh
 
 ## Files Created/Modified
 
-| File | Purpose |
-|------|---------|
-| `scripts/setup-dev.sh` | Automated setup script (new) |
-| `CONTRIBUTING.md` | Updated with quick setup instructions |
-| `README.md` | Added Development Setup section |
+| File                   | Purpose                               |
+| ---------------------- | ------------------------------------- |
+| `scripts/setup-dev.sh` | Automated setup script (new)          |
+| `CONTRIBUTING.md`      | Updated with quick setup instructions |
+| `README.md`            | Added Development Setup section       |
 
 ---
 
@@ -88,4 +88,4 @@ $ ./scripts/setup-dev.sh
 
 ---
 
-*Part of Phase 9: Workspace & Developer Tooling (v1.1 Dogfooding)*
+_Part of Phase 9: Workspace & Developer Tooling (v1.1 Dogfooding)_

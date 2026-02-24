@@ -2,7 +2,7 @@
 
 **Status:** ✅ COMPLETE  
 **Requirement:** CONTENT-03  
-**Completed:** 2026-02-23  
+**Completed:** 2026-02-23
 
 ---
 
@@ -12,12 +12,12 @@ Created telemetry logging system for LLM usage tracking.
 
 ### Files Created
 
-| File | Purpose |
-|------|---------|
-| `.telemetry/usage.csv` | CSV storage for telemetry data |
-| `.telemetry/README.md` | Documentation for telemetry system |
-| `scripts/log-telemetry.sh` | Script to log telemetry entries |
-| `scripts/telemetry-report.sh` | Script to generate usage reports |
+| File                          | Purpose                            |
+| ----------------------------- | ---------------------------------- |
+| `.telemetry/usage.csv`        | CSV storage for telemetry data     |
+| `.telemetry/README.md`        | Documentation for telemetry system |
+| `scripts/log-telemetry.sh`    | Script to log telemetry entries    |
+| `scripts/telemetry-report.sh` | Script to generate usage reports   |
 
 ### Schema
 
@@ -26,6 +26,7 @@ timestamp,model,prompt_tokens,completion_tokens,task_success,task_type,duration_
 ```
 
 Fields:
+
 - `timestamp` — ISO 8601 timestamp (UTC)
 - `model` — LLM model name
 - `prompt_tokens` — Tokens in prompt
@@ -38,6 +39,7 @@ Fields:
 ### Sample Data
 
 5 sample rows added demonstrating schema:
+
 - Phase 5 CI setup execution
 - Phase 6 test suite execution
 - Quick task example
@@ -81,4 +83,4 @@ None — telemetry system implemented and tested successfully.
 
 ---
 
-*Part of Phase 7: Content Hygiene (v1.1 Dogfooding)*
+_Part of Phase 7: Content Hygiene (v1.1 Dogfooding)_

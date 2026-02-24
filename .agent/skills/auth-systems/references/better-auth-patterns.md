@@ -25,8 +25,8 @@ GOOGLE_CLIENT_SECRET=...
 ### lib/auth.ts — Core Config
 
 ```typescript
-import { betterAuth } from 'better-auth';
-import { Pool } from 'pg';
+import { betterAuth } from "better-auth";
+import { Pool } from "pg";
 
 export const auth = betterAuth({
   database: new Pool({ connectionString: process.env.DATABASE_URL }),
@@ -49,7 +49,7 @@ export const auth = betterAuth({
 ### lib/auth-client.ts — Browser Client
 
 ```typescript
-import { createAuthClient } from 'better-auth/react';
+import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL, // your app's base URL
@@ -59,8 +59,8 @@ export const authClient = createAuthClient({
 ### app/api/auth/[...all]/route.ts — Route Handler
 
 ```typescript
-import { auth } from '@/lib/auth';
-import { toNextJsHandler } from 'better-auth/next-js';
+import { auth } from "@/lib/auth";
+import { toNextJsHandler } from "better-auth/next-js";
 
 export const { POST, GET } = toNextJsHandler(auth);
 ```
@@ -82,21 +82,21 @@ Use `getSessionCookie` for middleware — cookie check only, no DB round trip. S
 
 ```typescript
 // middleware.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { getSessionCookie } from 'better-auth/cookies';
+import { NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
   const sessionCookie = getSessionCookie(request);
-  if (!sessionCookie && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+  if (!sessionCookie && request.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
   ],
 };
 ```
@@ -107,21 +107,21 @@ Use only when middleware needs to inspect user data (e.g., role-based routing). 
 
 ```typescript
 // middleware.ts — Approach B (use sparingly)
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
   const session = await auth.api.getSession({ headers: request.headers });
-  if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+  if (!session && request.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
   ],
 };
 ```
@@ -149,15 +149,15 @@ export default async function DashboardPage() {
 ### Server Action
 
 ```typescript
-'use server';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+"use server";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export async function deletePost(postId: string) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (!session) throw new Error('Unauthorized');
+  if (!session) throw new Error("Unauthorized");
   // ... action logic
 }
 ```
@@ -165,13 +165,13 @@ export async function deletePost(postId: string) {
 ### API Route Handler
 
 ```typescript
-import { auth } from '@/lib/auth';
+import { auth } from "@/lib/auth";
 
 export async function GET(request: Request) {
   const session = await auth.api.getSession({
     headers: request.headers,
   });
-  if (!session) return new Response('Unauthorized', { status: 401 });
+  if (!session) return new Response("Unauthorized", { status: 401 });
   return Response.json({ userId: session.user.id, email: session.user.email });
 }
 ```
@@ -232,8 +232,8 @@ Better Auth supports many OAuth providers. Add to `socialProviders` in `lib/auth
 ### Sign In / Sign Up
 
 ```typescript
-'use client';
-import { authClient } from '@/lib/auth-client';
+"use client";
+import { authClient } from "@/lib/auth-client";
 
 // Email/password sign-in
 await authClient.signIn.email({ email, password });
@@ -242,15 +242,15 @@ await authClient.signIn.email({ email, password });
 await authClient.signUp.email({ email, password, name });
 
 // OAuth sign-in (redirects to provider)
-await authClient.signIn.social({ provider: 'github' });
-await authClient.signIn.social({ provider: 'google' });
+await authClient.signIn.social({ provider: "github" });
+await authClient.signIn.social({ provider: "google" });
 ```
 
 ### Sign Out
 
 ```typescript
-'use client';
-import { authClient } from '@/lib/auth-client';
+"use client";
+import { authClient } from "@/lib/auth-client";
 
 await authClient.signOut();
 ```
@@ -274,24 +274,24 @@ export function UserGreeting() {
 
 ## Version Context
 
-| Library | Last Verified | Notes |
-|---|---|---|
-| `better-auth` | 1.3.x | `betterAuth()` config + `toNextJsHandler` for App Router |
-| `better-auth/cookies` | (bundled) | `getSessionCookie` for fast middleware path |
-| `better-auth/next-js` | (bundled) | `toNextJsHandler` mounts Better Auth in App Router |
-| `better-auth/react` | (bundled) | `createAuthClient` for client components |
-| Next.js | 15.2.3+ | Required — patches CVE-2025-29927 middleware bypass |
+| Library               | Last Verified | Notes                                                    |
+| --------------------- | ------------- | -------------------------------------------------------- |
+| `better-auth`         | 1.3.x         | `betterAuth()` config + `toNextJsHandler` for App Router |
+| `better-auth/cookies` | (bundled)     | `getSessionCookie` for fast middleware path              |
+| `better-auth/next-js` | (bundled)     | `toNextJsHandler` mounts Better Auth in App Router       |
+| `better-auth/react`   | (bundled)     | `createAuthClient` for client components                 |
+| Next.js               | 15.2.3+       | Required — patches CVE-2025-29927 middleware bypass      |
 
 ---
 
 ## Failure Modes
 
-| Scenario | What Happens | How to Handle |
-|---|---|---|
-| `DATABASE_URL` not set | Server error on first auth request | Check env vars before first request; Better Auth logs the missing config |
-| `BETTER_AUTH_SECRET` not set or too short | Sessions can be forged | Always use `openssl rand -base64 32`; never use a predictable secret |
-| Migration not run | Table does not exist error on first login | Run `npx @better-auth/cli migrate` before first request |
-| OAuth callback URL mismatch | Provider returns `redirect_uri_mismatch` error | Callback URL in provider dashboard must exactly match `{BASE_URL}/api/auth/callback/{provider}` |
-| Full session fetch in middleware | DB round trip on every request | Use `getSessionCookie()` fast path in middleware; reserve full fetch for server components |
-| Prisma adapter vs raw `pg.Pool` | Schema table names differ | Use `@better-auth/prisma` for Prisma projects; do not mix adapters |
-| `BETTER_AUTH_URL` not set | OAuth callbacks fail in production | Set to your production domain; must match provider redirect URI |
+| Scenario                                  | What Happens                                   | How to Handle                                                                                   |
+| ----------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `DATABASE_URL` not set                    | Server error on first auth request             | Check env vars before first request; Better Auth logs the missing config                        |
+| `BETTER_AUTH_SECRET` not set or too short | Sessions can be forged                         | Always use `openssl rand -base64 32`; never use a predictable secret                            |
+| Migration not run                         | Table does not exist error on first login      | Run `npx @better-auth/cli migrate` before first request                                         |
+| OAuth callback URL mismatch               | Provider returns `redirect_uri_mismatch` error | Callback URL in provider dashboard must exactly match `{BASE_URL}/api/auth/callback/{provider}` |
+| Full session fetch in middleware          | DB round trip on every request                 | Use `getSessionCookie()` fast path in middleware; reserve full fetch for server components      |
+| Prisma adapter vs raw `pg.Pool`           | Schema table names differ                      | Use `@better-auth/prisma` for Prisma projects; do not mix adapters                              |
+| `BETTER_AUTH_URL` not set                 | OAuth callbacks fail in production             | Set to your production domain; must match provider redirect URI                                 |

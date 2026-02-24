@@ -27,14 +27,15 @@ Comprehensive guidance for building scalable, maintainable, and production-ready
 
 ## Core Frameworks
 
-| Framework | Best For | Performance |
-|-----------|----------|-------------|
-| **Express.js** | Flexibility, large ecosystem, quick prototyping | Good |
-| **Fastify** | High performance, TypeScript support, schema validation | Excellent |
+| Framework      | Best For                                                | Performance |
+| -------------- | ------------------------------------------------------- | ----------- |
+| **Express.js** | Flexibility, large ecosystem, quick prototyping         | Good        |
+| **Fastify**    | High performance, TypeScript support, schema validation | Excellent   |
 
 **Quick Recommendation:** Use **Express.js** for familiarity and ecosystem breadth. Use **Fastify** for performance-critical applications requiring built-in validation.
 
 For detailed setup and patterns, see:
+
 - [Express.js Patterns](./references/guides/express-patterns.md)
 - [Fastify Patterns](./references/guides/fastify-patterns.md)
 
@@ -162,12 +163,14 @@ container.singleton(
 ## Middleware & Validation
 
 Middleware patterns are framework-specific. See detailed guides:
+
 - [Express Middleware Patterns](./references/guides/express-patterns.md)
 - [Fastify Plugin Patterns](./references/guides/fastify-patterns.md)
 
 ### Validation Schema Examples
 
 Common validation patterns using Zod and Joi:
+
 - [Validation Schema Examples](./references/examples/validation-schemas.md)
 
 ## Database Patterns
@@ -380,6 +383,7 @@ export function Cacheable(ttl: number = 300) {
 ## Security Best Practices
 
 For comprehensive security guidelines, see:
+
 - [API Security Checklist](./references/checklists/api-security.md)
 
 ### Quick Security Summary

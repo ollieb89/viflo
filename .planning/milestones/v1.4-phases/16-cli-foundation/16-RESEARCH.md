@@ -5,6 +5,7 @@
 **Confidence:** HIGH
 
 <user_constraints>
+
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
@@ -39,11 +40,13 @@ None — discussion stayed within phase scope.
 </user_constraints>
 
 <phase_requirements>
+
 ## Phase Requirements
 
-| ID | Description | Research Support |
-|----|-------------|-----------------|
+| ID      | Description                                                                                                                                                                          | Research Support                                                                                           |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
 | INIT-05 | Re-running `viflo init` on an existing project does not overwrite customized content (CLAUDE.md outside sentinel block, existing `.planning/` files, existing settings.json entries) | Idempotency patterns: string-equality check before write, sentinel-aware merge, Set-based JSON array dedup |
+
 </phase_requirements>
 
 ---
@@ -62,25 +65,25 @@ The existing codebase already uses Vitest 1.x (locked at `^1.0.0` in apps/web/pa
 
 ### Core
 
-| Library | Version | Purpose | Why Standard |
-|---------|---------|---------|--------------|
+| Library                                | Version                                        | Purpose                               | Why Standard                                                                                                                                 |
+| -------------------------------------- | ---------------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Node.js built-ins (`path`, `fs`, `os`) | Node >= 20 (engine constraint in package.json) | Path construction, file I/O, home dir | Zero deps; `path.join`/`path.resolve` handle cross-platform separators; `fs.readFileSync`/`writeFileSync` sufficient for synchronous CLI ops |
-| Vitest | ^1.0.0 (already installed in apps/web) | Unit test runner | Already in monorepo; `vi.mock` covers `os.homedir()` mocking; runs from any directory |
+| Vitest                                 | ^1.0.0 (already installed in apps/web)         | Unit test runner                      | Already in monorepo; `vi.mock` covers `os.homedir()` mocking; runs from any directory                                                        |
 
 ### Supporting
 
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| `os` (built-in) | Node >= 20 | `os.homedir()` — only for path context in tests, NOT in production path logic | Only in tests to mock and verify `~` never appears |
-| `v8` coverage provider | via `@vitest/coverage-v8` | Test coverage reports | Already configured in apps/web; reuse same provider config for bin/lib tests |
+| Library                | Version                   | Purpose                                                                       | When to Use                                                                  |
+| ---------------------- | ------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `os` (built-in)        | Node >= 20                | `os.homedir()` — only for path context in tests, NOT in production path logic | Only in tests to mock and verify `~` never appears                           |
+| `v8` coverage provider | via `@vitest/coverage-v8` | Test coverage reports                                                         | Already configured in apps/web; reuse same provider config for bin/lib tests |
 
 ### Alternatives Considered
 
-| Instead of | Could Use | Tradeoff |
-|------------|-----------|----------|
-| Node built-in `path` | `pathe` (in node_modules already) | `pathe` is ESM-first; `.cjs` files use CommonJS `require`; built-in `path` is the correct choice |
-| Vitest | Jest | Vitest already present in the monorepo; Jest would be redundant |
-| Hand-rolled deep merge | `lodash.merge` | No third-party deps in `bin/lib/`; deep merge for a two-level JSON object is 20 lines — acceptable to write |
+| Instead of             | Could Use                         | Tradeoff                                                                                                    |
+| ---------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Node built-in `path`   | `pathe` (in node_modules already) | `pathe` is ESM-first; `.cjs` files use CommonJS `require`; built-in `path` is the correct choice            |
+| Vitest                 | Jest                              | Vitest already present in the monorepo; Jest would be redundant                                             |
+| Hand-rolled deep merge | `lodash.merge`                    | No third-party deps in `bin/lib/`; deep merge for a two-level JSON object is 20 lines — acceptable to write |
 
 **Installation:**
 
@@ -117,9 +120,9 @@ Note: `bin/viflo.cjs` is NOT created in this phase. This phase is library-only.
 
 ```javascript
 // bin/lib/paths.cjs
-'use strict';
+"use strict";
 
-const path = require('path');
+const path = require("path");
 
 /**
  * Resolve the viflo installation root.
@@ -127,7 +130,7 @@ const path = require('path');
  * Never uses process.cwd() or os.homedir().
  */
 function resolveViFloRoot() {
-  return path.resolve(__dirname, '..', '..');
+  return path.resolve(__dirname, "..", "..");
 }
 
 /**
@@ -137,8 +140,8 @@ function resolveViFloRoot() {
  * @returns {string} Absolute path string
  */
 function resolveTargetPath(cwd, ...segments) {
-  if (!cwd || typeof cwd !== 'string') {
-    throw new Error('resolveTargetPath: cwd is required and must be a string');
+  if (!cwd || typeof cwd !== "string") {
+    throw new Error("resolveTargetPath: cwd is required and must be a string");
   }
   return path.resolve(cwd, ...segments);
 }
@@ -159,19 +162,19 @@ module.exports = { resolveViFloRoot, resolveTargetPath };
 function writeIfChanged(filePath, newContent) {
   let existing = null;
   try {
-    existing = fs.readFileSync(filePath, 'utf-8');
+    existing = fs.readFileSync(filePath, "utf-8");
   } catch {
     // File does not exist — will be created
   }
 
   if (existing === newContent) {
     console.log(`[viflo] skipped (unchanged): ${filePath}`);
-    return { written: false, reason: 'unchanged' };
+    return { written: false, reason: "unchanged" };
   }
 
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, newContent, 'utf-8');
-  return { written: true, reason: existing === null ? 'created' : 'updated' };
+  fs.writeFileSync(filePath, newContent, "utf-8");
+  return { written: true, reason: existing === null ? "created" : "updated" };
 }
 ```
 
@@ -184,17 +187,18 @@ function writeIfChanged(filePath, newContent) {
 **Example:**
 
 ```javascript
-const SENTINEL_START = '<!-- BEGIN VIFLO -->';
-const SENTINEL_END = '<!-- END VIFLO -->';
+const SENTINEL_START = "<!-- BEGIN VIFLO -->";
+const SENTINEL_END = "<!-- END VIFLO -->";
 
 function mergeCLAUDEmd(existingContent, sentinelContent) {
-  const startCount = (existingContent.match(/<!-- BEGIN VIFLO -->/g) || []).length;
-  const endCount   = (existingContent.match(/<!-- END VIFLO -->/g) || []).length;
+  const startCount = (existingContent.match(/<!-- BEGIN VIFLO -->/g) || [])
+    .length;
+  const endCount = (existingContent.match(/<!-- END VIFLO -->/g) || []).length;
 
   if (startCount > 1 || endCount > 1) {
     throw new Error(
-      '[viflo] CLAUDE.md contains multiple sentinel blocks. ' +
-      'Remove duplicates manually before running viflo init.'
+      "[viflo] CLAUDE.md contains multiple sentinel blocks. " +
+        "Remove duplicates manually before running viflo init.",
     );
   }
 
@@ -202,13 +206,15 @@ function mergeCLAUDEmd(existingContent, sentinelContent) {
 
   if (startCount === 0) {
     // Append — non-destructive
-    return existingContent.trimEnd() + '\n\n' + block + '\n';
+    return existingContent.trimEnd() + "\n\n" + block + "\n";
   }
 
   // Replace existing block
   const startIdx = existingContent.indexOf(SENTINEL_START);
-  const endIdx   = existingContent.indexOf(SENTINEL_END) + SENTINEL_END.length;
-  return existingContent.slice(0, startIdx) + block + existingContent.slice(endIdx);
+  const endIdx = existingContent.indexOf(SENTINEL_END) + SENTINEL_END.length;
+  return (
+    existingContent.slice(0, startIdx) + block + existingContent.slice(endIdx)
+  );
 }
 ```
 
@@ -227,10 +233,10 @@ function deepMerge(existing, incoming) {
       result[key] = [...new Set([...result[key], ...value])];
     } else if (
       value !== null &&
-      typeof value === 'object' &&
+      typeof value === "object" &&
       !Array.isArray(value) &&
       result[key] !== null &&
-      typeof result[key] === 'object' &&
+      typeof result[key] === "object" &&
       !Array.isArray(result[key])
     ) {
       // Recurse for nested objects
@@ -254,11 +260,11 @@ function deepMerge(existing, incoming) {
 
 ## Don't Hand-Roll
 
-| Problem | Don't Build | Use Instead | Why |
-|---------|-------------|-------------|-----|
-| Recursive directory creation before write | Custom mkdir loop | `fs.mkdirSync(dir, { recursive: true })` | Built-in since Node 10.12; handles race conditions |
-| JSON pretty-printing on write | Custom serialiser | `JSON.stringify(obj, null, 2) + '\n'` | Consistent 2-space indent; trailing newline avoids POSIX lint warnings |
-| Cross-platform path joins | String concatenation with `/` | `path.join()` or `path.resolve()` | Windows compatibility future-proofing; avoids double-slash bugs |
+| Problem                                   | Don't Build                   | Use Instead                              | Why                                                                    |
+| ----------------------------------------- | ----------------------------- | ---------------------------------------- | ---------------------------------------------------------------------- |
+| Recursive directory creation before write | Custom mkdir loop             | `fs.mkdirSync(dir, { recursive: true })` | Built-in since Node 10.12; handles race conditions                     |
+| JSON pretty-printing on write             | Custom serialiser             | `JSON.stringify(obj, null, 2) + '\n'`    | Consistent 2-space indent; trailing newline avoids POSIX lint warnings |
+| Cross-platform path joins                 | String concatenation with `/` | `path.join()` or `path.resolve()`        | Windows compatibility future-proofing; avoids double-slash bugs        |
 
 **Key insight:** The entire `bin/lib/` layer needs zero third-party dependencies. Node's built-ins (`path`, `fs`, `os`) handle every requirement. Adding npm packages to the bin layer would complicate the eventual global install story (Phase PLAT-02).
 
@@ -323,11 +329,11 @@ Verified patterns from Node.js built-ins (HIGH confidence — Node.js 20 LTS doc
 ```javascript
 // bin/lib/paths.cjs
 // __dirname = /path/to/viflo/bin/lib
-const path = require('path');
+const path = require("path");
 
 function resolveViFloRoot() {
   // bin/lib -> bin -> repo root
-  return path.resolve(__dirname, '..', '..');
+  return path.resolve(__dirname, "..", "..");
 }
 // Returns: /path/to/viflo  (absolute, regardless of process.cwd())
 ```
@@ -336,34 +342,38 @@ function resolveViFloRoot() {
 
 ```javascript
 // Node.js 20 built-in — no external dep needed
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 fs.mkdirSync(path.dirname(filePath), { recursive: true });
-fs.writeFileSync(filePath, content, 'utf-8');
+fs.writeFileSync(filePath, content, "utf-8");
 ```
 
 ### Vitest mock of `os.homedir()` (CJS test file)
 
 ```javascript
 // bin/lib/__tests__/paths.test.js
-const { describe, it, expect, vi, beforeEach } = require('vitest');
+const { describe, it, expect, vi, beforeEach } = require("vitest");
 
-vi.mock('os', () => ({
-  homedir: vi.fn(() => '/mock/home'),
+vi.mock("os", () => ({
+  homedir: vi.fn(() => "/mock/home"),
 }));
 
 // In tests: import paths AFTER mock is set up
-const { resolveTargetPath } = require('../paths.cjs');
+const { resolveTargetPath } = require("../paths.cjs");
 
-describe('resolveTargetPath', () => {
-  it('requires explicit cwd', () => {
-    expect(() => resolveTargetPath()).toThrow('cwd is required');
+describe("resolveTargetPath", () => {
+  it("requires explicit cwd", () => {
+    expect(() => resolveTargetPath()).toThrow("cwd is required");
   });
 
-  it('returns absolute path from cwd + segments', () => {
-    const result = resolveTargetPath('/tmp/my-project', '.claude', 'settings.json');
-    expect(result).toBe('/tmp/my-project/.claude/settings.json');
+  it("returns absolute path from cwd + segments", () => {
+    const result = resolveTargetPath(
+      "/tmp/my-project",
+      ".claude",
+      "settings.json",
+    );
+    expect(result).toBe("/tmp/my-project/.claude/settings.json");
   });
 });
 ```
@@ -372,12 +382,12 @@ describe('resolveTargetPath', () => {
 
 ```javascript
 // bin/vitest.config.cjs  (CommonJS — vitest supports cjs config files)
-const { defineConfig } = require('vitest/config');
+const { defineConfig } = require("vitest/config");
 
 module.exports = defineConfig({
   test: {
-    include: ['bin/lib/__tests__/**/*.test.{js,cjs}'],
-    environment: 'node',
+    include: ["bin/lib/__tests__/**/*.test.{js,cjs}"],
+    environment: "node",
   },
 });
 ```
@@ -392,11 +402,11 @@ pnpm exec vitest run bin/lib/__tests__
 
 ## State of the Art
 
-| Old Approach | Current Approach | When Changed | Impact |
-|--------------|------------------|--------------|--------|
-| `__filename` globals in CJS | `__dirname` + `path.resolve` | Always best practice | `__dirname` gives directory, not file — correct for upward traversal |
-| Regex-based sentinel replace | `indexOf` position + slice | This phase's design | Safer; throws on ambiguity; no greedy overmatch |
-| Shallow `Object.assign` for JSON merge | Recursive deep merge with Set arrays | This phase's design | Preserves nested keys; deduplicates arrays correctly |
+| Old Approach                           | Current Approach                     | When Changed         | Impact                                                               |
+| -------------------------------------- | ------------------------------------ | -------------------- | -------------------------------------------------------------------- |
+| `__filename` globals in CJS            | `__dirname` + `path.resolve`         | Always best practice | `__dirname` gives directory, not file — correct for upward traversal |
+| Regex-based sentinel replace           | `indexOf` position + slice           | This phase's design  | Safer; throws on ambiguity; no greedy overmatch                      |
+| Shallow `Object.assign` for JSON merge | Recursive deep merge with Set arrays | This phase's design  | Preserves nested keys; deduplicates arrays correctly                 |
 
 **Deprecated/outdated:**
 

@@ -320,6 +320,7 @@ defer pprof.StopCPUProfile()
 ## Advanced Techniques & Patterns
 
 For detailed debugging techniques and patterns by issue type, see:
+
 - **[references/guides/debugging-techniques.md](references/guides/debugging-techniques.md)** - Binary search, differential debugging, trace debugging, memory leak detection, and patterns for intermittent bugs, performance issues, and production bugs
 
 ## Best Practices

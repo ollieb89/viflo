@@ -4,16 +4,17 @@
 
 **Phase Goal**: Fresh CI clones work reliably without workarounds, and developer onboarding automates pre-commit hook installation  
 **Requirements**: CI-02 (gap closure), QUAL-01, QUAL-02 (gap closure)  
-**Depends on**: Phase 8  
+**Depends on**: Phase 8
 
 ## Current State Analysis
 
 ### CI Issue (WORKAROUND EXISTS)
 
 Current `.github/workflows/ci.yml` has a workaround:
+
 ```yaml
 - run: pnpm install --frozen-lockfile
-- run: cd apps/web && pnpm install --frozen-lockfile  # WORKAROUND
+- run: cd apps/web && pnpm install --frozen-lockfile # WORKAROUND
 ```
 
 **Root Cause**: `pnpm-workspace.yaml` doesn't properly declare workspace topology.
@@ -38,12 +39,14 @@ Current state: Developers must manually run `pre-commit install` after cloning.
 Based on the 4 success criteria, I expect **2 plans**:
 
 ### 09-01: Workspace Configuration (CI-02 gap closure)
+
 - Fix `pnpm-workspace.yaml` to properly declare workspaces
 - Update CI to use single `pnpm install`
 - Verify workspace dependencies are linked correctly
 - Test CI pipeline end-to-end
 
 ### 09-02: Developer Onboarding Automation (QUAL-01, QUAL-02 gap closure)
+
 - Create `scripts/setup-dev.sh` or Makefile target for setup
 - Automate `pre-commit install` in setup script
 - Update `CONTRIBUTING.md` with onboarding instructions
@@ -51,7 +54,7 @@ Based on the 4 success criteria, I expect **2 plans**:
 
 ## Open Questions
 
-1. **Setup script vs Makefile**: 
+1. **Setup script vs Makefile**:
    - Option A: `scripts/setup-dev.sh` (consistent with existing scripts)
    - Option B: Makefile (common convention)
    - **Decision**: Option A — consistent with existing script structure

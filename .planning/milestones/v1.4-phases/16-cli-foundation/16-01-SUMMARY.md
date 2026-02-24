@@ -2,7 +2,8 @@
 phase: 16-cli-foundation
 plan: "01"
 subsystem: infra
-tags: [nodejs, commonjs, path-resolution, idempotency, file-writing, sentinel-merge]
+tags:
+  [nodejs, commonjs, path-resolution, idempotency, file-writing, sentinel-merge]
 
 requires: []
 provides:
@@ -51,7 +52,7 @@ completed: 2026-02-24
 
 # Phase 16 Plan 01: CLI Foundation Summary
 
-**CommonJS path utilities and idempotent file writers for viflo init — resolveViFloRoot/__dirname-based root detection, sentinel-merge CLAUDE.md, and Set-dedup deep-merge settings.json**
+**CommonJS path utilities and idempotent file writers for viflo init — resolveViFloRoot/\_\_dirname-based root detection, sentinel-merge CLAUDE.md, and Set-dedup deep-merge settings.json**
 
 ## Performance
 
@@ -104,5 +105,6 @@ None - no external service configuration required.
 - No blockers or concerns
 
 ---
-*Phase: 16-cli-foundation*
-*Completed: 2026-02-24*
+
+_Phase: 16-cli-foundation_
+_Completed: 2026-02-24_

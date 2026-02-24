@@ -222,36 +222,38 @@ async function retry<T>(
     maxAttempts?: number;
     backoffMs?: number;
     retryableErrors?: Array<new (...args: any[]) => Error>;
-  } = {}
+  } = {},
 ): Promise<T> {
   const { maxAttempts = 3, backoffMs = 1000, retryableErrors = [] } = options;
-  
+
   let lastError: Error | undefined;
-  
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await fn();
     } catch (error) {
       lastError = error as Error;
-      
-      const isRetryable = retryableErrors.length === 0 || 
-        retryableErrors.some(ErrorClass => error instanceof ErrorClass);
-      
+
+      const isRetryable =
+        retryableErrors.length === 0 ||
+        retryableErrors.some((ErrorClass) => error instanceof ErrorClass);
+
       if (!isRetryable || attempt === maxAttempts) {
         throw error;
       }
-      
+
       const delay = backoffMs * Math.pow(2, attempt - 1);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
-  
+
   throw lastError;
 }
 
 // Usage
-const data = await retry(
-  () => fetchUserData(userId),
-  { maxAttempts: 3, backoffMs: 500, retryableErrors: [NetworkError] }
-);
+const data = await retry(() => fetchUserData(userId), {
+  maxAttempts: 3,
+  backoffMs: 500,
+  retryableErrors: [NetworkError],
+});
 ```

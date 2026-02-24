@@ -10,7 +10,7 @@ function chunkText(text: string, chunkSize = 512, overlap = 128): string[] {
   const chunks: string[] = [];
 
   for (let i = 0; i < words.length; i += chunkSize - overlap) {
-    const chunk = words.slice(i, i + chunkSize).join(' ');
+    const chunk = words.slice(i, i + chunkSize).join(" ");
     if (chunk.trim()) chunks.push(chunk);
     if (i + chunkSize >= words.length) break;
   }
@@ -20,6 +20,7 @@ function chunkText(text: string, chunkSize = 512, overlap = 128): string[] {
 ```
 
 **Chunking rules:**
+
 - Target 256–512 tokens per chunk (not characters — use a tokeniser like `tiktoken` for precision)
 - Use 25–50% overlap to preserve context at boundaries
 - Never split mid-sentence if possible — split on paragraph breaks first
@@ -28,14 +29,14 @@ function chunkText(text: string, chunkSize = 512, overlap = 128): string[] {
 ## Batch Embedding with Retry
 
 ```typescript
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 const openai = new OpenAI();
 const BATCH_SIZE = 100;
 
 async function embedBatch(texts: string[]): Promise<number[][]> {
   const response = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: texts,
   });
   return response.data.map((d) => d.embedding);
