@@ -51,7 +51,7 @@
 
 ### 📋 v1.4 Project Tooling (Phases 15–19)
 
-- [ ] **Phase 15: Integration Review** — Update INDEX.md, verify 500-line compliance, and add cross-skill references across all new skills
+- [ ] **Phase 15: Integration Review** — Update INDEX.md, verify 500-line compliance, and add cross-skill references across all new skills (3 plans)
 - [ ] **Phase 16: CLI Foundation** — Path utilities and write primitives with Vitest unit tests; idempotency built in from the start
 - [ ] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json)
 - [ ] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template
@@ -67,7 +67,12 @@
   1. INDEX.md lists prompt-engineering, auth-systems, rag-vector-search, agent-architecture, and stripe-payments with accurate one-line descriptions
   2. VERIFICATION.md records the line count for every new/updated SKILL.md and each count is confirmed ≤500
   3. The RAG skill links to Agent Architecture at the episodic memory seam; Agent Architecture links back to RAG at the pgvector pattern seam; both link to prompt-engineering at the system-prompt design seam
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 15-01-PLAN.md — Update INDEX.md with accurate v1.4 skill descriptions and intro paragraph (INFRA-01)
+- [ ] 15-02-PLAN.md — Add See Also cross-reference sections to rag-vector-search, agent-architecture, and prompt-engineering SKILL.md files (INFRA-03)
+- [ ] 15-03-PLAN.md — Create VERIFICATION.md with post-edit line counts for all five v1.4 skills (INFRA-02)
 
 ### Phase 16: CLI Foundation
 **Goal**: Safe, tested path utilities and write primitives exist so all later CLI phases can build on a correct foundation
@@ -129,7 +134,7 @@
 | 12. RAG / Vector Search | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 13. Agent Architecture | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 14. Stripe Payments | v1.3 | 2/2 | Complete | 2026-02-24 |
-| 15. Integration Review | v1.4 | 0/TBD | Not started | - |
+| 15. Integration Review | v1.4 | 0/3 | Not started | - |
 | 16. CLI Foundation | v1.4 | 0/TBD | Not started | - |
 | 17. Minimal Mode | v1.4 | 0/TBD | Not started | - |
 | 18. Full Mode | v1.4 | 0/TBD | Not started | - |
