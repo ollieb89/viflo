@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-24 after v1.5 milestone start)
 ## Current Position
 
 Phase: 17 — Minimal Mode
-Plan: —
-Status: Roadmap finalized — ready for Phase 17 planning
-Last activity: 2026-02-24 — v1.5 roadmap created (phases 17–19 with full success criteria)
+Plan: 1/3
+Status: In progress — Plan 17-01 complete
+Last activity: 2026-02-24 — Plan 17-01 complete: scanSkills runtime skill scanner implemented with TDD
 
 ## Accumulated Context
 
@@ -23,6 +23,8 @@ Last activity: 2026-02-24 — v1.5 roadmap created (phases 17–19 with full suc
 - [v1.4]: Write to project-scope `.claude/settings.json` only — user-scope deferred due to active Claude Code bug #5140
 - [v1.4]: vitest installed at workspace root for CLI tests; web app tests remain unaffected
 - [v1.4]: agent-architecture 503 lines accepted — 4/5 skills within limit is the valid pass state
+- [17-01]: scanSkills accepts rootDir explicitly — caller passes resolveViFloRoot(), keeps function pure and testable
+- [17-01]: ENOENT returns [] — new projects without .agent/skills/ dir are a normal state, not an error
 
 ### Pending Todos
 
@@ -36,5 +38,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.5 roadmap finalized — all 7 requirements (INIT-01–08 excl. INIT-05) mapped to phases 17–19
-Resume with: `/gsd:plan-phase 17` to start Phase 17 planning
+Stopped at: Completed 17-01-PLAN.md — scanSkills implemented, 28/28 tests passing
+Resume with: `/gsd:execute-phase 17` to continue with Plan 17-02
