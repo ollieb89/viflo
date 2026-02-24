@@ -52,7 +52,7 @@
 ### 📋 v1.4 Project Tooling (Phases 15–19)
 
 - [x] **Phase 15: Integration Review** — Update INDEX.md, verify 500-line compliance, and add cross-skill references across all new skills (3 plans) (completed 2026-02-24)
-- [ ] **Phase 16: CLI Foundation** — Path utilities and write primitives with Vitest unit tests; idempotency built in from the start
+- [x] **Phase 16: CLI Foundation** — Path utilities and write primitives with Vitest unit tests; idempotency built in from the start (completed 2026-02-24)
 - [ ] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json)
 - [ ] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template
 - [ ] **Phase 19: Polish** — --dry-run flag, labelled per-file output, and package.json bin wiring
@@ -139,7 +139,7 @@ Plans:
 | 13. Agent Architecture | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 14. Stripe Payments | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 15. Integration Review | 3/3 | Complete    | 2026-02-24 | - |
-| 16. CLI Foundation | 1/2 | In Progress|  | - |
+| 16. CLI Foundation | 2/2 | Complete   | 2026-02-24 | - |
 | 17. Minimal Mode | v1.4 | 0/TBD | Not started | - |
 | 18. Full Mode | v1.4 | 0/TBD | Not started | - |
 | 19. Polish | v1.4 | 0/TBD | Not started | - |

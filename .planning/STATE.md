@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.4 milestone started)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.4 Project Tooling — Phase 16 (CLI Foundation) in progress; Plan 01 complete
+**Current focus:** v1.4 Project Tooling — Phase 16 (CLI Foundation) in progress; Plan 02 complete
 
 ## Current Position
 
 Phase: 16 (CLI Foundation) — In Progress
-Plan: 01 complete (of 4)
-Status: INIT-05 satisfied — bin/lib/paths.cjs and bin/lib/writers.cjs created with idempotent write semantics
-Last activity: 2026-02-24 — Phase 16 Plan 01 complete (paths.cjs + writers.cjs foundation layer)
+Plan: 02 complete (of 4)
+Status: INIT-05 verified by tests — 23-test suite covering paths.cjs and writers.cjs; pnpm run test:cli exits 0
+Last activity: 2026-02-24 — Phase 16 Plan 02 complete (Vitest test suite + test:cli script)
 
 Progress: [███░░░░░░░] 30% — v1.4 in progress (1.25/5 phases)
 
@@ -45,6 +45,7 @@ Progress: [███░░░░░░░] 30% — v1.4 in progress (1.25/5 phas
 | Phase 15-integration-review P01 | 1 | 1 tasks | 1 files |
 | Phase 15-integration-review P03 | 2 | 1 tasks | 1 files |
 | Phase 16-cli-foundation P01 | 2 | 2 tasks | 2 files |
+| Phase 16-cli-foundation P02 | 8 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Recent decisions affecting current work:
 - [Phase 16-cli-foundation P01]: resolveViFloRoot() uses __dirname not process.cwd() — deterministic regardless of invocation directory
 - [Phase 16-cli-foundation P01]: indexOf+slice used for sentinel block replacement instead of regex — avoids escaping edge cases
 - [Phase 16-cli-foundation P01]: existing-first ordering in Set spread preserves user-added array entries at front
+- [Phase 16-cli-foundation P02]: vitest globals:true required for CJS test files — explicit require('vitest') conflicts with vi.mock() hoisting
+- [Phase 16-cli-foundation P02]: vitest installed at workspace root (not web app) to enable pnpm exec vitest run from repo root
+- [Phase 16-cli-foundation P02]: Real temp directories used for writers tests (fs.mkdtempSync) — filesystem mocking would defeat the purpose of testing real I/O
 
 ### Pending Todos
 
@@ -88,5 +92,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 16-01-PLAN.md — bin/lib/paths.cjs and bin/lib/writers.cjs created, INIT-05 satisfied
-Resume with: /gsd:execute-phase 16 02 (CLI Foundation, Plan 02)
+Stopped at: Completed 16-02-PLAN.md — 23-test suite for paths.cjs + writers.cjs; test:cli script wired; INIT-05 verified
+Resume with: /gsd:execute-phase 16 03 (CLI Foundation, Plan 03)
