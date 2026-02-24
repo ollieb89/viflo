@@ -11,9 +11,56 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  sc-prompts-validate:
+    name: sc-prompts-validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate SC prompts
+        run: pnpm run validate:sc-prompts
+
+  sc-reflect-benchmark:
+    name: sc-reflect-benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Benchmark SC reflect
+        run: pnpm run bench:sc-reflect
+
   build:
     name: build
     runs-on: ubuntu-latest
+    needs:
+      - sc-prompts-validate
+      - sc-reflect-benchmark
 
     steps:
       - name: Checkout repository

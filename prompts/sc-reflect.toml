@@ -1,0 +1,60 @@
+name = "sc-reflect"
+version = "1.0.0"
+description = "Structured reflection and validation workflow for task/session/completion checkpoints."
+command = "/sc:reflect"
+input_mode = "optional"
+
+[[flags]]
+name = "--type"
+description = "Reflection scope: task, session, or completion."
+default = "task"
+
+[[flags]]
+name = "--analyze"
+description = "Run analysis phase."
+default = "true"
+
+[[flags]]
+name = "--validate"
+description = "Run validation phase."
+default = "true"
+
+[[sections]]
+id = "analyze"
+title = "Analyze"
+intent = "Assess current progress and state."
+instructions = "Use Serena reflection tools to inspect task/session evidence before concluding."
+
+[[sections]]
+id = "validate"
+title = "Validate"
+intent = "Check adherence and quality."
+instructions = "Assess requirement fulfillment and identify deviations from task goals."
+
+[[sections]]
+id = "reflect"
+title = "Reflect"
+intent = "Synthesize insights."
+instructions = "Identify patterns, risks, and blockers from collected information."
+
+[[sections]]
+id = "document"
+title = "Document"
+intent = "Persist learning."
+instructions = "Write concise memory artifacts only when insights are reusable."
+
+[[sections]]
+id = "optimize"
+title = "Optimize"
+intent = "Recommend improvements."
+instructions = "Return a prioritized list of concrete next actions."
+
+[tooling]
+mcp_required = "serena"
+reflection_tools = "think_about_task_adherence,think_about_collected_information,think_about_whether_you_are_done"
+memory_tools = "list_memories,read_memory,write_memory"
+
+[validation]
+core_reflection_p95_ms = 200
+checkpoint_p95_ms = 1000
+require_explicit_done_signal = true
