@@ -60,10 +60,11 @@
   3. Developer can read about chunking strategies (fixed-size vs semantic, overlap rules, token budgets) and choose one with documented tradeoffs
   4. Developer can follow the hybrid search section and understand RRF fusion combining vector similarity and full-text search
   5. The Gotchas section names at least 3 pitfalls (embedding model drift, missing HNSW index, chunking pitfalls) each with explicit warning signs and fixes
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 12-01: TBD
+- [ ] 12-01-PLAN.md — Rewrite SKILL.md to auth-systems depth (Quick Start, Schema, Chunking, Hybrid Search, Evaluation, Gotchas)
+- [ ] 12-02-PLAN.md — Create eval.ts runnable evaluation script; update references/ with HNSW schema and RRF CTE
 
 ---
 
