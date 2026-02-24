@@ -1,6 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk';
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES module compatible __filename and __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const client = new Anthropic(); // reads ANTHROPIC_API_KEY from env
 
@@ -52,21 +57,52 @@ function parseTestCase(filePath: string): TestCase {
 }
 
 async function runTestCase(testCase: TestCase): Promise<{ passed: boolean; reason: string }> {
-  // Build messages from Input Prompt section
-  const lines = testCase.inputPrompt.split('\n');
-  let system = '';
-  let userContent = '';
+  // Build messages from Input Prompt section.
+  // Supports multi-line system prompts and multi-turn conversations:
+  //   System: ...          → system prompt (continues until next role line)
+  //   User: ...            → user message
+  //   User (example N): ... → user message (few-shot example)
+  //   User (real): ...     → user message (final real input)
+  //   Assistant: ...       → assistant message
+  //   Assistant (example N): ... → assistant message (few-shot example)
+  type Section = { type: 'system' | 'user' | 'assistant'; content: string };
+  const sections: Section[] = [];
+  let currentSection: Section | null = null;
 
-  for (const line of lines) {
-    if (line.startsWith('System: ')) system = line.slice('System: '.length);
-    else if (line.startsWith('User: ') || line.startsWith('User (real): ')) {
-      userContent = line.replace(/^User \(real\): /, '').replace(/^User: /, '');
-    } else if (userContent) {
-      userContent += '\n' + line;
+  const flush = () => {
+    if (currentSection) sections.push({ ...currentSection, content: currentSection.content.trim() });
+    currentSection = null;
+  };
+
+  for (const line of testCase.inputPrompt.split('\n')) {
+    const sysMatch = line.match(/^System:\s*(.*)/);
+    const userMatch = line.match(/^User(?:\s+\([^)]*\))?\s*:\s*(.*)/);
+    const asstMatch = line.match(/^Assistant(?:\s+\([^)]*\))?\s*:\s*(.*)/);
+    if (sysMatch) {
+      flush();
+      currentSection = { type: 'system', content: sysMatch[1] };
+    } else if (userMatch) {
+      flush();
+      currentSection = { type: 'user', content: userMatch[1] };
+    } else if (asstMatch) {
+      flush();
+      currentSection = { type: 'assistant', content: asstMatch[1] };
+    } else if (currentSection) {
+      currentSection.content += '\n' + line;
+    }
+  }
+  flush();
+
+  let system = '';
+  const messages: Anthropic.MessageParam[] = [];
+  for (const section of sections) {
+    if (section.type === 'system') {
+      system = section.content;
+    } else {
+      messages.push({ role: section.type, content: section.content });
     }
   }
 
-  const messages: Anthropic.MessageParam[] = [{ role: 'user', content: userContent.trim() }];
   const createParams: Anthropic.MessageCreateParamsNonStreaming = {
     model: testCase.model,
     max_tokens: 1024,

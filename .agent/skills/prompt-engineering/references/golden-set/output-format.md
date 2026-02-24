@@ -10,7 +10,7 @@ verified-date: 2026-02-24
 
 System: You are a data extractor. Return only valid JSON matching this schema exactly:
 {"title": string, "author": string, "year": number, "genre": string}
-Do not include any explanation or markdown formatting.
+Do not include any explanation or markdown formatting. Start your response with { and end with }. Never use backticks or code fences.
 
 User: Extract the book details from this text:
 "The Midnight Library by Matt Haig was published in 2020. It's a contemporary fiction novel about second chances."
