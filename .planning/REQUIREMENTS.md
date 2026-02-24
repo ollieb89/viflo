@@ -68,30 +68,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| RAG-01 | — | Pending |
-| RAG-02 | — | Pending |
-| RAG-03 | — | Pending |
-| RAG-04 | — | Pending |
-| RAG-05 | — | Pending |
-| AGENT-01 | — | Pending |
-| AGENT-02 | — | Pending |
-| AGENT-03 | — | Pending |
-| AGENT-04 | — | Pending |
-| AGENT-05 | — | Pending |
-| STRIPE-01 | — | Pending |
-| STRIPE-02 | — | Pending |
-| STRIPE-03 | — | Pending |
-| STRIPE-04 | — | Pending |
-| STRIPE-05 | — | Pending |
-| INFRA-01 | — | Pending |
-| INFRA-02 | — | Pending |
-| INFRA-03 | — | Pending |
+| RAG-01 | Phase 12 | Pending |
+| RAG-02 | Phase 12 | Pending |
+| RAG-03 | Phase 12 | Pending |
+| RAG-04 | Phase 12 | Pending |
+| RAG-05 | Phase 12 | Pending |
+| AGENT-01 | Phase 13 | Pending |
+| AGENT-02 | Phase 13 | Pending |
+| AGENT-03 | Phase 13 | Pending |
+| AGENT-04 | Phase 13 | Pending |
+| AGENT-05 | Phase 13 | Pending |
+| STRIPE-01 | Phase 14 | Pending |
+| STRIPE-02 | Phase 14 | Pending |
+| STRIPE-03 | Phase 14 | Pending |
+| STRIPE-04 | Phase 14 | Pending |
+| STRIPE-05 | Phase 14 | Pending |
+| INFRA-01 | Phase 15 | Pending |
+| INFRA-02 | Phase 15 | Pending |
+| INFRA-03 | Phase 15 | Pending |
 
 **Coverage:**
 - v1.3 requirements: 18 total
-- Mapped to phases: 0
-- Unmapped: 18 ⚠️ (roadmap not yet created)
+- Mapped to phases: 18
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after initial v1.3 definition*
+*Last updated: 2026-02-24 after v1.3 roadmap creation (Phases 12–15)*
