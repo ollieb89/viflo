@@ -20,8 +20,8 @@ The primary risks identified include "Agent Infinite Loops" (where autonomous ag
 | **Phase 1** | Model Strategy & Environment Setup       | ✅ Complete    | 100%       |
 | **Phase 2** | Detailed Planning & Architectural Design | ✅ Complete    | 100%       |
 | **Phase 3** | Agentic Implementation (Execution)       | ⚠️ Partial     | ~70%       |
-| **Phase 4** | Testing, CI/CD, and Quality Gates        | ⚠️ Partial     | ~60%       |
-| **Phase 5** | Iteration & Continuous Improvement       | 🔲 Not Started | 0%         |
+| **Phase 4** | Testing, CI/CD, and Quality Gates        | ✅ Complete    | 85%        |
+| **Phase 5** | Iteration & Continuous Improvement       | ⚠️ Partial     | 10%        |
 
 **Evidence base:** `.planning/STATE.md`, `.planning/PROJECT.md`, `.planning/milestones/v1.0-MILESTONE-AUDIT.md`, 35 skills in `.agent/skills/`, scripts in `scripts/`, monorepo in `packages/`.
 
@@ -418,7 +418,7 @@ Items identified as incomplete during the v1.0 audit. Ordered by priority.
 
 | ID   | Task                                                                                                                                                 | Phase | Effort | Owner        |
 | :--- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :---- | :----- | :----------- |
-| G-01 | **Activate CI/CD pipeline** — copy `ci-cd-pipelines` templates to `.github/workflows/ci.yml` and verify green on push                                | 4.1   | Low    | DevOps Agent |
+| G-01 | **Activate CI/CD pipeline** — copy `ci-cd-pipelines` templates to `.github/workflows/ci.yml` and verify green on push                                | 4.1   | Low    | ✅ DONE      |
 | G-02 | **Wire pre-commit hooks** — configure Husky at repo root with `detect-secrets` and `gitleaks`; test against a dummy secret                           | 4.4   | Low    | DevOps Agent |
 | G-03 | **Add live test suite** — add Vitest to `apps/web/`; write ≥1 unit test per utility; enforce via CI                                                  | 4.2   | Medium | QA Agent     |
 | G-04 | **Coverage ratchet script** — implement script that reads current coverage, updates threshold in `vitest.config.ts`, and fails if coverage regresses | 4.2   | Low    | QA Agent     |

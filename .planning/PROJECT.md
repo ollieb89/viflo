@@ -1,6 +1,6 @@
 # Viflo: Universal Agentic Development Environment
 
-## Current State: v1.5 Shipped
+## Current State: v1.6 Planning
 
 `viflo init` CLI is fully functional. Developers can wire any project to viflo in one command:
 - `viflo init --minimal` — CLAUDE.md sentinel + `.claude/settings.json` permissions
@@ -9,7 +9,18 @@
 - Unified labelled output (`created`/`updated`/`skipped`/`merged`) with absolute paths
 - `npx viflo` / `pnpm exec viflo` invocable via `package.json` bin field
 
-**Next milestone:** TBD — see `/gsd:new-milestone` to define v1.6 scope.
+## Current Milestone: v1.6 Infrastructure Hardening & Quality Gates
+
+**Goal:** Operationalize and harden repository-level quality/safety gates so contributors cannot merge insecure or unverified changes.
+
+**Target features:**
+- CI/CD gate hardening (live GitHub Actions with enforced lint/typecheck/test/build checks)
+- Security enforcement hardening (pre-commit secret scanning + consistent bootstrap/install path)
+- Testing reliability hardening (web Vitest baseline + coverage ratchet enforcement)
+- Database operationalization for integration testing (single migration command + CI integration flow)
+- Cost-controlled LLM testing gates (optional and explicitly restricted to low-cost/local profiles)
+
+**Next step:** `/gsd-plan-phase 20` after roadmap approval.
 
 ## What This Is
 
@@ -70,7 +81,11 @@ A complete agentic dev environment you can install in one command — structured
 
 ### Active
 
-(None — all v1.5 requirements shipped. Define v1.6 requirements via `/gsd:new-milestone`.)
+- [ ] GATE-01: Maintainer can rely on push/PR checks to block merges when lint, typecheck, unit tests, or build fail
+- [ ] SEC-01: Contributor commits are blocked locally when staged changes contain detected secrets
+- [ ] TEST-01: `apps/web` test suite and coverage ratchet are enforced in CI, preventing regression
+- [ ] DBOP-01: Contributor can run one workspace command to provision/update development DB schema for integration testing
+- [ ] COST-01: Optional LLM test paths run only behind explicit low-cost/local model gating
 
 ### Out of Scope
 
@@ -180,4 +195,4 @@ Known tech debt:
 
 ---
 
-_Last updated: 2026-02-24 after v1.5 milestone_
+_Last updated: 2026-02-24 after v1.6 milestone kickoff_

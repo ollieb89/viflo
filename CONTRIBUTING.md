@@ -154,6 +154,18 @@ python3 scripts/verify_env.py
 
 For documentation changes, read the rendered output carefully for clarity and accuracy.
 
+#### CI Policy and MCP Probe Mode
+
+Our standard CI pipeline runs deterministically to ensure reliable and fast feedback on pull requests. Tests that interact with external MCP servers (which might introduce flakiness) are disabled by default.
+
+However, we provide an optional **MCP probe mode** for testing agentic workflows that hit actual endpoints. You can trigger these extended tests by running the benchmark commands locally with the following environment variables:
+
+```bash
+MCP_PROBE_CMD=true ALLOW_FLAKY_PROBES=1 pnpm run bench:sc-reflect
+```
+
+These tests also run automatically in our nightly benchmark workflows to monitor the health of the agent integrations over time without blocking everyday development.
+
 ### Step 6: Push and Open a PR
 
 ```bash

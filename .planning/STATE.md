@@ -2,17 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24 after v1.5 milestone)
+See: .planning/PROJECT.md (updated 2026-02-24 after v1.6 milestone kickoff)
 
-**Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** Planning next milestone — run `/gsd:new-milestone` to define v1.6
+**Core value:** A complete agentic dev environment you can install in one command — structured methodology, ready-made skills, and proven workflows so teams skip setup and ship faster.
+**Current focus:** Milestone v1.6 planning and phase kickoff
 
 ## Current Position
 
-Phase: —
+Phase: Not started (defining requirements)
 Plan: —
-Status: v1.5 milestone complete — all phases shipped, archived, git tagged
-Last activity: 2026-02-24 — v1.5 milestone archived: viflo init CLI (Phases 17–19), 55/55 tests, all requirements satisfied
+Status: Defining requirements
+Last activity: 2026-02-24 — Milestone v1.6 started (Infrastructure Hardening & Quality Gates)
 
 ## Accumulated Context
 
@@ -29,7 +29,7 @@ Last activity: 2026-02-24 — v1.5 milestone archived: viflo init CLI (Phases 17
 
 ### Pending Todos
 
-- Re-verify Claude Code user-scope permissions.allow bug (#5140) for next milestone
+- Re-verify Claude Code user-scope permissions.allow bug (#5140) for future milestone planning
 
 ### Blockers/Concerns
 
@@ -38,5 +38,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.5 milestone complete and archived
-Resume with: `/gsd:new-milestone` to start v1.6 planning
+Stopped at: Milestone v1.6 initialized (requirements + roadmap defined)
+Resume with: `/gsd-plan-phase 20` to begin execution
