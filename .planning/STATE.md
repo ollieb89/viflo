@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.3 — Phase 13 (Agent Architecture) — In Progress (1 of 2 plans done)
+**Current focus:** v1.3 — Phase 13 (Agent Architecture) — Complete (2 of 2 plans done)
 
 ## Current Position
 
 Phase: 13 of 15 (Agent Architecture)
-Plan: 01 complete (1 of 2 plans)
-Status: In Progress
-Last activity: 2026-02-24 — 13-01 agent-architecture SKILL.md expanded from 81 to 498 lines
+Plan: 02 complete (2 of 2 plans) — Phase 13 complete
+Status: Phase Complete — Resume Phase 14 (Stripe Payments)
+Last activity: 2026-02-24 — 13-02 reference files updated for LangGraph 1.x and pgvector episodic memory
 
 Progress: [████████░░] 75% (historical — v1.3 phases at 0%)
 
@@ -37,6 +37,7 @@ Progress: [████████░░] 75% (historical — v1.3 phases at 0%
 | Phase 12-rag-vector-search P01 | 4 | 2 tasks | 2 files |
 | Phase 12-rag-vector-search P02 | 3 | 2 tasks | 3 files |
 | Phase 13-agent-architecture P01 | 4 | 1 tasks | 1 files |
+| Phase 13-agent-architecture P02 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -59,6 +60,9 @@ Recent decisions affecting current work:
 - [Phase 13-agent-architecture]: Manual tool-use loop over tool_runner() shortcut — guardrail placement is explicit and auditable
 - [Phase 13-agent-architecture]: Python primary for LangGraph — TypeScript SDK noted but not covered in agent-architecture skill
 - [Phase 13-agent-architecture]: Next.js API route proxy pattern for streaming — avoids CORS, keeps API key server-side
+- [Phase 13-agent-architecture]: create_react_agent (Option B) recommended over custom StateGraph (Option A) for most LangGraph use cases
+- [Phase 13-agent-architecture]: PostgresSaver (Option B) mandatory for production LangGraph — InMemorySaver (Option A) for dev only
+- [Phase 13-agent-architecture]: pgvector episodic store (Option B) recommended for >20-turn sessions or cross-session recall — in-context (Option A) for short sessions only
 
 ### Pending Todos
 
@@ -71,5 +75,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 13-01-PLAN.md — agent-architecture SKILL.md expanded from 81 to 498 lines
-Resume with: Phase 13 Plan 02 (if any) or Phase 14 (Stripe Payments)
+Stopped at: Completed 13-02-PLAN.md — reference files updated for LangGraph 1.x and pgvector episodic memory
+Resume with: Phase 14 (Stripe Payments)
