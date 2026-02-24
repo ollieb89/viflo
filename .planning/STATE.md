@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-02-24 after v1.5 milestone start)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 17 — Minimal Mode
 Plan: —
-Status: Defining requirements
-Last activity: 2026-02-24 — Milestone v1.5 started
+Status: Roadmap finalized — ready for Phase 17 planning
+Last activity: 2026-02-24 — v1.5 roadmap created (phases 17–19 with full success criteria)
 
 ## Accumulated Context
 
@@ -27,7 +27,6 @@ Last activity: 2026-02-24 — Milestone v1.5 started
 ### Pending Todos
 
 - Re-verify Claude Code user-scope permissions.allow bug (#5140) status at Phase 17 implementation time
-- Update ROADMAP.md Phase 17 success criterion sentinel format (viflo:start/end → BEGIN VIFLO/END VIFLO) before Phase 17 planning
 - Update research/ files stale sentinel references before Phase 17 research begins
 
 ### Blockers/Concerns
@@ -37,5 +36,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.4 milestone complete — archived to milestones/, git tagged
+Stopped at: v1.5 roadmap finalized — all 7 requirements (INIT-01–08 excl. INIT-05) mapped to phases 17–19
 Resume with: `/gsd:plan-phase 17` to start Phase 17 planning

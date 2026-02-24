@@ -76,8 +76,6 @@
   3. Running `viflo init --minimal` a second time on a project that already has the sentinel block and settings entries completes without modifying any file content
 **Plans**: TBD
 
-**⚠ Pre-planning note:** Update sentinel format in this success criterion from `viflo:start/viflo:end` to `<!-- BEGIN VIFLO --> / <!-- END VIFLO -->` before planning begins (Phase 16 locked the sentinel format).
-
 ### Phase 18: Full Mode
 **Goal**: A developer starting a new project can run `viflo init --full` and immediately have both viflo skill imports and a GSD planning scaffold ready to use
 **Depends on**: Phase 17
@@ -91,7 +89,7 @@
 ### Phase 19: Polish
 **Goal**: The CLI is fully wired as an executable, previews its actions safely, and communicates every file outcome clearly
 **Depends on**: Phase 18
-**Requirements**: INIT-06, INIT-07
+**Requirements**: INIT-06, INIT-07, INIT-08
 **Success Criteria** (what must be TRUE):
   1. Running `viflo init --dry-run` (with any flag combination) prints every file action with its resolved absolute path and exits without writing, creating, or modifying any file
   2. Every file action in a real run emits a labelled result (`created`, `updated`, `skipped`, or `merged`) with the resolved absolute path on stdout

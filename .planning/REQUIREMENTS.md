@@ -67,4 +67,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after initial v1.5 definition*
+*Last updated: 2026-02-24 — INIT-08 (bin wiring) mapped to Phase 19; traceability confirmed complete*
