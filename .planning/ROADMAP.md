@@ -124,5 +124,5 @@ Plans:
 | 15. Integration Review | v1.4 | 3/3 | Complete | 2026-02-24 |
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
 | 17. Minimal Mode | v1.5 | 2/2 | Complete | 2026-02-24 |
-| 18. Full Mode | v1.5 | 0/2 | Not started | - |
+| 18. Full Mode | 1/2 | In Progress|  | - |
 | 19. Polish | v1.5 | 0/TBD | Not started | - |

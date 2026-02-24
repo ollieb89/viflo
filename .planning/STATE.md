@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-02-24 after v1.5 milestone start)
 
 ## Current Position
 
-Phase: 17 — Minimal Mode
-Plan: 2/3
-Status: In progress — Plan 17-02 complete
-Last activity: 2026-02-24 — Plan 17-02 complete: bin/viflo.cjs CLI entry point implemented with 7 integration tests (35 total passing)
+Phase: 18 — Full Mode
+Plan: 1/1
+Status: In progress — Plan 18-01 complete
+Last activity: 2026-02-24 — Plan 18-01 complete: viflo init --full implemented (writePlanningScaffold, writeCLAUDEmdTemplate, 6-file scaffold, 35/35 tests passing)
 
 ## Accumulated Context
 
@@ -28,6 +28,9 @@ Last activity: 2026-02-24 — Plan 17-02 complete: bin/viflo.cjs CLI entry point
 - [17-02]: argv positional-path detection skips args starting with '--' — allows flag/path order flexibility
 - [17-02]: defaultSettings nests allow under permissions to match real Claude Code settings.json schema
 - [17-02]: No shebang added to bin/viflo.cjs — Phase 19 handles bin wiring as planned
+- [18-01]: writePlanningScaffold uses fs.existsSync (skip-if-exists) not writeIfChanged — planning files preserve user edits
+- [18-01]: writeCLAUDEmdTemplate falls back to writeCLAUDEmd for existing CLAUDE.md — no duplicate merge logic
+- [18-01]: Internal [viflo] skipped log lines remain visible in --full output — Phase 19 polish handles cleanup
 
 ### Pending Todos
 
@@ -41,5 +44,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 17-02-PLAN.md — bin/viflo.cjs CLI entry point + 7 integration tests, 35/35 tests passing
-Resume with: `/gsd:execute-phase 17` to continue with Plan 17-03 (if exists) or next phase
+Stopped at: Completed 18-01-PLAN.md — viflo init --full, writePlanningScaffold, writeCLAUDEmdTemplate, 35/35 tests passing
+Resume with: `/gsd:execute-phase 18` to continue with next phase plan (if any) or proceed to Phase 19

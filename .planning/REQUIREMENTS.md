@@ -14,8 +14,8 @@ Requirements for v1.5 viflo init CLI. Each maps to roadmap phases 17–19.
 
 ### Init Mode: Full
 
-- [ ] **INIT-03**: User can run `viflo init --full` and get a `.planning/` directory scaffolded with GSD stub files (PROJECT.md, STATE.md, ROADMAP.md, config.json) — each existing file is skipped individually without overwriting
-- [ ] **INIT-04**: User can run `viflo init --full` in a project without CLAUDE.md and get a starter CLAUDE.md template written; running it where CLAUDE.md already exists does not replace or alter content outside the sentinel block
+- [x] **INIT-03**: User can run `viflo init --full` and get a `.planning/` directory scaffolded with GSD stub files (PROJECT.md, STATE.md, ROADMAP.md, config.json) — each existing file is skipped individually without overwriting
+- [x] **INIT-04**: User can run `viflo init --full` in a project without CLAUDE.md and get a starter CLAUDE.md template written; running it where CLAUDE.md already exists does not replace or alter content outside the sentinel block
 
 ### CLI Polish
 
@@ -54,8 +54,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | INIT-01 | Phase 17 | Complete |
 | INIT-02 | Phase 17 | Complete |
-| INIT-03 | Phase 18 | Pending |
-| INIT-04 | Phase 18 | Pending |
+| INIT-03 | Phase 18 | Complete |
+| INIT-04 | Phase 18 | Complete |
 | INIT-06 | Phase 19 | Pending |
 | INIT-07 | Phase 19 | Pending |
 | INIT-08 | Phase 19 | Pending |
