@@ -27,7 +27,7 @@ async function runAgentLoop(userMessage: string, tools: Anthropic.Tool[]): Promi
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 8096,
+      max_tokens: 8192,
       tools,
       messages: state.messages,
     });
@@ -37,6 +37,13 @@ async function runAgentLoop(userMessage: string, tools: Anthropic.Tool[]): Promi
     if (response.stop_reason === 'end_turn') {
       const textBlock = response.content.find((b) => b.type === 'text');
       return textBlock?.text ?? '';
+    }
+
+    if (response.stop_reason === 'max_tokens') {
+      // Output was truncated — push partial content and ask model to continue
+      state.messages.push({ role: 'assistant', content: response.content });
+      state.messages.push({ role: 'user', content: 'Continue.' });
+      continue;
     }
 
     if (response.stop_reason === 'tool_use') {

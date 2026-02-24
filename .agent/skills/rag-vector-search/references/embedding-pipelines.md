@@ -3,6 +3,9 @@
 ## Chunking Strategy
 
 ```typescript
+// Note: chunkSize is in words, not tokens. Average English word ≈ 1.3 tokens,
+// so chunkSize=512 words ≈ 665 tokens. Adjust down to ~390 for 512-token chunks.
+// For precision, use a tokeniser like `tiktoken` to count tokens directly.
 function chunkText(text: string, chunkSize = 512, overlap = 128): string[] {
   const words = text.split(/\s+/);
   const chunks: string[] = [];
@@ -79,8 +82,12 @@ CREATE TABLE embeddings (
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE INDEX ON embeddings (model_version); -- speeds up model_version filter
+
 -- Approximate nearest-neighbour index (build after bulk load for speed)
 CREATE INDEX ON embeddings USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+-- Size lists = rows / 1000 for up to 1M rows, or sqrt(rows) for over 1M rows.
+-- lists = 100 is appropriate for ~100K rows.
 -- Or HNSW for better recall at query time (slower to build):
 -- CREATE INDEX ON embeddings USING hnsw (embedding vector_cosine_ops);
 ```

@@ -12,7 +12,7 @@ SELECT
     + ts_rank(to_tsvector('english', text), plainto_tsquery('english', $2)) * 0.3 AS score
 FROM embeddings
 WHERE model_version = 'text-embedding-3-small-v1'
-  AND to_tsvector('english', text) @@ plainto_tsquery('english', $2)
+-- No keyword filter: allow pure semantic matches to rank via score weighting
 ORDER BY score DESC
 LIMIT 10;
 ```

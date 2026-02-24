@@ -70,7 +70,8 @@ const messages: Anthropic.MessageParam[] = [
   { role: 'assistant', content: '{"sentiment": "positive", "confidence": 0.95}' },
   {
     role: 'user',
-    content: `Classify sentiment: "${userInput}"`, // actual query last
+    // Note: do not wrap userInput in quotes — allows escape attacks via `"`
+    content: `Classify the sentiment of the following text.\n\nText: ${userInput}`,
   },
 ];
 ```
@@ -92,7 +93,7 @@ See `references/evaluation-workflows.md` for iterating on prompts and `reference
 
 | Model Family | Behaviour Notes |
 |---|---|
-| Claude (Anthropic) | Excellent at following structured instructions; responds well to XML tags for sections (`<context>`, `<task>`) |
-| GPT-4o (OpenAI) | Strong at JSON mode; use `response_format: { type: "json_object" }` for structured output |
+| Claude (claude-sonnet-4-6 / claude-haiku-4-5) | Excellent at following structured instructions; responds well to XML tags for sections (`<context>`, `<task>`) |
+| GPT-4o / GPT-4o-mini (OpenAI) | Strong at JSON mode; use `response_format: { type: "json_object" }` for structured output |
 | Gemini (Google) | Supports system instructions; use `systemInstruction` field in API, not system turn in messages |
 | All models | Temperature 0 reduces but does not eliminate variance; test with N=20 samples for critical tasks |

@@ -56,8 +56,12 @@ Return: {"score": 0-1, "reasoning": "one sentence"}`,
     ],
   });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '{}';
-  return JSON.parse(text);
+  const raw = response.content[0].type === 'text' ? response.content[0].text : '{}';
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return { score: 0, reasoning: 'Judge returned invalid JSON' };
+  }
 }
 ```
 
