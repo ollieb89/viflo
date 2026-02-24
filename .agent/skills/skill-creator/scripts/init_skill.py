@@ -100,6 +100,38 @@ Files not intended to be loaded into context, but rather used within the output 
 ---
 
 **Any unneeded directories can be deleted.** Not every skill requires all three types of resources.
+
+## Implementation Patterns
+
+[TODO: Provide working code examples — not prose. Show the actual implementation, not "use library X".]
+
+## Failure Modes & Edge Cases
+
+[TODO: Cover at least 3 concrete failure scenarios. What breaks? Race conditions? Null inputs? Timeouts?]
+
+| Scenario | What Happens | How to Handle |
+|---|---|---|
+| [e.g. API timeout] | [e.g. request hangs] | [e.g. set timeout + retry with backoff] |
+| [e.g. concurrent writes] | [e.g. data corruption] | [e.g. use optimistic locking] |
+| [e.g. null input] | [e.g. silent failure] | [e.g. validate at boundary] |
+
+## Decision Matrix
+
+[TODO: When should they use X vs Y? Don't just list options — give a recommendation and explain why.]
+
+| Situation | Recommended Approach | Why |
+|---|---|---|
+| [e.g. < 10k users, simple data] | [e.g. Option A] | [e.g. lower ops burden, sufficient scale] |
+| [e.g. > 100k users, complex queries] | [e.g. Option B] | [e.g. horizontal scaling, index support] |
+
+## Version Context
+
+[TODO: List key library versions this skill was last verified against. Flag known breaking changes.]
+
+| Library / Framework | Last Verified Version | Notes |
+|---|---|---|
+| [e.g. Next.js] | [e.g. 15.x] | [e.g. App Router only; Pages Router differs] |
+| [e.g. @auth/core] | [e.g. 0.37.x] | [e.g. Breaking change in 0.35: session callback signature changed] |
 """
 
 EXAMPLE_SCRIPT = '''#!/usr/bin/env python3
