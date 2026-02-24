@@ -1,8 +1,14 @@
 # Viflo: Universal Agentic Development Environment
 
-## Current State: v1.2 Shipped — Planning v1.3
+## Current Milestone: v1.3 Expert Skills
 
-v1.2 (Foundation Skills) shipped 2026-02-24: prompt-engineering and auth-systems skills rewritten to v1.2 depth standard. v1.3 will deliver the remaining planned skills: Stripe Payments, RAG/Vector Search, Agent Architecture, and integration review.
+**Goal:** Deliver Stripe Payments, RAG/Vector Search, and Agent Architecture skills at v1.2 depth standard, plus integration review to bring INDEX.md and all skill metadata current.
+
+**Target features:**
+- Stripe payments skill (checkout, subscriptions, webhooks)
+- RAG/vector search skill (embedding pipelines, retrieval patterns)
+- Agent architecture skill (multi-agent systems, orchestration)
+- Integration review (INDEX.md update, SKILL.md size compliance)
 
 ## What This Is
 
@@ -139,4 +145,4 @@ Known tech debt:
 
 ---
 
-_Last updated: 2026-02-24 after v1.2 milestone_
+_Last updated: 2026-02-24 after v1.3 milestone start_

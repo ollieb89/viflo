@@ -2,18 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24 after v1.2 milestone)
+See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** Planning v1.3 — Stripe Payments, RAG/Vector Search, Agent Architecture, Integration Review
+**Current focus:** v1.3 — Stripe Payments, RAG/Vector Search, Agent Architecture, Integration Review
 
 ## Current Position
 
-Phase: v1.2 complete — between milestones
-Status: v1.2 shipped (Phase 11 only) — ready to plan v1.3
-Last activity: 2026-02-24 — Completed v1.2 milestone archival
-
-Progress: [██████████] v1.2 100% (Phase 11: 3/3 plans)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-24 — Milestone v1.3 started
 
 ## Performance Metrics
 
