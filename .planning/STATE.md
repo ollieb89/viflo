@@ -42,6 +42,7 @@ Progress: [██░░░░░░░░] 20% — v1.4 in progress (1/5 phases)
 | Phase 14-stripe-payments P02 | 3 | 2 tasks | 2 files |
 | Phase 15-integration-review P01 | 1 | 1 tasks | 1 files |
 | Phase 15-integration-review P02 | 3 | 1 tasks | 3 files |
+| Phase 15-integration-review P01 | 1 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
