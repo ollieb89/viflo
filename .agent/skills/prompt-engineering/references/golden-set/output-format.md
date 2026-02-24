@@ -4,6 +4,7 @@ model: claude-sonnet-4-6
 applies-to: [claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5-20251001]
 last-verified-against: claude-sonnet-4-6
 verified-date: 2026-02-24
+eval-verified-date: 2026-02-24
 ---
 
 ## Input Prompt
