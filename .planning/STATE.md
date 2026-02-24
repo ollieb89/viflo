@@ -2,18 +2,19 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone completion)
+See: .planning/PROJECT.md (updated 2026-02-24 after v1.4 milestone started)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.4 planning — Phase 15 (Integration Review) is first candidate phase
+**Current focus:** v1.4 — Phase 15 (Integration Review) first, then viflo init CLI
 
 ## Current Position
 
-Phase: v1.3 complete — ready for v1.4 planning
-Status: Milestone Complete — v1.3 Expert Skills shipped 2026-02-24
-Last activity: 2026-02-24 — v1.3 milestone archived (Phases 12–14, 6 plans, 28 commits)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-24 — Milestone v1.4 started
 
-Progress: [██████████] v1.3 complete — start /gsd:new-milestone for v1.4
+Progress: [░░░░░░░░░░] 0% — v1.4 in progress
 
 ## Performance Metrics
 

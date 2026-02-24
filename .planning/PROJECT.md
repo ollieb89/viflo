@@ -1,8 +1,14 @@
 # Viflo: Universal Agentic Development Environment
 
-## Current Milestone: v1.4 (Planning)
+## Current Milestone: v1.4 — Project Tooling
 
-**Goal:** TBD — likely Integration Review (Phase 15: INDEX.md update, 500-line compliance verification, cross-skill references) plus any new skill work.
+**Goal:** Close v1.3 integration debt and ship `viflo init` — a CLI that wires new projects to viflo in one command.
+
+**Target features:**
+- Integration review: INDEX.md update, 500-line compliance verification, cross-skill references (INFRA-01–03)
+- `viflo init --minimal`: writes CLAUDE.md import stanza + Claude Code settings.json for skill referencing
+- `viflo init --full`: also scaffolds `.planning/` directory + starter CLAUDE.md template
+- Idempotent, safe to re-run on existing projects
 
 ## What This Is
 
@@ -55,6 +61,10 @@ A complete agentic dev environment you can install in one command — structured
 - [ ] INDEX.md updated with prompt-engineering, auth-systems, rag-vector-search, agent-architecture, stripe-payments (INFRA-01)
 - [ ] All new/updated SKILL.md files verified ≤500 lines with line counts in VERIFICATION.md (INFRA-02)
 - [ ] Cross-references between RAG ↔ Agent Architecture ↔ prompt-engineering skills at integration seams (INFRA-03)
+- [ ] `viflo init --minimal` writes CLAUDE.md stanza + Claude Code settings.json to reference viflo skills (INIT-01)
+- [ ] `viflo init --full` additionally scaffolds .planning/ directory with GSD template stubs (INIT-02)
+- [ ] `viflo init --full` writes a starter CLAUDE.md template with project-specific sections (INIT-03)
+- [ ] `viflo init` is idempotent — safe to re-run on existing projects without overwriting custom content (INIT-04)
 
 ### Out of Scope
 
@@ -149,4 +159,4 @@ Known tech debt:
 
 ---
 
-_Last updated: 2026-02-24 after v1.3 milestone completion_
+_Last updated: 2026-02-24 after v1.4 milestone started_
