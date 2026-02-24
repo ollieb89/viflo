@@ -135,6 +135,6 @@ Plans:
 | 10. Commit & Verify | v1.1 | 3/3 | Complete | 2026-02-24 |
 | 11. Foundation Skills | v1.2 | 3/3 | Complete | 2026-02-24 |
 | 12. RAG / Vector Search | 2/2 | Complete    | 2026-02-24 | - |
-| 13. Agent Architecture | 2/2 | Complete   | 2026-02-24 | - |
+| 13. Agent Architecture | 2/2 | Complete    | 2026-02-24 | - |
 | 14. Stripe Payments | v1.3 | 0/TBD | Not started | - |
 | 15. Integration Review | v1.3 | 0/TBD | Not started | - |
