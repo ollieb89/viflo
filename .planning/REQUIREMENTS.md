@@ -1,0 +1,70 @@
+# Requirements: Viflo
+
+**Defined:** 2026-02-24
+**Core Value:** A complete agentic dev environment you can install in one command — structured methodology, ready-made skills, and proven workflows so teams skip setup and ship faster.
+
+## v1.5 Requirements
+
+Requirements for v1.5 viflo init CLI. Each maps to roadmap phases 17–19.
+
+### Init Mode: Minimal
+
+- [ ] **INIT-01**: User can run `viflo init --minimal` and get a CLAUDE.md sentinel block with `@` import lines for all viflo skills created or merged into an existing CLAUDE.md
+- [ ] **INIT-02**: User can run `viflo init --minimal` and get `.claude/settings.json` created or merged with safe default `permissions.allow` entries — existing entries are preserved
+
+### Init Mode: Full
+
+- [ ] **INIT-03**: User can run `viflo init --full` and get a `.planning/` directory scaffolded with GSD stub files (PROJECT.md, STATE.md, ROADMAP.md, config.json) — each existing file is skipped individually without overwriting
+- [ ] **INIT-04**: User can run `viflo init --full` in a project without CLAUDE.md and get a starter CLAUDE.md template written; running it where CLAUDE.md already exists does not replace or alter content outside the sentinel block
+
+### CLI Polish
+
+- [ ] **INIT-06**: User can run `viflo init --dry-run` (combined with any mode flag) and see every planned file action with its resolved absolute path printed to stdout — no files are written, created, or modified
+- [ ] **INIT-07**: Every file action in a real run emits a labelled result (`created`, `updated`, `skipped`, or `merged`) with the resolved absolute path on stdout
+
+### Bin Wiring
+
+- [ ] **INIT-08**: `package.json` has a `"bin": { "viflo": "bin/viflo.cjs" }` field so the CLI is invocable via `npx` or `pnpm exec viflo` from the repo
+
+## Previously Validated (v1.4)
+
+- ✓ **INIT-05**: `viflo init` library layer idempotent — CLAUDE.md sentinel merge and settings.json deep-merge are safe to re-run (shipped v1.4, Phase 16)
+
+## Future Requirements
+
+### Distribution
+
+- **DIST-01**: Package published to npm so `npx viflo` works without local install
+- **DIST-02**: Auto-update check on `viflo` run (semver, non-blocking)
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| User-scope `~/.claude/settings.json` writes | Deferred — Claude Code bug #5140 not resolved; project-scope only for v1.5 |
+| Interactive prompts / wizard mode | v1.5 is flag-driven; interactive mode deferred |
+| `viflo update` command | Updating installed skills deferred post-ship |
+| npm publish / registry setup | Distribution deferred to after CLI is proven working |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INIT-01 | Phase 17 | Pending |
+| INIT-02 | Phase 17 | Pending |
+| INIT-03 | Phase 18 | Pending |
+| INIT-04 | Phase 18 | Pending |
+| INIT-06 | Phase 19 | Pending |
+| INIT-07 | Phase 19 | Pending |
+| INIT-08 | Phase 19 | Pending |
+
+**Coverage:**
+- v1.5 requirements: 7 total
+- Mapped to phases: 7
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-02-24*
+*Last updated: 2026-02-24 after initial v1.5 definition*
