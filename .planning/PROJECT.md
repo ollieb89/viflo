@@ -1,14 +1,8 @@
 # Viflo: Universal Agentic Development Environment
 
-## Current Milestone: v1.3 Expert Skills
+## Current Milestone: v1.4 (Planning)
 
-**Goal:** Deliver Stripe Payments, RAG/Vector Search, and Agent Architecture skills at v1.2 depth standard, plus integration review to bring INDEX.md and all skill metadata current.
-
-**Target features:**
-- Stripe payments skill (checkout, subscriptions, webhooks)
-- RAG/vector search skill (embedding pipelines, retrieval patterns)
-- Agent architecture skill (multi-agent systems, orchestration)
-- Integration review (INDEX.md update, SKILL.md size compliance)
+**Goal:** TBD — likely Integration Review (Phase 15: INDEX.md update, 500-line compliance verification, cross-skill references) plus any new skill work.
 
 ## What This Is
 
@@ -52,14 +46,15 @@ A complete agentic dev environment you can install in one command — structured
 - ✓ VERIFICATION.md exists for Phases 0–9 (CONTENT-02) — v1.1
 - ✓ Prompt engineering skill at v1.2 depth — quick-start, applies-to schema, 5-pattern anti-pattern catalogue, golden-set eval architecture (PROMPT-01–05) — v1.2
 - ✓ Auth systems skill at v1.2 depth — Clerk quick-start, Better Auth self-hosted path, DAL pattern, CVE-2025-29927 docs, webhook receiver (AUTH-01–06) — v1.2
+- ✓ RAG/Vector Search skill at v1.3 depth — HNSW schema, RRF hybrid search SQL, 4 Gotchas, runnable eval.ts with recall@5/MRR (RAG-01–05) — v1.3
+- ✓ Agent Architecture skill at v1.3 depth — MAX_TURNS guardrails in every example, FastAPI SSE streaming, LangGraph 1.x, pgvector episodic memory, MCP overview (AGENT-01–05) — v1.3
+- ✓ Stripe Payments skill at v1.3 depth — raw-body webhooks, atomic ON CONFLICT idempotency, four-event subscription lifecycle, Customer Portal, trial periods (STRIPE-01–05) — v1.3
 
 ### Active
 
-- [ ] Stripe payments skill covering checkout, subscriptions, and webhooks (STRIPE-01–05)
-- [ ] RAG / vector search skill covering embedding pipelines and retrieval patterns (RAG-01–05)
-- [ ] Agent architecture skill covering multi-agent systems and orchestration (AGENT-01–05)
-- [ ] INDEX.md updated with new skill categories and entries (INFRA-01)
-- [ ] All new SKILL.md files ≤500 lines compliance check (INFRA-02)
+- [ ] INDEX.md updated with prompt-engineering, auth-systems, rag-vector-search, agent-architecture, stripe-payments (INFRA-01)
+- [ ] All new/updated SKILL.md files verified ≤500 lines with line counts in VERIFICATION.md (INFRA-02)
+- [ ] Cross-references between RAG ↔ Agent Architecture ↔ prompt-engineering skills at integration seams (INFRA-03)
 
 ### Out of Scope
 
@@ -110,14 +105,17 @@ A complete agentic dev environment you can install in one command — structured
 Shipped v1.0 with 35 skill packages, ~60,775 LOC across Markdown/JS/TS/JSON (7 days, 5 phases).
 Shipped v1.1 with CI pipeline, Vitest coverage, skill modularization, and VERIFICATION.md audit trail (2 days, 6 phases, 33 commits).
 Shipped v1.2 (Foundation Skills) with prompt-engineering and auth-systems rewrites at v1.2 depth standard (1 day, 1 phase, 3 plans).
+Shipped v1.3 (Expert Skills) with RAG/Vector Search, Agent Architecture, and Stripe Payments skills at v1.2 depth standard (7 days, 3 phases, 6 plans, 28 commits).
 
 Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js tooling, pnpm workspace.
-~48,455 LOC in `.agent/skills/`.
+~48,455 LOC in `.agent/skills/` (pre-v1.3 baseline; v1.3 added ~5,500 net lines).
 
 Known tech debt:
 - Makefile `make setup` target (09-CONTEXT.md specified Makefile; execution used `scripts/setup-dev.sh` instead — different mechanism, same function)
 - 07-VERIFICATION.md checked off telemetry commit before verifying against `git ls-files` — future verifications should use `git ls-files` to confirm committed state
-- INDEX.md not yet updated with prompt-engineering and auth-systems v1.2 upgrades (deferred to v1.3 integration review)
+- INDEX.md not yet updated with v1.2/v1.3 skills (INFRA-01 — deferred to v1.4)
+- 500-line compliance not formally verified for v1.3 skills (INFRA-02 — deferred to v1.4)
+- Cross-skill references between RAG ↔ Agent ↔ prompt-engineering not added (INFRA-03 — deferred to v1.4)
 
 ## Key Decisions
 
@@ -142,7 +140,13 @@ Known tech debt:
 | 2026-02-24 | Better Auth replaces Auth.js      | ✓ Good — Auth.js is maintenance-mode since Sept 2025; Better Auth is the active project |
 | 2026-02-24 | applies-to frontmatter schema     | ✓ Good — model-specific technique tagging proven useful in prompt-engineering skill |
 | 2026-02-24 | Scope v1.2 to Phase 11 only       | ✓ Good — foundation skills independently valuable; AI/LLM + Stripe deferred to v1.3 |
+| 2026-02-24 | HNSW as default pgvector index     | ✓ Good — no training step, better recall than IVFFlat; pattern adopted in both RAG and Agent skills |
+| 2026-02-24 | RRF rank-based hybrid search fusion | ✓ Good — no score normalization needed; SQL inline in SKILL.md body (not only in references/) |
+| 2026-02-24 | MAX_TURNS/MAX_TOKENS_PER_RUN as named constants | ✓ Good — guardrails in every agent example; grep-able, explicit, non-optional |
+| 2026-02-24 | Next.js API route proxy for SSE streaming | ✓ Good — keeps API key server-side, avoids CORS, simpler than direct FastAPI-to-useChat bridge |
+| 2026-02-24 | pg.Pool raw SQL for Stripe idempotency | ✓ Good — atomic ON CONFLICT DO NOTHING preferred over Prisma P2002 try/catch; consistent across SKILL.md and references/ |
+| 2026-02-24 | Defer Phase 15 (INFRA) to v1.4    | ✓ Good — 15/18 requirements satisfied; INDEX.md/compliance/cross-refs are housekeeping, not blockers |
 
 ---
 
-_Last updated: 2026-02-24 after v1.3 milestone start_
+_Last updated: 2026-02-24 after v1.3 milestone completion_

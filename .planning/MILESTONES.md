@@ -59,3 +59,28 @@
 
 ---
 
+
+## v1.3 Expert Skills (Shipped: 2026-02-24)
+
+**Phases completed:** 3 phases (12–14), 6 plans, 28 commits
+**Timeline:** 2026-02-17 → 2026-02-24 (7 days)
+**Files changed:** 32 files, ~5,509 net lines added
+**Git range:** feat(12-01): rewrite SKILL.md → fix(tech-debt): resolve v1.0 audit documentation accuracy items
+
+**Key accomplishments:**
+- RAG/Vector Search SKILL.md expanded 92 → 416 lines: HNSW schema, RRF hybrid search SQL inline, 4 named Gotchas, and runnable eval.ts with recall@5/MRR golden-set evaluation
+- RAG reference files updated: embedding-pipelines.md to `document_chunks` schema with HNSW+GIN indexes; retrieval-patterns.md with RRF CTE as recommended Option B
+- Agent Architecture SKILL.md expanded 81 → 498 lines: MAX_TURNS/MAX_TOKENS_PER_RUN guardrails in every example, FastAPI SSE streaming to Next.js AI SDK v6, LangGraph 1.x, episodic memory via pgvector, MCP overview
+- Agent Architecture references updated: LangGraph 1.x PostgresSaver + interrupt(), pgvector `agent_episodes` schema with embedding_model_version cross-referencing RAG skill
+- Stripe Payments SKILL.md expanded 91 → 363 lines: raw-body webhook with `await req.text()`, atomic `ON CONFLICT` idempotency, four-event subscription lifecycle, Customer Portal, trial periods, 5 Gotchas
+- Stripe reference files updated to stripe@20.3.1 / 2026-01-28.clover / Next.js 15: atomic SQL idempotency replacing Prisma P2002, all four subscription events in standalone handler
+
+**Known gaps (deferred to v1.4):**
+- INFRA-01: INDEX.md not updated with new skills
+- INFRA-02: 500-line compliance not formally verified for new skills
+- INFRA-03: Cross-skill references between RAG ↔ Agent ↔ prompt-engineering not added
+
+**Archive:** `.planning/milestones/v1.3-ROADMAP.md`
+
+---
+

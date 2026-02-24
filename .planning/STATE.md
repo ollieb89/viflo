@@ -2,19 +2,18 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone start)
+See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone completion)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.3 — Phase 14 (Stripe Payments) — Complete (2 of 2 plans done)
+**Current focus:** v1.4 planning — Phase 15 (Integration Review) is first candidate phase
 
 ## Current Position
 
-Phase: 14 of 15 (Stripe Payments)
-Plan: 02 complete (2 of 2 plans) — Phase 14 complete
-Status: Phase Complete — Resume Phase 15 (Integration Review)
-Last activity: 2026-02-24 — 14-02 stripe-payments reference files updated to 2026-01-28.clover and stripe@20.x
+Phase: v1.3 complete — ready for v1.4 planning
+Status: Milestone Complete — v1.3 Expert Skills shipped 2026-02-24
+Last activity: 2026-02-24 — v1.3 milestone archived (Phases 12–14, 6 plans, 28 commits)
 
-Progress: [████████░░] 75% (historical — v1.3 phases at 0%)
+Progress: [██████████] v1.3 complete — start /gsd:new-milestone for v1.4
 
 ## Performance Metrics
 
@@ -79,5 +78,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 14-02-PLAN.md — Stripe reference files updated to 2026-01-28.clover and stripe@20.x
-Resume with: Phase 15 (Integration Review)
+Stopped at: v1.3 milestone archived — Expert Skills shipped
+Resume with: /gsd:new-milestone to define v1.4 scope (Phase 15 Integration Review is the primary candidate)
