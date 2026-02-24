@@ -60,7 +60,7 @@
 
 ### 📋 v1.5 viflo init CLI (Phases 17–19)
 
-- [ ] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json)
+- [x] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json) (completed 2026-02-24)
 - [ ] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template
 - [ ] **Phase 19: Polish** — --dry-run flag, labelled per-file output, and package.json bin wiring
 
@@ -120,6 +120,6 @@ Plans:
 | 14. Stripe Payments | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 15. Integration Review | v1.4 | 3/3 | Complete | 2026-02-24 |
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
-| 17. Minimal Mode | 1/2 | In Progress|  | - |
+| 17. Minimal Mode | 2/2 | Complete   | 2026-02-24 | - |
 | 18. Full Mode | v1.5 | 0/TBD | Not started | - |
 | 19. Polish | v1.5 | 0/TBD | Not started | - |

@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-24 after v1.5 milestone start)
 ## Current Position
 
 Phase: 17 — Minimal Mode
-Plan: 1/3
-Status: In progress — Plan 17-01 complete
-Last activity: 2026-02-24 — Plan 17-01 complete: scanSkills runtime skill scanner implemented with TDD
+Plan: 2/3
+Status: In progress — Plan 17-02 complete
+Last activity: 2026-02-24 — Plan 17-02 complete: bin/viflo.cjs CLI entry point implemented with 7 integration tests (35 total passing)
 
 ## Accumulated Context
 
@@ -25,6 +25,9 @@ Last activity: 2026-02-24 — Plan 17-01 complete: scanSkills runtime skill scan
 - [v1.4]: agent-architecture 503 lines accepted — 4/5 skills within limit is the valid pass state
 - [17-01]: scanSkills accepts rootDir explicitly — caller passes resolveViFloRoot(), keeps function pure and testable
 - [17-01]: ENOENT returns [] — new projects without .agent/skills/ dir are a normal state, not an error
+- [17-02]: argv positional-path detection skips args starting with '--' — allows flag/path order flexibility
+- [17-02]: defaultSettings nests allow under permissions to match real Claude Code settings.json schema
+- [17-02]: No shebang added to bin/viflo.cjs — Phase 19 handles bin wiring as planned
 
 ### Pending Todos
 
@@ -38,5 +41,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 17-01-PLAN.md — scanSkills implemented, 28/28 tests passing
-Resume with: `/gsd:execute-phase 17` to continue with Plan 17-02
+Stopped at: Completed 17-02-PLAN.md — bin/viflo.cjs CLI entry point + 7 integration tests, 35/35 tests passing
+Resume with: `/gsd:execute-phase 17` to continue with Plan 17-03 (if exists) or next phase

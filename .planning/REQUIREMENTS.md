@@ -10,7 +10,7 @@ Requirements for v1.5 viflo init CLI. Each maps to roadmap phases 17–19.
 ### Init Mode: Minimal
 
 - [x] **INIT-01**: User can run `viflo init --minimal` and get a CLAUDE.md sentinel block with `@` import lines for all viflo skills created or merged into an existing CLAUDE.md
-- [ ] **INIT-02**: User can run `viflo init --minimal` and get `.claude/settings.json` created or merged with safe default `permissions.allow` entries — existing entries are preserved
+- [x] **INIT-02**: User can run `viflo init --minimal` and get `.claude/settings.json` created or merged with safe default `permissions.allow` entries — existing entries are preserved
 
 ### Init Mode: Full
 
@@ -53,7 +53,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | INIT-01 | Phase 17 | Complete |
-| INIT-02 | Phase 17 | Pending |
+| INIT-02 | Phase 17 | Complete |
 | INIT-03 | Phase 18 | Pending |
 | INIT-04 | Phase 18 | Pending |
 | INIT-06 | Phase 19 | Pending |
