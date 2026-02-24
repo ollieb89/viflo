@@ -3,9 +3,8 @@
 ## Chunking Strategy
 
 ```typescript
-// Note: chunkSize is in words, not tokens. Average English word ≈ 1.3 tokens,
-// so chunkSize=512 words ≈ 665 tokens. Adjust down to ~390 for 512-token chunks.
-// For precision, use a tokeniser like `tiktoken` to count tokens directly.
+// Note: chunkSize is in words. For token-precise control, use tiktoken (Python) or approximate: 1 word ≈ 1.3 tokens.
+// chunkSize=512 words ≈ 665 tokens. Adjust down to ~390 for 512-token chunks.
 function chunkText(text: string, chunkSize = 512, overlap = 128): string[] {
   const words = text.split(/\s+/);
   const chunks: string[] = [];
@@ -66,28 +65,31 @@ async function embedAll(texts: string[], retries = 3): Promise<number[][]> {
 }
 ```
 
+// For upsert pattern with pgvector.toSql(), see SKILL.md Quick Start.
+
 ## pgvector Schema (Prisma + raw SQL extension)
 
 ```sql
 -- Run once to enable the extension
 CREATE EXTENSION IF NOT EXISTS vector;
 
--- Embeddings table
-CREATE TABLE embeddings (
-  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  source_id   TEXT NOT NULL,
-  text        TEXT NOT NULL,
-  embedding   vector(1536),  -- match your model's output dimensions
-  model_version TEXT NOT NULL,
-  created_at  TIMESTAMPTZ DEFAULT NOW()
+-- document_chunks table (matches SKILL.md Quick Start)
+CREATE TABLE document_chunks (
+  id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  source_id             TEXT NOT NULL,
+  content               TEXT NOT NULL,
+  search_vector         tsvector GENERATED ALWAYS AS (to_tsvector('english', content)) STORED,
+  embedding             vector(1536),  -- match your model's output dimensions
+  embedding_model_version TEXT NOT NULL,
+  created_at            TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX ON embeddings (model_version); -- speeds up model_version filter
+CREATE INDEX ON document_chunks (embedding_model_version); -- speeds up model_version filter
 
--- Approximate nearest-neighbour index (build after bulk load for speed)
-CREATE INDEX ON embeddings USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
--- Size lists = rows / 1000 for up to 1M rows, or sqrt(rows) for over 1M rows.
--- lists = 100 is appropriate for ~100K rows.
--- Or HNSW for better recall at query time (slower to build):
--- CREATE INDEX ON embeddings USING hnsw (embedding vector_cosine_ops);
+-- GIN index for full-text search
+CREATE INDEX ON document_chunks USING gin(search_vector);
+
+-- HNSW index for approximate nearest-neighbour search (no training required, better recall)
+CREATE INDEX ON document_chunks USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64);
+-- IVFFlat alternative for >1M rows (requires training): CREATE INDEX ON document_chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
 ```
