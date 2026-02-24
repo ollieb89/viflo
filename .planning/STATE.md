@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.4 milestone started)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.4 Project Tooling — Phase 15 (Integration Review) in progress
+**Current focus:** v1.4 Project Tooling — Phase 15 (Integration Review) complete; Phase 16 (CLI Foundation) next
 
 ## Current Position
 
-Phase: 15 (Integration Review) — In progress
-Plan: 02 complete (of 3)
-Status: INDEX.md updated, See Also cross-references added; VERIFICATION.md (Plan 03) remaining
-Last activity: 2026-02-24 — Phase 15 Plan 02 complete (bidirectional See Also links added to three SKILL.md files)
+Phase: 15 (Integration Review) — Complete
+Plan: 03 complete (of 3)
+Status: All three INFRA requirements satisfied — INDEX.md updated (INFRA-01), See Also cross-references added (INFRA-03), VERIFICATION.md created (INFRA-02)
+Last activity: 2026-02-24 — Phase 15 Plan 03 complete (VERIFICATION.md with post-edit line counts for all five v1.4 skills)
 
 Progress: [██░░░░░░░░] 20% — v1.4 in progress (1/5 phases)
 
@@ -43,6 +43,7 @@ Progress: [██░░░░░░░░] 20% — v1.4 in progress (1/5 phases)
 | Phase 15-integration-review P01 | 1 | 1 tasks | 1 files |
 | Phase 15-integration-review P02 | 3 | 1 tasks | 3 files |
 | Phase 15-integration-review P01 | 1 | 1 tasks | 1 files |
+| Phase 15-integration-review P03 | 2 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,7 @@ Recent decisions affecting current work:
 - [Phase 13-agent-architecture]: Next.js API route proxy pattern for streaming — avoids CORS, keeps API key server-side
 - [Phase 14-stripe-payments]: await req.text() as webhook headline; ON CONFLICT atomic idempotency; API version 2026-01-28.clover
 - [Phase 15-integration-review]: See Also sections appended to SKILL.md file bottoms using relative markdown links with named seam annotations at three AI/LLM integration seams
+- [Phase 15-integration-review]: agent-architecture flagged ✗ at 503 lines per locked plan decision — phase succeeds with 4/5 skills within limit
 
 ### Pending Todos
 
@@ -81,5 +83,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Phase 15 Plan 02 complete — bidirectional See Also sections added to rag-vector-search, agent-architecture, and prompt-engineering SKILL.md files
-Resume with: /gsd:execute-phase 15 (plan 15-03 remaining)
+Stopped at: Phase 15 complete — VERIFICATION.md created, all three INFRA requirements (INFRA-01, INFRA-02, INFRA-03) satisfied
+Resume with: /gsd:execute-phase 16 (CLI Foundation)

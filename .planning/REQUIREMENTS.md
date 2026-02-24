@@ -10,7 +10,7 @@ Requirements for the v1.4 Project Tooling milestone. Phases start from 15 (conti
 ### Integration Review
 
 - [x] **INFRA-01**: INDEX.md is updated with entries for prompt-engineering, auth-systems, rag-vector-search, agent-architecture, and stripe-payments skills
-- [ ] **INFRA-02**: All new/updated SKILL.md files are verified ≤500 lines with line counts recorded in VERIFICATION.md
+- [x] **INFRA-02**: All new/updated SKILL.md files are verified ≤500 lines with line counts recorded in VERIFICATION.md
 - [x] **INFRA-03**: Cross-reference links are added between RAG, Agent Architecture, and prompt-engineering skills at their integration seams
 
 ### viflo init CLI
@@ -53,7 +53,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | INFRA-01 | Phase 15 | Complete |
-| INFRA-02 | Phase 15 | Pending |
+| INFRA-02 | Phase 15 | Complete |
 | INFRA-03 | Phase 15 | Complete |
 | INIT-01 | Phase 17 | Pending |
 | INIT-02 | Phase 17 | Pending |
