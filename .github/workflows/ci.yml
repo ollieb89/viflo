@@ -31,9 +31,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install apps/web dependencies
-        run: cd apps/web && pnpm install --frozen-lockfile
-
       - name: Run lint
         run: pnpm run lint
 
@@ -44,7 +41,7 @@ jobs:
         run: pnpm run test
 
       - name: Run coverage ratchet
-        run: cd apps/web && pnpm run test:coverage:ratchet
+        run: pnpm --filter @viflo/web run test:coverage:ratchet
 
       - name: Run build
         run: pnpm run build

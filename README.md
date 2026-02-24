@@ -60,6 +60,21 @@ Viflo is a comprehensive development methodology and toolchain designed to stand
    python3 scripts/verify_env.py
    ```
 
+## Development Setup
+
+If you're contributing to Viflo, set up the development environment:
+
+```bash
+# Clone and enter the repository
+git clone https://github.com/your-org/viflo.git
+cd viflo
+
+# Run the automated setup script
+./scripts/setup-dev.sh
+```
+
+This script installs all dependencies, sets up pre-commit hooks for secret scanning, and verifies your environment. See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed contribution guidelines.
+
 ## Usage
 
 ### Planning Phase
