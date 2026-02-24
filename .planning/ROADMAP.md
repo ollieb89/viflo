@@ -83,7 +83,11 @@ Plans:
   2. `bin/lib/writers.cjs` exports a CLAUDE.md sentinel-aware merge function and a settings.json JSON merge function with `Set`-based array deduplication
   3. Vitest unit tests for `paths.cjs` and `writers.cjs` pass in CI — tests mock `os.homedir()` and run from a temp directory outside the viflo repo
   4. Re-running any writer function on already-written output produces identical file contents and emits a skipped/unchanged signal rather than re-writing
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 16-01-PLAN.md — Create bin/lib/paths.cjs and bin/lib/writers.cjs library modules (INIT-05)
+- [ ] 16-02-PLAN.md — Create Vitest test suite for paths and writers, wire test:cli script (INIT-05)
 
 ### Phase 17: Minimal Mode
 **Goal**: A developer can run `viflo init --minimal` in any project and get CLAUDE.md skill imports and safe Claude Code permissions wired in one command
@@ -135,7 +139,7 @@ Plans:
 | 13. Agent Architecture | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 14. Stripe Payments | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 15. Integration Review | 3/3 | Complete    | 2026-02-24 | - |
-| 16. CLI Foundation | v1.4 | 0/TBD | Not started | - |
+| 16. CLI Foundation | v1.4 | 0/2 | Not started | - |
 | 17. Minimal Mode | v1.4 | 0/TBD | Not started | - |
 | 18. Full Mode | v1.4 | 0/TBD | Not started | - |
 | 19. Polish | v1.4 | 0/TBD | Not started | - |
