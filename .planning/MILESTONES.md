@@ -18,3 +18,24 @@
 **Archive:** `.planning/milestones/v1.0-ROADMAP.md`
 
 ---
+
+## v1.1 Dogfooding (Shipped: 2026-02-24)
+
+**Phases completed:** 6 phases (5–10), 14 plans, 33 commits
+**Timeline:** 2026-02-23 → 2026-02-24 (2 days)
+**Files changed:** 249 files (+24,137 / -10,832 lines)
+**Git range:** dad66e3 (Phase 5 CI) → 219015a (Phase 10 summaries)
+
+**Key accomplishments:**
+
+- GitHub Actions CI pipeline live — push/PR triggers install → lint → type-check → test → build with branch protection
+- Vitest test suite in `apps/web/` with coverage ratchet enforcing no regression between runs
+- 12 oversized SKILL.md files modularized (534–1055 lines → 143–498 lines) with extracted `references/` guides
+- VERIFICATION.md records created for all Phases 0–9 — full audit trail for methodology compliance
+- pnpm workspace topology committed — fresh clones work without per-package install workarounds
+- Developer onboarding automated via `scripts/setup-dev.sh` (prerequisites, pnpm install, pre-commit hook)
+
+**Archive:** `.planning/milestones/v1.1-ROADMAP.md`
+
+---
+
