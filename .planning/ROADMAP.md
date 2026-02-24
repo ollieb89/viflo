@@ -26,7 +26,7 @@
 - [x] **Phase 6: Test Suite** - Vitest suite live in `apps/web/` with coverage ratchet enforced in CI ✅
 - [x] **Phase 7: Content Hygiene** - Oversized skills modularized, VERIFICATION.md backfilled, telemetry logging in place
 - [x] **Phase 8: Verification & Requirements Closure** - VERIFICATION.md for all v1.1 phases, CONTENT-01 fully satisfied, requirements checked off (completed 2026-02-23)
-- [ ] **Phase 9: Workspace & Developer Tooling** - pnpm-workspace.yaml added, pre-commit install automated
+- [x] **Phase 9: Workspace & Developer Tooling** - pnpm-workspace.yaml added, pre-commit install automated ✅
 - [ ] **Phase 10: Commit and Verify Uncommitted Work** - Stage all Phase 7 & 9 disk artifacts, create Phase 9 VERIFICATION.md
 
 **Plans**: 3/3 complete (Phases 5–7)
@@ -153,9 +153,9 @@ Plans:
 
 Plans:
 
-- [ ] 10-01-PLAN.md — Commit Phase 7 artifacts (CONTENT-01, CONTENT-02, CONTENT-03)
-- [ ] 10-02-PLAN.md — Commit Phase 9 artifacts (CI-02, QUAL-01, QUAL-02, QUAL-04)
-- [ ] 10-03-PLAN.md — Create Phase 9 VERIFICATION.md and finalize all requirements
+- [x] 10-01-PLAN.md — Commit Phase 7 artifacts (CONTENT-01, CONTENT-02, CONTENT-03) ✅
+- [x] 10-02-PLAN.md — Commit Phase 9 artifacts (CI-02, QUAL-01, QUAL-02, QUAL-04) ✅
+- [x] 10-03-PLAN.md — Create Phase 9 VERIFICATION.md and finalize all requirements ✅
 
 ## Progress
 
@@ -170,5 +170,5 @@ Plans:
 | 6. Test Suite              | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 7. Content Hygiene         | v1.1      | 3/3            | Complete    | 2026-02-23 |
 | 8. Verification Closure    | v1.1      | 2/2            | Complete    | 2026-02-23 |
-| 9. Workspace Tooling       | v1.1      | TBD            | Pending     |            |
-| 10. Commit & Verify        | v1.1      | 0/3            | Pending     |            |
+| 9. Workspace Tooling       | v1.1      | 2/2            | Complete    | 2026-02-24 |
+| 10. Commit & Verify        | v1.1      | 3/3            | Complete    | 2026-02-24 |
