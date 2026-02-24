@@ -89,6 +89,26 @@ Skills marked with 📚 have extended content in `references/` subdirectories:
 | [error-handling-patterns](error-handling-patterns/SKILL.md) 📚 | Exceptions, Result types, circuit breakers, graceful degradation | Intermediate | Building resilient applications |
 | [temporal-python-testing](temporal-python-testing/SKILL.md) | Temporal workflow testing with pytest, time-skipping, mocking    | Advanced     | Temporal workflow test coverage |
 
+### Authentication
+
+| Skill                                       | Description                                                        | Difficulty   | When to Use                                   |
+| ------------------------------------------- | ------------------------------------------------------------------ | ------------ | --------------------------------------------- |
+| [auth-systems](auth-systems/SKILL.md)       | Clerk and Auth.js/NextAuth authentication, sessions, RBAC          | Intermediate | Adding auth to Next.js or Node.js applications |
+
+### Payments
+
+| Skill                                             | Description                                                              | Difficulty   | When to Use                                        |
+| ------------------------------------------------- | ------------------------------------------------------------------------ | ------------ | -------------------------------------------------- |
+| [stripe-payments](stripe-payments/SKILL.md)       | Stripe checkout, subscriptions, webhooks, and billing lifecycle          | Intermediate | Implementing payment flows and subscription billing |
+
+### AI/LLM
+
+| Skill                                                       | Description                                                              | Difficulty   | When to Use                                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------ | ------------ | ------------------------------------------------ |
+| [rag-vector-search](rag-vector-search/SKILL.md)             | Embedding pipelines, pgvector/Pinecone, retrieval-augmented generation   | Advanced     | Building semantic search or RAG applications     |
+| [agent-architecture](agent-architecture/SKILL.md)           | Multi-agent systems, memory patterns, orchestration frameworks           | Advanced     | Designing autonomous agents and multi-agent flows |
+| [prompt-engineering](prompt-engineering/SKILL.md)           | Prompt templates, evaluation, chain-of-thought, anti-patterns            | Intermediate | Optimizing LLM prompts and evaluating quality    |
+
 ### Security
 
 | Skill                                                             | Description                                              | Difficulty   | When to Use                  |
