@@ -100,7 +100,10 @@ Plans:
   1. Running `viflo init --dry-run` (with any flag combination) prints every file action with its resolved absolute path and exits without writing, creating, or modifying any file
   2. Every file action in a real run emits a labelled result (`created`, `updated`, `skipped`, or `merged`) with the resolved absolute path on stdout
   3. `package.json` has a `"bin": { "viflo": "bin/viflo.cjs" }` field so the CLI is invocable via `npx` or a local `pnpm exec viflo` call from the repo
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 19-01-PLAN.md — --dry-run flag + unified labelled output with absolute paths (writers.cjs refactor + viflo.cjs)
+- [ ] 19-02-PLAN.md — Integration tests for Polish features + package.json bin wiring
 
 ## Progress
 
