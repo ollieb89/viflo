@@ -1,0 +1,162 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { resolveTargetPath } = require('./paths.cjs');
+
+const SENTINEL_START = '<!-- BEGIN VIFLO -->';
+const SENTINEL_END   = '<!-- END VIFLO -->';
+
+/**
+ * Write newContent to filePath only if it differs from existing content.
+ * Creates parent directories if needed.
+ *
+ * @param {string} filePath - Absolute path to write.
+ * @param {string} newContent - Content to write.
+ * @returns {{ written: boolean, reason: string }}
+ */
+function writeIfChanged(filePath, newContent) {
+  let existing = null;
+  try {
+    existing = fs.readFileSync(filePath, 'utf-8');
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+
+  if (existing === newContent) {
+    console.log('[viflo] skipped (unchanged): ' + filePath);
+    return { written: false, reason: 'unchanged' };
+  }
+
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, newContent, 'utf-8');
+  return { written: true, reason: existing === null ? 'created' : 'updated' };
+}
+
+/**
+ * Merge sentinelContent into existingContent using VIFLO sentinel markers.
+ * Appends a new sentinel block if none exists; replaces the block if one exists.
+ * Throws if multiple sentinel blocks are detected.
+ *
+ * @param {string} existingContent
+ * @param {string} sentinelContent
+ * @returns {string}
+ */
+function mergeCLAUDEmd(existingContent, sentinelContent) {
+  const startCount = existingContent.split(SENTINEL_START).length - 1;
+  const endCount   = existingContent.split(SENTINEL_END).length - 1;
+
+  if (startCount > 1 || endCount > 1) {
+    throw new Error(
+      '[viflo] CLAUDE.md contains multiple sentinel blocks. Remove duplicates manually before running viflo init.'
+    );
+  }
+
+  const block = SENTINEL_START + '\n' + sentinelContent + '\n' + SENTINEL_END;
+
+  if (startCount === 0) {
+    return existingContent.trimEnd() + '\n\n' + block + '\n';
+  }
+
+  // startCount === 1: replace existing block
+  const startIdx = existingContent.indexOf(SENTINEL_START);
+  const endIdx   = existingContent.indexOf(SENTINEL_END);
+  return (
+    existingContent.slice(0, startIdx) +
+    block +
+    existingContent.slice(endIdx + SENTINEL_END.length)
+  );
+}
+
+/**
+ * Recursively merge incoming into a shallow copy of existing.
+ * Arrays: deduplicate with existing-first order.
+ * Objects: recurse.
+ * Scalars / type mismatch: incoming wins.
+ * Unknown keys in existing are preserved.
+ *
+ * @param {Object} existing
+ * @param {Object} incoming
+ * @returns {Object}
+ */
+function deepMerge(existing, incoming) {
+  const result = Object.assign({}, existing);
+
+  for (const key of Object.keys(incoming)) {
+    const existingVal = existing[key];
+    const incomingVal = incoming[key];
+
+    if (Array.isArray(existingVal) && Array.isArray(incomingVal)) {
+      result[key] = [...new Set([...existingVal, ...incomingVal])];
+    } else if (
+      existingVal !== null &&
+      incomingVal !== null &&
+      typeof existingVal === 'object' &&
+      typeof incomingVal === 'object' &&
+      !Array.isArray(existingVal) &&
+      !Array.isArray(incomingVal)
+    ) {
+      result[key] = deepMerge(existingVal, incomingVal);
+    } else {
+      result[key] = incomingVal;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Write the viflo sentinel block into the target project's CLAUDE.md.
+ * Creates the file if it does not exist. Replaces the block if it does.
+ * Idempotent: second call with same content returns { written: false, reason: 'unchanged' }.
+ *
+ * @param {string} targetCwd - Absolute path to the target project root.
+ * @param {string} sentinelContent - Content to place between sentinel markers.
+ * @returns {{ written: boolean, reason: string }}
+ */
+function writeCLAUDEmd(targetCwd, sentinelContent) {
+  const filePath = resolveTargetPath(targetCwd, 'CLAUDE.md');
+
+  let existingContent = null;
+  try {
+    existingContent = fs.readFileSync(filePath, 'utf-8');
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+
+  let newContent;
+  if (existingContent === null) {
+    newContent = SENTINEL_START + '\n' + sentinelContent + '\n' + SENTINEL_END + '\n';
+  } else {
+    newContent = mergeCLAUDEmd(existingContent, sentinelContent);
+  }
+
+  return writeIfChanged(filePath, newContent);
+}
+
+/**
+ * Write viflo settings into the target project's .claude/settings.json.
+ * Deep-merges with existing content. Deduplicates arrays (existing items first).
+ * Idempotent: second call with same settings returns { written: false, reason: 'unchanged' }.
+ *
+ * @param {string} targetCwd - Absolute path to the target project root.
+ * @param {Object} incomingSettings - Settings object to merge in.
+ * @returns {{ written: boolean, reason: string }}
+ */
+function writeSettingsJson(targetCwd, incomingSettings) {
+  const filePath = resolveTargetPath(targetCwd, '.claude', 'settings.json');
+
+  let existing = {};
+  try {
+    existing = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+
+  const merged = deepMerge(existing, incomingSettings);
+  const newContent = JSON.stringify(merged, null, 2) + '\n';
+
+  return writeIfChanged(filePath, newContent);
+}
+
+module.exports = { writeCLAUDEmd, writeSettingsJson };
