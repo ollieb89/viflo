@@ -87,7 +87,10 @@ Plans:
   1. Running `viflo init --full` in an empty project creates `.planning/` with stub files for PROJECT.md, STATE.md, ROADMAP.md, and config.json
   2. Running `viflo init --full` when `.planning/` already contains customized files skips each existing file individually — no existing content is overwritten
   3. Running `viflo init --full` in a project with no CLAUDE.md creates a starter CLAUDE.md template; running it where CLAUDE.md already exists does not replace or alter the file outside the sentinel block
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 18-01-PLAN.md — Library functions (writePlanningScaffold, writeCLAUDEmdTemplate) + CLI --full flag wiring
+- [ ] 18-02-PLAN.md — Integration tests for --full behaviours (INIT-03, INIT-04)
 
 ### Phase 19: Polish
 **Goal**: The CLI is fully wired as an executable, previews its actions safely, and communicates every file outcome clearly
@@ -120,6 +123,6 @@ Plans:
 | 14. Stripe Payments | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 15. Integration Review | v1.4 | 3/3 | Complete | 2026-02-24 |
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
-| 17. Minimal Mode | 2/2 | Complete    | 2026-02-24 | - |
-| 18. Full Mode | v1.5 | 0/TBD | Not started | - |
+| 17. Minimal Mode | v1.5 | 2/2 | Complete | 2026-02-24 |
+| 18. Full Mode | v1.5 | 0/2 | Not started | - |
 | 19. Polish | v1.5 | 0/TBD | Not started | - |
