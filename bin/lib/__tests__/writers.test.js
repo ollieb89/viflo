@@ -19,20 +19,20 @@ describe('writeCLAUDEmd', () => {
   it('creates CLAUDE.md with sentinel block when file does not exist', () => {
     const { writeCLAUDEmd } = require('../writers.cjs');
     const result = writeCLAUDEmd(tmpDir, 'viflo instructions here');
-    expect(result).toEqual({ written: true, reason: 'created' });
+    const expectedFilePath = path.join(tmpDir, 'CLAUDE.md');
+    expect(result).toEqual({ written: true, reason: 'created', filePath: expectedFilePath });
     const content = fs.readFileSync(path.join(tmpDir, 'CLAUDE.md'), 'utf-8');
     expect(content).toContain('<!-- BEGIN VIFLO -->');
     expect(content).toContain('<!-- END VIFLO -->');
     expect(content).toContain('viflo instructions here');
   });
 
-  it('returns { written: false, reason: "unchanged" } on second call with same content', () => {
+  it('returns { written: false, reason: "skipped" } on second call with same content', () => {
     const { writeCLAUDEmd } = require('../writers.cjs');
     writeCLAUDEmd(tmpDir, 'same content');
-    const logSpy = vi.spyOn(console, 'log');
     const result = writeCLAUDEmd(tmpDir, 'same content');
-    expect(result).toEqual({ written: false, reason: 'unchanged' });
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[viflo] skipped (unchanged)'));
+    const expectedFilePath = path.join(tmpDir, 'CLAUDE.md');
+    expect(result).toEqual({ written: false, reason: 'skipped', filePath: expectedFilePath });
   });
 
   it('appends sentinel block at end of existing CLAUDE.md with no markers', () => {
@@ -86,20 +86,20 @@ describe('writeSettingsJson', () => {
   it('creates .claude/settings.json when it does not exist', () => {
     const { writeSettingsJson } = require('../writers.cjs');
     const result = writeSettingsJson(tmpDir, { allow: ['Bash(git*)'] });
-    expect(result).toEqual({ written: true, reason: 'created' });
+    const expectedFilePath = path.join(tmpDir, '.claude', 'settings.json');
+    expect(result).toEqual({ written: true, reason: 'created', filePath: expectedFilePath });
     const filePath = path.join(tmpDir, '.claude', 'settings.json');
     expect(fs.existsSync(filePath)).toBe(true);
     const parsed = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     expect(parsed.allow).toEqual(['Bash(git*)']);
   });
 
-  it('returns { written: false, reason: "unchanged" } on second call with same settings', () => {
+  it('returns { written: false, reason: "skipped" } on second call with same settings', () => {
     const { writeSettingsJson } = require('../writers.cjs');
     writeSettingsJson(tmpDir, { version: 1 });
-    const logSpy = vi.spyOn(console, 'log');
     const result = writeSettingsJson(tmpDir, { version: 1 });
-    expect(result).toEqual({ written: false, reason: 'unchanged' });
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('[viflo] skipped (unchanged)'));
+    const expectedFilePath = path.join(tmpDir, '.claude', 'settings.json');
+    expect(result).toEqual({ written: false, reason: 'skipped', filePath: expectedFilePath });
   });
 
   it('deep-merges: existing key is preserved when incoming has only a different key', () => {

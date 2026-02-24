@@ -13,7 +13,7 @@ const SENTINEL_END   = '<!-- END VIFLO -->';
  *
  * @param {string} filePath - Absolute path to write.
  * @param {string} newContent - Content to write.
- * @returns {{ written: boolean, reason: string }}
+ * @returns {{ written: boolean, reason: string, filePath: string }}
  */
 function writeIfChanged(filePath, newContent) {
   let existing = null;
@@ -24,13 +24,12 @@ function writeIfChanged(filePath, newContent) {
   }
 
   if (existing === newContent) {
-    console.log('[viflo] skipped (unchanged): ' + filePath);
-    return { written: false, reason: 'unchanged' };
+    return { written: false, reason: 'skipped', filePath };
   }
 
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, newContent, 'utf-8');
-  return { written: true, reason: existing === null ? 'created' : 'updated' };
+  return { written: true, reason: existing === null ? 'created' : 'updated', filePath };
 }
 
 /**
@@ -108,11 +107,11 @@ function deepMerge(existing, incoming) {
 /**
  * Write the viflo sentinel block into the target project's CLAUDE.md.
  * Creates the file if it does not exist. Replaces the block if it does.
- * Idempotent: second call with same content returns { written: false, reason: 'unchanged' }.
+ * Idempotent: second call with same content returns { written: false, reason: 'skipped', filePath }.
  *
  * @param {string} targetCwd - Absolute path to the target project root.
  * @param {string} sentinelContent - Content to place between sentinel markers.
- * @returns {{ written: boolean, reason: string }}
+ * @returns {{ written: boolean, reason: string, filePath: string }}
  */
 function writeCLAUDEmd(targetCwd, sentinelContent) {
   const filePath = resolveTargetPath(targetCwd, 'CLAUDE.md');
@@ -137,11 +136,11 @@ function writeCLAUDEmd(targetCwd, sentinelContent) {
 /**
  * Write viflo settings into the target project's .claude/settings.json.
  * Deep-merges with existing content. Deduplicates arrays (existing items first).
- * Idempotent: second call with same settings returns { written: false, reason: 'unchanged' }.
+ * Idempotent: second call with same settings returns { written: false, reason: 'skipped', filePath }.
  *
  * @param {string} targetCwd - Absolute path to the target project root.
  * @param {Object} incomingSettings - Settings object to merge in.
- * @returns {{ written: boolean, reason: string }}
+ * @returns {{ written: boolean, reason: string, filePath: string }}
  */
 function writeSettingsJson(targetCwd, incomingSettings) {
   const filePath = resolveTargetPath(targetCwd, '.claude', 'settings.json');
@@ -164,7 +163,7 @@ function writeSettingsJson(targetCwd, incomingSettings) {
  * Each file is written only if it does not already exist.
  *
  * @param {string} targetCwd - Absolute path to the target project root.
- * @returns {Array<{ path: string, written: boolean, reason: string }>}
+ * @returns {Array<{ path: string, filePath: string, written: boolean, reason: string }>}
  */
 function writePlanningScaffold(targetCwd) {
   const planningDir = path.join(targetCwd, '.planning');
@@ -265,10 +264,10 @@ function writePlanningScaffold(targetCwd) {
   for (const stub of stubs) {
     const filePath = resolveTargetPath(targetCwd, stub.relPath);
     if (fs.existsSync(filePath)) {
-      results.push({ path: stub.relPath, written: false, reason: 'skipped (already exists)' });
+      results.push({ path: stub.relPath, filePath, written: false, reason: 'skipped' });
     } else {
       const result = writeIfChanged(filePath, stub.content);
-      results.push({ path: stub.relPath, written: result.written, reason: result.reason });
+      results.push({ path: stub.relPath, filePath: result.filePath, written: result.written, reason: result.reason });
     }
   }
   return results;
@@ -280,7 +279,7 @@ function writePlanningScaffold(targetCwd) {
  *
  * @param {string} targetCwd - Absolute path to the target project root.
  * @param {string} sentinelContent - Content to place between sentinel markers.
- * @returns {{ written: boolean, reason: string }}
+ * @returns {{ written: boolean, reason: string, filePath: string }}
  */
 function writeCLAUDEmdTemplate(targetCwd, sentinelContent) {
   const filePath = resolveTargetPath(targetCwd, 'CLAUDE.md');
