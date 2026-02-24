@@ -19,7 +19,7 @@ Requirements for the v1.4 Project Tooling milestone. Phases start from 15 (conti
 - [ ] **INIT-02**: User can run `viflo init --minimal` to write/merge `.claude/settings.json` with safe default `permissions.allow` entries
 - [ ] **INIT-03**: User can run `viflo init --full` to scaffold a `.planning/` directory with GSD stub files (PROJECT.md, STATE.md, ROADMAP.md, config.json) — skips files that already exist
 - [ ] **INIT-04**: User can run `viflo init --full` to write a starter CLAUDE.md template when no CLAUDE.md exists in the project
-- [ ] **INIT-05**: Re-running `viflo init` on an existing project does not overwrite customized content (CLAUDE.md outside sentinel block, existing `.planning/` files, existing settings.json entries)
+- [x] **INIT-05**: Re-running `viflo init` on an existing project does not overwrite customized content (CLAUDE.md outside sentinel block, existing `.planning/` files, existing settings.json entries)
 - [ ] **INIT-06**: User can run `viflo init --dry-run` to preview all file actions with resolved absolute paths without writing any files
 - [ ] **INIT-07**: Each file action emits a labelled result (`created` / `updated` / `skipped` / `merged`) with the resolved absolute path
 
@@ -59,7 +59,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INIT-02 | Phase 17 | Pending |
 | INIT-03 | Phase 18 | Pending |
 | INIT-04 | Phase 18 | Pending |
-| INIT-05 | Phase 16 | Pending |
+| INIT-05 | Phase 16 | Complete |
 | INIT-06 | Phase 19 | Pending |
 | INIT-07 | Phase 19 | Pending |
 

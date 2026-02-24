@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.4 milestone started)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.4 Project Tooling — Phase 15 (Integration Review) complete; Phase 16 (CLI Foundation) next
+**Current focus:** v1.4 Project Tooling — Phase 16 (CLI Foundation) in progress; Plan 01 complete
 
 ## Current Position
 
-Phase: 15 (Integration Review) — Complete
-Plan: 03 complete (of 3)
-Status: All three INFRA requirements satisfied — INDEX.md updated (INFRA-01), See Also cross-references added (INFRA-03), VERIFICATION.md created (INFRA-02)
-Last activity: 2026-02-24 — Phase 15 Plan 03 complete (VERIFICATION.md with post-edit line counts for all five v1.4 skills)
+Phase: 16 (CLI Foundation) — In Progress
+Plan: 01 complete (of 4)
+Status: INIT-05 satisfied — bin/lib/paths.cjs and bin/lib/writers.cjs created with idempotent write semantics
+Last activity: 2026-02-24 — Phase 16 Plan 01 complete (paths.cjs + writers.cjs foundation layer)
 
-Progress: [██░░░░░░░░] 20% — v1.4 in progress (1/5 phases)
+Progress: [███░░░░░░░] 30% — v1.4 in progress (1.25/5 phases)
 
 ## Performance Metrics
 
@@ -44,6 +44,7 @@ Progress: [██░░░░░░░░] 20% — v1.4 in progress (1/5 phases)
 | Phase 15-integration-review P02 | 3 | 1 tasks | 3 files |
 | Phase 15-integration-review P01 | 1 | 1 tasks | 1 files |
 | Phase 15-integration-review P03 | 2 | 1 tasks | 1 files |
+| Phase 16-cli-foundation P01 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,10 @@ Recent decisions affecting current work:
 - [Phase 14-stripe-payments]: await req.text() as webhook headline; ON CONFLICT atomic idempotency; API version 2026-01-28.clover
 - [Phase 15-integration-review]: See Also sections appended to SKILL.md file bottoms using relative markdown links with named seam annotations at three AI/LLM integration seams
 - [Phase 15-integration-review]: agent-architecture flagged ✗ at 503 lines per locked plan decision — phase succeeds with 4/5 skills within limit
+- [Phase 16-cli-foundation P01]: Sentinel format confirmed as <!-- BEGIN VIFLO --> / <!-- END VIFLO --> (not the stale viflo:start/end mentioned in earlier STATE.md decisions)
+- [Phase 16-cli-foundation P01]: resolveViFloRoot() uses __dirname not process.cwd() — deterministic regardless of invocation directory
+- [Phase 16-cli-foundation P01]: indexOf+slice used for sentinel block replacement instead of regex — avoids escaping edge cases
+- [Phase 16-cli-foundation P01]: existing-first ordering in Set spread preserves user-added array entries at front
 
 ### Pending Todos
 
@@ -83,5 +88,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Phase 15 complete — VERIFICATION.md created, all three INFRA requirements (INFRA-01, INFRA-02, INFRA-03) satisfied
-Resume with: /gsd:execute-phase 16 (CLI Foundation)
+Stopped at: Completed 16-01-PLAN.md — bin/lib/paths.cjs and bin/lib/writers.cjs created, INIT-05 satisfied
+Resume with: /gsd:execute-phase 16 02 (CLI Foundation, Plan 02)
