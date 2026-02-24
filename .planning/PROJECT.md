@@ -1,17 +1,15 @@
 # Viflo: Universal Agentic Development Environment
 
-## Current Milestone: v1.5 — viflo init CLI
+## Current State: v1.5 Shipped
 
-**Goal:** Ship the `viflo init` CLI so developers can wire any project to viflo in one command.
+`viflo init` CLI is fully functional. Developers can wire any project to viflo in one command:
+- `viflo init --minimal` — CLAUDE.md sentinel + `.claude/settings.json` permissions
+- `viflo init --full` — also scaffolds `.planning/` with GSD stubs + starter CLAUDE.md template
+- `viflo init --dry-run` — filesystem-safe preview of all file actions with resolved absolute paths
+- Unified labelled output (`created`/`updated`/`skipped`/`merged`) with absolute paths
+- `npx viflo` / `pnpm exec viflo` invocable via `package.json` bin field
 
-**Target features:**
-- `viflo init --minimal`: writes CLAUDE.md sentinel block with `@` import lines + `.claude/settings.json` permissions (INIT-01, INIT-02)
-- `viflo init --full`: also scaffolds `.planning/` directory with GSD stubs + starter CLAUDE.md template (INIT-03, INIT-04)
-- `viflo init --dry-run`: preview all file actions without writing (INIT-06)
-- Labelled per-file output (`created`/`updated`/`skipped`/`merged`) with resolved absolute paths (INIT-07)
-- Idempotent across all modes — already covered at library level by v1.4 CLI Foundation (INIT-05 ✓)
-
-**Deferred from v1.4:** Phases 17–19 scope unchanged; library layer (paths.cjs, writers.cjs) is ready.
+**Next milestone:** TBD — see `/gsd:new-milestone` to define v1.6 scope.
 
 ## What This Is
 
@@ -62,15 +60,17 @@ A complete agentic dev environment you can install in one command — structured
 - ✓ All v1.4 SKILL.md files verified ≤500 lines with VERIFICATION.md audit table (INFRA-02) — v1.4 (agent-architecture 503 lines, accepted per decision)
 - ✓ Bidirectional See Also cross-references across RAG ↔ Agent Architecture ↔ prompt-engineering at three named seams (INFRA-03) — v1.4
 - ✓ `viflo init` library layer idempotent — CLAUDE.md sentinel merge and settings.json deep-merge safe to re-run (INIT-05) — v1.4
+- ✓ `viflo init --minimal` writes CLAUDE.md sentinel block with `@` import lines for all viflo skills (INIT-01) — v1.5
+- ✓ `viflo init --minimal` writes/merges `.claude/settings.json` with safe default `permissions.allow` entries (INIT-02) — v1.5
+- ✓ `viflo init --full` scaffolds `.planning/` directory with GSD stub files — skips files that already exist (INIT-03) — v1.5
+- ✓ `viflo init --full` writes starter CLAUDE.md template when no CLAUDE.md exists (INIT-04) — v1.5
+- ✓ `viflo init --dry-run` previews all file actions with resolved absolute paths without writing any files (INIT-06) — v1.5
+- ✓ Each file action emits a labelled result (`created`/`updated`/`skipped`/`merged`) with resolved absolute path (INIT-07) — v1.5
+- ✓ `package.json` bin wiring — `npx viflo` / `pnpm exec viflo` invocable (INIT-08) — v1.5
 
 ### Active
 
-- [ ] `viflo init --minimal` writes CLAUDE.md sentinel block with `@` import lines for all viflo skills (INIT-01)
-- [ ] `viflo init --minimal` writes/merges `.claude/settings.json` with safe default `permissions.allow` entries (INIT-02)
-- [ ] `viflo init --full` scaffolds `.planning/` directory with GSD stub files — skips files that already exist (INIT-03)
-- [ ] `viflo init --full` writes starter CLAUDE.md template when no CLAUDE.md exists (INIT-04)
-- [ ] `viflo init --dry-run` previews all file actions with resolved absolute paths without writing any files (INIT-06)
-- [ ] Each file action emits a labelled result (`created`/`updated`/`skipped`/`merged`) with resolved absolute path (INIT-07)
+(None — all v1.5 requirements shipped. Define v1.6 requirements via `/gsd:new-milestone`.)
 
 ### Out of Scope
 
@@ -123,18 +123,17 @@ Shipped v1.1 with CI pipeline, Vitest coverage, skill modularization, and VERIFI
 Shipped v1.2 (Foundation Skills) with prompt-engineering and auth-systems rewrites at v1.2 depth standard (1 day, 1 phase, 3 plans).
 Shipped v1.3 (Expert Skills) with RAG/Vector Search, Agent Architecture, and Stripe Payments skills at v1.3 depth standard (7 days, 3 phases, 6 plans, 28 commits).
 Shipped v1.4 (Project Tooling) with integration review (INDEX.md, VERIFICATION.md, See Also links) and CLI library layer (paths.cjs, writers.cjs, 23 Vitest tests) (1 day, 2 phases, 5 plans, +3,165 lines).
+Shipped v1.5 (viflo init CLI) with `viflo init --minimal/--full/--dry-run`, unified labelled output, and `npx viflo` bin wiring (1 day, 3 phases, 6 plans, 574 CJS LOC, 55/55 tests).
 
-Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js/CommonJS tooling, pnpm workspace, Vitest.
+Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js/CommonJS CLI tooling, pnpm workspace, Vitest.
 ~53,000 LOC estimated in `.agent/skills/` (v1.3 baseline ~48,455 + v1.4 additions).
+CLI: 574 lines of CJS (bin/viflo.cjs, bin/lib/writers.cjs, bin/lib/skills.cjs, bin/lib/paths.cjs).
 
 Known tech debt:
 - Makefile `make setup` target (09-CONTEXT.md specified Makefile; execution used `scripts/setup-dev.sh` instead — different mechanism, same function)
 - 07-VERIFICATION.md checked off telemetry commit before verifying against `git ls-files` — future verifications should use `git ls-files` to confirm committed state
-- writeIfChanged helper not exported from writers.cjs — Phase 17+ must extend or duplicate idempotency logic
-- resolveViFloRoot() exported and tested but not yet called within bin/ tree — correctly deferred to Phase 17+
-- ROADMAP.md Phase 17 success criterion uses stale sentinel format (viflo:start/end) — must update before Phase 17 planning
-- research/ files reference stale viflo:start/viflo:end format — update before Phase 17 research begins
 - agent-architecture SKILL.md is 503 lines (over 500-line limit) — accepted per locked Phase 15 decision; 4/5 skills within limit is the accepted outcome
+- User-scope `~/.claude/settings.json` writes deferred — Claude Code bug #5140 not resolved; project-scope only for v1.5
 
 ## Key Decisions
 
@@ -173,7 +172,12 @@ Known tech debt:
 | 2026-02-24 | Real temp directories (fs.mkdtempSync) for writers tests | ✓ Good — real I/O is what the tests are designed to verify; filesystem mocking would defeat the purpose |
 | 2026-02-24 | agent-architecture 503 lines accepted, trimming ruled out | ✓ Good — See Also section addition was post-baseline; 4/5 within limit is valid pass state |
 | 2026-02-24 | Named seam annotations in See Also links (not just destination) | ✓ Good — "episodic memory pattern (pgvector-backed recall)" tells readers what they'll find, not just where |
+| 2026-02-24 | scanSkills accepts rootDir explicitly — caller passes resolveViFloRoot() | ✓ Good — pure function, easy to test with any temp directory, decoupled from install path |
+| 2026-02-24 | writePlanningScaffold uses fs.existsSync (skip-if-exists) not writeIfChanged | ✓ Good — planning files preserve user edits; writers.cjs skip-if-unchanged semantics differ by file type |
+| 2026-02-24 | `merged` label at CLI call-site (not in writers) — writers return `updated`, CLI maps to `merged` | ✓ Good — writers.cjs stays single-responsibility; CLI applies semantic context |
+| 2026-02-24 | No shebang required — npm bin wiring uses node implicitly for .cjs files | ✓ Good — bin field alone sufficient; fewer moving parts |
+| 2026-02-24 | User-scope ~/.claude/settings.json writes deferred (bug #5140) | — Pending — re-evaluate at v1.6 planning |
 
 ---
 
-_Last updated: 2026-02-24 after v1.5 milestone start_
+_Last updated: 2026-02-24 after v1.5 milestone_

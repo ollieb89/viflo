@@ -7,7 +7,7 @@
 - ✅ **v1.2 Foundation Skills** — Phase 11 (shipped 2026-02-24) — [Archive](milestones/v1.2-ROADMAP.md)
 - ✅ **v1.3 Expert Skills** — Phases 12–14 (shipped 2026-02-24) — [Archive](milestones/v1.3-ROADMAP.md)
 - ✅ **v1.4 Project Tooling** — Phases 15–16 (shipped 2026-02-24) — [Archive](milestones/v1.4-ROADMAP.md)
-- 📋 **v1.5 viflo init CLI** — Phases 17–19 (planned)
+- ✅ **v1.5 viflo init CLI** — Phases 17–19 (shipped 2026-02-24) — [Archive](milestones/v1.5-ROADMAP.md)
 
 ## Phases
 
@@ -58,52 +58,14 @@
 
 </details>
 
-### 📋 v1.5 viflo init CLI (Phases 17–19)
+<details>
+<summary>✅ v1.5 viflo init CLI (Phases 17–19) — SHIPPED 2026-02-24</summary>
 
-- [x] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json) (completed 2026-02-24)
-- [x] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template (completed 2026-02-24)
-- [x] **Phase 19: Polish** — --dry-run flag, labelled per-file output, and package.json bin wiring (completed 2026-02-24)
+- [x] Phase 17: Minimal Mode (2/2 plans) — completed 2026-02-24
+- [x] Phase 18: Full Mode (2/2 plans) — completed 2026-02-24
+- [x] Phase 19: Polish (2/2 plans) — completed 2026-02-24
 
-## Phase Details
-
-### Phase 17: Minimal Mode
-**Goal**: A developer can run `viflo init --minimal` in any project and get CLAUDE.md skill imports and safe Claude Code permissions wired in one command
-**Depends on**: Phase 16
-**Requirements**: INIT-01, INIT-02
-**Success Criteria** (what must be TRUE):
-  1. Running `viflo init --minimal` in a project without CLAUDE.md creates CLAUDE.md containing a `<!-- BEGIN VIFLO -->` / `<!-- END VIFLO -->` sentinel block with `@` import lines for all viflo skills
-  2. Running `viflo init --minimal` creates or merges `.claude/settings.json` with safe default `permissions.allow` entries — existing entries in the file are preserved
-  3. Running `viflo init --minimal` a second time on a project that already has the sentinel block and settings entries completes without modifying any file content
-**Plans**: 2 plans
-Plans:
-- [ ] 17-01-PLAN.md — TDD: scanSkills runtime skill directory scanner
-- [ ] 17-02-PLAN.md — bin/viflo.cjs CLI entry point and integration tests
-
-### Phase 18: Full Mode
-**Goal**: A developer starting a new project can run `viflo init --full` and immediately have both viflo skill imports and a GSD planning scaffold ready to use
-**Depends on**: Phase 17
-**Requirements**: INIT-03, INIT-04
-**Success Criteria** (what must be TRUE):
-  1. Running `viflo init --full` in an empty project creates `.planning/` with stub files for PROJECT.md, STATE.md, ROADMAP.md, and config.json
-  2. Running `viflo init --full` when `.planning/` already contains customized files skips each existing file individually — no existing content is overwritten
-  3. Running `viflo init --full` in a project with no CLAUDE.md creates a starter CLAUDE.md template; running it where CLAUDE.md already exists does not replace or alter the file outside the sentinel block
-**Plans**: 2 plans
-Plans:
-- [ ] 18-01-PLAN.md — Library functions (writePlanningScaffold, writeCLAUDEmdTemplate) + CLI --full flag wiring
-- [ ] 18-02-PLAN.md — Integration tests for --full behaviours (INIT-03, INIT-04)
-
-### Phase 19: Polish
-**Goal**: The CLI is fully wired as an executable, previews its actions safely, and communicates every file outcome clearly
-**Depends on**: Phase 18
-**Requirements**: INIT-06, INIT-07, INIT-08
-**Success Criteria** (what must be TRUE):
-  1. Running `viflo init --dry-run` (with any flag combination) prints every file action with its resolved absolute path and exits without writing, creating, or modifying any file
-  2. Every file action in a real run emits a labelled result (`created`, `updated`, `skipped`, or `merged`) with the resolved absolute path on stdout
-  3. `package.json` has a `"bin": { "viflo": "bin/viflo.cjs" }` field so the CLI is invocable via `npx` or a local `pnpm exec viflo` call from the repo
-**Plans**: 2 plans
-Plans:
-- [ ] 19-01-PLAN.md — --dry-run flag + unified labelled output with absolute paths (writers.cjs refactor + viflo.cjs)
-- [ ] 19-02-PLAN.md — Integration tests for Polish features + package.json bin wiring
+</details>
 
 ## Progress
 
@@ -127,5 +89,5 @@ Plans:
 | 15. Integration Review | v1.4 | 3/3 | Complete | 2026-02-24 |
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
 | 17. Minimal Mode | v1.5 | 2/2 | Complete | 2026-02-24 |
-| 18. Full Mode | 2/2 | Complete    | 2026-02-24 | - |
-| 19. Polish | 2/2 | Complete    | 2026-02-24 | - |
+| 18. Full Mode | v1.5 | 2/2 | Complete | 2026-02-24 |
+| 19. Polish | v1.5 | 2/2 | Complete | 2026-02-24 |

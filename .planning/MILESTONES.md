@@ -112,3 +112,24 @@
 
 ---
 
+
+## v1.5 viflo init CLI (Shipped: 2026-02-24)
+
+**Phases completed:** 3 phases (17–19), 6 plans
+**Timeline:** 2026-02-24 → 2026-02-24 (1 day, ~2h build time)
+**LOC:** 574 CJS (viflo.cjs 183, writers.cjs 318, skills.cjs 33, paths.cjs 30)
+**Tests:** 55/55 passing across 4 test files
+**Git range:** feat(17-01): implement scanSkills → docs(phase-19): complete phase execution
+
+**Key accomplishments:**
+- `scanSkills` runtime scanner — reads `.agent/skills/`, returns sorted `@`-import lines, ENOENT-safe for new projects without skills directory
+- `viflo init --minimal` CLI — writes CLAUDE.md sentinel block with `@`-imports and `.claude/settings.json` in one command, fully idempotent on re-run
+- `viflo init --full` — scaffolds `.planning/` with 4 stub files + richer CLAUDE.md template; each file independently skip-if-exists to preserve user edits
+- `--dry-run` flag — filesystem-safe preview of all planned file actions with resolved absolute paths, exits 0 without writing
+- Unified labelled output — `created`/`updated`/`skipped`/`merged` with absolute paths on every real-run file action via `printResult()` helper
+- `package.json` bin wiring — `"bin": { "viflo": "bin/viflo.cjs" }` makes CLI invocable via `npx viflo` / `pnpm exec viflo`
+
+**Archive:** `.planning/milestones/v1.5-ROADMAP.md`
+
+---
+
