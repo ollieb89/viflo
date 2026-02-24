@@ -81,13 +81,14 @@ describe('viflo init --minimal', () => {
     expect(fs.existsSync(path.join(process.cwd(), 'CLAUDE.md'))).toBe(false);
   });
 
-  it('stdout reports created status for new files', () => {
+  it('stdout reports created status for new files with absolute paths', () => {
     const result = spawnSync(process.execPath, [cliPath, 'init', '--minimal', tmpDir], {
       encoding: 'utf-8',
     });
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain('[viflo] CLAUDE.md: created');
-    expect(result.stdout).toContain('[viflo] .claude/settings.json: created');
+    expect(result.stdout).toMatch(/created\s+\//);
+    expect(result.stdout).toContain(path.join(tmpDir, 'CLAUDE.md'));
+    expect(result.stdout).toContain(path.join(tmpDir, '.claude', 'settings.json'));
   });
 });
 
