@@ -2,20 +2,27 @@
 
 ## Current Status
 
-**Milestone**: v1.1 Dogfooding — ARCHIVED 2026-02-24
-**Status**: Milestone complete — ready for v1.2 planning
-**Last activity**: 2026-02-24 — v1.1 milestone archived, git tag v1.1 created
+**Milestone**: v1.2 Skills Expansion — STARTED 2026-02-24
+**Status**: Defining requirements
+**Last activity**: 2026-02-24 — Milestone v1.2 started
+
+## Current Position
+
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-24 — Milestone v1.2 started
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24 after v1.1 milestone)
+See: .planning/PROJECT.md (updated 2026-02-24 — v1.2 milestone started)
 
-**Core value:** A complete agentic dev environment — 35 skills, GSD methodology, proven workflows, live CI
-**Current focus:** Planning v1.2 — run `/gsd:new-milestone` to start
+**Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
+**Current focus:** v1.2 Skills Expansion — domain integration + AI/LLM pattern skills
 
 ## Decisions
 
-None (clear for next milestone)
+None
 
 ## Blockers
 
@@ -32,5 +39,5 @@ None
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.1 Dogfooding ARCHIVED — all artifacts committed, git tagged v1.1
-Resume with: `/gsd:new-milestone` to start v1.2 planning
+Stopped at: v1.2 milestone started — defining requirements, roadmap TBD
+Resume with: `/gsd:plan-phase [N]` after roadmap is created

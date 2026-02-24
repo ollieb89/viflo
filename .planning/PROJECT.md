@@ -1,8 +1,19 @@
 # Viflo: Universal Agentic Development Environment
 
+## Current Milestone: v1.2 Skills Expansion
+
+**Goal:** Expand the skills library with high-demand domain integration and AI/LLM pattern skills
+
+**Target features:**
+- Auth systems skill (Clerk + Auth.js/NextAuth — session handling, protected routes, OAuth)
+- Stripe payments skill (checkout, subscriptions, webhooks, billing patterns)
+- RAG / vector search skill (embedding pipelines, pgvector/Pinecone, retrieval patterns)
+- Agent architecture skill (multi-agent systems, handoffs, memory, orchestration)
+- Prompt engineering skill (templates, evaluation, iteration workflows, anti-patterns)
+
 ## What This Is
 
-Viflo is a comprehensive development methodology and toolchain that standardizes and accelerates agentic software development. It ships as 35 reusable skill packages, a structured 5-phase lifecycle, and GSD workflow tooling for hybrid AI-human development teams. With v1.1, viflo applies its own methodology to itself — the repo has live CI, Vitest test coverage, pre-commit security scanning, and modular skill documentation, proving the toolkit by dogfooding it.
+Viflo is a comprehensive development methodology and toolchain that standardizes and accelerates agentic software development. It ships as 35+ reusable skill packages, a structured 5-phase lifecycle, and GSD workflow tooling for hybrid AI-human development teams. With v1.1, viflo applies its own methodology to itself — the repo has live CI, Vitest test coverage, pre-commit security scanning, and modular skill documentation, proving the toolkit by dogfooding it.
 
 ## Core Value
 
@@ -43,7 +54,11 @@ A complete agentic dev environment you can install in one command — structured
 
 ### Active
 
-<!-- Next milestone requirements go here after /gsd:new-milestone -->
+- [ ] Auth systems skill covering Clerk and Auth.js/NextAuth patterns (AUTH-01)
+- [ ] Stripe payments skill covering checkout, subscriptions, and webhooks (STRIPE-01)
+- [ ] RAG / vector search skill covering embedding pipelines and retrieval patterns (RAG-01)
+- [ ] Agent architecture skill covering multi-agent systems and orchestration (AGENT-01)
+- [ ] Prompt engineering skill covering templates, evaluation, and iteration workflows (PROMPT-01)
 
 ### Out of Scope
 
@@ -124,4 +139,4 @@ Known tech debt:
 
 ---
 
-_Last updated: 2026-02-24 after v1.1 milestone_
+_Last updated: 2026-02-24 — v1.2 milestone started_
