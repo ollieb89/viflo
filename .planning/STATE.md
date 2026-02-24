@@ -2,57 +2,42 @@
 
 ## Current Status
 
-**Milestone**: v1.1 Dogfooding — ACTIVE 2026-02-23  
-**Phase**: 6 of 7 — Test Suite ✅ COMPLETE  
-**Status**: Executed and verified  
-**Last activity**: 2026-02-23 — Phase 6 executed (Vitest + coverage ratchet)
+**Milestone**: v1.2 Skills Expansion — STARTED 2026-02-24
+**Status**: Defining requirements
+**Last activity**: 2026-02-24 — Milestone v1.2 started
+
+## Current Position
+
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-24 — Milestone v1.2 started
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-23)
+See: .planning/PROJECT.md (updated 2026-02-24 — v1.2 milestone started)
 
-**Core value:** A complete agentic dev environment — 35 skills, GSD methodology, proven workflows  
-**Current focus:** v1.1 — Phase 7: Content Hygiene (modularize skills + VERIFICATION + telemetry)
-
-Progress: [██████░░░░] 67% (v1.1 — 4/6 plans complete, Phase 6 done)
+**Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
+**Current focus:** v1.2 Skills Expansion — domain integration + AI/LLM pattern skills
 
 ## Decisions
 
-- QUAL-03: Vitest test suite in apps/web/ with utility functions
-- QUAL-04: CI runs tests and fails on test failure
-- QUAL-05: Coverage ratchet prevents regression (baseline: 98.11% lines)
-- Test utilities: skill validation, plan parsing (dogfooding viflo's own formats)
-- Coverage baseline stored in .coverage/baseline.json
+None
 
 ## Blockers
 
 None
 
-## Completed (Phase 6)
-
-- ✅ `apps/web/` — Vitest package with 13 tests
-- ✅ `src/validation/skill.ts` — Skill frontmatter validation (100% test coverage)
-- ✅ `src/parsing/plan.ts` — Plan file parsing (100% test coverage)
-- ✅ `scripts/coverage-ratchet.ts` — Coverage threshold enforcement
-- ✅ `.coverage/baseline.json` — Coverage baseline (98.11% lines)
-- ✅ CI workflow updated with coverage ratchet step
-- ✅ Root package.json test scripts updated
-
-## Todos (Phase 7)
-
-- CONTENT-01: Modularize oversized SKILL.md files (>500 lines)
-- CONTENT-02: Add VERIFICATION.md for Phases 0–3
-- CONTENT-03: Telemetry logging script (timestamp, model, tokens, success)
-
 ## Accumulated Context
 
-- v1.0 shipped 35 skills, GSD methodology, 14/14 requirements, 41 commits
-- v1.1 Phase 5 complete: CI workflow, branch protection, pre-commit secret scanning
-- v1.1 Phase 6 complete: Vitest suite with 13 tests, 98%+ coverage, coverage ratchet active
-- Remaining: Phase 7 (Content Hygiene) — 3 requirements
+- v1.0 shipped 35 skills, GSD methodology, 14/14 requirements, 41 commits (7 days)
+- v1.1 shipped CI pipeline, Vitest suite, SKILL.md modularization, VERIFICATION.md audit trail (2 days, 33 commits)
+- All 11 v1.1 requirements satisfied in committed tree (Phase 10 closed disk/committed drift)
+- Coverage baseline: 98.11% lines (`apps/web/.coverage/baseline.json`)
+- Pre-commit: gitleaks + detect-secrets via `.pre-commit-config.yaml`; run `./scripts/setup-dev.sh` to install hooks
 
 ## Session Continuity
 
-Last session: 2026-02-23  
-Stopped at: Phase 6 complete — ready to start Phase 7 (Content Hygiene)  
-Resume file: None
+Last session: 2026-02-24
+Stopped at: v1.2 milestone started — defining requirements, roadmap TBD
+Resume with: `/gsd:plan-phase [N]` after roadmap is created

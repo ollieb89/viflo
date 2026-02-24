@@ -11,6 +11,13 @@
 2. Load the skill: `@.agent/skills/<skill-name>/SKILL.md`
 3. Follow the skill's instructions — read only referenced sub-files as needed
 
+### Extended Content
+
+Skills marked with 📚 have extended content in `references/` subdirectories:
+- `references/guides/` — Detailed implementation guides
+- `references/examples/` — Code examples and templates  
+- `references/checklists/` — Verification and review checklists
+
 ---
 
 ## Skills by Category
@@ -19,7 +26,7 @@
 
 | Skill                                                   | Description                                                       | Difficulty   | When to Use                         |
 | ------------------------------------------------------- | ----------------------------------------------------------------- | ------------ | ----------------------------------- |
-| [api-design-principles](api-design-principles/SKILL.md) | REST and GraphQL design patterns, versioning, pagination, HATEOAS | Intermediate | Designing new APIs, reviewing specs |
+| [api-design-principles](api-design-principles/SKILL.md) 📚 | REST and GraphQL design patterns, versioning, pagination, HATEOAS | Intermediate | Designing new APIs, reviewing specs |
 | [api-patterns](api-patterns/SKILL.md)                   | API style selection (REST/GraphQL/tRPC), response formats, auth   | Beginner     | Choosing API style, quick reference |
 
 ### Architecture
@@ -35,8 +42,8 @@
 | Skill                                                       | Description                                                  | Difficulty   | When to Use                         |
 | ----------------------------------------------------------- | ------------------------------------------------------------ | ------------ | ----------------------------------- |
 | [backend-dev-guidelines](backend-dev-guidelines/SKILL.md)   | FastAPI + SQLAlchemy 2.0 + Pydantic v2 development standards | Intermediate | Python/FastAPI projects             |
-| [fastapi-templates](fastapi-templates/SKILL.md)             | Production-ready FastAPI with async, DI, repository pattern  | Intermediate | Starting new FastAPI applications   |
-| [nodejs-backend-patterns](nodejs-backend-patterns/SKILL.md) | Node.js/Express/Fastify patterns, middleware, auth, database | Intermediate | Node.js REST APIs and microservices |
+| [fastapi-templates](fastapi-templates/SKILL.md) 📚             | Production-ready FastAPI with async, DI, repository pattern  | Intermediate | Starting new FastAPI applications   |
+| [nodejs-backend-patterns](nodejs-backend-patterns/SKILL.md) 📚 | Node.js/Express/Fastify patterns, middleware, auth, database | Intermediate | Node.js REST APIs and microservices |
 
 ### CI/CD and DevOps
 
@@ -69,17 +76,38 @@
 | [brainstorming](brainstorming/SKILL.md)       | Socratic questioning, progress reporting, communication protocol | Beginner     | Clarifying requirements before implementation |
 | [gsd-workflow](gsd-workflow/SKILL.md)         | Get Shit Done spec-driven development methodology                | Intermediate | Structured project planning and execution     |
 | [skill-creator](skill-creator/SKILL.md)       | Create and update skills following best practices                | Intermediate | Adding new capabilities                       |
-| [writing-skills](writing-skills/SKILL.md)     | Test-driven approach to skill documentation                      | Advanced     | Verifying skills work correctly               |
+| [skill-depth-standard](skill-depth-standard/SKILL.md) | Rubric and checklist for auditing and writing deep skills        | Intermediate | Auditing and improving skill quality          |
+| [writing-skills](writing-skills/SKILL.md) 📚     | Test-driven approach to skill documentation                      | Advanced     | Verifying skills work correctly               |
 
 ### Quality and Testing
 
 | Skill                                                       | Description                                                      | Difficulty   | When to Use                     |
 | ----------------------------------------------------------- | ---------------------------------------------------------------- | ------------ | ------------------------------- |
-| [code-review-excellence](code-review-excellence/SKILL.md)   | Effective code review practices and feedback techniques          | Beginner     | Reviewing pull requests         |
-| [debugging-strategies](debugging-strategies/SKILL.md)       | Systematic debugging, profiling, root cause analysis             | Intermediate | Tracking down bugs              |
-| [e2e-testing-patterns](e2e-testing-patterns/SKILL.md)       | Playwright and Cypress patterns, Page Objects, fixtures          | Intermediate | E2E test implementation         |
-| [error-handling-patterns](error-handling-patterns/SKILL.md) | Exceptions, Result types, circuit breakers, graceful degradation | Intermediate | Building resilient applications |
+| [code-review-excellence](code-review-excellence/SKILL.md) 📚   | Effective code review practices and feedback techniques          | Beginner     | Reviewing pull requests         |
+| [debugging-strategies](debugging-strategies/SKILL.md) 📚       | Systematic debugging, profiling, root cause analysis             | Intermediate | Tracking down bugs              |
+| [e2e-testing-patterns](e2e-testing-patterns/SKILL.md) 📚       | Playwright and Cypress patterns, Page Objects, fixtures          | Intermediate | E2E test implementation         |
+| [error-handling-patterns](error-handling-patterns/SKILL.md) 📚 | Exceptions, Result types, circuit breakers, graceful degradation | Intermediate | Building resilient applications |
 | [temporal-python-testing](temporal-python-testing/SKILL.md) | Temporal workflow testing with pytest, time-skipping, mocking    | Advanced     | Temporal workflow test coverage |
+
+### Authentication
+
+| Skill                                       | Description                                                        | Difficulty   | When to Use                                   |
+| ------------------------------------------- | ------------------------------------------------------------------ | ------------ | --------------------------------------------- |
+| [auth-systems](auth-systems/SKILL.md)       | Clerk and Auth.js/NextAuth authentication, sessions, RBAC          | Intermediate | Adding auth to Next.js or Node.js applications |
+
+### Payments
+
+| Skill                                             | Description                                                              | Difficulty   | When to Use                                        |
+| ------------------------------------------------- | ------------------------------------------------------------------------ | ------------ | -------------------------------------------------- |
+| [stripe-payments](stripe-payments/SKILL.md)       | Stripe checkout, subscriptions, webhooks, and billing lifecycle          | Intermediate | Implementing payment flows and subscription billing |
+
+### AI/LLM
+
+| Skill                                                       | Description                                                              | Difficulty   | When to Use                                      |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------ | ------------ | ------------------------------------------------ |
+| [rag-vector-search](rag-vector-search/SKILL.md)             | Embedding pipelines, pgvector/Pinecone, retrieval-augmented generation   | Advanced     | Building semantic search or RAG applications     |
+| [agent-architecture](agent-architecture/SKILL.md)           | Multi-agent systems, memory patterns, orchestration frameworks           | Advanced     | Designing autonomous agents and multi-agent flows |
+| [prompt-engineering](prompt-engineering/SKILL.md)           | Prompt templates, evaluation, chain-of-thought, anti-patterns            | Intermediate | Optimizing LLM prompts and evaluating quality    |
 
 ### Security
 
@@ -92,7 +120,7 @@
 
 | Skill                                                           | Description                                                  | Difficulty | When to Use                   |
 | --------------------------------------------------------------- | ------------------------------------------------------------ | ---------- | ----------------------------- |
-| [typescript-advanced-types](typescript-advanced-types/SKILL.md) | Generics, conditional types, mapped types, template literals | Advanced   | Complex TypeScript type logic |
+| [typescript-advanced-types](typescript-advanced-types/SKILL.md) 📚 | Generics, conditional types, mapped types, template literals | Advanced   | Complex TypeScript type logic |
 
 ### Documentation
 
@@ -106,7 +134,7 @@
 | --------------------------------------------------------------------------- | ----------------------------------------------------------- | ------------ | ------------------------------------------------ |
 | [git-advanced-workflows](git-advanced-workflows/SKILL.md)                   | Rebase, cherry-pick, bisect, worktrees, reflog              | Intermediate | Complex Git history management                   |
 | [i18n-implementation](i18n-implementation/SKILL.md)                         | Internationalization with next-i18next, RTL support         | Intermediate | Adding multi-language support                    |
-| [monorepo-management](monorepo-management/SKILL.md)                         | Turborepo/Nx/pnpm workspace management                      | Intermediate | Multi-package repository setup                   |
+| [monorepo-management](monorepo-management/SKILL.md) 📚                         | Turborepo/Nx/pnpm workspace management                      | Intermediate | Multi-package repository setup                   |
 | [workflow-orchestration-patterns](workflow-orchestration-patterns/SKILL.md) | Temporal durable workflows, saga patterns, state management | Advanced     | Long-running processes, distributed transactions |
 
 ---

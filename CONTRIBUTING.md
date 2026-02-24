@@ -90,12 +90,30 @@ git checkout -b docs/improve-getting-started
 
 ### Step 3: Set Up the Development Environment
 
+We provide an automated setup script that handles all dependencies and pre-commit hook installation:
+
+```bash
+# Run the setup script
+./scripts/setup-dev.sh
+```
+
+This script will:
+- Check for required tools (Node.js 20+, pnpm, Python 3, pre-commit)
+- Install all dependencies with `pnpm install`
+- Set up pre-commit hooks for secret scanning
+- Verify the setup is working correctly
+
+#### Manual Setup (if you prefer)
+
+If you prefer to set up manually:
+
 ```bash
 # Install Node.js dependencies
 pnpm install
 
-# Install Python dependencies (for scripts)
-pip3 install -r scripts/requirements.txt
+# Install pre-commit hooks
+pip3 install pre-commit
+pre-commit install
 
 # Verify your environment
 python3 scripts/verify_env.py
@@ -105,14 +123,7 @@ python3 scripts/verify_env.py
 
 This repository uses [pre-commit](https://pre-commit.com/) to run secret scanning before every commit. The hooks run `gitleaks` and `detect-secrets` to prevent accidental credential exposure.
 
-Install the hooks after cloning:
-
-```bash
-pip install pre-commit
-pre-commit install
-```
-
-Once installed, the hooks run automatically on `git commit`. To run them manually against all files:
+If you used `./scripts/setup-dev.sh`, hooks are already installed. To run them manually against all files:
 
 ```bash
 pre-commit run --all-files
