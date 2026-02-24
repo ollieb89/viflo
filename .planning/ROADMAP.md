@@ -128,4 +128,4 @@ Plans:
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
 | 17. Minimal Mode | v1.5 | 2/2 | Complete | 2026-02-24 |
 | 18. Full Mode | 2/2 | Complete    | 2026-02-24 | - |
-| 19. Polish | v1.5 | 0/TBD | Not started | - |
+| 19. Polish | 1/2 | In Progress|  | - |
