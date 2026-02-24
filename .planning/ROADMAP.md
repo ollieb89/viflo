@@ -78,10 +78,11 @@ Plans:
   3. Developer can follow the streaming section and wire SSE output from a FastAPI StreamingResponse to a Next.js client using Vercel AI SDK v6
   4. The Gotchas section names at least 3 pitfalls (runaway costs, untyped sub-agent handoffs, bag-of-agents error multiplication) with warning signs and fixes
   5. Developer can read a "When NOT to use agents" callout and make an informed build-vs-agent decision
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 13-01: TBD
+- [ ] 13-01-PLAN.md — Rewrite SKILL.md to auth-systems depth (Quick Start, Guardrails, Streaming, LangGraph, Memory/MCP, When NOT to use, Gotchas)
+- [ ] 13-02-PLAN.md — Update references/ — multi-agent-patterns.md (LangGraph 1.x) and memory-orchestration.md (pgvector episodic memory)
 
 ---
 
