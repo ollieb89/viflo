@@ -51,6 +51,10 @@ export async function POST(req: Request) {
 ```typescript
 // app/api/billing-portal/route.ts
 export async function POST(req: Request) {
+  // Authenticate first — never trust client-provided customerId
+  // const session = await auth(); if (!session) return new Response('Unauthorized', { status: 401 });
+  // const user = await db.user.findUnique({ where: { id: session.user.id } });
+  // Use user.stripeCustomerId, not a value from the request body
   const { customerId } = await req.json();
 
   const session = await stripe.billingPortal.sessions.create({

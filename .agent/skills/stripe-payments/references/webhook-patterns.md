@@ -24,12 +24,15 @@ export async function POST(req: Request) {
     return new Response('Invalid signature', { status: 400 });
   }
 
-  // Idempotency: skip if already processed
-  const existing = await db.stripeEvent.findUnique({ where: { stripeEventId: event.id } });
-  if (existing) return new Response('Already processed', { status: 200 });
-
-  // Record first to prevent race conditions
-  await db.stripeEvent.create({ data: { stripeEventId: event.id, type: event.type } });
+  // Idempotency: @unique on stripeEventId is the true guard against concurrent delivery
+  try {
+    await db.stripeEvent.create({ data: { stripeEventId: event.id, type: event.type } });
+  } catch (err: unknown) {
+    if ((err as { code?: string }).code === 'P2002') {
+      return new Response('Already processed', { status: 200 });
+    }
+    throw err;
+  }
 
   switch (event.type) {
     case 'checkout.session.completed': {

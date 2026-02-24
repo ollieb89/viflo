@@ -33,12 +33,15 @@ await stripe.subscriptions.update(subscriptionId, {
 ## Checking Active Subscription Server-Side
 
 ```typescript
-// Never trust the client — always verify from Stripe or your DB
+// Prefer DB-first: webhooks keep your DB in sync; only call Stripe if you suspect drift
 async function getUserPlan(userId: string) {
-  const user = await db.user.findUnique({ where: { id: userId }, select: { stripeSubscriptionId: true } });
-  if (!user?.stripeSubscriptionId) return 'free';
+  const user = await db.user.findUnique({ where: { id: userId }, select: { plan: true } });
+  return user?.plan ?? 'free';
+}
 
-  const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+// Use Stripe API only for one-time drift checks (e.g., reconciliation job)
+async function verifyPlanFromStripe(stripeSubscriptionId: string) {
+  const subscription = await stripe.subscriptions.retrieve(stripeSubscriptionId);
   return subscription.status === 'active' || subscription.status === 'trialing' ? 'pro' : 'free';
 }
 ```
