@@ -52,7 +52,11 @@
   3. Developer can follow the Clerk quick-start to add sign-up, sign-in, and protected routes to a Next.js App Router app (proxy.ts middleware)
   4. Developer can configure Better Auth as a self-hosted alternative with the same protected-route pattern and OAuth provider wiring (GitHub, Google)
   5. Skill documents the App Router cache pitfall and DAL re-validation pattern, and covers the Clerk webhook receiver for user lifecycle sync
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — Upgrade prompt-engineering skill: quick-start, numbered sections, applies-to schema, Before/After anti-patterns, golden-set eval architecture
+- [ ] 11-02-PLAN.md — Upgrade auth-systems skill: Better Auth replaces Auth.js, quick-start, side-by-side middleware, webhook handler, DAL/cache pitfall
 
 ### Phase 12: AI/LLM Skills
 **Goal**: The complete AI/LLM skill cluster is published — developers can implement semantic search pipelines with pgvector and build multi-step agent workflows using the Claude API.
