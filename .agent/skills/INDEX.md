@@ -76,6 +76,7 @@ Skills marked with 📚 have extended content in `references/` subdirectories:
 | [brainstorming](brainstorming/SKILL.md)       | Socratic questioning, progress reporting, communication protocol | Beginner     | Clarifying requirements before implementation |
 | [gsd-workflow](gsd-workflow/SKILL.md)         | Get Shit Done spec-driven development methodology                | Intermediate | Structured project planning and execution     |
 | [skill-creator](skill-creator/SKILL.md)       | Create and update skills following best practices                | Intermediate | Adding new capabilities                       |
+| [skill-depth-standard](skill-depth-standard/SKILL.md) | Rubric and checklist for auditing and writing deep skills        | Intermediate | Auditing and improving skill quality          |
 | [writing-skills](writing-skills/SKILL.md) 📚     | Test-driven approach to skill documentation                      | Advanced     | Verifying skills work correctly               |
 
 ### Quality and Testing
