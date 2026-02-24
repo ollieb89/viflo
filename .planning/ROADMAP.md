@@ -43,7 +43,7 @@
 
 **Milestone Goal:** Deliver Stripe Payments, RAG/Vector Search, and Agent Architecture skills at v1.2 depth standard, with full INDEX.md update, 500-line compliance verification, and cross-skill integration references.
 
-- [ ] **Phase 12: RAG / Vector Search** — Upgrade RAG skill to auth-systems depth with Quick Start, HNSW schema, hybrid search, and Gotchas
+- [x] **Phase 12: RAG / Vector Search** — Upgrade RAG skill to auth-systems depth with Quick Start, HNSW schema, hybrid search, and Gotchas (completed 2026-02-24)
 - [ ] **Phase 13: Agent Architecture** — Upgrade Agent skill to auth-systems depth with mandatory guardrails, typed handoffs, episodic memory, and streaming
 - [ ] **Phase 14: Stripe Payments** — Upgrade Stripe skill to auth-systems depth with Quick Start, raw-body webhook, subscription lifecycle, and Gotchas
 - [ ] **Phase 15: Integration Review** — Update INDEX.md, verify 500-line compliance, and add cross-skill references across all three new skills
@@ -133,7 +133,7 @@ Plans:
 | 9. Workspace Tooling | v1.1 | 2/2 | Complete | 2026-02-24 |
 | 10. Commit & Verify | v1.1 | 3/3 | Complete | 2026-02-24 |
 | 11. Foundation Skills | v1.2 | 3/3 | Complete | 2026-02-24 |
-| 12. RAG / Vector Search | 1/2 | In Progress|  | - |
+| 12. RAG / Vector Search | 2/2 | Complete   | 2026-02-24 | - |
 | 13. Agent Architecture | v1.3 | 0/TBD | Not started | - |
 | 14. Stripe Payments | v1.3 | 0/TBD | Not started | - |
 | 15. Integration Review | v1.3 | 0/TBD | Not started | - |
