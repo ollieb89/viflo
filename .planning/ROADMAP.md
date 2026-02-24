@@ -6,7 +6,7 @@
 - ✅ **v1.1 Dogfooding** — Phases 5–10 (shipped 2026-02-24) — [Archive](milestones/v1.1-ROADMAP.md)
 - ✅ **v1.2 Foundation Skills** — Phase 11 (shipped 2026-02-24) — [Archive](milestones/v1.2-ROADMAP.md)
 - ✅ **v1.3 Expert Skills** — Phases 12–14 (shipped 2026-02-24) — [Archive](milestones/v1.3-ROADMAP.md)
-- 📋 **v1.4** — TBD (planned)
+- 📋 **v1.4 Project Tooling** — Phases 15–19 (in progress)
 
 ## Phases
 
@@ -49,9 +49,66 @@
 
 </details>
 
-### 📋 v1.4 (Planned)
+### 📋 v1.4 Project Tooling (Phases 15–19)
 
-- [ ] **Phase 15: Integration Review** — Update INDEX.md, verify 500-line compliance, and add cross-skill references across all new skills (INFRA-01, INFRA-02, INFRA-03)
+- [ ] **Phase 15: Integration Review** — Update INDEX.md, verify 500-line compliance, and add cross-skill references across all new skills
+- [ ] **Phase 16: CLI Foundation** — Path utilities and write primitives with Vitest unit tests; idempotency built in from the start
+- [ ] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json)
+- [ ] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template
+- [ ] **Phase 19: Polish** — --dry-run flag, labelled per-file output, and package.json bin wiring
+
+## Phase Details
+
+### Phase 15: Integration Review
+**Goal**: The skill library is coherent, discoverable, and cross-referenced — closing all housekeeping debt from v1.3
+**Depends on**: Nothing (first phase of v1.4; all skill content is final)
+**Requirements**: INFRA-01, INFRA-02, INFRA-03
+**Success Criteria** (what must be TRUE):
+  1. INDEX.md lists prompt-engineering, auth-systems, rag-vector-search, agent-architecture, and stripe-payments with accurate one-line descriptions
+  2. VERIFICATION.md records the line count for every new/updated SKILL.md and each count is confirmed ≤500
+  3. The RAG skill links to Agent Architecture at the episodic memory seam; Agent Architecture links back to RAG at the pgvector pattern seam; both link to prompt-engineering at the system-prompt design seam
+**Plans**: TBD
+
+### Phase 16: CLI Foundation
+**Goal**: Safe, tested path utilities and write primitives exist so all later CLI phases can build on a correct foundation
+**Depends on**: Phase 15
+**Requirements**: INIT-05
+**Success Criteria** (what must be TRUE):
+  1. `bin/lib/paths.cjs` exports functions that resolve viflo root via `__dirname` and target-project paths via an explicit `cwd` parameter — no `~` literals anywhere in path construction
+  2. `bin/lib/writers.cjs` exports a CLAUDE.md sentinel-aware merge function and a settings.json JSON merge function with `Set`-based array deduplication
+  3. Vitest unit tests for `paths.cjs` and `writers.cjs` pass in CI — tests mock `os.homedir()` and run from a temp directory outside the viflo repo
+  4. Re-running any writer function on already-written output produces identical file contents and emits a skipped/unchanged signal rather than re-writing
+**Plans**: TBD
+
+### Phase 17: Minimal Mode
+**Goal**: A developer can run `viflo init --minimal` in any project and get CLAUDE.md skill imports and safe Claude Code permissions wired in one command
+**Depends on**: Phase 16
+**Requirements**: INIT-01, INIT-02
+**Success Criteria** (what must be TRUE):
+  1. Running `viflo init --minimal` in a project without CLAUDE.md creates CLAUDE.md containing a `<!-- viflo:start -->` / `<!-- viflo:end -->` sentinel block with `@` import lines for all viflo skills
+  2. Running `viflo init --minimal` creates or merges `.claude/settings.json` with safe default `permissions.allow` entries — existing entries in the file are preserved
+  3. Running `viflo init --minimal` a second time on a project that already has the sentinel block and settings entries completes without modifying any file content
+**Plans**: TBD
+
+### Phase 18: Full Mode
+**Goal**: A developer starting a new project can run `viflo init --full` and immediately have both viflo skill imports and a GSD planning scaffold ready to use
+**Depends on**: Phase 17
+**Requirements**: INIT-03, INIT-04
+**Success Criteria** (what must be TRUE):
+  1. Running `viflo init --full` in an empty project creates `.planning/` with stub files for PROJECT.md, STATE.md, ROADMAP.md, and config.json
+  2. Running `viflo init --full` when `.planning/` already contains customized files skips each existing file individually — no existing content is overwritten
+  3. Running `viflo init --full` in a project with no CLAUDE.md creates a starter CLAUDE.md template; running it where CLAUDE.md already exists does not replace or alter the file outside the sentinel block
+**Plans**: TBD
+
+### Phase 19: Polish
+**Goal**: The CLI is fully wired as an executable, previews its actions safely, and communicates every file outcome clearly
+**Depends on**: Phase 18
+**Requirements**: INIT-06, INIT-07
+**Success Criteria** (what must be TRUE):
+  1. Running `viflo init --dry-run` (with any flag combination) prints every file action with its resolved absolute path and exits without writing, creating, or modifying any file
+  2. Every file action in a real run emits a labelled result (`created`, `updated`, `skipped`, or `merged`) with the resolved absolute path on stdout
+  3. `package.json` has a `"bin": { "viflo": "bin/viflo.cjs" }` field so the CLI is invocable via `npx` or a local `pnpm exec viflo` call from the repo
+**Plans**: TBD
 
 ## Progress
 
@@ -73,3 +130,7 @@
 | 13. Agent Architecture | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 14. Stripe Payments | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 15. Integration Review | v1.4 | 0/TBD | Not started | - |
+| 16. CLI Foundation | v1.4 | 0/TBD | Not started | - |
+| 17. Minimal Mode | v1.4 | 0/TBD | Not started | - |
+| 18. Full Mode | v1.4 | 0/TBD | Not started | - |
+| 19. Polish | v1.4 | 0/TBD | Not started | - |

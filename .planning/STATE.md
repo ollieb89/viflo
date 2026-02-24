@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.4 milestone started)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.4 — Phase 15 (Integration Review) first, then viflo init CLI
+**Current focus:** v1.4 Project Tooling — Phase 15 (Integration Review) is next
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 15 (Integration Review) — Not started
 Plan: —
-Status: Defining requirements
-Last activity: 2026-02-24 — Milestone v1.4 started
+Status: Roadmap defined, ready to plan Phase 15
+Last activity: 2026-02-24 — v1.4 roadmap created (Phases 15–19)
 
-Progress: [░░░░░░░░░░] 0% — v1.4 in progress
+Progress: [░░░░░░░░░░] 0% — v1.4 in progress (0/5 phases)
 
 ## Performance Metrics
 
@@ -48,29 +48,27 @@ Progress: [░░░░░░░░░░] 0% — v1.4 in progress
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- [v1.4 roadmap]: Phase 15 (Integration Review) before CLI phases — INDEX.md and cross-refs written only after all skill content is final
+- [v1.4 roadmap]: Phase 16 (CLI Foundation) before orchestration — path utilities and write primitives must be tested in isolation before any user-facing flow is wired; the two most dangerous pitfalls (tilde expansion, __dirname confusion) live in this layer
+- [v1.4 roadmap]: INIT-05 (idempotency) assigned to Phase 16 — idempotency is a property of the writers layer, not the orchestrator; sentinel merge and JSON merge deduplication belong here
+- [v1.4 roadmap]: Phase 17 (--minimal) before Phase 18 (--full) — --full is a superset; confirming the subset is stable and idempotency-tested before adding scaffolding complexity
+- [v1.4 roadmap]: bin/viflo.cjs at repo root (not packages/cli/) — matches gsd-tools.cjs precedent; packages/cli/ TypeScript workspace deferred as premature for v1.4
+- [v1.4 roadmap]: Sentinel format <!-- viflo:start --> / <!-- viflo:end --> is the shipped contract for CLAUDE.md merge; never overwrite content outside markers
+- [v1.4 roadmap]: Write to project-scope .claude/settings.json only — user-scope ~/.claude/settings.json deferred due to active Claude Code bug #5140
 - [v1.3 roadmap]: RAG before Agent — pgvector patterns established in Phase 12 so Agent episodic memory section (Phase 13) can make concrete cross-references, not forward references
 - [v1.3 roadmap]: Stripe last (Phase 14) — isolated from AI stack; no benefit to building before RAG/Agent in single-author scenario
-- [v1.3 roadmap]: Integration Review (Phase 15) last — INDEX.md and cross-refs written only after all skill content is final, preventing description drift
 - [Phase 11-02]: Better Auth replaces Auth.js as self-hosted alternative; auth.api.getSession() reserved for server components needing user data
 - [Phase 11-01]: output_config: { format: zodOutputFormat(...) } is the correct Anthropic SDK parameter; response.parsed_output is the correct accessor
 - [Phase 12-rag-vector-search]: HNSW as default index over IVFFlat — no training step, better recall
 - [Phase 12-rag-vector-search]: RRF rank-based fusion over weighted score addition — no score normalization needed
 - [Phase 12-rag-vector-search]: pgvector.toSql() mandatory (not JSON.stringify) — canonical wire format
-- [Phase 12-rag-vector-search]: HNSW as default pgvector index — no training required, better recall than IVFFlat
-- [Phase 12-rag-vector-search]: RRF rank-based fusion as primary hybrid search — no score normalization needed vs weighted addition
-- [Phase 12-rag-vector-search]: recall@5 > 0.80 production threshold, MRR > 0.70 secondary threshold for RAG eval.ts
 - [Phase 13-agent-architecture]: Manual tool-use loop over tool_runner() shortcut — guardrail placement is explicit and auditable
-- [Phase 13-agent-architecture]: Python primary for LangGraph — TypeScript SDK noted but not covered in agent-architecture skill
 - [Phase 13-agent-architecture]: Next.js API route proxy pattern for streaming — avoids CORS, keeps API key server-side
-- [Phase 13-agent-architecture]: create_react_agent (Option B) recommended over custom StateGraph (Option A) for most LangGraph use cases
-- [Phase 13-agent-architecture]: PostgresSaver (Option B) mandatory for production LangGraph — InMemorySaver (Option A) for dev only
-- [Phase 13-agent-architecture]: pgvector episodic store (Option B) recommended for >20-turn sessions or cross-session recall — in-context (Option A) for short sessions only
-- [Phase 14-stripe-payments]: Stripe Checkout as primary path (SAQ A); await req.text() as webhook headline; ON CONFLICT atomic idempotency; Stripe status strings stored directly; API version 2026-01-28.clover
-- [Phase 14-stripe-payments P02]: Replaced Prisma P2002 idempotency with raw SQL INSERT ON CONFLICT; expanded webhook-patterns.md to all four subscription events; subscription-patterns.md rewritten with raw pg.Pool queries
+- [Phase 14-stripe-payments]: await req.text() as webhook headline; ON CONFLICT atomic idempotency; API version 2026-01-28.clover
 
 ### Pending Todos
 
-None yet.
+- Re-verify Claude Code user-scope permissions.allow bug (#5140) status at Phase 17 implementation time — if resolved, document whether project scope is still the safer default
 
 ### Blockers/Concerns
 
@@ -79,5 +77,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.3 milestone archived — Expert Skills shipped
-Resume with: /gsd:new-milestone to define v1.4 scope (Phase 15 Integration Review is the primary candidate)
+Stopped at: v1.4 roadmap defined — Phases 15–19 mapped to all 10 requirements
+Resume with: /gsd:plan-phase 15

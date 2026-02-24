@@ -55,19 +55,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-01 | Phase 15 | Pending |
 | INFRA-02 | Phase 15 | Pending |
 | INFRA-03 | Phase 15 | Pending |
-| INIT-01 | TBD | Pending |
-| INIT-02 | TBD | Pending |
-| INIT-03 | TBD | Pending |
-| INIT-04 | TBD | Pending |
-| INIT-05 | TBD | Pending |
-| INIT-06 | TBD | Pending |
-| INIT-07 | TBD | Pending |
+| INIT-01 | Phase 17 | Pending |
+| INIT-02 | Phase 17 | Pending |
+| INIT-03 | Phase 18 | Pending |
+| INIT-04 | Phase 18 | Pending |
+| INIT-05 | Phase 16 | Pending |
+| INIT-06 | Phase 19 | Pending |
+| INIT-07 | Phase 19 | Pending |
 
 **Coverage:**
 - v1.4 requirements: 10 total
-- Mapped to phases: 3 (INFRA-01–03 → Phase 15)
-- Unmapped: 7 ⚠️ (roadmapper will assign)
+- Mapped to phases: 10/10 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after initial definition*
+*Last updated: 2026-02-24 — traceability completed by roadmapper*
