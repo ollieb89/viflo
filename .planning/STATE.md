@@ -10,24 +10,24 @@ See: .planning/PROJECT.md (updated 2026-02-24 — v1.2 milestone started)
 ## Current Position
 
 Phase: 11 of 14 (Foundation Skills)
-Plan: 02 complete (Phase 11 done)
+Plan: 03 complete (Phase 11 done)
 Status: Phase 11 complete — ready for Phase 12
-Last activity: 2026-02-24 — Completed 11-02 (auth-systems skill v1.2 rewrite)
+Last activity: 2026-02-24 — Completed 11-03 (structured output API surface gap closure)
 
-Progress: [██░░░░░░░░] 20% (2 plans complete)
+Progress: [██░░░░░░░░] 20% (3 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed (v1.2): 2
-- Average duration: 3.5 min
-- Total execution time: 7 min
+- Total plans completed (v1.2): 3
+- Average duration: 2.7 min
+- Total execution time: 8 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 11-foundation-skills | 2 | 7 min | 3.5 min |
+| 11-foundation-skills | 3 | 8 min | 2.7 min |
 
 *Updated after each plan completion*
 
@@ -47,6 +47,7 @@ Recent decisions affecting current work:
 - [11-02]: Better Auth replaces Auth.js as self-hosted alternative — authjs-patterns.md replaced with deprecation stub
 - [11-02]: Better Auth middleware uses getSessionCookie() fast path (Approach A) as recommended default; auth.api.getSession() reserved for server components needing user data
 - [11-02]: CVE-2025-29927 documented as Next.js App Router framework-level pitfall — applies to Clerk and Better Auth users equally; requires Next.js 15.2.3+
+- [Phase 11-foundation-skills]: output_config: { format: zodOutputFormat(...) } is the correct Anthropic SDK parameter; response.parsed_output is the correct accessor (not OpenAI-compatible response_format/choices[0])
 
 ### Pending Todos
 
@@ -60,5 +61,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 11-02-PLAN.md (auth-systems skill v1.2 rewrite — Phase 11 complete)
+Stopped at: Completed 11-03-PLAN.md (structured output API surface gap closure — PROMPT-03 and PROMPT-04 fully satisfied)
 Resume with: `/gsd:plan-phase 12` for Phase 12 (agent-architecture)
