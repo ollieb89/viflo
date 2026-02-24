@@ -8,6 +8,8 @@ verified-date: 2026-02-24
 
 ## Input Prompt
 
+System: Classify sentiment as one of: positive, negative, neutral. Return JSON only.
+
 User (example 1): Classify sentiment: "Product arrived broken and customer service was useless."
 Assistant (example 1): {"sentiment": "negative", "confidence": 0.97}
 
