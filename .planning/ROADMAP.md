@@ -61,7 +61,7 @@
 ### 📋 v1.5 viflo init CLI (Phases 17–19)
 
 - [x] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json) (completed 2026-02-24)
-- [ ] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template
+- [x] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template (completed 2026-02-24)
 - [ ] **Phase 19: Polish** — --dry-run flag, labelled per-file output, and package.json bin wiring
 
 ## Phase Details
@@ -124,5 +124,5 @@ Plans:
 | 15. Integration Review | v1.4 | 3/3 | Complete | 2026-02-24 |
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
 | 17. Minimal Mode | v1.5 | 2/2 | Complete | 2026-02-24 |
-| 18. Full Mode | 1/2 | In Progress|  | - |
+| 18. Full Mode | 2/2 | Complete   | 2026-02-24 | - |
 | 19. Polish | v1.5 | 0/TBD | Not started | - |
