@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 0–4 (shipped 2026-02-23) — [Archive](.planning/milestones/v1.0-ROADMAP.md)
-- 🚧 **v1.1 Dogfooding** — Phases 5–7 (in progress)
+- ✅ **v1.1 Dogfooding** — Phases 5–9 (complete 2026-02-23)
 
 ## Phases
 
@@ -18,7 +18,7 @@
 
 </details>
 
-### 🚧 v1.1 Dogfooding (In Progress)
+### ✅ v1.1 Dogfooding (Complete)
 
 **Milestone Goal:** Apply viflo's own methodology, CI templates, testing patterns, and security scanning to the viflo repository itself — proving the toolkit with its own toolkit.
 
@@ -27,6 +27,7 @@
 - [x] **Phase 7: Content Hygiene** - Oversized skills modularized, VERIFICATION.md backfilled, telemetry logging in place
 - [x] **Phase 8: Verification & Requirements Closure** - VERIFICATION.md for all v1.1 phases, CONTENT-01 fully satisfied, requirements checked off (completed 2026-02-23)
 - [ ] **Phase 9: Workspace & Developer Tooling** - pnpm-workspace.yaml added, pre-commit install automated
+- [ ] **Phase 10: Commit and Verify Uncommitted Work** - Stage all Phase 7 & 9 disk artifacts, create Phase 9 VERIFICATION.md
 
 **Plans**: 3/3 complete (Phases 5–7)
 
@@ -126,7 +127,26 @@ Plans:
 3. `pre-commit install` is automated via a setup script or Makefile target
 4. `README.md` or `CONTRIBUTING.md` references the onboarding command
 
-**Plans**: TBD
+**Plans**: 2 plans ready
+
+### Phase 10: Commit and Verify Uncommitted Work
+
+**Goal**: All Phase 7 and Phase 9 artifacts are committed to git, and Phase 9 has a passing VERIFICATION.md — making the committed tree match the disk state and closing all 7 partial/unsatisfied requirements
+**Depends on**: Phase 9 (work already done on disk)
+**Requirements**: CI-02, QUAL-01, QUAL-02, QUAL-04, CONTENT-01, CONTENT-02, CONTENT-03
+**Gap Closure**: Closes all gaps from v1.1 audit (2026-02-24)
+
+**Success Criteria** (what must be TRUE):
+
+1. All Phase 7 SKILL.md modularizations, `references/` files, `verifications/`, and telemetry artifacts are committed to HEAD
+2. All Phase 9 artifacts (`pnpm-workspace.yaml`, updated `ci.yml`, `setup-dev.sh`, updated docs) are committed to HEAD
+3. `09-workspace-tooling/09-VERIFICATION.md` exists and verifies all 4 Phase 9 success criteria against the committed tree
+4. Running `git ls-files` confirms every previously-untracked artifact is now tracked
+5. A fresh `git clone` can run `pnpm install && pnpm --filter @viflo/web test` without error
+
+**Plans**: 1 plan
+
+- [ ] 10-01-PLAN.md — Commit Phase 7 & 9 artifacts, create Phase 9 VERIFICATION.md (all gaps)
 
 ## Progress
 
@@ -142,3 +162,4 @@ Plans:
 | 7. Content Hygiene         | v1.1      | 3/3            | Complete    | 2026-02-23 |
 | 8. Verification Closure    | 2/2 | Complete    | 2026-02-23 |            |
 | 9. Workspace Tooling       | v1.1      | TBD            | Pending     |            |
+| 10. Commit & Verify        | v1.1      | 0/1            | Pending     |            |
