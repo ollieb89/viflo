@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.3 — Phase 12 (RAG / Vector Search) — Complete (2 of 2 plans done)
+**Current focus:** v1.3 — Phase 13 (Agent Architecture) — In Progress (1 of 2 plans done)
 
 ## Current Position
 
-Phase: 12 of 15 (RAG / Vector Search)
-Plan: 02 complete (2 of 2 plans)
-Status: Phase Complete
-Last activity: 2026-02-24 — 12-02 eval.ts + reference file updates (HNSW schema, RRF CTE)
+Phase: 13 of 15 (Agent Architecture)
+Plan: 01 complete (1 of 2 plans)
+Status: In Progress
+Last activity: 2026-02-24 — 13-01 agent-architecture SKILL.md expanded from 81 to 498 lines
 
 Progress: [████████░░] 75% (historical — v1.3 phases at 0%)
 
@@ -36,6 +36,7 @@ Progress: [████████░░] 75% (historical — v1.3 phases at 0%
 *Updated after each plan completion*
 | Phase 12-rag-vector-search P01 | 4 | 2 tasks | 2 files |
 | Phase 12-rag-vector-search P02 | 3 | 2 tasks | 3 files |
+| Phase 13-agent-architecture P01 | 4 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -55,6 +56,9 @@ Recent decisions affecting current work:
 - [Phase 12-rag-vector-search]: HNSW as default pgvector index — no training required, better recall than IVFFlat
 - [Phase 12-rag-vector-search]: RRF rank-based fusion as primary hybrid search — no score normalization needed vs weighted addition
 - [Phase 12-rag-vector-search]: recall@5 > 0.80 production threshold, MRR > 0.70 secondary threshold for RAG eval.ts
+- [Phase 13-agent-architecture]: Manual tool-use loop over tool_runner() shortcut — guardrail placement is explicit and auditable
+- [Phase 13-agent-architecture]: Python primary for LangGraph — TypeScript SDK noted but not covered in agent-architecture skill
+- [Phase 13-agent-architecture]: Next.js API route proxy pattern for streaming — avoids CORS, keeps API key server-side
 
 ### Pending Todos
 
@@ -62,10 +66,10 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 13 — research flag]: LangGraph 1.1.5 checkpointing and human-in-the-loop patterns may have shifted from 0.x to 1.0 (released October 2025). Validate before writing multi-agent section. Core Anthropic tool-use loop is stable and needs no research.
+None.
 
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 12-02-PLAN.md — eval.ts finalized, embedding-pipelines.md HNSW schema, retrieval-patterns.md RRF CTE
-Resume with: Phase 13 (Agent Memory)
+Stopped at: Completed 13-01-PLAN.md — agent-architecture SKILL.md expanded from 81 to 498 lines
+Resume with: Phase 13 Plan 02 (if any) or Phase 14 (Stripe Payments)

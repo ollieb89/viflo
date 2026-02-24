@@ -17,11 +17,11 @@ Requirements for v1.3 Expert Skills milestone. Each maps to roadmap phases.
 
 ### Agent Architecture
 
-- [ ] **AGENT-01**: User can follow a Quick Start to build a tool-using agent with Anthropic SDK in under 15 minutes
-- [ ] **AGENT-02**: Skill documents max_turns and max_tokens guardrails as required (not optional), with cost runaway context
-- [ ] **AGENT-03**: Skill covers streaming output via SSE (FastAPI StreamingResponse) and Vercel AI SDK v6 (Next.js client)
-- [ ] **AGENT-04**: Skill covers LangGraph stateful multi-agent graphs with v1.1.5 stability note
-- [ ] **AGENT-05**: Skill covers episodic memory via pgvector (cross-reference to RAG skill) and includes 1-paragraph MCP overview
+- [x] **AGENT-01**: User can follow a Quick Start to build a tool-using agent with Anthropic SDK in under 15 minutes
+- [x] **AGENT-02**: Skill documents max_turns and max_tokens guardrails as required (not optional), with cost runaway context
+- [x] **AGENT-03**: Skill covers streaming output via SSE (FastAPI StreamingResponse) and Vercel AI SDK v6 (Next.js client)
+- [x] **AGENT-04**: Skill covers LangGraph stateful multi-agent graphs with v1.1.5 stability note
+- [x] **AGENT-05**: Skill covers episodic memory via pgvector (cross-reference to RAG skill) and includes 1-paragraph MCP overview
 
 ### Stripe Payments
 
@@ -73,11 +73,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RAG-03 | Phase 12 | Complete |
 | RAG-04 | Phase 12 | Complete |
 | RAG-05 | Phase 12 | Complete |
-| AGENT-01 | Phase 13 | Pending |
-| AGENT-02 | Phase 13 | Pending |
-| AGENT-03 | Phase 13 | Pending |
-| AGENT-04 | Phase 13 | Pending |
-| AGENT-05 | Phase 13 | Pending |
+| AGENT-01 | Phase 13 | Complete |
+| AGENT-02 | Phase 13 | Complete |
+| AGENT-03 | Phase 13 | Complete |
+| AGENT-04 | Phase 13 | Complete |
+| AGENT-05 | Phase 13 | Complete |
 | STRIPE-01 | Phase 14 | Pending |
 | STRIPE-02 | Phase 14 | Pending |
 | STRIPE-03 | Phase 14 | Pending |
