@@ -159,4 +159,161 @@ function writeSettingsJson(targetCwd, incomingSettings) {
   return writeIfChanged(filePath, newContent);
 }
 
-module.exports = { writeCLAUDEmd, writeSettingsJson };
+/**
+ * Write four stub files into {targetCwd}/.planning/.
+ * Each file is written only if it does not already exist.
+ *
+ * @param {string} targetCwd - Absolute path to the target project root.
+ * @returns {Array<{ path: string, written: boolean, reason: string }>}
+ */
+function writePlanningScaffold(targetCwd) {
+  const planningDir = path.join(targetCwd, '.planning');
+  fs.mkdirSync(planningDir, { recursive: true });
+
+  const stubs = [
+    {
+      relPath: '.planning/PROJECT.md',
+      content: '# Project\n\n## Goals\n\n## Stack\n\n## Architecture\n\n## Conventions\n',
+    },
+    {
+      relPath: '.planning/ROADMAP.md',
+      content: [
+        '# Roadmap',
+        '',
+        '## Milestones',
+        '',
+        '### \uD83D\uDCCB v1.0 MVP',
+        '',
+        '## Phases',
+        '',
+        '<!-- Example phase entry \u2014 fill in your own below:',
+        '### Phase 1: Feature Name',
+        '**Goal**: What this phase achieves',
+        '**Depends on**: Phase 0',
+        '**Requirements**: REQ-01, REQ-02',
+        '**Plans**: TBD',
+        '-->',
+        '',
+        '## Progress',
+        '',
+        '| Phase | Plans Complete | Status | Completed |',
+        '|-------|----------------|--------|-----------|',
+        '',
+      ].join('\n'),
+    },
+    {
+      relPath: '.planning/config.json',
+      content: JSON.stringify(
+        {
+          mode: 'interactive',
+          depth: 'standard',
+          profile: 'balanced',
+          workflow: {
+            research: false,
+            plan_check: true,
+            verifier: true,
+            auto_advance: false,
+          },
+          parallelization: {
+            enabled: true,
+          },
+          git: {
+            commit_docs: true,
+            branching_strategy: 'none',
+          },
+        },
+        null,
+        2
+      ) + '\n',
+    },
+    {
+      relPath: '.planning/STATE.md',
+      content: [
+        '# Project State',
+        '',
+        '## Project Reference',
+        '',
+        'See: .planning/PROJECT.md',
+        '',
+        '## Current Position',
+        '',
+        'Phase: \u2014',
+        'Plan: \u2014',
+        'Status: Not started',
+        '',
+        '## Accumulated Context',
+        '',
+        '### Key Decisions (summary)',
+        '',
+        '### Pending Todos',
+        '',
+        '### Blockers/Concerns',
+        '',
+        'None.',
+        '',
+        '## Session Continuity',
+        '',
+        'Last session: \u2014',
+        'Stopped at: \u2014',
+        'Resume with: /gsd:new-project to plan your first phase',
+        '',
+      ].join('\n'),
+    },
+  ];
+
+  const results = [];
+  for (const stub of stubs) {
+    const filePath = resolveTargetPath(targetCwd, stub.relPath);
+    if (fs.existsSync(filePath)) {
+      results.push({ path: stub.relPath, written: false, reason: 'skipped (already exists)' });
+    } else {
+      const result = writeIfChanged(filePath, stub.content);
+      results.push({ path: stub.relPath, written: result.written, reason: result.reason });
+    }
+  }
+  return results;
+}
+
+/**
+ * Write a richer CLAUDE.md starter template when the file does not exist.
+ * If CLAUDE.md already exists, falls back to writeCLAUDEmd() (sentinel-only merge).
+ *
+ * @param {string} targetCwd - Absolute path to the target project root.
+ * @param {string} sentinelContent - Content to place between sentinel markers.
+ * @returns {{ written: boolean, reason: string }}
+ */
+function writeCLAUDEmdTemplate(targetCwd, sentinelContent) {
+  const filePath = resolveTargetPath(targetCwd, 'CLAUDE.md');
+
+  if (!fs.existsSync(filePath)) {
+    const block = SENTINEL_START + '\n' + sentinelContent + '\n' + SENTINEL_END;
+    const fullTemplate = [
+      '# Project',
+      '',
+      'A brief description of this project.',
+      '',
+      '## Tech Stack',
+      '',
+      '- Language:',
+      '- Framework:',
+      '- Database:',
+      '',
+      '## Development Workflow',
+      '',
+      'This project uses [GSD methodology](https://github.com/olivermonberg/viflo) with `/gsd:` commands.',
+      '',
+      'Key commands:',
+      '- `/gsd:new-project` \u2014 plan and start a new project milestone',
+      '- `/gsd:plan-phase N` \u2014 plan a specific phase',
+      '- `/gsd:execute-phase N` \u2014 execute a planned phase',
+      '',
+      block,
+      '',
+    ].join('\n');
+    return writeIfChanged(filePath, fullTemplate);
+  }
+
+  return writeCLAUDEmd(targetCwd, sentinelContent);
+}
+
+module.exports = { writeCLAUDEmd, writeSettingsJson, writePlanningScaffold, writeCLAUDEmdTemplate };
