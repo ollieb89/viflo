@@ -1,15 +1,8 @@
 # Viflo: Universal Agentic Development Environment
 
-## Current Milestone: v1.2 Skills Expansion
+## Current State: v1.2 Shipped — Planning v1.3
 
-**Goal:** Expand the skills library with high-demand domain integration and AI/LLM pattern skills
-
-**Target features:**
-- Auth systems skill (Clerk + Auth.js/NextAuth — session handling, protected routes, OAuth)
-- Stripe payments skill (checkout, subscriptions, webhooks, billing patterns)
-- RAG / vector search skill (embedding pipelines, pgvector/Pinecone, retrieval patterns)
-- Agent architecture skill (multi-agent systems, handoffs, memory, orchestration)
-- Prompt engineering skill (templates, evaluation, iteration workflows, anti-patterns)
+v1.2 (Foundation Skills) shipped 2026-02-24: prompt-engineering and auth-systems skills rewritten to v1.2 depth standard. v1.3 will deliver the remaining planned skills: Stripe Payments, RAG/Vector Search, Agent Architecture, and integration review.
 
 ## What This Is
 
@@ -51,14 +44,16 @@ A complete agentic dev environment you can install in one command — structured
 - ✓ Telemetry script logs LLM calls (timestamp, model, tokens, success) to CSV (CONTENT-03) — v1.1
 - ✓ All SKILL.md files ≤500 lines — oversized content extracted to `references/` (CONTENT-01) — v1.1
 - ✓ VERIFICATION.md exists for Phases 0–9 (CONTENT-02) — v1.1
+- ✓ Prompt engineering skill at v1.2 depth — quick-start, applies-to schema, 5-pattern anti-pattern catalogue, golden-set eval architecture (PROMPT-01–05) — v1.2
+- ✓ Auth systems skill at v1.2 depth — Clerk quick-start, Better Auth self-hosted path, DAL pattern, CVE-2025-29927 docs, webhook receiver (AUTH-01–06) — v1.2
 
 ### Active
 
-- [ ] Auth systems skill covering Clerk and Auth.js/NextAuth patterns (AUTH-01)
-- [ ] Stripe payments skill covering checkout, subscriptions, and webhooks (STRIPE-01)
-- [ ] RAG / vector search skill covering embedding pipelines and retrieval patterns (RAG-01)
-- [ ] Agent architecture skill covering multi-agent systems and orchestration (AGENT-01)
-- [ ] Prompt engineering skill covering templates, evaluation, and iteration workflows (PROMPT-01)
+- [ ] Stripe payments skill covering checkout, subscriptions, and webhooks (STRIPE-01–05)
+- [ ] RAG / vector search skill covering embedding pipelines and retrieval patterns (RAG-01–05)
+- [ ] Agent architecture skill covering multi-agent systems and orchestration (AGENT-01–05)
+- [ ] INDEX.md updated with new skill categories and entries (INFRA-01)
+- [ ] All new SKILL.md files ≤500 lines compliance check (INFRA-02)
 
 ### Out of Scope
 
@@ -108,13 +103,15 @@ A complete agentic dev environment you can install in one command — structured
 
 Shipped v1.0 with 35 skill packages, ~60,775 LOC across Markdown/JS/TS/JSON (7 days, 5 phases).
 Shipped v1.1 with CI pipeline, Vitest coverage, skill modularization, and VERIFICATION.md audit trail (2 days, 6 phases, 33 commits).
+Shipped v1.2 (Foundation Skills) with prompt-engineering and auth-systems rewrites at v1.2 depth standard (1 day, 1 phase, 3 plans).
 
 Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js tooling, pnpm workspace.
-All 11 v1.1 requirements delivered with audit-verified committed state.
+~48,455 LOC in `.agent/skills/`.
 
 Known tech debt:
 - Makefile `make setup` target (09-CONTEXT.md specified Makefile; execution used `scripts/setup-dev.sh` instead — different mechanism, same function)
 - 07-VERIFICATION.md checked off telemetry commit before verifying against `git ls-files` — future verifications should use `git ls-files` to confirm committed state
+- INDEX.md not yet updated with prompt-engineering and auth-systems v1.2 upgrades (deferred to v1.3 integration review)
 
 ## Key Decisions
 
@@ -136,7 +133,10 @@ Known tech debt:
 | 2026-02-23 | CSV for telemetry output          | ✓ Good — zero-dep, spreadsheet-compatible     |
 | 2026-02-24 | setup-dev.sh instead of Makefile  | ⚠️ Revisit — CONTEXT.md specified Makefile    |
 | 2026-02-24 | Phase 10 gap-closure pattern      | ✓ Good — explicit commit-and-verify phase prevents disk/committed drift |
+| 2026-02-24 | Better Auth replaces Auth.js      | ✓ Good — Auth.js is maintenance-mode since Sept 2025; Better Auth is the active project |
+| 2026-02-24 | applies-to frontmatter schema     | ✓ Good — model-specific technique tagging proven useful in prompt-engineering skill |
+| 2026-02-24 | Scope v1.2 to Phase 11 only       | ✓ Good — foundation skills independently valuable; AI/LLM + Stripe deferred to v1.3 |
 
 ---
 
-_Last updated: 2026-02-24 — v1.2 milestone started_
+_Last updated: 2026-02-24 after v1.2 milestone_

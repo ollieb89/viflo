@@ -39,3 +39,23 @@
 
 ---
 
+
+## v1.2 Foundation Skills (Shipped: 2026-02-24)
+
+**Phases completed:** 1 phase (Phase 11), 3 plans
+**Timeline:** 2026-02-24 → 2026-02-24 (1 day)
+**Files changed:** 86 files (v1.1 tag → HEAD)
+**LOC:** ~48,455 total in `.agent/skills/`
+**Git range:** feat(11-01): rewrite SKILL.md → docs(phase-11): complete phase execution
+
+**Key accomplishments:**
+- Rewrote prompt-engineering skill to v1.2 depth — quick-start, numbered sections, applies-to schema for model-specific pattern tagging, 5-pattern anti-pattern catalogue with Before/After TypeScript code blocks, and golden-set evaluation architecture (eval.ts + 3 .md test cases)
+- Rewrote auth-systems skill — Clerk quick-start, Better Auth as primary self-hosted alternative, side-by-side middleware patterns, DAL pattern with React cache(), CVE-2025-29927 documentation, Clerk webhook receiver for user lifecycle sync
+- Fixed Anthropic SDK structured output API surface throughout prompt-engineering skill — replaced OpenAI-compatible `response_format` and `choices[0].message.parsed` with `output_config: { format: zodOutputFormat(...) }` and `.parsed_output`
+
+**Scope note:** Scoped to Phase 11 (Foundation Skills) only. Phases 12–14 (AI/LLM Skills, Stripe Payments, Integration Review) deferred to v1.3.
+
+**Archive:** `.planning/milestones/v1.2-ROADMAP.md`
+
+---
+

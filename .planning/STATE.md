@@ -2,19 +2,18 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24 — v1.2 milestone started)
+See: .planning/PROJECT.md (updated 2026-02-24 after v1.2 milestone)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.2 Skills Expansion — Phase 11: Foundation Skills (Prompt Engineering + Auth Systems)
+**Current focus:** Planning v1.3 — Stripe Payments, RAG/Vector Search, Agent Architecture, Integration Review
 
 ## Current Position
 
-Phase: 11 of 14 (Foundation Skills)
-Plan: 03 complete (Phase 11 done)
-Status: Phase 11 complete — ready for Phase 12
-Last activity: 2026-02-24 — Completed 11-03 (structured output API surface gap closure)
+Phase: v1.2 complete — between milestones
+Status: v1.2 shipped (Phase 11 only) — ready to plan v1.3
+Last activity: 2026-02-24 — Completed v1.2 milestone archival
 
-Progress: [██░░░░░░░░] 20% (3 plans complete)
+Progress: [██████████] v1.2 100% (Phase 11: 3/3 plans)
 
 ## Performance Metrics
 
@@ -55,11 +54,10 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 12]: Hybrid search (pgvector + tsvector RRF) — specific SQLAlchemy 2.0 implementation needs verification during authoring; consider /gsd:research-phase if patterns feel thin
-- [Phase 12]: Agent token budget enforcement — verify which SDK surfaces max_turns/max_tokens_per_run controls during authoring
+None — between milestones.
 
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 11-03-PLAN.md (structured output API surface gap closure — PROMPT-03 and PROMPT-04 fully satisfied)
-Resume with: `/gsd:plan-phase 12` for Phase 12 (agent-architecture)
+Stopped at: Completed v1.2 milestone archival
+Resume with: `/gsd:new-milestone` to plan v1.3 (Stripe, RAG, Agent Architecture, Integration Review)
