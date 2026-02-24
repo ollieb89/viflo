@@ -62,7 +62,7 @@
 
 - [x] **Phase 17: Minimal Mode** — bin/viflo.cjs entry point + --minimal flag end-to-end (CLAUDE.md stanza + settings.json) (completed 2026-02-24)
 - [x] **Phase 18: Full Mode** — --full flag with .planning/ scaffold and starter CLAUDE.md template (completed 2026-02-24)
-- [ ] **Phase 19: Polish** — --dry-run flag, labelled per-file output, and package.json bin wiring
+- [x] **Phase 19: Polish** — --dry-run flag, labelled per-file output, and package.json bin wiring (completed 2026-02-24)
 
 ## Phase Details
 
@@ -128,4 +128,4 @@ Plans:
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
 | 17. Minimal Mode | v1.5 | 2/2 | Complete | 2026-02-24 |
 | 18. Full Mode | 2/2 | Complete    | 2026-02-24 | - |
-| 19. Polish | 1/2 | In Progress|  | - |
+| 19. Polish | 2/2 | Complete   | 2026-02-24 | - |

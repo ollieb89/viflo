@@ -19,12 +19,12 @@ Requirements for v1.5 viflo init CLI. Each maps to roadmap phases 17–19.
 
 ### CLI Polish
 
-- [ ] **INIT-06**: User can run `viflo init --dry-run` (combined with any mode flag) and see every planned file action with its resolved absolute path printed to stdout — no files are written, created, or modified
-- [ ] **INIT-07**: Every file action in a real run emits a labelled result (`created`, `updated`, `skipped`, or `merged`) with the resolved absolute path on stdout
+- [x] **INIT-06**: User can run `viflo init --dry-run` (combined with any mode flag) and see every planned file action with its resolved absolute path printed to stdout — no files are written, created, or modified
+- [x] **INIT-07**: Every file action in a real run emits a labelled result (`created`, `updated`, `skipped`, or `merged`) with the resolved absolute path on stdout
 
 ### Bin Wiring
 
-- [ ] **INIT-08**: `package.json` has a `"bin": { "viflo": "bin/viflo.cjs" }` field so the CLI is invocable via `npx` or `pnpm exec viflo` from the repo
+- [x] **INIT-08**: `package.json` has a `"bin": { "viflo": "bin/viflo.cjs" }` field so the CLI is invocable via `npx` or `pnpm exec viflo` from the repo
 
 ## Previously Validated (v1.4)
 
@@ -56,9 +56,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INIT-02 | Phase 17 | Complete |
 | INIT-03 | Phase 18 | Complete |
 | INIT-04 | Phase 18 | Complete |
-| INIT-06 | Phase 19 | Pending |
-| INIT-07 | Phase 19 | Pending |
-| INIT-08 | Phase 19 | Pending |
+| INIT-06 | Phase 19 | Complete |
+| INIT-07 | Phase 19 | Complete |
+| INIT-08 | Phase 19 | Complete |
 
 **Coverage:**
 - v1.5 requirements: 7 total

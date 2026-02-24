@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.5 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.5 — viflo init CLI (Phases 17–19)
+**Current focus:** v1.5 — viflo init CLI (Phases 17–19) — COMPLETE
 
 ## Current Position
 
 Phase: 19 — Polish
-Plan: 1/1
-Status: Complete — Plan 19-01 complete
-Last activity: 2026-02-24 — Plan 19-01 complete: --dry-run flag, unified labelled output with absolute paths, internal [viflo] log removed (45/45 tests passing)
+Plan: 2/2
+Status: Complete — Plan 19-02 complete
+Last activity: 2026-02-24 — Plan 19-02 complete: 10 integration tests for INIT-06/07 (dry-run, labelled output), package.json bin field for INIT-08 (55/55 tests passing)
 
 ## Accumulated Context
 
@@ -34,6 +34,8 @@ Last activity: 2026-02-24 — Plan 19-01 complete: --dry-run flag, unified label
 - [18-02]: CLAUDE.md existing-file test asserts ## Tech Stack absent to confirm template sections not injected into existing content
 - [19-01]: merged label handled at CLI call-site (viflo.cjs) not in writers — writers return updated, CLI maps to merged based on pre-check
 - [19-01]: Writer return shape standardised to { written, reason, filePath } — filePath always absolute
+- [19-02]: Tests placed in file-scope describe block — beforeEach/afterEach hooks shared automatically, no re-declaration
+- [19-02]: No shebang required for npm bin wiring — bin field in package.json is sufficient for .cjs extension files
 
 ### Pending Todos
 
@@ -47,5 +49,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 19-01-PLAN.md — --dry-run flag, unified labelled output, internal log removed
-Resume with: Phase 19 complete — v1.5 milestone viflo init CLI done
+Stopped at: Completed 19-02-PLAN.md — integration tests for dry-run/labelled output, package.json bin field
+Resume with: v1.5 milestone complete — all INIT-06/07/08 requirements satisfied, 55/55 tests passing
