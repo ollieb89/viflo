@@ -176,4 +176,4 @@ Known tech debt:
 
 ---
 
-_Last updated: 2026-02-24 after v1.4 milestone_
+_Last updated: 2026-02-24 after v1.5 milestone start_

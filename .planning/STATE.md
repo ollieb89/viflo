@@ -2,18 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24 after v1.4 milestone)
+See: .planning/PROJECT.md (updated 2026-02-24 after v1.5 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** Planning v1.5 — viflo init CLI (Phases 17–19)
+**Current focus:** v1.5 — viflo init CLI (Phases 17–19)
 
 ## Current Position
 
-Phase: v1.4 complete — milestone archived
-Status: Ready to start v1.5 milestone planning
-Last activity: 2026-02-24 — v1.4 Project Tooling milestone complete and archived
-
-Progress: [██████████] 100% — v1.4 shipped (Phases 15–16)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-24 — Milestone v1.5 started
 
 ## Accumulated Context
 
@@ -39,4 +38,4 @@ None.
 
 Last session: 2026-02-24
 Stopped at: v1.4 milestone complete — archived to milestones/, git tagged
-Resume with: `/gsd:new-milestone` to plan v1.5
+Resume with: `/gsd:plan-phase 17` to start Phase 17 planning
