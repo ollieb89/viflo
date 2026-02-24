@@ -9,11 +9,11 @@ Requirements for v1.3 Expert Skills milestone. Each maps to roadmap phases.
 
 ### RAG / Vector Search
 
-- [ ] **RAG-01**: User can follow a Quick Start to embed and retrieve documents with pgvector in under 15 minutes
-- [ ] **RAG-02**: Skill documents chunking strategies (fixed-size vs semantic, overlap rules, token budgets)
-- [ ] **RAG-03**: Skill includes HNSW index setup and hybrid search with RRF fusion (vector + full-text)
-- [ ] **RAG-04**: Skill documents 3 named Gotchas with warning signs and fixes (chunking pitfalls, missing HNSW index, embedding model drift)
-- [ ] **RAG-05**: Skill includes embedding model version column schema and retrieval evaluation patterns (recall@k, MRR)
+- [x] **RAG-01**: User can follow a Quick Start to embed and retrieve documents with pgvector in under 15 minutes
+- [x] **RAG-02**: Skill documents chunking strategies (fixed-size vs semantic, overlap rules, token budgets)
+- [x] **RAG-03**: Skill includes HNSW index setup and hybrid search with RRF fusion (vector + full-text)
+- [x] **RAG-04**: Skill documents 3 named Gotchas with warning signs and fixes (chunking pitfalls, missing HNSW index, embedding model drift)
+- [x] **RAG-05**: Skill includes embedding model version column schema and retrieval evaluation patterns (recall@k, MRR)
 
 ### Agent Architecture
 
@@ -68,11 +68,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| RAG-01 | Phase 12 | Pending |
-| RAG-02 | Phase 12 | Pending |
-| RAG-03 | Phase 12 | Pending |
-| RAG-04 | Phase 12 | Pending |
-| RAG-05 | Phase 12 | Pending |
+| RAG-01 | Phase 12 | Complete |
+| RAG-02 | Phase 12 | Complete |
+| RAG-03 | Phase 12 | Complete |
+| RAG-04 | Phase 12 | Complete |
+| RAG-05 | Phase 12 | Complete |
 | AGENT-01 | Phase 13 | Pending |
 | AGENT-02 | Phase 13 | Pending |
 | AGENT-03 | Phase 13 | Pending |

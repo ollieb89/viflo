@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.3 — Phase 12 (RAG / Vector Search) ready to plan
+**Current focus:** v1.3 — Phase 12 (RAG / Vector Search) — Plan 01 complete
 
 ## Current Position
 
 Phase: 12 of 15 (RAG / Vector Search)
-Plan: — (ready to plan)
-Status: Ready to plan
-Last activity: 2026-02-24 — v1.3 roadmap created (Phases 12–15)
+Plan: 01 complete (1 of 1 plans)
+Status: Phase In Progress
+Last activity: 2026-02-24 — 12-01 SKILL.md rewrite complete (416 lines, eval.ts created)
 
 Progress: [████████░░] 75% (historical — v1.3 phases at 0%)
 
@@ -34,6 +34,7 @@ Progress: [████████░░] 75% (historical — v1.3 phases at 0%
 - Trend: Stable
 
 *Updated after each plan completion*
+| Phase 12-rag-vector-search P01 | 4 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -47,6 +48,9 @@ Recent decisions affecting current work:
 - [v1.3 roadmap]: Integration Review (Phase 15) last — INDEX.md and cross-refs written only after all skill content is final, preventing description drift
 - [Phase 11-02]: Better Auth replaces Auth.js as self-hosted alternative; auth.api.getSession() reserved for server components needing user data
 - [Phase 11-01]: output_config: { format: zodOutputFormat(...) } is the correct Anthropic SDK parameter; response.parsed_output is the correct accessor
+- [Phase 12-rag-vector-search]: HNSW as default index over IVFFlat — no training step, better recall
+- [Phase 12-rag-vector-search]: RRF rank-based fusion over weighted score addition — no score normalization needed
+- [Phase 12-rag-vector-search]: pgvector.toSql() mandatory (not JSON.stringify) — canonical wire format
 
 ### Pending Todos
 
@@ -59,5 +63,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.3 roadmap creation complete — Phases 12–15 defined
-Resume with: `/gsd:plan-phase 12`
+Stopped at: Completed 12-01-PLAN.md — RAG SKILL.md rewrite (416 lines, eval.ts)
+Resume with: Next phase or additional RAG plans if planned

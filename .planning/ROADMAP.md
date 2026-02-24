@@ -133,7 +133,7 @@ Plans:
 | 9. Workspace Tooling | v1.1 | 2/2 | Complete | 2026-02-24 |
 | 10. Commit & Verify | v1.1 | 3/3 | Complete | 2026-02-24 |
 | 11. Foundation Skills | v1.2 | 3/3 | Complete | 2026-02-24 |
-| 12. RAG / Vector Search | v1.3 | 0/TBD | Not started | - |
+| 12. RAG / Vector Search | 1/2 | In Progress|  | - |
 | 13. Agent Architecture | v1.3 | 0/TBD | Not started | - |
 | 14. Stripe Payments | v1.3 | 0/TBD | Not started | - |
 | 15. Integration Review | v1.3 | 0/TBD | Not started | - |
