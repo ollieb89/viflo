@@ -51,11 +51,13 @@ export async function POST(req: Request) {
 ```typescript
 // app/api/billing-portal/route.ts
 export async function POST(req: Request) {
-  // Authenticate first — never trust client-provided customerId
-  // const session = await auth(); if (!session) return new Response('Unauthorized', { status: 401 });
-  // const user = await db.user.findUnique({ where: { id: session.user.id } });
-  // Use user.stripeCustomerId, not a value from the request body
-  const { customerId } = await req.json();
+  // ⚠️  ALWAYS authenticate first. The pattern below is INCOMPLETE — never use a
+  // client-provided customerId in production. Replace with a server-side lookup:
+  //   const session = await auth();
+  //   if (!session) return new Response('Unauthorized', { status: 401 });
+  //   const user = await db.user.findUnique({ where: { id: session.user.id } });
+  //   const customerId = user.stripeCustomerId; // never trust request body
+  const { customerId } = await req.json(); // ⚠️  replace with server-side lookup above
 
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,

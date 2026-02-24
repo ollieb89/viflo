@@ -63,4 +63,4 @@ Use this when auditing an existing skill:
 
 ## Reference Skill
 
-The Auth skill (`.agent/skills/auth-systems/SKILL.md`), once created, will serve as the canonical reference — built first in v1.2 specifically to stress-test this standard. Until then, apply the checklist above directly against any skill under review.
+The Auth skill (`.agent/skills/auth-systems/SKILL.md`) serves as the canonical reference — built first in v1.2 specifically to stress-test this standard. When in doubt, use it as the structural benchmark.
