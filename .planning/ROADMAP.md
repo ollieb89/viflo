@@ -96,10 +96,11 @@ Plans:
   3. The idempotency section shows atomic deduplication via `INSERT ... ON CONFLICT (stripe_event_id) DO NOTHING` in the main SKILL.md body
   4. Developer can read the subscription lifecycle section covering create, update, cancel, and status sync to the database for all four critical events
   5. The Gotchas section names at least 3 pitfalls (raw body destruction, non-atomic idempotency, PCI scope creep) with warning signs and fixes
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 14-01: TBD
+- [ ] 14-01-PLAN.md — Rewrite SKILL.md to auth-systems depth (Quick Start, Webhooks, Idempotency, Subscriptions, Customer Portal, Gotchas)
+- [ ] 14-02-PLAN.md — Update references/ files to stripe v20 and Next.js 15 (webhook-patterns.md, subscription-patterns.md)
 
 ---
 
