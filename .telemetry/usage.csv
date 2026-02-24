@@ -1,0 +1,6 @@
+timestamp,model,prompt_tokens,completion_tokens,task_success,task_type,duration_ms,notes
+2026-02-23T22:19:28Z,claude-3-opus,2500,4800,true,execute,125000,Phase 5 CI setup
+2026-02-23T22:19:28Z,claude-3-opus,3200,5600,true,execute,180000,Phase 6 test suite
+2026-02-23T22:19:28Z,gemini-1.5-flash,800,1200,true,quick,15000,Fix typo in README
+2026-02-23T22:19:28Z,claude-3-opus,1800,2900,true,plan,95000,Phase 7 discussion
+2026-02-23T22:19:28Z,claude-3-sonnet,1500,2100,false,execute,60000,Failed test debug

@@ -168,30 +168,17 @@ For each file:
 
 ### Technique 1: The Checklist Method
 
+Use checklists for systematic reviews. See the [full review checklist](references/checklists/review-checklist.md) for detailed security, performance, testing, and maintainability checklists.
+
+**Quick Reference:**
+
 ```markdown
-## Security Checklist
+## Quick Review Checklist
 
-- [ ] User input validated and sanitized
-- [ ] SQL queries use parameterization
-- [ ] Authentication/authorization checked
-- [ ] Secrets not hardcoded
-- [ ] Error messages don't leak info
-
-## Performance Checklist
-
-- [ ] No N+1 queries
-- [ ] Database queries indexed
-- [ ] Large lists paginated
-- [ ] Expensive operations cached
-- [ ] No blocking I/O in hot paths
-
-## Testing Checklist
-
-- [ ] Happy path tested
-- [ ] Edge cases covered
-- [ ] Error cases tested
-- [ ] Test names are descriptive
-- [ ] Tests are deterministic
+Security:    [ ] Input validated  [ ] SQL params  [ ] Auth checked
+Performance: [ ] No N+1 queries  [ ] Indexed     [ ] Cached
+Testing:     [ ] Happy path      [ ] Edge cases  [ ] Deterministic
+Maintainability: [ ] Clear names [ ] SRP         [ ] Comments
 ```
 
 ### Technique 2: The Question Approach
@@ -399,37 +386,7 @@ test('displays incremented count when clicked', () => {
 
 ### Pattern 3: Security Review
 
-```markdown
-## Security Review Checklist
-
-### Authentication & Authorization
-
-- [ ] Is authentication required where needed?
-- [ ] Are authorization checks before every action?
-- [ ] Is JWT validation proper (signature, expiry)?
-- [ ] Are API keys/secrets properly secured?
-
-### Input Validation
-
-- [ ] All user inputs validated?
-- [ ] File uploads restricted (size, type)?
-- [ ] SQL queries parameterized?
-- [ ] XSS protection (escape output)?
-
-### Data Protection
-
-- [ ] Passwords hashed (bcrypt/argon2)?
-- [ ] Sensitive data encrypted at rest?
-- [ ] HTTPS enforced for sensitive data?
-- [ ] PII handled according to regulations?
-
-### Common Vulnerabilities
-
-- [ ] No eval() or similar dynamic execution?
-- [ ] No hardcoded secrets?
-- [ ] CSRF protection for state-changing operations?
-- [ ] Rate limiting on public endpoints?
-```
+For comprehensive security review, use the [detailed security checklist](references/checklists/review-checklist.md#detailed-security-review) covering Authentication & Authorization, Input Validation, Data Protection, and Common Vulnerabilities.
 
 ## Giving Difficult Feedback
 
@@ -536,9 +493,6 @@ When author disagrees with your feedback:
 
 ## Resources
 
-- **references/code-review-best-practices.md**: Comprehensive review guidelines
-- **references/common-bugs-checklist.md**: Language-specific bugs to watch for
-- **references/security-review-guide.md**: Security-focused review checklist
-- **assets/pr-review-template.md**: Standard review comment template
-- **assets/review-checklist.md**: Quick reference checklist
-- **scripts/pr-analyzer.py**: Analyze PR complexity and suggest reviewers
+- **references/checklists/review-checklist.md**: Review checklists
+- **references/code-review-best-practices.md**: Review guidelines
+- **references/common-bugs-checklist.md**: Language-specific bugs
