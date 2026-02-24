@@ -127,7 +127,12 @@ Plans:
 3. `pre-commit install` is automated via a setup script or Makefile target
 4. `README.md` or `CONTRIBUTING.md` references the onboarding command
 
-**Plans**: 2 plans ready
+**Plans**: 2 plans
+
+Plans:
+
+- [ ] 09-01-PLAN.md — Workspace configuration fix (CI-02 gap closure)
+- [ ] 09-02-PLAN.md — Developer onboarding automation (QUAL-01, QUAL-02 gap closure)
 
 ### Phase 10: Commit and Verify Uncommitted Work
 
@@ -144,9 +149,13 @@ Plans:
 4. Running `git ls-files` confirms every previously-untracked artifact is now tracked
 5. A fresh `git clone` can run `pnpm install && pnpm --filter @viflo/web test` without error
 
-**Plans**: 1 plan
+**Plans**: 3 plans
 
-- [ ] 10-01-PLAN.md — Commit Phase 7 & 9 artifacts, create Phase 9 VERIFICATION.md (all gaps)
+Plans:
+
+- [ ] 10-01-PLAN.md — Commit Phase 7 artifacts (CONTENT-01, CONTENT-02, CONTENT-03)
+- [ ] 10-02-PLAN.md — Commit Phase 9 artifacts (CI-02, QUAL-01, QUAL-02, QUAL-04)
+- [ ] 10-03-PLAN.md — Create Phase 9 VERIFICATION.md and finalize all requirements
 
 ## Progress
 
@@ -160,6 +169,6 @@ Plans:
 | 5. CI & Security           | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 6. Test Suite              | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 7. Content Hygiene         | v1.1      | 3/3            | Complete    | 2026-02-23 |
-| 8. Verification Closure    | 2/2 | Complete    | 2026-02-23 |            |
+| 8. Verification Closure    | v1.1      | 2/2            | Complete    | 2026-02-23 |
 | 9. Workspace Tooling       | v1.1      | TBD            | Pending     |            |
-| 10. Commit & Verify        | v1.1      | 0/1            | Pending     |            |
+| 10. Commit & Verify        | v1.1      | 0/3            | Pending     |            |
