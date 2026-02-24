@@ -25,11 +25,11 @@ Requirements for v1.3 Expert Skills milestone. Each maps to roadmap phases.
 
 ### Stripe Payments
 
-- [ ] **STRIPE-01**: User can follow a Quick Start to accept a one-time payment via Stripe Checkout in under 15 minutes
-- [ ] **STRIPE-02**: Skill documents webhook handler with raw-body pattern (await req.text()) and atomic idempotency schema
-- [ ] **STRIPE-03**: Skill covers subscription lifecycle (create, update, cancel, status sync to database)
-- [ ] **STRIPE-04**: Skill documents 3 named Gotchas with warning signs (raw body destruction, non-atomic idempotency, PCI scope creep)
-- [ ] **STRIPE-05**: Skill covers Customer Portal integration and trial periods with proration handling
+- [x] **STRIPE-01**: User can follow a Quick Start to accept a one-time payment via Stripe Checkout in under 15 minutes
+- [x] **STRIPE-02**: Skill documents webhook handler with raw-body pattern (await req.text()) and atomic idempotency schema
+- [x] **STRIPE-03**: Skill covers subscription lifecycle (create, update, cancel, status sync to database)
+- [x] **STRIPE-04**: Skill documents 3 named Gotchas with warning signs (raw body destruction, non-atomic idempotency, PCI scope creep)
+- [x] **STRIPE-05**: Skill covers Customer Portal integration and trial periods with proration handling
 
 ### Infrastructure
 
@@ -78,11 +78,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AGENT-03 | Phase 13 | Complete |
 | AGENT-04 | Phase 13 | Complete |
 | AGENT-05 | Phase 13 | Complete |
-| STRIPE-01 | Phase 14 | Pending |
-| STRIPE-02 | Phase 14 | Pending |
-| STRIPE-03 | Phase 14 | Pending |
-| STRIPE-04 | Phase 14 | Pending |
-| STRIPE-05 | Phase 14 | Pending |
+| STRIPE-01 | Phase 14 | Complete |
+| STRIPE-02 | Phase 14 | Complete |
+| STRIPE-03 | Phase 14 | Complete |
+| STRIPE-04 | Phase 14 | Complete |
+| STRIPE-05 | Phase 14 | Complete |
 | INFRA-01 | Phase 15 | Pending |
 | INFRA-02 | Phase 15 | Pending |
 | INFRA-03 | Phase 15 | Pending |

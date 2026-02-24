@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.3 — Phase 13 (Agent Architecture) — Complete (2 of 2 plans done)
+**Current focus:** v1.3 — Phase 14 (Stripe Payments) — In Progress (1 of 1 plans done)
 
 ## Current Position
 
-Phase: 13 of 15 (Agent Architecture)
-Plan: 02 complete (2 of 2 plans) — Phase 13 complete
-Status: Phase Complete — Resume Phase 14 (Stripe Payments)
-Last activity: 2026-02-24 — 13-02 reference files updated for LangGraph 1.x and pgvector episodic memory
+Phase: 14 of 15 (Stripe Payments)
+Plan: 01 complete (1 of 1 plans) — Phase 14 complete
+Status: Phase Complete — Resume Phase 15 (Integration Review)
+Last activity: 2026-02-24 — 14-01 stripe-payments SKILL.md rewritten to auth-systems depth (363 lines)
 
 Progress: [████████░░] 75% (historical — v1.3 phases at 0%)
 
@@ -38,6 +38,7 @@ Progress: [████████░░] 75% (historical — v1.3 phases at 0%
 | Phase 12-rag-vector-search P02 | 3 | 2 tasks | 3 files |
 | Phase 13-agent-architecture P01 | 4 | 1 tasks | 1 files |
 | Phase 13-agent-architecture P02 | 2 | 2 tasks | 2 files |
+| Phase 14-stripe-payments P01 | 2 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,7 @@ Recent decisions affecting current work:
 - [Phase 13-agent-architecture]: create_react_agent (Option B) recommended over custom StateGraph (Option A) for most LangGraph use cases
 - [Phase 13-agent-architecture]: PostgresSaver (Option B) mandatory for production LangGraph — InMemorySaver (Option A) for dev only
 - [Phase 13-agent-architecture]: pgvector episodic store (Option B) recommended for >20-turn sessions or cross-session recall — in-context (Option A) for short sessions only
+- [Phase 14-stripe-payments]: Stripe Checkout as primary path (SAQ A); await req.text() as webhook headline; ON CONFLICT atomic idempotency; Stripe status strings stored directly; API version 2026-01-28.clover
 
 ### Pending Todos
 
@@ -75,5 +77,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 13-02-PLAN.md — reference files updated for LangGraph 1.x and pgvector episodic memory
-Resume with: Phase 14 (Stripe Payments)
+Stopped at: Completed 14-01-PLAN.md — Stripe SKILL.md rewritten to auth-systems depth (363 lines)
+Resume with: Phase 15 (Integration Review)
