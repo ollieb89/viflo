@@ -8,6 +8,9 @@
     "pnpm": ">=10.0.0"
   },
   "packageManager": "pnpm@10.6.5",
+  "bin": {
+    "viflo": "bin/viflo.cjs"
+  },
   "scripts": {
     "lint": "prettier --check \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
     "lint:fix": "prettier --write \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
