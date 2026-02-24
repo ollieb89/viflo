@@ -1,4 +1,127 @@
-# Prompt Evaluation Workflows
+# Evaluation Workflows
+
+---
+
+## Golden Set Architecture
+
+A golden set is a folder of `.md` test case files plus a TypeScript runner (`eval.ts`). It gives you a lightweight, platform-free eval suite that lives in your repo alongside your prompts.
+
+```
+references/golden-set/
+  chain-of-thought.md   # test case: CoT pattern
+  few-shot.md           # test case: few-shot pattern
+  output-format.md      # test case: structured output pattern
+  eval.ts               # runner: reads .md files, calls Claude, judges output
+```
+
+**Developer workflow:**
+
+1. Write or edit a prompt pattern file
+2. `cd .agent/skills/prompt-engineering/references/golden-set/`
+3. `npx ts-node eval.ts`
+4. See pass/fail per test case in stdout
+5. Fix prompt, repeat until all pass
+
+No external platform needed. No account registration. Just `ANTHROPIC_API_KEY` in your environment.
+
+---
+
+## Test Case Format
+
+Each `.md` file in `golden-set/` follows this structure:
+
+```markdown
+---
+pattern: chain-of-thought
+model: claude-sonnet-4-6
+applies-to: [claude-opus-4-6, claude-sonnet-4-6]
+last-verified-against: claude-sonnet-4-6
+verified-date: 2026-02-24
+---
+
+## Input Prompt
+
+System: [system prompt text]
+
+User: [user message text]
+
+## Expected Output Criteria
+
+- [criterion 1 — specific, checkable]
+- [criterion 2]
+- [criterion 3]
+```
+
+**Frontmatter fields:**
+
+| Field | Required | Purpose |
+|---|---|---|
+| `pattern` | Yes | Human-readable pattern name (used in runner output) |
+| `model` | Yes | Model to call when running this test |
+| `applies-to` | Yes | Full list of models this pattern is validated for |
+| `last-verified-against` | Yes | Model used in last successful run |
+| `verified-date` | Yes | ISO date of last verification |
+
+**Criteria writing tips:**
+- Make each criterion independently checkable (the LLM judge evaluates each one)
+- Prefer specific over vague: "Final answer states the car is 20 mph faster" not "Answer is correct"
+- Include format criteria ("Does not wrap JSON in markdown code fences") alongside content criteria
+
+---
+
+## Running the Eval
+
+**One-time setup (if not already installed):**
+
+```bash
+npm install -D ts-node @types/node
+```
+
+**Run:**
+
+```bash
+cd .agent/skills/prompt-engineering/references/golden-set/
+npx ts-node eval.ts
+```
+
+**Output format:**
+
+```
+  Running chain-of-thought... ✓ PASS
+  Running few-shot... ✓ PASS
+  Running output-format-specification... ✗ FAIL — Output skipped intermediate steps
+
+3/3 passed     # or with failures:
+2/3 passed     # exit code 1 on any failure
+```
+
+Exit code 0 on all pass, exit code 1 on any failure — suitable for CI integration.
+
+---
+
+## Prompt Versioning
+
+Each prompt variant is a file. Git history is version history.
+
+**File structure:**
+
+```
+prompts/
+  summarize-v1.md    # last-verified-against: claude-sonnet-4-6, 2026-01-15
+  summarize-v2.md    # last-verified-against: claude-sonnet-4-6, 2026-02-10
+  classify-v1.md
+```
+
+**Rules:**
+
+1. Every prompt file carries `last-verified-against:` frontmatter — locks it to a model snapshot
+2. When you change a prompt, commit the change with a message explaining why (don't edit silently)
+3. For significant changes, create a new file (`summarize-v3.md`) — preserves rollback
+4. When a new model is released, re-run golden set on existing prompts and update `last-verified-against:`
+
+**Warning sign:** A single `prompts.ts` file with inline string edits — no audit trail, no rollback, no model pinning.
+
+---
 
 ## The Eval Loop
 
@@ -7,6 +130,8 @@ Write prompt → Sample N outputs → Score with rubric → Identify failure pat
 ```
 
 Never iterate on a prompt based on a single output. Sample at least 10, preferably 50.
+
+---
 
 ## Scoring Rubric Design
 
@@ -30,6 +155,8 @@ function averageScore(results: EvalResult[]): Record<string, number> {
   );
 }
 ```
+
+---
 
 ## Automated Scoring with LLM-as-Judge
 
@@ -64,6 +191,8 @@ Return: {"score": 0-1, "reasoning": "one sentence"}`,
   }
 }
 ```
+
+---
 
 ## Version Tracking
 
