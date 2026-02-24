@@ -35,7 +35,7 @@
 
 **Milestone Goal:** Expand the skills library with five high-demand domain skills — Auth Systems, Prompt Engineering, RAG/Vector Search, Agent Architecture, and Stripe Payments — authored in dependency order with a final integration review pass.
 
-- [ ] **Phase 11: Foundation Skills** - Prompt Engineering + Auth Systems (no inter-dependencies; downstream skills depend on both)
+- [x] **Phase 11: Foundation Skills** - Prompt Engineering + Auth Systems (no inter-dependencies; downstream skills depend on both) (completed 2026-02-24)
 - [ ] **Phase 12: AI/LLM Skills** - RAG/Vector Search + Agent Architecture (agent depends on prompt engineering from Phase 11)
 - [ ] **Phase 13: Stripe Payments** - Full payments skill (depends on auth-systems from Phase 11 for user identity handoff)
 - [ ] **Phase 14: Integration Review** - Cross-skill audit, INDEX.md completion, 500-line compliance check
@@ -106,7 +106,7 @@ Plans:
 | 8. Verification Closure | v1.1 | 2/2 | Complete | 2026-02-23 |
 | 9. Workspace Tooling | v1.1 | 2/2 | Complete | 2026-02-24 |
 | 10. Commit & Verify | v1.1 | 3/3 | Complete | 2026-02-24 |
-| 11. Foundation Skills | v1.2 | 0/TBD | Not started | - |
+| 11. Foundation Skills | 2/2 | Complete   | 2026-02-24 | - |
 | 12. AI/LLM Skills | v1.2 | 0/TBD | Not started | - |
 | 13. Stripe Payments | v1.2 | 0/TBD | Not started | - |
 | 14. Integration Review | v1.2 | 0/TBD | Not started | - |

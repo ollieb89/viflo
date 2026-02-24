@@ -42,11 +42,11 @@ Requirements for the Skills Expansion milestone. Each maps to roadmap phases (Ph
 
 ### Prompt Engineering
 
-- [ ] **PROMPT-01**: Developer can write structured prompts using role/context/task/output anatomy
-- [ ] **PROMPT-02**: Skill documents model-specific technique applicability (instruction-tuned vs reasoning models) with `applies-to:` tags and `last-verified-against:` frontmatter
-- [ ] **PROMPT-03**: Developer can apply chain-of-thought, few-shot, and output format specification patterns
-- [ ] **PROMPT-04**: Skill includes an anti-pattern catalogue (top 5 output-degrading patterns)
-- [ ] **PROMPT-05**: Developer can version and evaluate prompts using a golden set (no external platform required)
+- [x] **PROMPT-01**: Developer can write structured prompts using role/context/task/output anatomy
+- [x] **PROMPT-02**: Skill documents model-specific technique applicability (instruction-tuned vs reasoning models) with `applies-to:` tags and `last-verified-against:` frontmatter
+- [x] **PROMPT-03**: Developer can apply chain-of-thought, few-shot, and output format specification patterns
+- [x] **PROMPT-04**: Skill includes an anti-pattern catalogue (top 5 output-degrading patterns)
+- [x] **PROMPT-05**: Developer can version and evaluate prompts using a golden set (no external platform required)
 
 ### Infrastructure / Compliance
 
@@ -98,11 +98,11 @@ Requirements for the Skills Expansion milestone. Each maps to roadmap phases (Ph
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PROMPT-01 | Phase 11 | Pending |
-| PROMPT-02 | Phase 11 | Pending |
-| PROMPT-03 | Phase 11 | Pending |
-| PROMPT-04 | Phase 11 | Pending |
-| PROMPT-05 | Phase 11 | Pending |
+| PROMPT-01 | Phase 11 | Complete |
+| PROMPT-02 | Phase 11 | Complete |
+| PROMPT-03 | Phase 11 | Complete |
+| PROMPT-04 | Phase 11 | Complete |
+| PROMPT-05 | Phase 11 | Complete |
 | AUTH-01 | Phase 11 | Pending |
 | AUTH-02 | Phase 11 | Pending |
 | AUTH-03 | Phase 11 | Pending |

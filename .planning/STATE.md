@@ -10,24 +10,24 @@ See: .planning/PROJECT.md (updated 2026-02-24 — v1.2 milestone started)
 ## Current Position
 
 Phase: 11 of 14 (Foundation Skills)
-Plan: — (not yet planned)
-Status: Ready to plan
-Last activity: 2026-02-24 — Roadmap created for v1.2 (Phases 11–14)
+Plan: 02 complete (Phase 11 done)
+Status: Phase 11 complete — ready for Phase 12
+Last activity: 2026-02-24 — Completed 11-02 (auth-systems skill v1.2 rewrite)
 
-Progress: [░░░░░░░░░░] 0% (0 plans complete)
+Progress: [██░░░░░░░░] 20% (2 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed (v1.2): 0
-- Average duration: —
-- Total execution time: —
+- Total plans completed (v1.2): 2
+- Average duration: 3.5 min
+- Total execution time: 7 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| — | — | — | — |
+| 11-foundation-skills | 2 | 7 min | 3.5 min |
 
 *Updated after each plan completion*
 
@@ -41,6 +41,9 @@ Recent decisions affecting current work:
 - [Phase 10]: Gap-closure pattern — explicit commit-and-verify phase prevents disk/committed drift
 - [v1.2 planning]: Auth.js is maintenance-mode (team joined Better Auth Sept 2025) — auth skill leads with Clerk (managed) + Better Auth (self-hosted); Auth.js covered as "migrating from" only
 - [v1.2 planning]: Dependency order: prompt-engineering → agent-architecture; auth-systems → stripe-payments
+- [11-01]: applies-to schema uses exact model IDs (claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5-20251001) not family names — prevents ambiguity when new models release
+- [11-01]: eval.ts uses LLM-as-judge (claude-haiku-4-5-20251001) against bullet criteria — handles natural language output variance without brittle string matching
+- [11-01]: golden-set .md test cases use human-readable sections parsed by eval.ts — keeps test cases editable without changing runner
 
 ### Pending Todos
 
@@ -54,5 +57,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.2 roadmap created — Phases 11–14 defined, 27/27 requirements mapped
-Resume with: `/gsd:plan-phase 11`
+Stopped at: Completed 11-01-PLAN.md (prompt-engineering skill v1.2 rewrite)
+Resume with: `/gsd:execute-phase 11` for next plan (11-02 auth-systems)
