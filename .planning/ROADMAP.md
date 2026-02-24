@@ -74,7 +74,10 @@
   1. Running `viflo init --minimal` in a project without CLAUDE.md creates CLAUDE.md containing a `<!-- BEGIN VIFLO -->` / `<!-- END VIFLO -->` sentinel block with `@` import lines for all viflo skills
   2. Running `viflo init --minimal` creates or merges `.claude/settings.json` with safe default `permissions.allow` entries — existing entries in the file are preserved
   3. Running `viflo init --minimal` a second time on a project that already has the sentinel block and settings entries completes without modifying any file content
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 17-01-PLAN.md — TDD: scanSkills runtime skill directory scanner
+- [ ] 17-02-PLAN.md — bin/viflo.cjs CLI entry point and integration tests
 
 ### Phase 18: Full Mode
 **Goal**: A developer starting a new project can run `viflo init --full` and immediately have both viflo skill imports and a GSD planning scaffold ready to use
@@ -117,6 +120,6 @@
 | 14. Stripe Payments | v1.3 | 2/2 | Complete | 2026-02-24 |
 | 15. Integration Review | v1.4 | 3/3 | Complete | 2026-02-24 |
 | 16. CLI Foundation | v1.4 | 2/2 | Complete | 2026-02-24 |
-| 17. Minimal Mode | v1.5 | 0/TBD | Not started | - |
+| 17. Minimal Mode | v1.5 | 0/2 | Not started | - |
 | 18. Full Mode | v1.5 | 0/TBD | Not started | - |
 | 19. Polish | v1.5 | 0/TBD | Not started | - |
