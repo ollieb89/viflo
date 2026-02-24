@@ -96,8 +96,6 @@ Requirements for the Skills Expansion milestone. Each maps to roadmap phases (Ph
 
 ## Traceability
 
-Which phases cover which requirements. Populated during roadmap creation.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PROMPT-01 | Phase 11 | Pending |
@@ -136,4 +134,4 @@ Which phases cover which requirements. Populated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after initial definition*
+*Last updated: 2026-02-24 — roadmap created (Phases 11–14)*
