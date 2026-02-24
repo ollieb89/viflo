@@ -45,7 +45,7 @@
 
 - [x] **Phase 12: RAG / Vector Search** — Upgrade RAG skill to auth-systems depth with Quick Start, HNSW schema, hybrid search, and Gotchas (completed 2026-02-24)
 - [x] **Phase 13: Agent Architecture** — Upgrade Agent skill to auth-systems depth with mandatory guardrails, typed handoffs, episodic memory, and streaming (completed 2026-02-24)
-- [ ] **Phase 14: Stripe Payments** — Upgrade Stripe skill to auth-systems depth with Quick Start, raw-body webhook, subscription lifecycle, and Gotchas
+- [x] **Phase 14: Stripe Payments** — Upgrade Stripe skill to auth-systems depth with Quick Start, raw-body webhook, subscription lifecycle, and Gotchas (completed 2026-02-24)
 - [ ] **Phase 15: Integration Review** — Update INDEX.md, verify 500-line compliance, and add cross-skill references across all three new skills
 
 ## Phase Details
@@ -137,5 +137,5 @@ Plans:
 | 11. Foundation Skills | v1.2 | 3/3 | Complete | 2026-02-24 |
 | 12. RAG / Vector Search | 2/2 | Complete    | 2026-02-24 | - |
 | 13. Agent Architecture | 2/2 | Complete    | 2026-02-24 | - |
-| 14. Stripe Payments | 1/2 | In Progress|  | - |
+| 14. Stripe Payments | 2/2 | Complete   | 2026-02-24 | - |
 | 15. Integration Review | v1.3 | 0/TBD | Not started | - |

@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.3 milestone start)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.3 — Phase 14 (Stripe Payments) — In Progress (1 of 1 plans done)
+**Current focus:** v1.3 — Phase 14 (Stripe Payments) — Complete (2 of 2 plans done)
 
 ## Current Position
 
 Phase: 14 of 15 (Stripe Payments)
-Plan: 01 complete (1 of 1 plans) — Phase 14 complete
+Plan: 02 complete (2 of 2 plans) — Phase 14 complete
 Status: Phase Complete — Resume Phase 15 (Integration Review)
-Last activity: 2026-02-24 — 14-01 stripe-payments SKILL.md rewritten to auth-systems depth (363 lines)
+Last activity: 2026-02-24 — 14-02 stripe-payments reference files updated to 2026-01-28.clover and stripe@20.x
 
 Progress: [████████░░] 75% (historical — v1.3 phases at 0%)
 
@@ -39,6 +39,7 @@ Progress: [████████░░] 75% (historical — v1.3 phases at 0%
 | Phase 13-agent-architecture P01 | 4 | 1 tasks | 1 files |
 | Phase 13-agent-architecture P02 | 2 | 2 tasks | 2 files |
 | Phase 14-stripe-payments P01 | 2 | 1 tasks | 1 files |
+| Phase 14-stripe-payments P02 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,7 @@ Recent decisions affecting current work:
 - [Phase 13-agent-architecture]: PostgresSaver (Option B) mandatory for production LangGraph — InMemorySaver (Option A) for dev only
 - [Phase 13-agent-architecture]: pgvector episodic store (Option B) recommended for >20-turn sessions or cross-session recall — in-context (Option A) for short sessions only
 - [Phase 14-stripe-payments]: Stripe Checkout as primary path (SAQ A); await req.text() as webhook headline; ON CONFLICT atomic idempotency; Stripe status strings stored directly; API version 2026-01-28.clover
+- [Phase 14-stripe-payments P02]: Replaced Prisma P2002 idempotency with raw SQL INSERT ON CONFLICT; expanded webhook-patterns.md to all four subscription events; subscription-patterns.md rewritten with raw pg.Pool queries
 
 ### Pending Todos
 
@@ -77,5 +79,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 14-01-PLAN.md — Stripe SKILL.md rewritten to auth-systems depth (363 lines)
+Stopped at: Completed 14-02-PLAN.md — Stripe reference files updated to 2026-01-28.clover and stripe@20.x
 Resume with: Phase 15 (Integration Review)
