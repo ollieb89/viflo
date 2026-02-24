@@ -1,215 +1,261 @@
 # Project Research Summary
 
-**Project:** viflo v1.2 Skills Expansion
-**Domain:** Skill file library — Auth, Stripe, RAG/Vector Search, Agent Architecture, Prompt Engineering
+**Project:** viflo v1.3 Expert Skills
+**Domain:** Skill documentation library — Stripe Payments, RAG/Vector Search, Agent Architecture
 **Researched:** 2026-02-24
-**Confidence:** HIGH (stack verified against live npm/PyPI; architecture from direct codebase inspection)
+**Confidence:** HIGH
 
 ## Executive Summary
 
-viflo v1.2 adds five new skill domains to an established skill file system. These are not product features — they are documentation modules (SKILL.md + references/) that an AI coding assistant loads at task time. The challenge is not building software but authoring high-quality, scoped, correctly ordered skill files that fit within the existing architecture constraints (≤500 lines per SKILL.md, progressive disclosure via references/, no @ syntax for cross-references, flat reference directory structure).
+Viflo v1.3 is a documentation upgrade project, not a greenfield application. Three existing skill files (Stripe Payments, RAG/Vector Search, Agent Architecture) each sit at 80–92 lines with the four required depth-standard sections present but lacking the structural depth established by the auth-systems benchmark (437 lines). The work is expansion and restructuring: adding Quick Start sections, promoting the most critical patterns out of `references/` into SKILL.md, and adding named Gotchas sections with warning signs. Every skill already has the hard content in references/ files; the gap is surfacing it correctly in the main SKILL.md body so it appears at agent load time.
 
-The recommended approach is dependency-ordered authoring: prompt-engineering and auth-systems first (foundation skills with no inter-dependencies), then rag-vector-search and agent-architecture (agent depends on prompt engineering), then stripe-payments last (depends on auth-systems for user identity). All five skills have well-understood stack requirements with verified library versions. The primary technical risks are documentation quality failures — incorrect library recommendations, missing idempotency patterns, scope creep — rather than infrastructure or integration uncertainty.
+The recommended approach is dependency-ordered authoring within a strict 500-line cap: RAG first (no v1.3 dependencies; produces pgvector infrastructure the Agent skill will reference for episodic memory), then Agent Architecture (depends on prompt-engineering which shipped in v1.2; benefits from RAG being complete), then Stripe (independent of the AI stack; depends only on already-shipped auth-systems). All three skills have verified library versions and complete references/ content. The primary technical risks are documentation quality failures — missing the security-critical raw body webhook pattern, omitting mandatory agent guardrails, scope creep past 500 lines — rather than any infrastructure or integration uncertainty.
 
-The most critical risk is the Auth.js ecosystem shift: the Auth.js team joined Better Auth in September 2025, making Auth.js maintenance-mode. The auth-systems skill must lead with Clerk (managed) and Better Auth (self-hosted) rather than Auth.js v5. A secondary systemic risk is cross-skill integration gaps: Auth and Stripe must explicitly document the user identity → Stripe Customer handoff, and Agent must document how to pass auth context through tool calls. Both gaps are predictable and must be addressed in a final integration review phase, not discovered after individual skills ship.
+The highest-stakes pitfalls are categorically "invisible in development, catastrophic in production": Stripe's raw body requirement for webhook signature verification must appear in the first code example, not a footnote; agent examples must include hard `MAX_TURNS` and `MAX_TOKENS_PER_RUN` limits or risk runaway API bills documented at $47,000; RAG skills must include an `embedding_model_version` column in every schema or risk silent retrieval corruption on model upgrade. These are not edge cases — they are the industry's most commonly shipped mistakes in these three domains.
+
+---
 
 ## Key Findings
 
 ### Recommended Stack
 
-All library versions are confirmed against live npm/PyPI as of 2026-02-24. The stack is fully compatible with the existing viflo environment (Next.js 16, React 19, TypeScript 5.7+, Python 3.11+, Node 20+, SQLAlchemy 2.0).
+All library versions are confirmed against live npm/PyPI as of 2026-02-24. The full stack is compatible with the existing viflo environment (Next.js, React 19, TypeScript 5.7+, Python 3.11+, Node 20+, SQLAlchemy 2.0). No new managed services are required unless scale pushes RAG beyond ~50M vectors (use Pinecone then) or the project requires managed auth (Clerk is already in the v1.2 stack).
 
 See `.planning/research/STACK.md` for full version compatibility matrix and installation commands.
 
 **Core technologies:**
 
-- `@clerk/nextjs` ^6.38.0: Managed auth — fastest path to production for SaaS, ships MFA and org management out of the box
-- `next-auth@beta` (v5): Self-hosted auth — use when full data ownership is required; widely used in production despite beta tag
-- `stripe` ^20.3.1 + `@stripe/react-stripe-js` ^5.6.0: Official Stripe SDK pair — server-side API client + React Elements for PCI-compliant checkout UI
-- `pgvector` (Python ^0.4.2 / Node ^0.2.1): Vector search inside existing PostgreSQL — no extra managed service required for ≤50M vectors
-- `@anthropic-ai/sdk` ^0.78.0 + `ai` (Vercel) ^6.0.97: Direct Claude API + streaming UI layer for Next.js agent interfaces
-- `@langchain/langgraph` ^1.1.5: Stateful multi-agent graph orchestration — use only for complex workflows with explicit state transitions
-- `anthropic` Python ^0.83.0: Async Claude client for FastAPI backends; use `AsyncAnthropic` — synchronous client blocks the event loop
+- `stripe` ^20.3.1 (Node) / ^14.3.0 (Python): Official SDK; handles checkout, subscriptions, webhook signature verification; pinned to API version `2026-01-28` in Node v20
+- `@stripe/react-stripe-js` ^5.6.0: React 19-compatible Stripe Elements; use only when embedding checkout in-page — hosted Checkout is simpler for the majority of use cases
+- `pgvector` ^0.4.2 (Python) / ^0.2.1 (Node): Vector search inside existing PostgreSQL; no extra managed service required; integrates with SQLAlchemy 2.0 via `pgvector.sqlalchemy.VECTOR`
+- `text-embedding-3-small` (OpenAI, 1536 dims, ~$0.02/1M tokens): Default embedding model; must be pinned by version and stored alongside every vector row
+- `@anthropic-ai/sdk` ^0.78.0: Direct Claude API client for TypeScript agents; use `client.messages.stream()` for streaming
+- `anthropic` ^0.83.0 (Python): Claude client for FastAPI backends — use `AsyncAnthropic` exclusively; synchronous client blocks the event loop
+- `ai` (Vercel AI SDK) ^6.x + `@ai-sdk/anthropic` ^1.x: Best DX for streaming agent UI in Next.js; handles tool execution, real-time tool result rendering, multi-provider switching
+- `@langchain/langgraph` ^1.1.5: Stateful multi-agent graph orchestration; use only when the workflow has conditional branches and persistent state requirements — adds significant complexity for simpler pipelines
 
 **Critical version notes:**
 
-- Auth.js v4 is unmaintained — must use v5 (`next-auth@beta`) or Better Auth for new projects
-- `@clerk/nextjs` < v6 / Core 1 is deprecated — use ^6 only
-- `stripe` < 16 locks to outdated API surfaces — use ^20
-- Next.js 16 renames `middleware.ts` → `proxy.ts`; Clerk's `clerkMiddleware()` must live there
+- `stripe` < 16 locks to deprecated API surfaces — use ^20
+- `@stripe/stripe-js` < 8 type definitions misalign with stripe Node SDK v20 — use ^8.8.0
+- `langchain` Python v0.1.x (pre-LCEL) is being deprecated in 2026 — use ^0.5.x with LCEL interface
+- `text-embedding-ada-002` is deprecated — `text-embedding-3-small` outperforms it at lower cost
 
 ### Expected Features
 
-See `.planning/research/FEATURES.md` for full feature tables per skill.
+The v1.3 work upgrades existing SKILL.md files to match the auth-systems depth standard (437 lines). The feature research defines exactly what each expansion must contain.
 
-**Must have (table stakes — required for each skill to be useful):**
+See `.planning/research/FEATURES.md` for full per-skill feature tables, dependency graph, and gap analysis.
 
-- Auth: Clerk quick-start for App Router, Auth.js v5 setup, protected routes via proxy.ts, OAuth provider wiring, session access in server components
-- Stripe: Checkout session creation, subscription setup with Billing, webhook receiver with signature verification, idempotent webhook handler (dedup by event.id), customer portal
-- RAG: Full embed → store → query loop, pgvector schema and index setup, cosine similarity query, chunking strategy with overlap, embedding model consistency rule
-- Agent: Core perceive→reason→act loop, tool/function calling pattern, orchestrator–worker pattern, memory taxonomy, handoff pattern, guardrails
-- Prompt: Prompt anatomy (role/context/task/output), system vs user vs prefill mechanics, few-shot examples, chain-of-thought, output format specification, prompt versioning in files
+**Must have (P1 — required to reach auth-systems depth standard):**
 
-**Should have (differentiators that elevate the skill above raw docs):**
+- Quick Start section for each skill: working code in <30 lines, immediately copy-pasteable, appearing before any other content
+- Named Gotchas section with at minimum 3 pitfalls per skill, each with an explicit warning signs list
+- Stripe: raw body webhook handler (`await req.text()`), idempotency via `stripe_events` table, all four critical events documented (`checkout.session.completed`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`), test/live key startup validation
+- RAG: HNSW index creation in schema, `embedding_model_version` column in vector table, similarity threshold check in retrieval pipeline, chunking strategies plural (not fixed-size-only as the recommendation), retrieval evaluation section in main SKILL.md
+- Agent: `max_turns` + `max_tokens` guardrails with code in every agent example, typed handoff schema interface, "When NOT to use agents" explicit callout, sub-agent context scoping pattern
 
-- Auth: App Router cache pitfall for authenticated content (leaks user data across sessions), DAL re-validation pattern, Clerk webhook receiver for user lifecycle sync
-- Stripe: Async webhook processing pattern (acknowledge fast, process asynchronously), Stripe CLI local testing workflow, test card cheat sheet
-- RAG: Hybrid search (vector + BM25 RRF), retrieval evaluation with golden test set, observability pattern (log retrieved chunks per LLM call)
-- Agent: Anthropic's 6 composable patterns, MCP protocol overview, failure budget / partial failure handling, token budget awareness
-- Prompt: Anti-pattern catalogue (top 5), golden set evaluation without a platform, LLM-as-judge pattern, prompt injection awareness
+**Should have (P2 — adds value without blowing 500-line budget):**
 
-**Defer to v1.3+:**
+- Stripe: test card cheat-sheet table, grace period pattern summary promoted from references/, plan change proration summary
+- RAG: hybrid search summary (vector + BM25 + RRF) promoted from references/, similarity threshold calibration guide
+- Agent: Anthropic composable patterns overview (5 patterns, one paragraph each), model tier strategy (Opus for planning, Haiku/Sonnet for execution), MCP overview paragraph
 
-- Auth: Full RBAC library integration (CASL), SAML/enterprise SSO, multi-tenancy/org management deep dive
-- Stripe: Connect/marketplace payments, invoicing API deep dive, Stripe Tax
-- RAG: Multimodal retrieval (images/audio), GraphRAG/knowledge graphs, fine-tuned embedding models
-- Agent: Full LangGraph workflow patterns skill, autonomous agents without human oversight
-- Prompt: Automated evaluation CI pipeline, red-teaming infrastructure, multimodal prompting
+**Defer to v1.4+:**
+
+- Stripe: Connect/marketplace payments (own skill territory), usage-based metered billing deep dive (Stripe Meters API)
+- RAG: Multimodal retrieval (images, audio), Agentic RAG as a distinct cross-skill topic
+- Agent: Full LangGraph workflow patterns as a dedicated skill, MCP server implementation guide, streaming agent responses as a first-class topic
 
 ### Architecture Approach
 
-The viflo skill system uses progressive disclosure: SKILL.md holds only decision logic, quick-reference tables, and links (≤500 lines enforced); detail lives in `references/` and is loaded on demand. Each new skill follows the established pattern of one SKILL.md per domain with 3 reference files covering major sub-topics or provider variants. INDEX.md must be updated to add three new categories (Payments, AI/LLM) and update the Security category.
+The viflo skill system uses progressive disclosure: SKILL.md holds decision logic, quick-reference tables, and links (≤500 lines enforced); detail lives in `references/` and is loaded on demand when Claude determines it is needed. All three v1.3 skills already have complete `references/` files — the upgrade work is entirely in SKILL.md: promoting high-value content into the main body, adding structural sections, and updating cross-references.
 
-See `.planning/research/ARCHITECTURE.md` for full directory layout, anti-patterns, and build order rationale.
+See `.planning/research/ARCHITECTURE.md` for full directory layout, data flow diagrams, database schemas, integration patterns, and anti-patterns.
 
-**Major components:**
+**Major components per skill:**
 
-1. `SKILL.md` (per skill) — frontmatter triggers for agent discovery, core decision logic, quick-reference tables, links to references; hard 500-line limit
-2. `references/` (3 files per skill) — detailed how-to content loaded lazily; one file per provider variant or major sub-topic (e.g., `clerk-setup.md`, `nextauth-setup.md`, `oauth-patterns.md`)
-3. `INDEX.md` (modified) — central discovery table; must gain 3 new categories and 5 new rows plus 4 Quick Selection Guide entries
-4. 4 existing skills (modified) — `api-patterns/auth.md`, `pci-compliance/SKILL.md`, `postgresql/SKILL.md` need forward-references to avoid content duplication
+1. **Stripe integration:** Next.js billing pages + webhook route → FastAPI billing router + Stripe service → PostgreSQL `customers`, `subscriptions`, `processed_webhook_events` tables; Stripe Checkout keeps card data entirely off your servers
+2. **RAG integration:** Next.js search UI → FastAPI ingest worker (background) + retrieval service + generation service → PostgreSQL `documents` + `document_chunks` (with `vector(1536)` column, tsvector column, HNSW index, GIN index for hybrid search)
+3. **Agent integration:** Next.js chat UI (SSE stream reader) → FastAPI agent router + SSE streaming endpoint → LangGraph orchestrator + tool services → PostgreSQL `agent_runs`, `agent_messages`, `agent_memories` (reuses pgvector if RAG is installed — zero additional operational cost)
 
-Total file count: 20 new files + 4 modified files.
+**Key architectural insight:** RAG and Agent share infrastructure. If pgvector is installed for RAG, the agent episodic memory layer reuses the same `vector(1536)` column pattern and HNSW index at no additional cost. This is the primary reason to build RAG before Agent Architecture.
+
+**Firm build order (from dependency analysis):**
+
+```
+Phase 1: RAG / Vector Search
+  — No v1.3 dependencies; extends only shipped postgresql + database-design skills
+  — Produces pgvector + embedding pipeline that agent-architecture will reference
+
+Phase 2: Agent Architecture
+  — Depends on prompt-engineering (v1.2, shipped)
+  — Benefits from RAG complete: episodic memory can reference pgvector patterns
+
+Phase 3: Stripe Payments
+  — Depends only on auth-systems (v1.2, shipped)
+  — No dependency on AI stack; can be built in parallel with Phase 1 if staffed
+```
+
+**Files affected:** 3 SKILL.md upgrades + 4 existing skills gain forward-reference links (`INDEX.md`, `pci-compliance`, `postgresql`, `workflow-orchestration-patterns`)
 
 ### Critical Pitfalls
 
-See `.planning/research/PITFALLS.md` for full pitfall descriptions, warning signs, and recovery strategies.
+See `.planning/research/PITFALLS.md` for full descriptions, warning signs, recovery strategies, and a "Looks Done But Isn't" verification checklist.
 
-1. **Auth.js deprecation** — Auth.js team joined Better Auth in Sept 2025; the skill must recommend Clerk (managed) or Better Auth (self-hosted) as primary paths, not Auth.js v5. Scope Auth.js coverage to existing projects only, and document the v4 → v5 cookie rename that silently logs users out.
+1. **Stripe: `await req.json()` in webhook handler destroys raw body** — Stripe signature verification throws a cryptic error; developers spend hours debugging. Fix: always use `await req.text()` in Next.js App Router webhook handlers. No `export const config` needed (and that Pages Router config is silently ignored in App Router). This pattern must be the first code example in the webhook section, not a footnote.
 
-2. **Stripe webhook not idempotent** — Stripe retries for up to 3 days; inline processing causes duplicate order fulfillment. The correct pattern is: verify signature → store raw event with `event.id` as unique key → return 200 immediately → process asynchronously. This must be in the main SKILL.md body, not a references file.
+2. **Stripe: No idempotency on webhook processing causes duplicate fulfillment** — Stripe retries for up to 72 hours; concurrent invocations without atomic deduplication cause double charges and duplicate subscription activations. Fix: `INSERT INTO stripe_events ... ON CONFLICT (stripe_event_id) DO NOTHING`; verify and return 200 immediately; process async from queue. Must be in main SKILL.md, not references/.
 
-3. **RAG hallucinations blamed on the LLM** — Low retrieval quality (wrong chunks, embedding model mismatch, too-small chunk sizes) causes hallucinations that are misdiagnosed as generation failures. The skill must cover retrieval evaluation separately from generation quality, and must include a score-threshold fallback ("I don't know" if top result similarity is below threshold).
+3. **RAG: Embedding model version mismatch silently corrupts retrieval** — Upgrading the embedding model makes all existing vectors meaningless; cosine similarity scores become noise with no runtime error; hallucinations follow. Fix: store `embedding_model_version` alongside every vector; assert match at query time; use blue/green index strategy on upgrade. The column must appear in the schema in the main SKILL.md, not just references/.
 
-4. **Agent skill scope creep** — The agent domain is wide enough to blow the 500-line limit and produce an abstract skill that cannot be applied. Scope is defined in the outline phase: focus on task decomposition, handoffs, context budget management, and failure modes. Framework comparisons and memory store setup go to references/ from day one.
+4. **Agent: No loop depth guard enables runaway API bills** — An agent that cannot resolve a tool failure loops indefinitely; documented real-world incidents have produced $47,000 bills. Fix: hard `MAX_TURNS` and `MAX_TOKENS_PER_RUN` constants in every agent code example in SKILL.md, with a circuit breaker after N consecutive tool failures.
 
-5. **Prompt engineering staleness** — Prompt techniques are model-family specific. CoT prompting actively degrades output on reasoning models (o3, DeepSeek R1) that already reason internally. Every technique must be tagged with `Applies to:` (instruction-tuned / reasoning / both) and the skill must carry a `last-verified-against:` frontmatter field.
+5. **Agent: Untyped sub-agent handoffs cause context explosion and 17x error multiplication** — Passing full conversation history to sub-agents fills their context windows before they begin working; the "bag of agents" anti-pattern multiplies errors across agents rather than adding them. Fix: typed `AgentHandoff` TypeScript interface; sub-agents receive only task + required artifacts; supervisor/coordinator topology with no cycles.
 
-6. **Auth + Stripe integration gap** — Neither skill individually covers the handoff: user signup → create Stripe Customer → store `stripe_customer_id` → subscription-gate protected routes. Both skills need a "Cross-skill integration" section documenting their shared seam.
+---
 
 ## Implications for Roadmap
 
-Based on combined research, the dependency graph determines phase order. Skills must be authored in dependency order to ensure cross-references point to complete, accurate content.
+The three-skill upgrade has a clear phase structure driven by dependencies, shared infrastructure, and security risk profile. Each phase is a self-contained authoring unit.
 
-### Phase 1: Foundation Skills
+### Phase 1: RAG / Vector Search Skill Upgrade
 
-**Rationale:** Prompt-engineering has no new-skill dependencies and is referenced by agent-architecture. Auth-systems has no new-skill dependencies and is referenced by stripe-payments. Build both first so downstream skills can reference finished content.
+**Rationale:** No dependency on other v1.3 skills. Depends only on already-shipped `database-design` and `postgresql` skills. Producing the pgvector + embedding pipeline first means the Agent Architecture skill (Phase 2) can make concrete references to complete content rather than forward-referencing work in progress. The pgvector HNSW schema from this phase is also reused verbatim by the agent episodic memory layer.
 
-**Delivers:** Two complete, shippable skills — the most standalone and the most foundational of the five domains.
+**Delivers:** Upgraded `rag-vector-search/SKILL.md` at auth-systems depth (target 350–400 lines), with Quick Start, three named Gotchas, hybrid search summary and RAG prompt assembly promoted from references/, HNSW index in schema with filter-interaction notes, retrieval evaluation as a first-class section.
 
-**Implements features:** Full prompt anatomy, anti-pattern catalogue, versioning conventions; Clerk + Better Auth quick-starts, protected routes, DAL pattern, cache pitfall callout.
+**Addresses (P1 features):** Quick Start, Gotchas section, embedding model mismatch as Gotcha #1 with bold warning, RAG prompt assembly visible in SKILL.md, HNSW index creation in schema.
 
-**Avoids:** Prompt skill model staleness (model tagging in frontmatter established before any content written); Auth.js deprecation (Better Auth positioned as primary self-hosted path from day one).
+**Avoids:** Embedding model drift (Pitfall 6), fixed-size chunking as the default recommendation (Pitfall 5), missing HNSW index causing sequential scans at scale (Pitfall 8), no retrieval evaluation layer (Pitfall 7).
 
-**Research flag:** Standard patterns — both skills have well-documented library choices and clear scope boundaries. No phase-level research needed.
+**Research flag:** Standard patterns — skip `/gsd:research-phase`. pgvector, HNSW indexing, OpenAI embedding API, and hybrid search with RRF are well-documented with stable APIs. All versions verified 2026-02-24.
 
-### Phase 2: RAG and Agent Architecture
+---
 
-**Rationale:** RAG has no new-skill dependencies (it extends existing postgresql/database-design skills). Agent-architecture depends on prompt-engineering being complete (Phase 1). Both belong in the same phase: they cross-reference each other (RAG is an external memory tool for agents) and share the AI/LLM INDEX.md category.
+### Phase 2: Agent Architecture Skill Upgrade
 
-**Delivers:** The complete AI/LLM skill cluster — enables semantic search, agent construction, and multi-step workflows in developer projects.
+**Rationale:** Depends on `prompt-engineering` (v1.2, shipped) and benefits significantly from RAG being complete (Phase 1). The episodic memory section can reference the pgvector patterns established in Phase 1 without forward-referencing. Agent Architecture is the highest-complexity skill and the one with the highest documentation risk — build it second with the RAG foundation in place.
 
-**Implements features:** Full embed → store → query loop with pgvector, hybrid search, retrieval evaluation; orchestrator–worker pattern, MCP overview, tool calling, memory taxonomy, token budget guidance.
+**Delivers:** Upgraded `agent-architecture/SKILL.md` at auth-systems depth (target 350–400 lines), with Quick Start, mandatory guardrails section with code examples (loop depth guard as Gotcha #1 with cost warning), typed `AgentHandoff` interface, "When NOT to use agents" callout, Anthropic composable patterns overview, model tier strategy section.
 
-**Avoids:** RAG hallucination trap (retrieval evaluation section required in SKILL.md outline before writing begins); Agent scope creep (outline capped at 6 top-level sections).
+**Addresses (P1 features):** Quick Start, Gotchas section, loop depth guard promoted from references/ to Gotcha #1, sub-agent context scoping pattern with code, "When NOT to use agents" explicit callout.
 
-**Research flag:** RAG hybrid search (vector + BM25 RRF) and agent failure budget patterns are moderately complex — consider `/gsd:research-phase` if implementation guidance feels thin during authoring.
+**Avoids:** Runaway API cost from no loop limit (Pitfall 9, $47k incident), context explosion and reasoning failure from full history forwarding (Pitfall 10), bag-of-agents 17x error multiplication (Pitfall 11).
 
-### Phase 3: Stripe Payments
+**Research flag:** Partial research recommended. The core Anthropic tool-use loop and composable patterns are fully stable — no research needed. The MCP overview paragraph and LangGraph 1.1.5 checkpointing specifics may benefit from a focused research pass: LangGraph 1.0 shipped in October 2025 and some patterns around human-in-the-loop checkpointing may have shifted from 0.x. Validate before writing the multi-agent section.
 
-**Rationale:** Stripe depends on auth-systems (Phase 1) for user identity → Stripe Customer mapping. Must come after auth-systems is complete so cross-references point to accurate patterns.
+---
 
-**Delivers:** Complete payments skill covering one-time checkout, subscription billing, webhook handling, and customer portal.
+### Phase 3: Stripe Payments Skill Upgrade
 
-**Implements features:** Checkout session creation, subscription setup, idempotent webhook handler, async processing pattern, Stripe CLI testing workflow, test card cheat sheet.
+**Rationale:** Depends only on `auth-systems` (v1.2, shipped). Has no dependency on the AI stack. Could be built in parallel with Phase 1 if there are multiple authors — the research confirms no cross-dependency between Stripe and RAG. Building it last in a single-author scenario keeps payment concerns isolated from AI stack authoring.
 
-**Avoids:** Webhook idempotency failure (event.id deduplication pattern in main SKILL.md, not references); hardcoded price IDs (always use env vars in examples).
+**Delivers:** Upgraded `stripe-payments/SKILL.md` at auth-systems depth (target 350–400 lines), with Quick Start (zero-to-checkout in <20 lines), three named Gotchas (raw body, test/live key mismatch, checkout session expiry), test card cheat-sheet table, Stripe CLI testing block promoted from references/, and idempotent webhook pattern visible in main SKILL.md.
 
-**Research flag:** Standard patterns — Stripe's official docs are comprehensive and well-maintained. No phase-level research needed.
+**Addresses (P1 features):** Quick Start, Gotchas section, webhook idempotency pattern in SKILL.md body, Stripe CLI testing block visible, checkout + subscription side-by-side comparison.
 
-### Phase 4: Integration Review
+**Avoids:** Webhook body parsing failure (Pitfall 1 — the #1 Stripe production mistake), duplicate fulfillment from missing idempotency (Pitfall 2), event ordering assumptions breaking subscription state machine (Pitfall 3), test keys silently shipped to production (Pitfall 4).
 
-**Rationale:** Cross-skill integration gaps are predictable and invisible until all five skills are drafted. This phase exists specifically to audit and close those gaps before the milestone is marked complete.
+**Research flag:** No research needed — skip `/gsd:research-phase`. Stripe's documentation is industry-leading and among the most thoroughly documented payment integration topics. Stack versions verified from npm/PyPI on 2026-02-24.
 
-**Delivers:** Cross-reference audit, integration sections added to Auth + Stripe skill pair, INDEX.md completeness verification, 500-line check on all SKILL.md files.
+---
 
-**Addresses pitfalls:** Auth + Stripe integration gap (user identity → Stripe Customer handoff); Agent auth context pattern (how agents pass auth through tool calls); INDEX.md update completeness.
+### Phase 4: Index and Cross-Reference Update
 
-**Research flag:** No research needed — this is a QA and linkage phase. Use the "Looks Done But Isn't" checklist from PITFALLS.md as the verification gate.
+**Rationale:** After all three skills are upgraded, `INDEX.md` and four existing skills need forward-reference links. This is a coordination and QA phase — not content creation — but it is mandatory. Skipping it leaves the skill discovery layer incomplete and the integration seams between skills undocumented.
+
+**Delivers:** Updated `INDEX.md` with "Payments" and "AI / LLM" categories (three new rows); `pci-compliance`, `postgresql`, and `workflow-orchestration-patterns` skills gain forward-reference links; cross-reference audit confirms each skill pair mentions the other at integration seams; 500-line check on all three new SKILL.md files.
+
+**Avoids:** Integration cross-reference gap discovered post-release (auth + Stripe integration gap pattern from v1.2; agent + RAG integration seam); INDEX.md not updated (verification checklist item in PITFALLS.md).
+
+**Research flag:** No research needed. This is internal documentation work against a first-party codebase with a well-understood architecture. Use the "Looks Done But Isn't" checklist from `.planning/research/PITFALLS.md` as the verification gate.
+
+---
 
 ### Phase Ordering Rationale
 
-- Dependency order (prompt → agent, auth → stripe) prevents cross-references from pointing at incomplete content.
-- RAG and Agent are batched together because they share the AI/LLM INDEX category and cross-reference each other — authoring them in the same phase avoids one-way references.
-- Integration review is a mandatory final phase, not optional polish — the Auth + Stripe seam and the 500-line constraint are the two highest-probability failure modes for this milestone.
+- **RAG before Agent:** The agent skill's episodic memory section references pgvector patterns established in Phase 1. Building in dependency order ensures all cross-references point to complete, accurate content.
+- **Stripe last (or parallel):** Stripe is architecturally isolated from the AI stack. There is no benefit to building Stripe before RAG or Agent from a content quality perspective. In a single-author scenario, last is simplest; with multiple authors, parallel with Phase 1 is valid.
+- **500-line discipline is a phase-level concern:** The pitfalls research documents scope creep past 500 lines as a recurring v1.x issue. Plan the `references/` split in the outline at the start of each phase — not after the body is written.
+- **Index update after content is final:** Updating INDEX.md last ensures all skill frontmatter (name, description, when-to-use) is finalized before the discovery table is written. Mid-authoring updates risk the description drifting from the final scope.
+
+---
 
 ### Research Flags
 
-Phases needing `/gsd:research-phase` during planning:
-- **Phase 2 (RAG):** Hybrid search (pgvector + PostgreSQL tsvector + RRF merge) — moderately complex, sparse examples in official docs
-- **Phase 2 (Agent):** Failure budget patterns and partial failure recovery — documented in theory, fewer concrete code examples available
+Phases likely needing deeper research during planning:
 
-Phases with standard patterns (skip research-phase):
-- **Phase 1 (Prompt Engineering):** Core techniques are well-documented; model tagging convention is a structural decision, not a research question
-- **Phase 1 (Auth Systems):** Clerk and Better Auth both have thorough official docs; stack is verified
-- **Phase 3 (Stripe):** Stripe's documentation is industry-leading; webhook idempotency pattern is a known, documented solution
-- **Phase 4 (Integration Review):** Checklist-driven QA phase; no research required
+- **Phase 2 (Agent Architecture — partial):** LangGraph 1.1.5 checkpointing patterns and human-in-the-loop integration. LangGraph 1.0 shipped in October 2025; some workflow patterns may have shifted between 0.x and 1.0. The core Anthropic tool-use loop is fully stable and needs no research.
+
+Phases with standard patterns (skip `/gsd:research-phase`):
+
+- **Phase 1 (RAG):** pgvector, HNSW indexing, OpenAI embedding API, and hybrid search with RRF fusion are all stable and well-documented with multiple corroborating sources. Versions verified.
+- **Phase 3 (Stripe):** Stripe webhook and subscription patterns are the most thoroughly documented payment integration topic in existence. Versions verified. No ambiguity.
+- **Phase 4 (Index update):** Internal documentation QA against a first-party codebase. No external research required.
+
+---
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All library versions verified against live npm/PyPI on 2026-02-24; version compatibility matrix confirmed against existing viflo stack |
-| Features | HIGH (Auth, Stripe) / MEDIUM (RAG, Agent, Prompt) | Auth and Stripe feature sets are stable and well-defined; RAG, Agent, and Prompt engineering are evolving domains with some uncertainty around best practices |
-| Architecture | HIGH | Based on direct inspection of existing `.agent/skills/` codebase; conventions are explicit and enforced by prior v1.1 requirements |
-| Pitfalls | MEDIUM | Most pitfalls are verified against official sources; Auth.js deprecation is confirmed via GitHub discussion; prompt engineering model-staleness is inference from known model behavior differences |
+| Stack | HIGH | All library versions verified against live npm/PyPI on 2026-02-24. Full version compatibility with existing viflo stack (React 19, Node 20+, Python 3.11+, SQLAlchemy 2.0, TypeScript 5.7+) confirmed. |
+| Features | HIGH | Gap analysis grounded in direct codebase inspection of existing skills against the 437-line auth-systems benchmark. Scope boundaries are specific, measurable, and well-reasoned. |
+| Architecture | HIGH | Stripe and RAG architecture sourced from official documentation; Agent architecture patterns sourced from official Anthropic docs + high-confidence secondary sources. Skill system architecture from direct first-party codebase inspection. |
+| Pitfalls | HIGH (Stripe) / MEDIUM (RAG, Agent) | Stripe pitfalls corroborated by official Stripe docs, Next.js issue tracker, and multiple independent community sources. RAG and Agent pitfalls are well-sourced but the field is evolving — some calibration figures (62% → 84% hybrid search precision) are from specific benchmarks that may not generalize. |
 
-**Overall confidence:** HIGH for execution decisions; MEDIUM for RAG/Agent content depth
+**Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Better Auth coverage:** STACK.md covers Auth.js v5 in detail but PITFALLS.md flags the team's move to Better Auth. Auth skill authoring must resolve whether to cover Better Auth directly or treat it as a reference-only callout. Recommendation: cover Better Auth's install and `auth()` API as the self-hosted path; keep Auth.js as a "migration from" section.
-- **Hybrid search implementation depth:** FEATURES.md marks hybrid search as HIGH complexity. STACK.md does not cover BM25/tsvector tooling. If Phase 2 includes hybrid search in the main SKILL.md (recommended), verify the specific pgvector + tsvector + RRF pattern against viflo's SQLAlchemy 2.0 stack before writing.
-- **Agent token budget enforcement:** PITFALLS.md identifies multi-agent token runaway as a HIGH-cost recovery scenario. STACK.md does not specify which SDK surfaces `max_turns` / `max_tokens_per_run` controls. Verify against `@langchain/langgraph` and Vercel AI SDK v6 docs during Phase 2 authoring.
-- **INDEX.md category naming:** ARCHITECTURE.md recommends "AI / LLM" as the new category name. Verify this matches existing INDEX.md formatting conventions before creating the section.
+- **LangGraph 1.0+ pattern stability:** LangGraph 1.0 shipped October 2025 as the first stable release. Validate LangGraph 1.1.5 patterns for stateful checkpointing and human-in-the-loop before writing the Agent skill's multi-agent section. The core tool-use loop is stable.
+- **Hybrid search RRF precision figure:** The 62% → 84% retrieval precision improvement figure is from a 2025 benchmark on a specific corpus (DEV Community, lpossamai). Present this as a "typical improvement seen in practice" rather than a guarantee. Calibration guide in the RAG skill should instruct developers to validate on their own query set.
+- **Agent MCP overview scope:** Vercel AI SDK v6 supports MCP natively. The scope of the MCP overview paragraph in the Agent skill is undefined. Keep it to one paragraph with an external link unless the roadmapper decides to expand — MCP server implementation is explicitly deferred to v1.4+.
+
+---
 
 ## Sources
 
 ### Primary (HIGH confidence)
 
-- [npmjs.com — package registry] — all npm package versions verified live
-- [PyPI — package registry] — Python package versions verified live
-- Direct inspection of `.agent/skills/` codebase — architecture patterns and conventions
-- `.planning/PROJECT.md` — v1.1 CONTENT-01 constraint (≤500 lines), v1.2 requirements
-- [Clerk Docs](https://clerk.com/docs) — v6 breaking changes, middleware patterns
-- [Auth.js Docs](https://authjs.dev) — v5 API, session management
-- [Stripe Webhook Docs](https://docs.stripe.com/webhooks) — raw body requirement, constructEvent()
-- [Anthropic — Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — multi-agent patterns
+- Official `stripe` npm changelog + npmjs.com — v20.3.1 confirmed current
+- PyPI stripe — v14.3.0 confirmed, released 2026-01-28
+- Stripe Webhook Docs (docs.stripe.com/webhooks) — raw body requirement, `constructEvent()` 5-minute signature window
+- Stripe Idempotency Docs (docs.stripe.com) — auto-retry with idempotency keys in Node SDK v17+
+- Stripe API Keys best practices (docs.stripe.com/keys-best-practices) — test vs. live key management
+- pgvector GitHub (github.com/pgvector/pgvector) — HNSW index recommendation, scale guidance, filter interaction issues
+- pgvector-python GitHub — SQLAlchemy 2.0 `VECTOR` type, `mapped_column` usage
+- OpenAI text-embedding-3 docs — 1536 dims, $0.02/1M tokens, `dimensions` parameter
+- Vercel AI SDK 6 announcement (vercel.com/blog/ai-sdk-6) — v6 stable, MCP support, tool execution
+- LangGraph JS docs — TypeScript StateGraph pattern, checkpointing verified
+- Anthropic "Building Effective Agents" — orchestrator/subagent model, context scoping
+- Direct inspection of `.agent/skills/` codebase — skill system architecture (first-party)
+- Next.js issue #54090 (github.com/vercel/next.js) — `export const config` unsupported in App Router
 
 ### Secondary (MEDIUM confidence)
 
-- [Auth.js → Better Auth migration discussion](https://github.com/nextauthjs/next-auth/discussions/13252) — team transition confirmed via GitHub
-- [Stripe webhook best practices — Stigg](https://www.stigg.io/blog-posts/best-practices-i-wish-we-knew-when-integrating-stripe-webhooks) — idempotency pattern
-- [RAG at Scale — Redis 2026](https://redis.io/blog/rag-at-scale/) — retrieval evaluation methodology
-- [Optimizing RAG with hybrid search — Superlinked](https://superlinked.com/vectorhub/articles/optimizing-rag-with-hybrid-search-reranking) — BM25 + vector RRF pattern
-- [The Economics of Autonomy — Alps Agility](https://www.alpsagility.com/cost-control-agentic-systems) — token runaway prevention
-- [Prompt engineering 2025 state — Aakash G](https://www.news.aakashg.com/p/prompt-engineering) — reasoning model CoT anti-pattern
+- npmjs.com package pages — @stripe/stripe-js v8.8.0, @stripe/react-stripe-js v5.6.0, pgvector Node 0.2.1, @anthropic-ai/sdk 0.78.0, @langchain/langgraph 1.1.5, ai v6.0.x confirmed
+- instaclustr.com — pgvector 2026 guide; scale thresholds (~50M vector limit for pgvector)
+- DEV Community (lpossamai) — hybrid search with pgvector + RRF; 62% → 84% precision figure from 2025 benchmark
+- DEV Community (belazy) — Stripe webhook race condition; queue architecture pattern
+- Stigg blog — Stripe webhook best practices; event ordering caveat; signature window
+- Crunchy Data blog — HNSW indexes with pgvector; query planner behavior with combined WHERE filters
+- Toward Data Science — "17x error trap" bag of agents anti-pattern; error multiplication vs. addition
+- Medium (Micheal-Lanham) — $47k agent cost runaway incident; token guardrail patterns
+- factory.ai — context rot research on 18 LLMs; effective context window 30–50% of advertised limit
+- Google Developers Blog — architecting efficient context-aware multi-agent framework
+- langwatch.ai — LangGraph 1.0 October 2025 release date confirmed
+- DataCamp — CrewAI vs LangGraph 2026 comparison; LangGraph recommended for stateful conditional workflows
+- Redis blog (2026) — RAG at scale production patterns; embedding drift monitoring
+- DEV Community (kuldeep_paul) — Ten failure modes of RAG; context position bias, citation hallucination
 
-### Tertiary (LOW confidence — needs validation during authoring)
+### Tertiary (LOW confidence — validate during authoring)
 
-- Better Auth install and `auth()` API surface — not covered in STACK.md; verify against Better Auth official docs before writing auth-systems skill
-- pgvector + tsvector hybrid search with RRF merge — pattern confirmed conceptually; specific SQLAlchemy 2.0 implementation needs verification
+- Weaviate blog — chunking strategies; 9% recall gap for fixed-size vs. semantic chunking (benchmark-specific)
+- mastra.ai — @mastra/core v1.6.0 as TypeScript-first alternative to LangGraph; noted for evaluation but not yet widely adopted
 
 ---
+
 *Research completed: 2026-02-24*
 *Ready for roadmap: yes*

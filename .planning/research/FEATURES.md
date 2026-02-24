@@ -1,28 +1,37 @@
 # Feature Research
 
-**Domain:** Skill file library — Auth, Stripe, RAG/vector search, Agent architecture, Prompt engineering
+**Domain:** Skill file library — Stripe Payments, RAG/Vector Search, Agent Architecture (v1.3)
 **Researched:** 2026-02-24
-**Confidence:** HIGH (Auth, Stripe), MEDIUM (RAG, Agent), MEDIUM (Prompt Engineering)
+**Confidence:** HIGH (Stripe), HIGH (RAG), MEDIUM (Agent Architecture)
 
 ---
 
 ## Context
 
-This research covers five new skill areas for viflo v1.2. These are not product features —
-they are *documentation modules* (SKILL.md + references/) that an AI coding assistant loads
-at task time. The audience is a solo developer or small team using viflo with Claude Code or
-a similar agentic tool. The question for each skill is: what must the skill cover to be
-immediately useful when the AI picks it up mid-task?
+This research covers the three new skill areas for viflo v1.3. These are *documentation modules*
+(SKILL.md + references/) that an AI coding assistant loads at task time. The audience is a solo
+developer or small team using viflo with Claude Code or a similar agentic tool. The question for
+each skill is: what must the skill cover to be immediately useful when the AI picks it up mid-task?
 
-Existing viflo skills this work depends on:
-- `postgresql` — covers pgvector briefly; RAG skill extends this
-- `fastapi-templates` — FastAPI app structure; Auth and Stripe backends build on this
-- `frontend` / `frontend-dev-guidelines` — Next.js App Router; Auth skill extends this
-- `ci-cd-pipelines` — CI patterns; Prompt Engineering skill's evaluation/CI section connects here
+**Scope boundary:** Auth systems and Prompt Engineering were completed in v1.2. This document covers
+ONLY the three skills active in v1.3: Stripe, RAG, and Agent Architecture.
+
+**Depth standard:** The auth-systems skill (437 lines, v1.2) is the canonical reference. It provides:
+Quick Start, numbered Setup/Configuration/Patterns/Gotchas sections, named pitfalls with warning
+signs, and side-by-side comparisons. All three v1.3 skills must reach this structural benchmark.
+
+**Current state of the three skills:** All three have SKILL.md files (~80–92 lines each) with the
+four depth-standard sections (Decision Matrix, Implementation Patterns, Failure Modes, Version Context).
+They pass the basic depth checklist but fall short of auth-systems depth in:
+- No Quick Start section (zero-to-running code in <30 lines)
+- No named, numbered Gotchas with warning signs
+- No deeper pattern coverage in SKILL.md (too thin; auth carries 437 lines itself)
+
+The v1.3 work is an upgrade, not a greenfield write.
 
 ---
 
-## Skill 1: Auth Systems (Clerk + Auth.js/NextAuth)
+## Skill 1: Stripe Payments
 
 ### Table Stakes (Users Expect These)
 
@@ -30,247 +39,263 @@ Features a developer assumes the skill covers. Missing these = skill feels usele
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Clerk quick-start for Next.js App Router | Most solo devs reach for Clerk first — fastest path | LOW | Cover `clerkMiddleware`, `auth()`, `SignIn`/`SignUp` components |
-| Auth.js v5 (NextAuth) setup + `auth()` universal function | Open-source alternative; zero vendor lock-in | MEDIUM | Auth.js v5 unified `auth()` works in server components, route handlers, proxy.ts, server actions |
-| Protected routes via middleware (proxy.ts in Next.js 16) | Core security pattern; every app needs this | MEDIUM | Next.js 16 renames `middleware.ts` → `proxy.ts`; skill must reflect this |
-| OAuth provider wiring (GitHub, Google) | Devs assume social login is covered | MEDIUM | Cover both Clerk social connections and Auth.js provider config |
-| Session access in server components + server actions | App Router default pattern; no client-side session juggling | MEDIUM | Validate session at data access layer, not just middleware |
-| Sign-in / sign-out / sign-up flows | Core UX flows every app needs | LOW | Clerk: drop-in components. Auth.js: build-your-own with `signIn()`/`signOut()` |
-| Environment variable setup and secrets | Every integration starts here; mistakes are common | LOW | Clerk public/secret keys, Auth.js `AUTH_SECRET`, callback URLs |
+| Quick Start: working checkout in <30 lines | Auth skill has this; developers expect parity | LOW | `stripe.checkout.sessions.create()` + redirect; works on first read |
+| Checkout Session (one-time + subscription) | Simplest Stripe flow; every payment skill must cover it | LOW | `mode: 'payment'` and `mode: 'subscription'` side-by-side |
+| Webhook receiver with signature verification | Critical security step; the #1 production mistake | MEDIUM | `stripe.webhooks.constructEvent()` with raw body requirement |
+| Idempotent webhook handler (dedup by event.id) | Stripe retries events; duplicate processing causes double billing | MEDIUM | Already in references/webhook-patterns.md — needs surfacing in SKILL.md |
+| Subscription status sync (DB-first pattern) | Subscription state lives in Stripe; sync strategy is non-obvious | MEDIUM | Already in references/subscription-patterns.md |
+| Customer Portal for self-serve billing | Users expect to update cards and cancel themselves | LOW | One redirect; already in SKILL.md |
+| Storing Stripe IDs (not card data) in DB | PCI DSS: never store card data; store customer_id, subscription_id | LOW | Schema pattern already in references/ |
+| Key events to handle (the four critical ones) | Devs don't know which events matter | LOW | checkout.session.completed, invoice.payment_failed, customer.subscription.updated/.deleted |
+| Environment variable split (test vs live keys) | The #2 most common mistake; mixing keys corrupts production | LOW | STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY |
+
+**Gap vs current skill:** Quick Start section is missing entirely. Gotchas section (named, numbered,
+with warning signs) is absent. The current SKILL.md has 91 lines; the auth equivalent would be
+~350–400 lines to reach full depth.
 
 ### Differentiators (Competitive Advantage)
 
-Features that make this skill exceptional versus looking up the official docs.
+Features that make this skill exceptional versus looking up official docs.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Cache / caching pitfall for authenticated content | App Router's cache can leak User A's data to User B — not obvious | LOW | Single callout box: user-specific data must bypass all caching layers |
-| When to choose Clerk vs Auth.js decision tree | Docs never tell you which to pick; skill makes this explicit | LOW | Clerk = speed + managed; Auth.js = control + self-hosted |
-| Data Access Layer (DAL) pattern for real security | Middleware alone is not enough; DAL is where actual security lives | MEDIUM | Each sensitive DB/API call re-validates session independently |
-| Role-based access control (RBAC) skeleton | Most apps need at least admin vs user distinction | MEDIUM | Clerk metadata vs Auth.js JWT callbacks; keep to a pattern, not full RBAC library |
-| Webhook receiver for Clerk user lifecycle events | Clerk fires webhooks on user create/update/delete; devs need to sync to their own DB | MEDIUM | Svix signature verification, upsert user pattern |
+| Named Gotchas with warning signs (auth-style) | Negative patterns are more memorable than positive rules | LOW | Gotcha 1: raw body parsing; Gotcha 2: test vs live key mismatch; Gotcha 3: checkout session expiry |
+| Async webhook processing pattern | Stripe's 30-second timeout bites devs; return 200 fast then process | MEDIUM | Currently missing from SKILL.md; references/ exists but isn't surfaced |
+| Stripe CLI local testing block | Devs spend hours debugging webhooks; `stripe listen --forward-to` solves it | LOW | Already in references/webhook-patterns.md — promote to SKILL.md |
+| Test card cheat-sheet | Everyone needs `4242 4242 4242 4242` and failure scenarios | LOW | Declined, auth-required, and dispute test cards in a quick-reference table |
+| Plan change proration pattern | Upgrade = immediate proration; downgrade = end-of-period | MEDIUM | Currently in references/subscription-patterns.md — needs summary in SKILL.md |
+| Grace period pattern for failed payments | invoice.payment_failed → past_due state + cron downgrade after N days | MEDIUM | Currently in references/; pattern is high-value and widely mishandled |
 
 ### Anti-Features (Scope Creep to Avoid)
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Full custom auth from scratch (JWT + bcrypt) | "I don't want vendor lock-in" | Multi-week rabbit hole; security mistakes are catastrophic; out of scope for this skill | Use Auth.js for self-hosted with full control |
-| Magic link / passwordless deep dive | Useful, but niche | Blows the 500-line budget; secondary flow | Single paragraph pointing to Clerk/Auth.js docs |
-| Auth0 / WorkOS / Supabase Auth coverage | Mentioned in comparisons | Scope creep — project spec says Clerk + Auth.js | Call out in skill frontmatter that other providers are out of scope |
-| Multi-tenancy / organization management | Clerk has Orgs feature | Complex enough for its own skill | One-sentence mention with link to Clerk Orgs docs |
-| Full RBAC library integration (CASL, etc.) | Teams want fine-grained permissions | Standalone topic; adds a dependency | Refer to architecture-patterns skill |
+| Full PCI DSS compliance documentation | "We handle payments so we need this" | viflo already has a `pci-compliance` skill | Reference that skill; do not duplicate |
+| Custom payment form (Stripe Elements) | Full UI control | Complex; Stripe Checkout covers 90% of use cases | One paragraph: use Checkout unless brand control is a hard requirement |
+| Connect / marketplace payments | Multi-vendor payouts | Entirely different product; own skill territory | Out-of-scope callout in frontmatter |
+| Tax calculation (Stripe Tax) | Automatic tax is attractive | Regulatory complexity changes frequently | Reference Stripe Tax docs only |
+| Invoicing API deep dive | B2B invoicing is a valid use case | Niche; blows the 500-line SKILL.md budget | One-sentence mention with link |
+| Usage-based / metered billing deep dive | AI products charge per token | High complexity; own references/ file at most | One callout in Decision Matrix; point to Stripe Meters docs |
 
 ---
 
-## Skill 2: Stripe Payments
+## Skill 2: RAG / Vector Search
 
 ### Table Stakes (Users Expect These)
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Checkout Session creation (one-time payment) | Simplest Stripe flow; every payment skill must cover it | LOW | `stripe.checkout.sessions.create()`, `success_url`, `cancel_url` |
-| Subscription setup with Stripe Billing | SaaS use case; the most common reason devs reach for Stripe | MEDIUM | Products + Prices + `subscription_data`; portal link |
-| Webhook receiver with signature verification | Critical security step; #1 production mistake | MEDIUM | `stripe.webhooks.constructEvent()`, raw body requirement in Next.js route handlers |
-| Idempotent webhook handler (dedup by `event.id`) | Stripe retries events; duplicate processing causes double charges | MEDIUM | Log `event.id` before processing; check before acting |
-| Environment variable split (test vs live keys) | #2 common mistake; mixing keys corrupts production | LOW | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` |
-| Customer portal for self-serve billing management | Users expect to update cards and cancel themselves | LOW | `stripe.billingPortal.sessions.create()`; one redirect |
-| Storing Stripe IDs (not payment data) in your DB | PCI DSS: never store card data; store `customer_id`, `subscription_id` | LOW | Schema pattern: `stripe_customer_id`, `stripe_subscription_id` on user table |
-| Key Stripe events to handle | Devs don't know which events matter | LOW | `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed` |
+| Quick Start: embed one document + query in <30 lines | Auth skill has this pattern; devs expect a copy-pasteable start | MEDIUM | OpenAI embed → pgvector insert → cosine similarity query |
+| Embedding pipeline: chunk → embed → store | The core RAG loop; skill is useless without it | MEDIUM | Already in references/embedding-pipelines.md — needs distilled version in SKILL.md Quick Start |
+| pgvector setup and schema | viflo stack uses PostgreSQL; pgvector is the natural fit | MEDIUM | CREATE EXTENSION, vector(1536) column, ivfflat/hnsw index choice |
+| Cosine similarity query with threshold | The retrieval half of RAG; equally important as ingestion | MEDIUM | Already in SKILL.md; min_score filter is important and present |
+| Chunking strategy rules | Biggest performance lever; most tutorials skip it | MEDIUM | Already in references/embedding-pipelines.md |
+| Embedding model consistency rule | Single most common RAG bug: query and index use different models | LOW | Currently mentioned in SKILL.md Failure Modes — needs promotion to named Gotcha |
+| pgvector vs Pinecone decision rule | Devs need a decision rule, not a library survey | LOW | Already in Decision Matrix |
+| Full RAG query loop (end-to-end) | Devs need to see embed → retrieve → prompt construction together | MEDIUM | RAG prompt assembly is in references/retrieval-patterns.md — promote to SKILL.md |
+
+**Gap vs current skill:** Quick Start is missing. Gotchas section with named pitfalls is missing.
+The embedding model consistency rule is buried in Failure Modes; it should be Gotcha #1 with a
+bold warning. Current SKILL.md is 92 lines; auth equivalent would be ~350–400 lines.
 
 ### Differentiators (Competitive Advantage)
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Async webhook processing pattern | 20-second Stripe timeout bites devs; return 200 fast then process | MEDIUM | Acknowledge immediately after signature verification; push to queue or background job |
-| Subscription status sync pattern | Subscription state lives in Stripe, not your DB — sync strategy matters | MEDIUM | Webhook-driven upsert to `subscriptions` table; never trust only your DB |
-| Stripe CLI local webhook testing | Devs spend hours debugging webhooks; `stripe listen --forward-to` solves it | LOW | Short code block; massively reduces friction |
-| Test card cheat sheet | Everyone needs `4242 4242 4242 4242` and failure scenarios | LOW | Include declined, auth-required, dispute cards in a quick-reference table |
-| Metered / usage-based billing skeleton | Increasingly common for AI products charging per token/call | HIGH | Short mention only — flag as complex; point to Stripe metered usage docs |
+| Named Gotchas with warning signs (auth-style) | Negative patterns are the most memorable content | LOW | Gotcha 1: model version mismatch (existing data becomes garbage); Gotcha 2: chunk-size too small (hallucinations); Gotcha 3: no similarity threshold (bad context) |
+| Hybrid search (vector + BM25/full-text) | Consistently outperforms pure vector; most tutorials skip it | HIGH | Already in references/retrieval-patterns.md — promote summary to SKILL.md |
+| Index synchronization strategy | Updating documents after ingestion is harder than first indexing | MEDIUM | Delete-and-reinsert vs update; model_version tag makes this safe |
+| Similarity threshold calibration guide | "My RAG feels wrong" is not actionable; calibration gives a method | LOW | Log scores against 20 test queries; start at 0.75; already partially in references/ |
+| Re-ranking (two-stage retrieval) overview | Higher precision for long documents; widely used in production | HIGH | Already in references/retrieval-patterns.md — one-paragraph summary in SKILL.md |
+| Observability: log retrieved chunks per call | Without this, debugging RAG is guesswork | LOW | Pattern: log query, top-k chunks, and final prompt in same trace |
 
 ### Anti-Features (Scope Creep to Avoid)
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Full PCI DSS compliance documentation | "We handle payments so we need this" | Viflo already has a `pci-compliance` skill | Reference that skill; don't duplicate |
-| Custom payment form (Stripe Elements) | Some devs want full control of UI | Complex; Stripe Checkout covers 90% of use cases | One paragraph: use Checkout unless brand control is a hard requirement |
-| Connect / marketplace payments | Multi-vendor payouts | Entirely different product; own skill territory | Out of scope callout in frontmatter |
-| Invoicing API deep dive | B2B invoicing is a valid use case | Niche; blows budget | One-sentence mention with link |
-| Tax calculation (Stripe Tax) | Automatic tax is attractive | Changes frequently; regulatory complexity | Reference Stripe Tax docs only |
-
----
-
-## Skill 3: RAG / Vector Search
-
-### Table Stakes (Users Expect These)
-
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Embedding pipeline: chunk → embed → store | The core RAG loop; skill is useless without this | MEDIUM | Text splitting, `text-embedding-3-small` via OpenAI, insert to pgvector |
-| pgvector setup and schema | viflo stack uses PostgreSQL; pgvector is the natural fit | MEDIUM | `CREATE EXTENSION vector`, `vector(1536)` column, `ivfflat`/`hnsw` index |
-| Cosine similarity query | The retrieval half of RAG; equally important as ingestion | MEDIUM | `<=>` operator; `ORDER BY embedding <=> $1 LIMIT 10` pattern |
-| Chunking strategy with overlap | Biggest performance lever; most tutorials skip it | MEDIUM | 500-token chunks, 10-20% overlap; semantic boundary awareness |
-| Embedding model consistency rule | Single most common RAG bug: query and index use different models | LOW | Bold callout: index model must match query-time model, forever |
-| Basic RAG query loop: embed query → retrieve → inject into prompt | The full assembly; devs need to see end-to-end | MEDIUM | Python snippet showing embed → SELECT → f-string prompt construction |
-| When to use pgvector vs Pinecone | Devs need a decision rule, not a library overview | LOW | pgvector: ≤1M vectors, PostgreSQL already in stack; Pinecone: >1M vectors or dedicated search team |
-
-### Differentiators (Competitive Advantage)
-
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| Hybrid search (vector + BM25/full-text) | Consistently outperforms pure vector search; most tutorials skip it | HIGH | pgvector + PostgreSQL `tsvector`; RRF (Reciprocal Rank Fusion) to merge scores |
-| Chunking pitfall: tiny chunks cause hallucinations | 128-token chunks split mid-concept; leads to fragmented context | LOW | Explicit warning with the failure mode: retrieves sentence fragments → hallucination |
-| Index synchronization strategy | Updating documents after ingestion is harder than first indexing | MEDIUM | Delete-and-reinsert vs. update; trigger-based re-embedding tradeoffs |
-| Retrieval evaluation with a sample test set | "My RAG feels wrong" is not actionable; this gives a method | MEDIUM | Build 20-question golden set; measure precision@5 before deploying |
-| Observability: log retrieved chunks with every LLM call | Without this, debugging is guesswork | LOW | Pattern: log query, top-k chunks, and final prompt in same trace |
-
-### Anti-Features (Scope Creep to Avoid)
-
-| Feature | Why Requested | Why Problematic | Alternative |
-|---------|---------------|-----------------|-------------|
-| Fine-tuning embedding models | "Custom embeddings will be better" | Requires ML expertise and GPU budget; out of scope for viflo | Use `text-embedding-3-small`; it's excellent and cheap |
-| Full LangChain integration deep dive | LangChain is popular | LangChain changes rapidly; abstracts away understanding of the actual pipeline | Show the raw pattern first; mention LangChain as an option |
+| Fine-tuning embedding models | "Custom embeddings will be better" | Requires ML expertise and GPU budget | Use text-embedding-3-small; it's excellent and cheap |
+| Full LangChain integration deep dive | LangChain is popular | Changes rapidly; abstracts away understanding | Show the raw pattern first; mention LangChain as an option |
 | Multimodal RAG (images, audio) | Emerging use case | Entirely different pipeline; no pgvector support | One-sentence future reference |
-| GraphRAG / knowledge graphs | Interesting research topic | Production complexity 10x; no standard tooling | Out of scope callout |
-| Pinecone setup as primary path | Some devs want managed vector DB | viflo stack is PostgreSQL-first; pgvector keeps the stack simple | Cover Pinecone in a references/ file, not primary path |
+| GraphRAG / knowledge graphs | Interesting research topic | Production complexity 10x; no standard tooling | Out-of-scope callout |
+| Pinecone as primary path | Some devs want a managed vector DB | viflo stack is PostgreSQL-first | Cover Pinecone in references/ file only; not primary path |
+| Agentic RAG (tool-calling retrieval) | Agents calling RAG as a tool | Better covered in Agent Architecture skill | Cross-reference the agent skill; don't duplicate |
 
 ---
 
-## Skill 4: Agent Architecture
+## Skill 3: Agent Architecture
 
 ### Table Stakes (Users Expect These)
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Core agent loop: perceive → reason → act | Foundational mental model; every agent skill must start here | LOW | Diagram + description; not framework-specific |
-| Tool/function calling pattern | Agents are useless without tools; this is the mechanism | MEDIUM | OpenAI function calling schema or Anthropic tool_use block; include Python type-annotated example |
-| Orchestrator–worker pattern | Most common multi-agent pattern; high practical value | MEDIUM | One orchestrator routes tasks to specialist workers; show with code |
-| Memory types: in-context, external, episodic | Agents without memory degrade; devs need the taxonomy | MEDIUM | In-context (conversation history), external (vector store), episodic (structured DB log) |
-| Handoff pattern between agents | "How does Agent A pass work to Agent B?" | MEDIUM | Structured handoff object: task, context, constraints; show the data contract |
-| Guardrails: input validation + output validation | Agents in production without guardrails cause real harm | MEDIUM | Schema validation on tool inputs; confidence thresholds before acting |
-| When NOT to use agents | Agents are overused; this is genuinely valuable | LOW | Single-step tasks, latency-sensitive paths, and tasks with deterministic correct answers do not need agents |
+| Quick Start: single agent with one tool in <30 lines | Devs expect a working example to copy-paste | MEDIUM | Tool definition + runAgentLoop call + executeTool dispatch |
+| Core agent loop (tool_use → execute → tool_result) | The mechanism; everything else builds on it | MEDIUM | Already in references/multi-agent-patterns.md — needs condensed version in SKILL.md |
+| Tool definition schema (Anthropic + OpenAI) | Agents are useless without tools | MEDIUM | Already in SKILL.md; both providers covered |
+| Orchestrator–worker dispatch pattern | Most common multi-agent pattern; high practical value | MEDIUM | Already in SKILL.md and references/ |
+| Memory types taxonomy | Agents without memory degrade; devs need the taxonomy | MEDIUM | Already in references/memory-orchestration.md |
+| Loop guard (max depth counter) | Without this, agents loop indefinitely and burn API budget | LOW | Already in references/multi-agent-patterns.md as depth counter |
+| Context window budget management | Long chains exhaust context; common production surprise | LOW | Already in references/memory-orchestration.md |
+| When NOT to use agents | Agents are overused; this is genuinely valuable | LOW | Currently in Decision Matrix implicitly; needs explicit callout |
+
+**Gap vs current skill:** Quick Start is missing. Gotchas section is missing. The agent loop guard
+is buried in references/; it should be Gotcha #1 with a bold cost warning. Current SKILL.md is 80
+lines; auth equivalent would be ~350–400 lines.
 
 ### Differentiators (Competitive Advantage)
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Anthropic's 6 composable patterns (from official docs) | Vendor-aligned, battle-tested; matches viflo's Claude Code environment | MEDIUM | Prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — brief description of each |
-| MCP (Model Context Protocol) overview | Industry converging on MCP for agent-tool communication; viflo already uses it | MEDIUM | What it is, when it adds value vs. direct tool calling; point to viflo's own MCP usage |
-| Failure budget / partial failure handling | Agents fail silently; teams discover broken runs days later | HIGH | Explicit retry strategy, fallback to human-in-the-loop, dead-letter log pattern |
-| Token budget awareness for long agent runs | Long chains exhaust context; a common production surprise | LOW | Callout: summarize intermediate results, don't accumulate full histories |
-| Tracing and observability first | Without traces, multi-agent debugging is impossible | MEDIUM | Log: agent name, tool name, input, output, latency, token count per step |
+| Named Gotchas with warning signs (auth-style) | Multi-agent failures are silent and expensive | MEDIUM | Gotcha 1: agent loop without depth guard (runaway cost); Gotcha 2: handoff data loss (always send full context); Gotcha 3: parallel agents writing same record (race condition) |
+| Anthropic's composable patterns overview | Vendor-aligned; matches viflo's Claude Code environment | MEDIUM | Prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer |
+| Model tier strategy (Opus → Haiku) | Reserve expensive models for planning; cheap for execution | LOW | Already in SKILL.md Decision Matrix — needs explicit section |
+| Prompt injection via tool results | Malicious content in tool output hijacks agent; often ignored | MEDIUM | Already in SKILL.md Failure Modes — promote to named Gotcha |
+| Checkpointing long tasks | Agents fail partway through; resumability is critical | MEDIUM | Already in references/memory-orchestration.md |
+| MCP overview (viflo already uses it) | Industry converging on MCP for agent-tool communication | MEDIUM | What it is; when it adds value vs direct tool calling |
 
 ### Anti-Features (Scope Creep to Avoid)
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Full LangGraph / LangChain deep dive | Popular framework | Framework-specific; changes rapidly; obscures core patterns | Show patterns in plain Python; mention LangGraph as implementation option |
-| AutoGen / CrewAI / other framework tutorials | "Which framework should I use?" | Framework churn is high; this is a patterns skill not a framework survey | One comparison table in references/; not primary content |
-| Autonomous long-running agent without human oversight | Seems powerful | High failure rate in production; safety risk | Always design for human-in-the-loop checkpoints; this is a design principle to enforce |
-| Agent fine-tuning | "I want a specialized agent" | Requires ML infrastructure; out of scope for viflo | Use system prompt engineering + tool definition instead |
+| Full LangGraph / LangChain deep dive | Popular framework | Framework-specific; changes rapidly; obscures core patterns | Show patterns in plain TypeScript; mention LangGraph as an option |
+| AutoGen / CrewAI / other framework tutorials | "Which framework should I use?" | Framework churn is high; this is a patterns skill | One comparison table in references/ only |
+| Autonomous long-running agent without human oversight | Seems powerful | High failure rate; safety risk | Always design for human-in-the-loop checkpoints |
+| Agent fine-tuning | "I want a specialized agent" | Requires ML infrastructure; out of scope | Use system prompt engineering + tool definition instead |
 | Full agent platform setup (Vertex AI Agents, etc.) | Managed convenience | Cloud-specific; violates viflo's tool-agnostic principle | Cover in cloud-deployment skill if needed |
-
----
-
-## Skill 5: Prompt Engineering
-
-### Table Stakes (Users Expect These)
-
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Prompt anatomy: role, context, task, output contract | Structural foundation; most prompts fail because one piece is missing | LOW | Name each component; show a before/after example |
-| System prompt vs user message vs assistant prefill | Model-level mechanics devs misuse | LOW | When to put instructions in system vs user turn; prefill for output shaping |
-| Few-shot examples | Most effective single technique for format compliance | LOW | Show 1-3 examples in prompt; when examples help vs hurt |
-| Chain of thought (CoT) prompting | Standard technique for reasoning tasks | LOW | "Think step by step" and structured scratchpad variants |
-| Output format specification | "The model keeps returning JSON in markdown code blocks" | LOW | Explicit schema + example + negative example in prompt |
-| Iterative refinement workflow | Devs don't know how to systematically improve prompts | MEDIUM | Measure → identify failure mode → hypothesize fix → test on 10 examples → compare |
-| Prompt versioning in files (not hardcoded strings) | Most common anti-pattern causing prod regressions | LOW | Store prompts in `.prompts/` directory with semantic versioning; never embed in application code |
-
-### Differentiators (Competitive Advantage)
-
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| Anti-pattern catalogue (top 5) | Negative examples are more memorable than positive rules | LOW | (1) Vague task description, (2) missing output contract, (3) too long with no priority, (4) conflicting instructions, (5) prompt injection surface |
-| Evaluation without a platform (golden set method) | Teams think they need LangSmith before they can evaluate; they don't | MEDIUM | Build 20-example golden set in a JSON file; score with `assert` or simple rubric; run in CI |
-| LLM-as-judge pattern | Automated quality scoring without manual review | MEDIUM | Use a second LLM call with a rubric prompt; useful for open-ended outputs |
-| Prompt injection awareness | Security concern specific to prompts; often ignored | LOW | User input in prompts creates injection surface; delimiting and input sanitization patterns |
-| Model-specific tuning notes (Claude vs GPT-4o) | Prompts don't port perfectly between models | LOW | Claude: respond well to XML tags, explicit role instructions; GPT: strong with JSON mode |
-| Context window budget management | Long prompts cost money and degrade quality past threshold | LOW | Prioritize instructions at top, examples in middle, data last; trim ruthlessly |
-
-### Anti-Features (Scope Creep to Avoid)
-
-| Feature | Why Requested | Why Problematic | Alternative |
-|---------|---------------|-----------------|-------------|
-| Full PromptOps platform setup (LangSmith, Maxim, etc.) | Teams want managed tooling | Vendor-specific; changes fast; high setup friction for solo devs | Mention platforms in references/; primary skill uses file-based approach |
-| Automated prompt A/B testing infrastructure | Sounds rigorous | Requires traffic volume and statistical significance; overkill for v1.2 | Manual comparison with golden set is sufficient |
-| Fine-tuning as prompt alternative | "If prompts fail, fine-tune" | Separate discipline entirely; expensive; out of scope | Note: exhaust prompt engineering before considering fine-tuning |
-| Red teaming / adversarial testing deep dive | Important for safety | Dedicated topic; exceeds skill budget | One callout: point to Promptfoo for red-teaming |
-| Image / multimodal prompting | Vision models are gaining use | Different enough to need its own skill; budget risk | Out of scope callout in frontmatter |
+| Streaming agent responses | Better UX for long tasks | Adds WebSocket/SSE complexity; separate concern | One-paragraph mention only |
 
 ---
 
 ## Feature Dependencies
 
 ```
-Auth skill
-    └──extends──> frontend (Next.js App Router patterns)
-    └──extends──> fastapi-templates (protected API endpoints)
-
 Stripe skill
-    └──extends──> fastapi-templates (webhook route handlers)
-    └──depends on──> Auth skill (customer-to-user mapping requires authenticated user)
+    └──depends on──> auth-systems (customer-to-user mapping requires authenticated user ID)
     └──references──> pci-compliance (existing skill; do not duplicate)
+    └──uses pattern from──> fastapi-templates (webhook route handlers on FastAPI side)
 
 RAG skill
-    └──extends──> postgresql (pgvector type already mentioned)
-    └──extends──> fastapi-templates (embedding pipeline as FastAPI background task)
-    └──enhances──> Agent skill (agents can use RAG as a retrieval tool)
+    └──extends──> postgresql (pgvector type already mentioned in postgresql skill)
+    └──enhances──> agent-architecture (RAG as the external memory/retrieval tool for agents)
+    └──uses──> prompt-engineering (query-time prompt construction pattern)
 
-Agent skill
-    └──uses──> RAG skill (retrieval tool for memory)
-    └──uses──> Prompt Engineering skill (system prompt design for agents)
+Agent Architecture skill
+    └──uses──> prompt-engineering (system prompts, tool descriptions, evaluator-optimizer pattern)
+    └──uses──> rag-vector-search (external memory tool for agents — cross-reference both skills)
     └──references──> workflow-orchestration-patterns (existing skill)
-
-Prompt Engineering skill
-    └──enhances──> Agent skill (system prompts, tool descriptions)
-    └──enhances──> RAG skill (query-time prompt construction)
-    └──references──> ci-cd-pipelines (evaluation in CI)
 ```
 
 ### Dependency Notes
 
-- **Stripe requires Auth:** You need an authenticated user ID to create a Stripe Customer and map subscriptions to your user table. Build Auth first.
-- **RAG extends postgresql:** The postgresql skill already mentions `pgvector` and the `vector` type. The RAG skill picks up from there with full pipeline coverage.
-- **Agent and Prompt Engineering are mutually reinforcing:** Agent system prompts are the most important prompts to get right. Teach Prompt Engineering before or alongside Agent Architecture.
-- **RAG feeds Agent memory:** Treat RAG as the external memory tool for agents. The skills should cross-reference each other.
+- **Stripe requires auth-systems:** The billing portal endpoint must look up stripeCustomerId via
+  authenticated session — never trust a client-provided customerId. Auth must be live before
+  Stripe integration is meaningful.
+- **RAG and Agent are mutually reinforcing:** RAG is the standard external memory mechanism for
+  agents. Both skills should cross-reference each other. Build RAG before Agent Architecture
+  so the cross-reference is valid when the Agent skill is written.
+- **Prompt Engineering is a prerequisite for Agent Architecture:** Agent system prompts, tool
+  descriptions, and the evaluator-optimizer pattern are all prompt engineering. The agent skill
+  can reference prompt-engineering instead of repeating the fundamentals.
 
 ---
 
-## MVP Definition (Per Skill — What Ships in v1.2)
+## What "v1.2 Depth" Means for Each Skill (Gap Analysis)
+
+The auth-systems skill (437 lines) is the canonical benchmark. These three skills currently range
+from 80–92 lines — they have the four failure-mode sections but lack structural depth.
+
+### Stripe Payments — current score: 3/4 failure modes mitigated
+
+**What exists (keep):**
+- Decision Matrix: comprehensive, has explicit defaults
+- Implementation Patterns: Checkout Session + Customer Portal with annotated warnings
+- Failure Modes: 7 scenarios covered including duplicate delivery, mid-cycle changes, trial end
+- Version Context: versioned, recent (2025-01-27.acacia API)
+- references/webhook-patterns.md: idempotency via Prisma @unique, Stripe CLI testing
+- references/subscription-patterns.md: status mapping, plan changes, grace period
+
+**What to add for v1.2 depth:**
+- Quick Start section (zero-to-checkout in <20 lines, before any other content)
+- Gotchas section (named, numbered) with these three at minimum:
+  1. Raw body requirement (parsing JSON first corrupts signature verification)
+  2. Test vs live key mismatch (silent; only fails in production)
+  3. Checkout session expiry (URL-only success check is wrong)
+- Stripe CLI testing block promoted from references/ into SKILL.md
+- Test card quick-reference table in SKILL.md
+
+### RAG / Vector Search — current score: 3/4 failure modes mitigated
+
+**What exists (keep):**
+- Decision Matrix: pgvector vs Pinecone vs Qdrant with explicit default
+- Implementation Patterns: embed pipeline + cosine search with model_version filter
+- Failure Modes: 6 scenarios including model change, threshold, cold start, rate limits
+- Version Context: versioned libraries
+- references/embedding-pipelines.md: chunking rules, batch retry, pgvector schema + index SQL
+- references/retrieval-patterns.md: hybrid search SQL, RAG prompt assembly, re-ranking, threshold calibration
+
+**What to add for v1.2 depth:**
+- Quick Start section (embed one string + query back in <25 lines)
+- Gotchas section (named, numbered) with these three at minimum:
+  1. Embedding model version mismatch (existing index becomes garbage — bold warning)
+  2. Chunk size too small (128-token chunks split mid-concept → hallucination)
+  3. No similarity threshold (confident answers from irrelevant context)
+- RAG prompt assembly snippet promoted from references/ into SKILL.md
+- Hybrid search summary promoted from references/ into SKILL.md
+
+### Agent Architecture — current score: 3/4 failure modes mitigated
+
+**What exists (keep):**
+- Decision Matrix: single-agent vs orchestrator vs event-driven with explicit default
+- Implementation Patterns: tool definition (Anthropic) + orchestrator dispatch
+- Failure Modes: 6 scenarios including loop, context overflow, handoff loss, prompt injection
+- Version Context: Claude and GPT model names with use-case guidance
+- references/multi-agent-patterns.md: full agent loop with depth guard, handoff context interface
+- references/memory-orchestration.md: memory types table, checkpointing, context compression
+
+**What to add for v1.2 depth:**
+- Quick Start section (single agent + one tool, running in <25 lines)
+- Gotchas section (named, numbered) with these three at minimum:
+  1. No loop depth guard (runaway API costs — show the counter pattern inline)
+  2. Handoff data loss (passing only the delta; always send full context)
+  3. Prompt injection via tool results (malicious tool output hijacks agent)
+- Explicit "When NOT to use agents" callout (single-step tasks, latency-sensitive paths,
+  deterministic tasks)
+- Anthropic composable patterns overview (5 patterns, one paragraph each)
+- Model tier strategy section (Opus for planning, Haiku/Sonnet for execution)
+
+---
+
+## MVP Definition (What Ships in v1.3 Per Skill)
 
 ### Launch With (each skill's SKILL.md)
 
-These sections are required in every SKILL.md to meet the ≤500-line constraint:
+Sections required in every SKILL.md to meet auth-systems depth standard:
 
-- [ ] Frontmatter (name, description, triggers) — discoverable by agents
-- [ ] "When to use this skill" section — prevents mis-triggering
-- [ ] Core pattern(s) with annotated code — the reason the skill exists
-- [ ] Gotchas / pitfalls callout box — highest-density value
-- [ ] Decision rule (when to use X vs Y) — removes ambiguity
+- [ ] Quick Start — working code in <30 lines, immediately copy-pasteable
+- [ ] Decision Matrix — when-to-use-X-vs-Y with explicit recommended default
+- [ ] Implementation Patterns — at least 2 annotated code examples with inline warnings
+- [ ] Gotchas / Pitfalls — at minimum 3 named pitfalls with warning signs
+- [ ] Failure Modes & Edge Cases — at least 5 concrete scenarios with handling strategy
+- [ ] Version Context — last-verified library versions
 
-### Add to references/ (overflow content)
+SKILL.md must remain ≤500 lines. All code examples >30 lines go to references/.
 
-- [ ] Full code examples (>30 lines) that would blow the 500-line SKILL.md budget
-- [ ] Extended comparison tables
-- [ ] Step-by-step setup walkthroughs
-- [ ] Links to official docs with version pins
+### Retain in references/ (already exists — keep as-is)
 
-### Future Consideration (v1.3+)
+- Stripe: webhook-patterns.md (idempotency, env vars, Stripe CLI testing)
+- Stripe: subscription-patterns.md (status mapping, plan changes, grace period)
+- RAG: embedding-pipelines.md (chunking function, batch retry, pgvector schema)
+- RAG: retrieval-patterns.md (hybrid search SQL, RAG prompt assembly, re-ranking)
+- Agent: multi-agent-patterns.md (full agent loop, handoff context)
+- Agent: memory-orchestration.md (memory types, checkpointing, context compression)
 
-- [ ] Auth: RBAC skill using CASL or similar
-- [ ] Stripe: Connect / marketplace payments skill
-- [ ] RAG: Multimodal retrieval (images, audio)
-- [ ] Agents: Full LangGraph workflow patterns skill
-- [ ] Prompt Engineering: Automated evaluation CI pipeline (blocked by `AUTO-01` being out of scope)
+### Future Consideration (v1.4+)
+
+- Stripe: Connect / marketplace payments (own skill territory)
+- Stripe: Usage-based metered billing deep dive (Stripe Meters API)
+- RAG: Multimodal retrieval (images, audio) — different pipeline
+- RAG: Agentic RAG (retrieval as a tool call inside an agent loop)
+- Agent: Full LangGraph workflow patterns (framework-specific)
+- Agent: MCP server implementation guide (currently one-paragraph overview)
 
 ---
 
@@ -278,38 +303,45 @@ These sections are required in every SKILL.md to meet the ≤500-line constraint
 
 | Skill / Feature | User Value | Implementation Cost | Priority |
 |----------------|------------|---------------------|----------|
-| Auth: Clerk + Auth.js quick-start | HIGH | LOW | P1 |
-| Auth: Protected routes (proxy.ts) | HIGH | LOW | P1 |
-| Auth: DAL re-validation pattern | HIGH | LOW | P1 |
-| Auth: Cache pitfall callout | HIGH | LOW | P1 |
-| Stripe: Checkout + subscriptions | HIGH | LOW | P1 |
-| Stripe: Webhook with idempotency | HIGH | MEDIUM | P1 |
-| Stripe: Async processing pattern | HIGH | LOW | P1 |
-| RAG: Embed → store → query loop | HIGH | MEDIUM | P1 |
-| RAG: pgvector schema + index | HIGH | LOW | P1 |
-| RAG: Chunking strategy + pitfalls | HIGH | LOW | P1 |
-| RAG: Hybrid search pattern | MEDIUM | HIGH | P2 |
-| Agent: Core loop + tool calling | HIGH | MEDIUM | P1 |
-| Agent: Orchestrator-worker pattern | HIGH | MEDIUM | P1 |
-| Agent: Memory taxonomy | MEDIUM | LOW | P1 |
-| Agent: Guardrails pattern | HIGH | MEDIUM | P2 |
-| Prompt: Anatomy + output contract | HIGH | LOW | P1 |
-| Prompt: Anti-pattern catalogue | HIGH | LOW | P1 |
-| Prompt: Golden set evaluation | MEDIUM | MEDIUM | P1 |
-| Prompt: Prompt injection awareness | MEDIUM | LOW | P2 |
-| Prompt: Versioning in files | HIGH | LOW | P1 |
+| Stripe: Quick Start section | HIGH | LOW | P1 |
+| Stripe: Gotchas section (3 named pitfalls) | HIGH | LOW | P1 |
+| Stripe: Checkout + subscription side-by-side | HIGH | LOW | P1 |
+| Stripe: Webhook idempotency (promote from references/) | HIGH | LOW | P1 |
+| Stripe: Stripe CLI testing block in SKILL.md | HIGH | LOW | P1 |
+| Stripe: Test card table | MEDIUM | LOW | P2 |
+| Stripe: Grace period pattern summary | MEDIUM | LOW | P2 |
+| RAG: Quick Start section | HIGH | LOW | P1 |
+| RAG: Gotchas section (3 named pitfalls) | HIGH | LOW | P1 |
+| RAG: Model version mismatch warning (promote) | HIGH | LOW | P1 |
+| RAG: RAG prompt assembly (promote from references/) | HIGH | LOW | P1 |
+| RAG: Hybrid search summary (promote from references/) | MEDIUM | LOW | P2 |
+| RAG: Similarity threshold calibration guide | MEDIUM | LOW | P2 |
+| Agent: Quick Start section | HIGH | LOW | P1 |
+| Agent: Gotchas section (3 named pitfalls) | HIGH | LOW | P1 |
+| Agent: Loop depth guard (promote from references/) | HIGH | LOW | P1 |
+| Agent: "When NOT to use agents" explicit callout | HIGH | LOW | P1 |
+| Agent: Anthropic composable patterns overview | MEDIUM | LOW | P2 |
+| Agent: Model tier strategy section | MEDIUM | LOW | P2 |
+| Agent: MCP overview paragraph | LOW | LOW | P3 |
+
+**Priority key:**
+- P1: Must have to reach v1.2 depth standard
+- P2: Should have, adds meaningful value without blowing 500-line budget
+- P3: Nice to have, include only if room remains
 
 ---
 
 ## Sources
 
-- Auth research: [Authentication in Next.js App Router — WorkOS 2026](https://workos.com/blog/nextjs-app-router-authentication-guide-2026), [Clerk complete auth guide](https://clerk.com/articles/complete-authentication-guide-for-nextjs-app-router), [Auth.js protecting routes](https://authjs.dev/getting-started/session-management/protecting)
-- Stripe research: [Stripe webhooks official docs](https://docs.stripe.com/billing/subscriptions/webhooks), [Stripe idempotent requests](https://docs.stripe.com/api/idempotent_requests), [Best practices for Stripe webhooks — Stigg](https://www.stigg.io/blog-posts/best-practices-i-wish-we-knew-when-integrating-stripe-webhooks)
-- RAG research: [Chunking strategies — dasroot.net Feb 2026](https://dasroot.net/posts/2026/02/chunking-strategies-rag-performance/), [RAG at Scale — Redis 2026](https://redis.io/blog/rag-at-scale/), [Optimizing RAG with hybrid search — Superlinked](https://superlinked.com/vectorhub/articles/optimizing-rag-with-hybrid-search-reranking)
-- Agent research: [Anthropic composable agent patterns](https://aimultiple.com/building-ai-agents), [AI Agent Orchestration Patterns — Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns), [OpenAI multi-agent orchestration](https://openai.github.io/openai-agents-python/multi_agent/)
-- Prompt engineering research: [PromptOps complete guide — Adaline 2026](https://www.adaline.ai/blog/complete-guide-prompt-engineering-operations-promptops-2026), [Prompt engineering best practices — Palantir](https://www.palantir.com/docs/foundry/aip/best-practices-prompt-engineering), [IBM 2026 prompt engineering guide](https://www.ibm.com/think/prompt-engineering)
+- Stripe: [Stripe webhooks official docs](https://docs.stripe.com/billing/subscriptions/webhooks), [Stripe idempotent requests](https://docs.stripe.com/api/idempotent_requests), [Stripe Checkout docs](https://docs.stripe.com/payments/checkout)
+- RAG: Current SKILL.md and references/ files (verified against pgvector 0.8.x and openai 4.x)
+- RAG: [pgvector GitHub](https://github.com/pgvector/pgvector) — ivfflat vs hnsw guidance
+- Agent: Current SKILL.md and references/ files (verified against @anthropic-ai/sdk 0.37.x)
+- Agent: Anthropic agent patterns referenced in agent-architecture skill description
+- Depth standard: `.agent/skills/skill-depth-standard/SKILL.md` (internal)
+- Canonical reference: `.agent/skills/auth-systems/SKILL.md` (v1.2 benchmark, 437 lines)
 
 ---
 
-*Feature research for: viflo v1.2 skills expansion*
+*Feature research for: viflo v1.3 expert skills (Stripe, RAG, Agent Architecture)*
 *Researched: 2026-02-24*
