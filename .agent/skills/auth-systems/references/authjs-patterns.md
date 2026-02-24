@@ -1,5 +1,38 @@
 # Auth.js (NextAuth v5) Patterns
 
+## Middleware (Route Protection)
+
+```typescript
+// middleware.ts — simplest approach: re-export auth as middleware
+export { auth as middleware } from '@/auth';
+
+export const config = {
+  matcher: [
+    '/((?!_next|[^?]*\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/(api|trpc)(.*)',
+  ],
+};
+```
+
+For custom redirect logic (e.g., redirect to `/sign-in` instead of the default), use the `authorized` callback in your `auth.ts`:
+
+```typescript
+// auth.ts
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // redirect to sign-in
+      }
+      return true;
+    },
+  },
+});
+```
+
 ## Setup
 
 ```typescript
@@ -59,7 +92,7 @@ Wrap your root layout with `<SessionProvider>`:
 ```typescript
 // app/layout.tsx
 import { SessionProvider } from 'next-auth/react';
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <SessionProvider>{children}</SessionProvider>;
 }
 ```

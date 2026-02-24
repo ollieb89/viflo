@@ -24,7 +24,7 @@ description: Use when implementing authentication in web applications. Covers Cl
 
 See `references/clerk-patterns.md` for Clerk and `references/authjs-patterns.md` for Auth.js.
 
-**Middleware (Next.js App Router — applies to both approaches):**
+**Middleware — Clerk (Next.js App Router):**
 
 ```typescript
 // middleware.ts
@@ -49,6 +49,8 @@ export const config = {
   ],
 };
 ```
+
+**Middleware — Auth.js (Next.js App Router):** See `references/authjs-patterns.md` for the Auth.js v5 middleware pattern.
 
 ## Failure Modes & Edge Cases
 
