@@ -377,7 +377,7 @@ MCP is an open standard introduced by Anthropic in November 2024, now governed b
 
 ## Gotchas
 
-### Pitfall 1: Runaway Costs (Agent Loop Without Termination)
+### Gotcha 1: Runaway Costs (Agent Loop Without Termination)
 
 **Warning signs:**
 - API cost spikes on dashboards with no corresponding feature launch
@@ -416,7 +416,7 @@ raise RuntimeError(
 )
 ```
 
-### Pitfall 2: Untyped Sub-Agent Handoffs
+### Gotcha 2: Untyped Sub-Agent Handoffs
 
 **Warning signs:**
 - Sub-agent returns answers that reference fields not in the original task
@@ -451,7 +451,7 @@ const handoff = validateHandoff(JSON.parse(rawHandoff)); // throws on bad schema
 const subResult = await subAgent(handoff);
 ```
 
-### Pitfall 3: Bag-of-Agents Error Multiplication
+### Gotcha 3: Bag-of-Agents Error Multiplication
 
 **Warning signs:**
 - Final output quality is worse than a single-agent approach on the same task

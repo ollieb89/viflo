@@ -5,7 +5,7 @@ description: Use when implementing payments, subscriptions, or billing in Next.j
 
 # Stripe Payments
 
-> See `references/webhook-patterns.md` for complete webhook handler with Prisma schema.
+> See `references/webhook-patterns.md` for complete webhook handler with pg.Pool raw SQL and atomic idempotency.
 > See `references/subscription-patterns.md` for subscription lifecycle, plan changes, and portal patterns.
 
 ## Setup

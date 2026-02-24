@@ -321,7 +321,7 @@ Threshold: `MRR > 0.7` means the first relevant result appears in the top 2 on a
 Run: npx tsx .agent/skills/rag-vector-search/eval.ts
 ```
 
-`eval.ts` contains a golden set of 3–5 hardcoded queries with expected chunk IDs. No DB seeding required — uses data from the Quick Start. Outputs `recall@5` and `MRR` for each query.
+`eval.ts` contains a golden set of 3–5 hardcoded queries with expected chunk IDs. No DB seeding required — uses data from the Quick Start. Before metrics are meaningful, complete the Quick Start first and substitute the placeholder chunk IDs in the file with real IDs from your database. Outputs `recall@5` and `MRR` for each query.
 
 > See [.agent/skills/rag-vector-search/eval.ts](.agent/skills/rag-vector-search/eval.ts) for the full runnable evaluation script.
 
