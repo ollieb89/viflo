@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-24 after v1.4 milestone started)
 
 **Core value:** A complete agentic dev environment — 35+ skills, GSD methodology, proven workflows, live CI
-**Current focus:** v1.4 Project Tooling — Phase 15 (Integration Review) is next
+**Current focus:** v1.4 Project Tooling — Phase 15 (Integration Review) in progress
 
 ## Current Position
 
-Phase: 15 (Integration Review) — Not started
-Plan: —
-Status: Roadmap defined, ready to plan Phase 15
-Last activity: 2026-02-24 — v1.4 roadmap created (Phases 15–19)
+Phase: 15 (Integration Review) — In progress
+Plan: 02 complete (of 3)
+Status: INDEX.md updated, See Also cross-references added; VERIFICATION.md (Plan 03) remaining
+Last activity: 2026-02-24 — Phase 15 Plan 02 complete (bidirectional See Also links added to three SKILL.md files)
 
-Progress: [░░░░░░░░░░] 0% — v1.4 in progress (0/5 phases)
+Progress: [██░░░░░░░░] 20% — v1.4 in progress (1/5 phases)
 
 ## Performance Metrics
 
@@ -40,6 +40,8 @@ Progress: [░░░░░░░░░░] 0% — v1.4 in progress (0/5 phases)
 | Phase 13-agent-architecture P02 | 2 | 2 tasks | 2 files |
 | Phase 14-stripe-payments P01 | 2 | 1 tasks | 1 files |
 | Phase 14-stripe-payments P02 | 3 | 2 tasks | 2 files |
+| Phase 15-integration-review P01 | 1 | 1 tasks | 1 files |
+| Phase 15-integration-review P02 | 3 | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -65,6 +67,7 @@ Recent decisions affecting current work:
 - [Phase 13-agent-architecture]: Manual tool-use loop over tool_runner() shortcut — guardrail placement is explicit and auditable
 - [Phase 13-agent-architecture]: Next.js API route proxy pattern for streaming — avoids CORS, keeps API key server-side
 - [Phase 14-stripe-payments]: await req.text() as webhook headline; ON CONFLICT atomic idempotency; API version 2026-01-28.clover
+- [Phase 15-integration-review]: See Also sections appended to SKILL.md file bottoms using relative markdown links with named seam annotations at three AI/LLM integration seams
 
 ### Pending Todos
 
@@ -77,5 +80,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: v1.4 roadmap defined — Phases 15–19 mapped to all 10 requirements
-Resume with: /gsd:plan-phase 15
+Stopped at: Phase 15 Plan 02 complete — bidirectional See Also sections added to rag-vector-search, agent-architecture, and prompt-engineering SKILL.md files
+Resume with: /gsd:execute-phase 15 (plan 15-03 remaining)
