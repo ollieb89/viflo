@@ -209,3 +209,99 @@ describe('viflo init --full', () => {
     expect(fs.existsSync(path.join(tmpDir, '.planning'))).toBe(false);
   });
 });
+
+describe('viflo init polish — dry-run and labelled output', () => {
+  // File-scope beforeEach/afterEach (tmpDir creation/cleanup) already apply.
+  // cliPath and tmpDir are file-scoped — no re-declaration needed.
+
+  // ------------------------------------------------------------------
+  // INIT-06: Dry-run tests
+  // ------------------------------------------------------------------
+
+  it('--dry-run --minimal — exits 0 and creates no files', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--minimal', '--dry-run', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.status).toBe(0);
+    expect(fs.existsSync(path.join(tmpDir, 'CLAUDE.md'))).toBe(false);
+    expect(fs.existsSync(path.join(tmpDir, '.claude', 'settings.json'))).toBe(false);
+  });
+
+  it('--dry-run --minimal — stdout contains [dry-run] lines with absolute paths', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--minimal', '--dry-run', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.stdout).toContain('[dry-run]');
+    expect(result.stdout).toContain(tmpDir);
+  });
+
+  it('--dry-run --full — exits 0 and creates no files', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--full', '--dry-run', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.status).toBe(0);
+    expect(fs.existsSync(path.join(tmpDir, '.planning'))).toBe(false);
+    expect(fs.existsSync(path.join(tmpDir, 'CLAUDE.md'))).toBe(false);
+  });
+
+  it('--dry-run --full — stdout includes planning scaffold file paths', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--full', '--dry-run', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.stdout).toContain('PROJECT.md');
+    expect(result.stdout).toContain('STATE.md');
+    expect(result.stdout).toContain('ROADMAP.md');
+    expect(result.stdout).toContain('config.json');
+  });
+
+  it('--dry-run flag order flexibility — --dry-run before mode flag also works', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--dry-run', '--minimal', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.status).toBe(0);
+    expect(fs.existsSync(path.join(tmpDir, 'CLAUDE.md'))).toBe(false);
+  });
+
+  // ------------------------------------------------------------------
+  // INIT-07: Labelled output with absolute paths
+  // ------------------------------------------------------------------
+
+  it('--minimal real run — stdout shows "created" with absolute path for CLAUDE.md', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--minimal', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.stdout).toMatch(/created\s+.*CLAUDE\.md/);
+    expect(result.stdout).toContain(tmpDir);
+  });
+
+  it('--minimal real run — stdout shows "created" with absolute path for settings.json', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--minimal', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.stdout).toMatch(/created\s+.*settings\.json/);
+  });
+
+  it('--minimal second run — stdout shows "skipped" labels', () => {
+    spawnSync(process.execPath, [cliPath, 'init', '--minimal', tmpDir], { encoding: 'utf-8' });
+    const secondResult = spawnSync(process.execPath, [cliPath, 'init', '--minimal', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(secondResult.stdout).toMatch(/skipped\s+/);
+  });
+
+  it('--full real run — stdout shows "created" for all scaffold files with absolute paths', () => {
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--full', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.stdout).toMatch(/created\s+.*PROJECT\.md/);
+    expect(result.stdout).toContain(tmpDir);
+  });
+
+  it('--minimal with existing CLAUDE.md — stdout shows "merged" label', () => {
+    fs.writeFileSync(path.join(tmpDir, 'CLAUDE.md'), '# Existing\n', 'utf-8');
+    const result = spawnSync(process.execPath, [cliPath, 'init', '--minimal', tmpDir], {
+      encoding: 'utf-8',
+    });
+    expect(result.stdout).toMatch(/merged\s+.*CLAUDE\.md/);
+  });
+});
