@@ -1,5 +1,7 @@
 # Skills Index
 
+This index lists all available skills in `.agent/skills/`. Skills cover the full stack — from AI/LLM and authentication to databases, DevOps, and payment integrations. Load a skill by adding `@.agent/skills/<skill-name>/SKILL.md` to your context.
+
 > Complete reference for all available skills in `.agent/skills/`.
 > Select a skill based on your current task, then read its SKILL.md.
 
@@ -93,7 +95,7 @@ Skills marked with 📚 have extended content in `references/` subdirectories:
 
 | Skill                                       | Description                                                        | Difficulty   | When to Use                                   |
 | ------------------------------------------- | ------------------------------------------------------------------ | ------------ | --------------------------------------------- |
-| [auth-systems](auth-systems/SKILL.md)       | Clerk and Auth.js/NextAuth authentication, sessions, RBAC          | Intermediate | Adding auth to Next.js or Node.js applications |
+| [auth-systems](auth-systems/SKILL.md)       | Clerk and Better Auth self-hosted authentication, sessions, RBAC, CVE-2025-29927 pattern | Intermediate | Adding auth to Next.js or Node.js applications |
 
 ### Payments
 
@@ -105,7 +107,7 @@ Skills marked with 📚 have extended content in `references/` subdirectories:
 
 | Skill                                                       | Description                                                              | Difficulty   | When to Use                                      |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------ | ------------ | ------------------------------------------------ |
-| [rag-vector-search](rag-vector-search/SKILL.md)             | Embedding pipelines, pgvector/Pinecone, retrieval-augmented generation   | Advanced     | Building semantic search or RAG applications     |
+| [rag-vector-search](rag-vector-search/SKILL.md)             | Embedding pipelines, pgvector/HNSW, hybrid search, retrieval-augmented generation | Advanced     | Building semantic search or RAG applications     |
 | [agent-architecture](agent-architecture/SKILL.md)           | Multi-agent systems, memory patterns, orchestration frameworks           | Advanced     | Designing autonomous agents and multi-agent flows |
 | [prompt-engineering](prompt-engineering/SKILL.md)           | Prompt templates, evaluation, chain-of-thought, anti-patterns            | Intermediate | Optimizing LLM prompts and evaluating quality    |
 
