@@ -1,0 +1,11 @@
+title = "viflo gitleaks config"
+
+[allowlist]
+description = "Common non-secret placeholders"
+paths = [
+  '''\.env\.template$''',
+  '''docs/.*'''
+]
+regexes = [
+  '''^\s*(GEMINI_API_KEY|ANTHROPIC_API_KEY|OPENAI_API_KEY|XAI_API_KEY|DOPPLER_TOKEN)=\s*$'''
+]

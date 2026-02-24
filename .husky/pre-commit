@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+set -eu
+
+pnpm run lint
+pnpm run test:cli
+pnpm run precommit:secrets

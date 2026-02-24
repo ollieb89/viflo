@@ -30,6 +30,7 @@ interface BaselineFile {
 const COVERAGE_PATH = './coverage/coverage-summary.json';
 const BASELINE_PATH = './.coverage/baseline.json';
 const THRESHOLD = 0.01; // Allow 0.01% tolerance for floating point
+const IS_CI = !!process.env.CI && process.env.CI !== '0' && process.env.CI.toLowerCase() !== 'false';
 
 function readCurrentCoverage(): CoverageMetrics {
   if (!existsSync(COVERAGE_PATH)) {
@@ -111,6 +112,13 @@ function main(): void {
   const baseline = readBaseline();
 
   if (!baseline) {
+    if (IS_CI) {
+      console.error('❌ Coverage baseline missing in CI');
+      console.error('   Create and commit baseline locally with:');
+      console.error('   pnpm run test:coverage:update');
+      process.exit(1);
+    }
+
     console.log('⚠️  No baseline found. Creating initial baseline...');
     writeBaseline(current);
     console.log('✅ Baseline created');
@@ -137,10 +145,10 @@ function main(): void {
   // Check if coverage improved
   const improved = compareCoverage(baseline, current);
   if (improved.length > 0) {
-    console.log('\n✅ Coverage improved! Updating baseline...');
-    writeBaseline(current);
-    for (const imp of improved) {
-      console.log(`   • ${imp}`);
+    console.log('\n✅ Coverage improved above baseline');
+    if (!IS_CI) {
+      console.log('   Baseline not auto-updated in check mode.');
+      console.log('   To lock in gains, run: pnpm run test:coverage:update');
     }
   } else {
     console.log('\n✅ Coverage meets baseline');
