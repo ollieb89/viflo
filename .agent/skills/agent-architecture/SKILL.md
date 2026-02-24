@@ -496,3 +496,8 @@ if not validate_stage(result_2, schema=SummarySchema):
 | `langgraph-checkpoint-postgres` | 1.x | `PostgresSaver` for production checkpointing |
 | `langchain-anthropic` | latest | `ChatAnthropic` model provider for LangGraph |
 | `fastapi` | 0.115+ | `StreamingResponse` + async generator for SSE |
+
+## See Also
+
+- [RAG / Vector Search](../rag-vector-search/SKILL.md) — pgvector pattern (HNSW index, embedding pipeline, hybrid search)
+- [Prompt Engineering](../prompt-engineering/SKILL.md) — system-prompt design for agent instruction structure

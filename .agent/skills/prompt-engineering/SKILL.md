@@ -279,3 +279,8 @@ const result = response.parsed_output;
 **3. Missing applies-to Tags** — A pattern that works on `claude-opus-4-6` may not work as well on `claude-haiku-4-5-20251001`. Always tag patterns with `applies-to` frontmatter. Warning sign: pattern documented without `applies-to:` field.
 
 **4. Temperature Sensitivity** — Deterministic tasks (extraction, classification) must use temperature 0. Temperature 0 reduces but does not eliminate variance — test with N=20 samples for critical tasks before treating a prompt as production-ready.
+
+## See Also
+
+- [RAG / Vector Search](../rag-vector-search/SKILL.md) — RAG prompt assembly and retrieval context injection
+- [Agent Architecture](../agent-architecture/SKILL.md) — system-prompt design for tool-using agents

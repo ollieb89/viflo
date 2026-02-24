@@ -414,3 +414,8 @@ REINDEX INDEX CONCURRENTLY idx_document_chunks_embedding;
 | `openai` (npm) | 4.x | `text-embedding-3-small` (1536 dims, cost-optimal default); `text-embedding-3-large` (3072 dims, ~6× cost) |
 | `pgvector` (npm, pgvector-node) | latest | `pgvector/prisma` import — provides `toSql()` for Prisma `$executeRaw` |
 | Prisma | 5.x | pgvector requires raw SQL (`$executeRaw` / `$queryRaw`) — Prisma does not natively support the `vector` type |
+
+## See Also
+
+- [Agent Architecture](../agent-architecture/SKILL.md) — episodic memory pattern (pgvector-backed recall for agents)
+- [Prompt Engineering](../prompt-engineering/SKILL.md) — system-prompt design for RAG assembly and retrieval context injection
