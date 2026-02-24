@@ -1,347 +1,306 @@
 # Feature Research
 
-**Domain:** Skill file library — Stripe Payments, RAG/Vector Search, Agent Architecture (v1.3)
+**Domain:** CLI Init Tool for Agentic Development Environment (viflo init)
 **Researched:** 2026-02-24
-**Confidence:** HIGH (Stripe), HIGH (RAG), MEDIUM (Agent Architecture)
+**Confidence:** HIGH (CLAUDE.md @ import syntax and settings.json schema verified against official Claude Code docs; init CLI patterns cross-referenced against docker init, nuxt init, arc init, npm init behaviour)
 
 ---
 
-## Context
+## Context: What "Wired to Viflo" Actually Means
 
-This research covers the three new skill areas for viflo v1.3. These are *documentation modules*
-(SKILL.md + references/) that an AI coding assistant loads at task time. The audience is a solo
-developer or small team using viflo with Claude Code or a similar agentic tool. The question for
-each skill is: what must the skill cover to be immediately useful when the AI picks it up mid-task?
+Before listing features, it is worth being precise about what `viflo init` needs to produce.
 
-**Scope boundary:** Auth systems and Prompt Engineering were completed in v1.2. This document covers
-ONLY the three skills active in v1.3: Stripe, RAG, and Agent Architecture.
+**A project "wired to viflo" needs two things:**
 
-**Depth standard:** The auth-systems skill (437 lines, v1.2) is the canonical reference. It provides:
-Quick Start, numbered Setup/Configuration/Patterns/Gotchas sections, named pitfalls with warning
-signs, and side-by-side comparisons. All three v1.3 skills must reach this structural benchmark.
+1. **CLAUDE.md with an import stanza** — The file Claude Code reads on session start. It must contain `@` import lines pointing to the viflo skills the project wants available. Claude Code's `@` import is a literal file inclusion: the referenced file's content is injected at that position. Skills live at the viflo install path (resolved at run time). The import stanza needs to use absolute or home-relative paths (`~/.viflo/skills/...`) that Claude Code can resolve at session start.
 
-**Current state of the three skills:** All three have SKILL.md files (~80–92 lines each) with the
-four depth-standard sections (Decision Matrix, Implementation Patterns, Failure Modes, Version Context).
-They pass the basic depth checklist but fall short of auth-systems depth in:
-- No Quick Start section (zero-to-running code in <30 lines)
-- No named, numbered Gotchas with warning signs
-- No deeper pattern coverage in SKILL.md (too thin; auth carries 437 lines itself)
+2. **`.claude/settings.json` with safe project permissions** — This is checked into version control and shared across the team. It should allow the common Bash and file operations used in viflo workflows (git, pnpm/npm, test runners) without granting blanket `bypassPermissions`. Minimal is better: a project can always add more.
 
-The v1.3 work is an upgrade, not a greenfield write.
+The `--minimal` mode writes only these two artifacts into an existing project. The `--full` mode also scaffolds the `.planning/` directory (PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md stubs) and writes a starter CLAUDE.md with project-specific sections beyond just the import stanza.
 
 ---
 
-## Skill 1: Stripe Payments
+## Feature Landscape
 
 ### Table Stakes (Users Expect These)
 
-Features a developer assumes the skill covers. Missing these = skill feels useless.
+Features users assume exist. Missing these = tool feels broken or dangerous.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Quick Start: working checkout in <30 lines | Auth skill has this; developers expect parity | LOW | `stripe.checkout.sessions.create()` + redirect; works on first read |
-| Checkout Session (one-time + subscription) | Simplest Stripe flow; every payment skill must cover it | LOW | `mode: 'payment'` and `mode: 'subscription'` side-by-side |
-| Webhook receiver with signature verification | Critical security step; the #1 production mistake | MEDIUM | `stripe.webhooks.constructEvent()` with raw body requirement |
-| Idempotent webhook handler (dedup by event.id) | Stripe retries events; duplicate processing causes double billing | MEDIUM | Already in references/webhook-patterns.md — needs surfacing in SKILL.md |
-| Subscription status sync (DB-first pattern) | Subscription state lives in Stripe; sync strategy is non-obvious | MEDIUM | Already in references/subscription-patterns.md |
-| Customer Portal for self-serve billing | Users expect to update cards and cancel themselves | LOW | One redirect; already in SKILL.md |
-| Storing Stripe IDs (not card data) in DB | PCI DSS: never store card data; store customer_id, subscription_id | LOW | Schema pattern already in references/ |
-| Key events to handle (the four critical ones) | Devs don't know which events matter | LOW | checkout.session.completed, invoice.payment_failed, customer.subscription.updated/.deleted |
-| Environment variable split (test vs live keys) | The #2 most common mistake; mixing keys corrupts production | LOW | STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY |
-
-**Gap vs current skill:** Quick Start section is missing entirely. Gotchas section (named, numbered,
-with warning signs) is absent. The current SKILL.md has 91 lines; the auth equivalent would be
-~350–400 lines to reach full depth.
+| Detect existing CLAUDE.md and refuse to silently overwrite | Developers have custom content; silent overwrite destroys it. Every mature init tool (docker init, nuxt init) warns before overwrite | LOW | Check file existence before writing; use sentinel block pattern rather than wholesale replacement |
+| Detect existing `.claude/settings.json` and merge, not replace | Project may already have project-specific allow/deny rules. Replacing loses them | MEDIUM | Deep merge the `permissions.allow` and `permissions.deny` arrays; do not replace the entire JSON object. Skip write if no change |
+| Idempotent re-runs — safe to run twice with identical output | Users re-run inits when updating viflo. If output differs each run, re-running becomes risky | MEDIUM | Compare new content against existing before writing; emit "already up to date" for unchanged files |
+| `--minimal` flag that writes only CLAUDE.md stanza + settings.json | Matches the stated v1.4 requirement (INIT-01). Users with existing projects want surgical injection, not full scaffolding | LOW | Two file operations: inject sentinel block into CLAUDE.md (or create it), create/merge settings.json |
+| `--full` flag that also scaffolds `.planning/` directory | Matches the stated v1.4 requirement (INIT-02, INIT-03). New projects need GSD artifact stubs to start planning | MEDIUM | Create dir tree if absent; write stub files; skip files that already exist rather than overwriting |
+| Human-readable output — show what was written, what was skipped, what was merged | All polished init CLIs (create-next-app, docker init) print a clear file list. Silent success = confusion | LOW | Log each file with a status: created / updated / skipped / merged |
+| Error on missing viflo install path when generating import stanzas | Generating an `@/path/that/does/not/exist` import silently produces a broken CLAUDE.md that Claude Code cannot resolve | LOW | Resolve skill paths before writing; bail with a clear message if viflo cannot be located |
+| Correct `.claude/settings.json` schema output | Must be valid JSON matching the Claude Code schema. Wrong JSON breaks Claude Code startup | LOW | Include `$schema` key for editor autocomplete; validate before write |
 
 ### Differentiators (Competitive Advantage)
 
-Features that make this skill exceptional versus looking up official docs.
+Features that set the init apart. Not required to ship, but add clear value.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Named Gotchas with warning signs (auth-style) | Negative patterns are more memorable than positive rules | LOW | Gotcha 1: raw body parsing; Gotcha 2: test vs live key mismatch; Gotcha 3: checkout session expiry |
-| Async webhook processing pattern | Stripe's 30-second timeout bites devs; return 200 fast then process | MEDIUM | Currently missing from SKILL.md; references/ exists but isn't surfaced |
-| Stripe CLI local testing block | Devs spend hours debugging webhooks; `stripe listen --forward-to` solves it | LOW | Already in references/webhook-patterns.md — promote to SKILL.md |
-| Test card cheat-sheet | Everyone needs `4242 4242 4242 4242` and failure scenarios | LOW | Declined, auth-required, and dispute test cards in a quick-reference table |
-| Plan change proration pattern | Upgrade = immediate proration; downgrade = end-of-period | MEDIUM | Currently in references/subscription-patterns.md — needs summary in SKILL.md |
-| Grace period pattern for failed payments | invoice.payment_failed → past_due state + cron downgrade after N days | MEDIUM | Currently in references/; pattern is high-value and widely mishandled |
+| Append-only CLAUDE.md stanza with sentinel comments | Rather than rewriting the entire CLAUDE.md, inject a delimited block that can be found and replaced on re-run. Preserves all user content above and below the block | MEDIUM | Parse existing file for sentinel start/end markers; replace block content on re-run; insert at end if block absent. This is the primary idempotency mechanism for CLAUDE.md |
+| `--dry-run` flag to preview changes without writing | Reduces anxiety for users running on existing projects with custom configs | LOW | Print would-write diff without touching files; makes init safe to explore |
+| `--force` flag to replace sentinel block content without prompt | Power users who want a clean re-scaffold after manual edits corrupted the block | LOW | Replace only the sentinel-bounded region; never touch content outside it |
+| Verification pass after writing — confirm injected paths resolve | Read back the written files; verify `@` import paths exist on disk; report broken references | LOW | Simple `fs.existsSync` checks on each injected path; emits a warning (not a failure) for missing optional skills |
 
-### Anti-Features (Scope Creep to Avoid)
+### Anti-Features (Commonly Requested, Often Problematic)
 
-| Feature | Why Requested | Why Problematic | Alternative |
-|---------|---------------|-----------------|-------------|
-| Full PCI DSS compliance documentation | "We handle payments so we need this" | viflo already has a `pci-compliance` skill | Reference that skill; do not duplicate |
-| Custom payment form (Stripe Elements) | Full UI control | Complex; Stripe Checkout covers 90% of use cases | One paragraph: use Checkout unless brand control is a hard requirement |
-| Connect / marketplace payments | Multi-vendor payouts | Entirely different product; own skill territory | Out-of-scope callout in frontmatter |
-| Tax calculation (Stripe Tax) | Automatic tax is attractive | Regulatory complexity changes frequently | Reference Stripe Tax docs only |
-| Invoicing API deep dive | B2B invoicing is a valid use case | Niche; blows the 500-line SKILL.md budget | One-sentence mention with link |
-| Usage-based / metered billing deep dive | AI products charge per token | High complexity; own references/ file at most | One callout in Decision Matrix; point to Stripe Meters docs |
-
----
-
-## Skill 2: RAG / Vector Search
-
-### Table Stakes (Users Expect These)
-
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Quick Start: embed one document + query in <30 lines | Auth skill has this pattern; devs expect a copy-pasteable start | MEDIUM | OpenAI embed → pgvector insert → cosine similarity query |
-| Embedding pipeline: chunk → embed → store | The core RAG loop; skill is useless without it | MEDIUM | Already in references/embedding-pipelines.md — needs distilled version in SKILL.md Quick Start |
-| pgvector setup and schema | viflo stack uses PostgreSQL; pgvector is the natural fit | MEDIUM | CREATE EXTENSION, vector(1536) column, ivfflat/hnsw index choice |
-| Cosine similarity query with threshold | The retrieval half of RAG; equally important as ingestion | MEDIUM | Already in SKILL.md; min_score filter is important and present |
-| Chunking strategy rules | Biggest performance lever; most tutorials skip it | MEDIUM | Already in references/embedding-pipelines.md |
-| Embedding model consistency rule | Single most common RAG bug: query and index use different models | LOW | Currently mentioned in SKILL.md Failure Modes — needs promotion to named Gotcha |
-| pgvector vs Pinecone decision rule | Devs need a decision rule, not a library survey | LOW | Already in Decision Matrix |
-| Full RAG query loop (end-to-end) | Devs need to see embed → retrieve → prompt construction together | MEDIUM | RAG prompt assembly is in references/retrieval-patterns.md — promote to SKILL.md |
-
-**Gap vs current skill:** Quick Start is missing. Gotchas section with named pitfalls is missing.
-The embedding model consistency rule is buried in Failure Modes; it should be Gotcha #1 with a
-bold warning. Current SKILL.md is 92 lines; auth equivalent would be ~350–400 lines.
-
-### Differentiators (Competitive Advantage)
-
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| Named Gotchas with warning signs (auth-style) | Negative patterns are the most memorable content | LOW | Gotcha 1: model version mismatch (existing data becomes garbage); Gotcha 2: chunk-size too small (hallucinations); Gotcha 3: no similarity threshold (bad context) |
-| Hybrid search (vector + BM25/full-text) | Consistently outperforms pure vector; most tutorials skip it | HIGH | Already in references/retrieval-patterns.md — promote summary to SKILL.md |
-| Index synchronization strategy | Updating documents after ingestion is harder than first indexing | MEDIUM | Delete-and-reinsert vs update; model_version tag makes this safe |
-| Similarity threshold calibration guide | "My RAG feels wrong" is not actionable; calibration gives a method | LOW | Log scores against 20 test queries; start at 0.75; already partially in references/ |
-| Re-ranking (two-stage retrieval) overview | Higher precision for long documents; widely used in production | HIGH | Already in references/retrieval-patterns.md — one-paragraph summary in SKILL.md |
-| Observability: log retrieved chunks per call | Without this, debugging RAG is guesswork | LOW | Pattern: log query, top-k chunks, and final prompt in same trace |
-
-### Anti-Features (Scope Creep to Avoid)
+Features that seem good but create problems. Explicitly decline these.
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Fine-tuning embedding models | "Custom embeddings will be better" | Requires ML expertise and GPU budget | Use text-embedding-3-small; it's excellent and cheap |
-| Full LangChain integration deep dive | LangChain is popular | Changes rapidly; abstracts away understanding | Show the raw pattern first; mention LangChain as an option |
-| Multimodal RAG (images, audio) | Emerging use case | Entirely different pipeline; no pgvector support | One-sentence future reference |
-| GraphRAG / knowledge graphs | Interesting research topic | Production complexity 10x; no standard tooling | Out-of-scope callout |
-| Pinecone as primary path | Some devs want a managed vector DB | viflo stack is PostgreSQL-first | Cover Pinecone in references/ file only; not primary path |
-| Agentic RAG (tool-calling retrieval) | Agents calling RAG as a tool | Better covered in Agent Architecture skill | Cross-reference the agent skill; don't duplicate |
-
----
-
-## Skill 3: Agent Architecture
-
-### Table Stakes (Users Expect These)
-
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Quick Start: single agent with one tool in <30 lines | Devs expect a working example to copy-paste | MEDIUM | Tool definition + runAgentLoop call + executeTool dispatch |
-| Core agent loop (tool_use → execute → tool_result) | The mechanism; everything else builds on it | MEDIUM | Already in references/multi-agent-patterns.md — needs condensed version in SKILL.md |
-| Tool definition schema (Anthropic + OpenAI) | Agents are useless without tools | MEDIUM | Already in SKILL.md; both providers covered |
-| Orchestrator–worker dispatch pattern | Most common multi-agent pattern; high practical value | MEDIUM | Already in SKILL.md and references/ |
-| Memory types taxonomy | Agents without memory degrade; devs need the taxonomy | MEDIUM | Already in references/memory-orchestration.md |
-| Loop guard (max depth counter) | Without this, agents loop indefinitely and burn API budget | LOW | Already in references/multi-agent-patterns.md as depth counter |
-| Context window budget management | Long chains exhaust context; common production surprise | LOW | Already in references/memory-orchestration.md |
-| When NOT to use agents | Agents are overused; this is genuinely valuable | LOW | Currently in Decision Matrix implicitly; needs explicit callout |
-
-**Gap vs current skill:** Quick Start is missing. Gotchas section is missing. The agent loop guard
-is buried in references/; it should be Gotcha #1 with a bold cost warning. Current SKILL.md is 80
-lines; auth equivalent would be ~350–400 lines.
-
-### Differentiators (Competitive Advantage)
-
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| Named Gotchas with warning signs (auth-style) | Multi-agent failures are silent and expensive | MEDIUM | Gotcha 1: agent loop without depth guard (runaway cost); Gotcha 2: handoff data loss (always send full context); Gotcha 3: parallel agents writing same record (race condition) |
-| Anthropic's composable patterns overview | Vendor-aligned; matches viflo's Claude Code environment | MEDIUM | Prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer |
-| Model tier strategy (Opus → Haiku) | Reserve expensive models for planning; cheap for execution | LOW | Already in SKILL.md Decision Matrix — needs explicit section |
-| Prompt injection via tool results | Malicious content in tool output hijacks agent; often ignored | MEDIUM | Already in SKILL.md Failure Modes — promote to named Gotcha |
-| Checkpointing long tasks | Agents fail partway through; resumability is critical | MEDIUM | Already in references/memory-orchestration.md |
-| MCP overview (viflo already uses it) | Industry converging on MCP for agent-tool communication | MEDIUM | What it is; when it adds value vs direct tool calling |
-
-### Anti-Features (Scope Creep to Avoid)
-
-| Feature | Why Requested | Why Problematic | Alternative |
-|---------|---------------|-----------------|-------------|
-| Full LangGraph / LangChain deep dive | Popular framework | Framework-specific; changes rapidly; obscures core patterns | Show patterns in plain TypeScript; mention LangGraph as an option |
-| AutoGen / CrewAI / other framework tutorials | "Which framework should I use?" | Framework churn is high; this is a patterns skill | One comparison table in references/ only |
-| Autonomous long-running agent without human oversight | Seems powerful | High failure rate; safety risk | Always design for human-in-the-loop checkpoints |
-| Agent fine-tuning | "I want a specialized agent" | Requires ML infrastructure; out of scope | Use system prompt engineering + tool definition instead |
-| Full agent platform setup (Vertex AI Agents, etc.) | Managed convenience | Cloud-specific; violates viflo's tool-agnostic principle | Cover in cloud-deployment skill if needed |
-| Streaming agent responses | Better UX for long tasks | Adds WebSocket/SSE complexity; separate concern | One-paragraph mention only |
+| Interactive wizard prompting for project name, stack, author | Familiar from create-next-app and vue create; feels polished | Adds significant complexity for minimal payoff. viflo init's job is config injection, not project bootstrapping. Interactive prompts slow CI/automation usage | Accept `--name` as a CLI argument for non-interactive use; default to current directory name |
+| Full package.json or monorepo scaffolding | Seems logical as an extension of `--full` | Far out of scope. viflo init wires AI config; it does not bootstrap project structure | Explicitly document this boundary; point to create-next-app for project bootstrapping |
+| Automatically detecting and installing viflo if not installed | Convenient if viflo is not yet installed | Creates a circular dependency: init needs viflo to know where skills are. Installing in the middle of init creates unreliable state | Fail fast with a clear install instruction instead |
+| Semantic merge of two CLAUDE.md files (section matching) | Users want smart merge that combines their sections with viflo's | Semantic merge of Markdown is fragile and unpredictable. Claude Code reads CLAUDE.md literally; merged content order matters | Sentinel block pattern: user sections are never touched, viflo sections are bounded and replaceable |
+| Writing `.claude/settings.local.json` | Local settings file feels like a natural output | `settings.local.json` is gitignored by convention and is personal. viflo init should only touch the shared project settings | Write only `.claude/settings.json`; document that users can add local overrides themselves |
+| Generating CLAUDE.md content from codebase analysis | Makes the file more immediately useful for new users | Requires reading the codebase, which is out of scope for a config injection tool and creates a heavyweight dependency | `--full` writes a clearly-labelled starter template with `[TODO: fill in]` placeholders rather than attempting inference |
+| Skill selection wizard (which skills do you need?) | Tailored import stanzas are more useful than all-skills import | High complexity for v1; adds a skill taxonomy and detection heuristics | Default to importing all skills; users trim the stanza manually |
 
 ---
 
 ## Feature Dependencies
 
 ```
-Stripe skill
-    └──depends on──> auth-systems (customer-to-user mapping requires authenticated user ID)
-    └──references──> pci-compliance (existing skill; do not duplicate)
-    └──uses pattern from──> fastapi-templates (webhook route handlers on FastAPI side)
+[Resolve viflo install path]
+    └──required by──> [Write CLAUDE.md sentinel block with skill imports]
+                          └──required by──> [--minimal mode output]
+                          └──required by──> [--full mode output]
 
-RAG skill
-    └──extends──> postgresql (pgvector type already mentioned in postgresql skill)
-    └──enhances──> agent-architecture (RAG as the external memory/retrieval tool for agents)
-    └──uses──> prompt-engineering (query-time prompt construction pattern)
+[Detect existing CLAUDE.md]
+    └──required by──> [Sentinel block append-or-replace logic]
+    └──required by──> [Idempotent re-run for CLAUDE.md]
 
-Agent Architecture skill
-    └──uses──> prompt-engineering (system prompts, tool descriptions, evaluator-optimizer pattern)
-    └──uses──> rag-vector-search (external memory tool for agents — cross-reference both skills)
-    └──references──> workflow-orchestration-patterns (existing skill)
+[Detect existing settings.json]
+    └──required by──> [Merge permissions arrays]
+    └──required by──> [Idempotent re-run for settings.json]
+
+[Write abstraction layer]
+    └──required by──> [--dry-run flag]
+    └──required by──> [Change detection before write]
+
+[--minimal mode]
+    └──subset of──> [--full mode]
+
+[Sentinel block pattern]
+    └──enables──> [--force flag for block replacement]
+    └──enables──> [Idempotent CLAUDE.md re-runs]
+
+[.planning/ stub scaffolding]
+    └──part of──> [--full mode only]
+    └──uses──> [skip-if-exists per file]
 ```
 
 ### Dependency Notes
 
-- **Stripe requires auth-systems:** The billing portal endpoint must look up stripeCustomerId via
-  authenticated session — never trust a client-provided customerId. Auth must be live before
-  Stripe integration is meaningful.
-- **RAG and Agent are mutually reinforcing:** RAG is the standard external memory mechanism for
-  agents. Both skills should cross-reference each other. Build RAG before Agent Architecture
-  so the cross-reference is valid when the Agent skill is written.
-- **Prompt Engineering is a prerequisite for Agent Architecture:** Agent system prompts, tool
-  descriptions, and the evaluator-optimizer pattern are all prompt engineering. The agent skill
-  can reference prompt-engineering instead of repeating the fundamentals.
+- **Resolve viflo install path must happen before any file write:** Init cannot generate valid `@` import paths without knowing where viflo skills live on disk. This means init must be a post-install command, not a standalone bootstrap. The path resolution strategy (environment variable, config file, or binary location) needs to be decided before implementation.
+- **Sentinel block format is a shipped contract:** Once users have sentinel comments in their CLAUDE.md, changing the comment format breaks idempotency for everyone. Choose the sentinel format before v1 and document it as stable. Proposed: `<!-- viflo:skills:start -->` and `<!-- viflo:skills:end -->` (HTML comments are ignored by markdown renderers).
+- **`--minimal` is a strict subset of `--full`:** Full mode does everything minimal does, then adds `.planning/` scaffolding and a richer CLAUDE.md starter. Implement minimal correctly first; full composes on top of it.
+- **`--dry-run` requires the write layer to be abstracted from the start:** All file writes must go through a single function that can be swapped for a no-op print. Retrofitting this after implementation is painful. Design it in from day one.
+- **settings.json merge requires JSON schema awareness:** The merge must not blindly concat arrays (creates duplicates) or overwrite the entire file (loses user keys). Use deduplicated array union for `allow` and `deny`; leave all other keys untouched.
 
 ---
 
-## What "v1.2 Depth" Means for Each Skill (Gap Analysis)
+## MVP Definition
 
-The auth-systems skill (437 lines) is the canonical benchmark. These three skills currently range
-from 80–92 lines — they have the four failure-mode sections but lack structural depth.
+### Launch With (v1 — this milestone, INIT-01 through INIT-04)
 
-### Stripe Payments — current score: 3/4 failure modes mitigated
+Minimum viable product — what is needed to satisfy the four active requirements.
 
-**What exists (keep):**
-- Decision Matrix: comprehensive, has explicit defaults
-- Implementation Patterns: Checkout Session + Customer Portal with annotated warnings
-- Failure Modes: 7 scenarios covered including duplicate delivery, mid-cycle changes, trial end
-- Version Context: versioned, recent (2025-01-27.acacia API)
-- references/webhook-patterns.md: idempotency via Prisma @unique, Stripe CLI testing
-- references/subscription-patterns.md: status mapping, plan changes, grace period
+- [ ] **Resolve viflo install path** — detect where skills live (from a config file, environment variable, or the calling binary's location); fail with clear message if not found
+- [ ] **Write CLAUDE.md import stanza using sentinel block pattern** — append block to existing file or create new file; replace block content on re-run (idempotent); never touch content outside sentinels
+- [ ] **Write `.claude/settings.json`** — create with minimal safe permissions if absent; deep-merge permissions arrays (deduplicated union) if file already exists
+- [ ] **`--minimal` flag** — the two operations above only
+- [ ] **`--full` flag** — additionally scaffold `.planning/` directory with PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md stubs (skip-if-exists per file); write or update starter CLAUDE.md sections
+- [ ] **Idempotent re-runs** — compare new content against existing state before writing; emit "already up to date" for unchanged files
+- [ ] **Human-readable output** — log each file action (created / updated / skipped / merged) with the file path
+- [ ] **Fail fast on missing viflo path** — clear error message with install instructions, not a silent broken import
 
-**What to add for v1.2 depth:**
-- Quick Start section (zero-to-checkout in <20 lines, before any other content)
-- Gotchas section (named, numbered) with these three at minimum:
-  1. Raw body requirement (parsing JSON first corrupts signature verification)
-  2. Test vs live key mismatch (silent; only fails in production)
-  3. Checkout session expiry (URL-only success check is wrong)
-- Stripe CLI testing block promoted from references/ into SKILL.md
-- Test card quick-reference table in SKILL.md
+### Add After Validation (v1.x)
 
-### RAG / Vector Search — current score: 3/4 failure modes mitigated
+Features to add once core is working and tested on real projects.
 
-**What exists (keep):**
-- Decision Matrix: pgvector vs Pinecone vs Qdrant with explicit default
-- Implementation Patterns: embed pipeline + cosine search with model_version filter
-- Failure Modes: 6 scenarios including model change, threshold, cold start, rate limits
-- Version Context: versioned libraries
-- references/embedding-pipelines.md: chunking rules, batch retry, pgvector schema + index SQL
-- references/retrieval-patterns.md: hybrid search SQL, RAG prompt assembly, re-ranking, threshold calibration
+- [ ] **`--dry-run` flag** — implement once write abstraction is confirmed clean; low cost if designed in from day one
+- [ ] **`--force` flag** — replace sentinel block content without change detection; useful when manual edits corrupted the block
+- [ ] **Verification pass** — after writing, check that all injected `@` import paths resolve on disk; emit warnings for missing references
 
-**What to add for v1.2 depth:**
-- Quick Start section (embed one string + query back in <25 lines)
-- Gotchas section (named, numbered) with these three at minimum:
-  1. Embedding model version mismatch (existing index becomes garbage — bold warning)
-  2. Chunk size too small (128-token chunks split mid-concept → hallucination)
-  3. No similarity threshold (confident answers from irrelevant context)
-- RAG prompt assembly snippet promoted from references/ into SKILL.md
-- Hybrid search summary promoted from references/ into SKILL.md
+### Future Consideration (v2+)
 
-### Agent Architecture — current score: 3/4 failure modes mitigated
+Features to defer until the init command has real user feedback.
 
-**What exists (keep):**
-- Decision Matrix: single-agent vs orchestrator vs event-driven with explicit default
-- Implementation Patterns: tool definition (Anthropic) + orchestrator dispatch
-- Failure Modes: 6 scenarios including loop, context overflow, handoff loss, prompt injection
-- Version Context: Claude and GPT model names with use-case guidance
-- references/multi-agent-patterns.md: full agent loop with depth guard, handoff context interface
-- references/memory-orchestration.md: memory types table, checkpointing, context compression
-
-**What to add for v1.2 depth:**
-- Quick Start section (single agent + one tool, running in <25 lines)
-- Gotchas section (named, numbered) with these three at minimum:
-  1. No loop depth guard (runaway API costs — show the counter pattern inline)
-  2. Handoff data loss (passing only the delta; always send full context)
-  3. Prompt injection via tool results (malicious tool output hijacks agent)
-- Explicit "When NOT to use agents" callout (single-step tasks, latency-sensitive paths,
-  deterministic tasks)
-- Anthropic composable patterns overview (5 patterns, one paragraph each)
-- Model tier strategy section (Opus for planning, Haiku/Sonnet for execution)
-
----
-
-## MVP Definition (What Ships in v1.3 Per Skill)
-
-### Launch With (each skill's SKILL.md)
-
-Sections required in every SKILL.md to meet auth-systems depth standard:
-
-- [ ] Quick Start — working code in <30 lines, immediately copy-pasteable
-- [ ] Decision Matrix — when-to-use-X-vs-Y with explicit recommended default
-- [ ] Implementation Patterns — at least 2 annotated code examples with inline warnings
-- [ ] Gotchas / Pitfalls — at minimum 3 named pitfalls with warning signs
-- [ ] Failure Modes & Edge Cases — at least 5 concrete scenarios with handling strategy
-- [ ] Version Context — last-verified library versions
-
-SKILL.md must remain ≤500 lines. All code examples >30 lines go to references/.
-
-### Retain in references/ (already exists — keep as-is)
-
-- Stripe: webhook-patterns.md (idempotency, env vars, Stripe CLI testing)
-- Stripe: subscription-patterns.md (status mapping, plan changes, grace period)
-- RAG: embedding-pipelines.md (chunking function, batch retry, pgvector schema)
-- RAG: retrieval-patterns.md (hybrid search SQL, RAG prompt assembly, re-ranking)
-- Agent: multi-agent-patterns.md (full agent loop, handoff context)
-- Agent: memory-orchestration.md (memory types, checkpointing, context compression)
-
-### Future Consideration (v1.4+)
-
-- Stripe: Connect / marketplace payments (own skill territory)
-- Stripe: Usage-based metered billing deep dive (Stripe Meters API)
-- RAG: Multimodal retrieval (images, audio) — different pipeline
-- RAG: Agentic RAG (retrieval as a tool call inside an agent loop)
-- Agent: Full LangGraph workflow patterns (framework-specific)
-- Agent: MCP server implementation guide (currently one-paragraph overview)
+- [ ] **Stack-aware skill selection** — detect Node/Python/framework stack and inject a subset of skills; requires defining a skill taxonomy and detection heuristics; HIGH complexity
+- [ ] **Interactive wizard mode** — only if users report that the flag-based API is confusing
+- [ ] **Plugin registry for third-party skills** — viflo skills are the only target for v1; defer extensibility
 
 ---
 
 ## Feature Prioritization Matrix
 
-| Skill / Feature | User Value | Implementation Cost | Priority |
-|----------------|------------|---------------------|----------|
-| Stripe: Quick Start section | HIGH | LOW | P1 |
-| Stripe: Gotchas section (3 named pitfalls) | HIGH | LOW | P1 |
-| Stripe: Checkout + subscription side-by-side | HIGH | LOW | P1 |
-| Stripe: Webhook idempotency (promote from references/) | HIGH | LOW | P1 |
-| Stripe: Stripe CLI testing block in SKILL.md | HIGH | LOW | P1 |
-| Stripe: Test card table | MEDIUM | LOW | P2 |
-| Stripe: Grace period pattern summary | MEDIUM | LOW | P2 |
-| RAG: Quick Start section | HIGH | LOW | P1 |
-| RAG: Gotchas section (3 named pitfalls) | HIGH | LOW | P1 |
-| RAG: Model version mismatch warning (promote) | HIGH | LOW | P1 |
-| RAG: RAG prompt assembly (promote from references/) | HIGH | LOW | P1 |
-| RAG: Hybrid search summary (promote from references/) | MEDIUM | LOW | P2 |
-| RAG: Similarity threshold calibration guide | MEDIUM | LOW | P2 |
-| Agent: Quick Start section | HIGH | LOW | P1 |
-| Agent: Gotchas section (3 named pitfalls) | HIGH | LOW | P1 |
-| Agent: Loop depth guard (promote from references/) | HIGH | LOW | P1 |
-| Agent: "When NOT to use agents" explicit callout | HIGH | LOW | P1 |
-| Agent: Anthropic composable patterns overview | MEDIUM | LOW | P2 |
-| Agent: Model tier strategy section | MEDIUM | LOW | P2 |
-| Agent: MCP overview paragraph | LOW | LOW | P3 |
+| Feature | User Value | Implementation Cost | Priority |
+|---------|------------|---------------------|----------|
+| Sentinel block CLAUDE.md injection | HIGH | MEDIUM | P1 |
+| settings.json create with safe defaults | HIGH | LOW | P1 |
+| settings.json deep merge (existing file) | HIGH | MEDIUM | P1 |
+| Idempotent re-runs (change detection) | HIGH | LOW | P1 |
+| `--minimal` / `--full` flags | HIGH | LOW | P1 |
+| Human-readable per-file output | HIGH | LOW | P1 |
+| Fail fast on bad install path | HIGH | LOW | P1 |
+| `.planning/` stub scaffolding (--full) | MEDIUM | LOW | P1 |
+| Starter CLAUDE.md template sections (--full) | MEDIUM | LOW | P1 |
+| `--dry-run` flag | MEDIUM | LOW | P2 |
+| `--force` flag | MEDIUM | LOW | P2 |
+| Verification pass after writing | MEDIUM | LOW | P2 |
+| Stack-aware skill selection | MEDIUM | HIGH | P3 |
+| Interactive wizard | LOW | HIGH | P3 |
 
 **Priority key:**
-- P1: Must have to reach v1.2 depth standard
-- P2: Should have, adds meaningful value without blowing 500-line budget
-- P3: Nice to have, include only if room remains
+- P1: Must have for this milestone (INIT-01 through INIT-04)
+- P2: Should have, add when core is stable
+- P3: Nice to have, future milestone
+
+---
+
+## Analogous Tool Behavior
+
+How comparable init CLIs handle the patterns this feature set requires.
+
+| Behavior | docker init | nuxt init | arc init | npm init | Our Approach |
+|----------|-------------|-----------|----------|----------|--------------|
+| Existing file detection | Warns, prompts user to overwrite all or nothing | Prompts to overwrite or skip the target directory | Skip-if-exists by design; fully idempotent | Reads existing fields, strictly additive | Sentinel block for CLAUDE.md; array union merge for settings.json |
+| Re-run behaviour | Not idempotent — prompts again each time | Not idempotent — prompts again | Idempotent — no-op if file exists | Additive — never removes existing values | Idempotent via sentinel block detection + settings diff |
+| Minimal vs full modes | Single mode (all Docker files generated) | Single mode (full project scaffold) | Not applicable | Not applicable | Explicit `--minimal` / `--full` flags; minimal is the safe default |
+| Output verbosity | Lists each generated file with icon | Minimal output, sparse | Silent on skips | Question prompts + summary | List each file with action verb and absolute path |
+| Custom content preservation | No (user must back up Dockerfile manually) | No (overwrite is all-or-nothing) | Yes (never touches existing files) | Yes (additive only, never removes) | Yes — sentinel block never touches content outside its markers |
+
+**Key insight from analogues:** The most common complaint about init CLIs is accidental overwrite of custom content. The sentinel block pattern (used in Ansible's `# BEGIN ANSIBLE MANAGED BLOCK` / `# END ANSIBLE MANAGED BLOCK` convention and similar config management systems) solves this cleanly: viflo owns the region between the sentinels, the user owns everything else.
+
+**The arc init precedent is the closest model:** It generates files only if they do not already exist and is documented as safe to re-run. For CLAUDE.md specifically, viflo cannot use skip-if-exists because the file will usually already exist with user content — hence the sentinel block extension of this pattern.
+
+---
+
+## What Goes in CLAUDE.md vs settings.json
+
+This distinction is critical for getting the output of `viflo init` correct.
+
+### CLAUDE.md contains (knowledge, conventions, instructions)
+
+Per official Claude Code documentation: "CLAUDE.md controls what Claude should know." This includes:
+
+- `@` import lines pointing to viflo skills the project uses
+- Project-specific coding conventions (added by user, not by init)
+- Architectural decisions Claude should know about
+- Which files or directories are off-limits for editing
+
+**The viflo-generated sentinel block (minimal mode):**
+
+```markdown
+<!-- viflo:skills:start -->
+<!-- Managed by viflo init — edit this block by running: viflo init --minimal -->
+@~/.viflo/skills/gsd-workflow/SKILL.md
+@~/.viflo/skills/frontend/SKILL.md
+@~/.viflo/skills/backend-dev-guidelines/SKILL.md
+@~/.viflo/skills/database-design/SKILL.md
+<!-- viflo:skills:end -->
+```
+
+**The viflo-generated CLAUDE.md starter template (full mode only) adds:**
+
+```markdown
+# [Project Name]
+
+## Project Overview
+
+[TODO: 2-3 sentence description of this project]
+
+## Common Commands
+
+[TODO: fill in build, test, and lint commands]
+
+## Architecture Notes
+
+[TODO: key architectural decisions Claude should know]
+
+<!-- viflo:skills:start -->
+<!-- Managed by viflo init — edit this block by running: viflo init --minimal -->
+@~/.viflo/skills/gsd-workflow/SKILL.md
+...
+<!-- viflo:skills:end -->
+```
+
+### settings.json contains (permissions and behaviour)
+
+Per official Claude Code documentation: "settings.json controls what Claude can do." Project settings at `.claude/settings.json` are committed to version control and apply to all collaborators.
+
+**The viflo-generated minimal settings.json:**
+
+```json
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(pnpm *)",
+      "Bash(npm *)",
+      "Bash(node *)",
+      "Bash(python3 *)",
+      "Bash(pytest *)",
+      "WebSearch",
+      "WebFetch(domain:github.com)"
+    ],
+    "defaultMode": "acceptEdits"
+  }
+}
+```
+
+**What init must NOT write to settings.json:** `bypassPermissions` mode, deny rules (too project-specific), MCP server definitions, sensitive env vars, `skipDangerousModePermissionPrompt: true`.
+
+**What init adds when merging into an existing settings.json:** Union of the above allow patterns into the existing `permissions.allow` array, deduplicated. All other existing keys are left unchanged.
+
+---
+
+## Idempotency Implementation Patterns
+
+Based on the arc init and npm init precedents, these are the correct approaches per artifact:
+
+**CLAUDE.md (sentinel block):**
+1. Search for `<!-- viflo:skills:start -->` in existing file
+2. If found: replace everything between start and end sentinels with new skill list; leave content outside sentinels unchanged
+3. If not found: append the full block (start sentinel + imports + end sentinel) to the end of the file
+4. If file does not exist: create it with the sentinel block only (minimal) or with the full starter template (full)
+5. Before writing: compare new block against existing block; if identical, emit "already up to date" and skip
+
+**settings.json (deep merge):**
+1. Read existing file if present; parse as JSON
+2. Compute union of existing `permissions.allow` + viflo defaults, deduplicated
+3. Compute union of existing `permissions.deny` + viflo defaults (empty for v1), deduplicated
+4. Set `permissions.defaultMode` to `acceptEdits` if not already set (do not override if user has set it)
+5. Leave all other top-level keys unchanged
+6. Before writing: compare merged result against existing file; if identical, emit "already up to date" and skip
+
+**`.planning/` stubs (skip-if-exists):**
+1. For each stub file (PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md): check if it already exists
+2. If it exists: emit "skipped (already exists)" and do not touch it
+3. If it does not exist: write the template stub
 
 ---
 
 ## Sources
 
-- Stripe: [Stripe webhooks official docs](https://docs.stripe.com/billing/subscriptions/webhooks), [Stripe idempotent requests](https://docs.stripe.com/api/idempotent_requests), [Stripe Checkout docs](https://docs.stripe.com/payments/checkout)
-- RAG: Current SKILL.md and references/ files (verified against pgvector 0.8.x and openai 4.x)
-- RAG: [pgvector GitHub](https://github.com/pgvector/pgvector) — ivfflat vs hnsw guidance
-- Agent: Current SKILL.md and references/ files (verified against @anthropic-ai/sdk 0.37.x)
-- Agent: Anthropic agent patterns referenced in agent-architecture skill description
-- Depth standard: `.agent/skills/skill-depth-standard/SKILL.md` (internal)
-- Canonical reference: `.agent/skills/auth-systems/SKILL.md` (v1.2 benchmark, 437 lines)
+- [Claude Code Permissions Docs](https://code.claude.com/docs/en/permissions) — permissions system, settings.json schema, allow/deny/ask rules; HIGH confidence (official docs, fetched 2026-02-24)
+- [Claude Code Settings Docs](https://code.claude.com/docs/en/settings) — full settings.json key reference, precedence hierarchy; HIGH confidence (official docs, fetched 2026-02-24)
+- [CLAUDE.md @ import syntax](https://github.com/anthropics/claude-code/issues/6321) — confirmed `@path/to/file` literal inclusion, no heading adjustment, recursive imports supported; MEDIUM confidence (GitHub issue, consistent with official overview)
+- [docker init behavior](https://spacelift.io/blog/docker-init) — warns on existing files, prompts for overwrite decision, no --force flag; MEDIUM confidence (blog consistent with official Docker docs)
+- [arc init idempotency](https://arc.codes/docs/en/reference/cli/init) — explicit "generates files only if they do not already exist" design; HIGH confidence (official arc docs)
+- [npm init additive behavior](https://docs.npmjs.com/cli/init) — strictly additive, keeps existing fields; HIGH confidence (official npm docs)
+- [nuxt init existing project handling](https://github.com/vuejs/vue-cli/issues/267) — confirms prompts on existing project but does not do semantic merge; MEDIUM confidence (GitHub issue)
+- Developer guide to Claude Code settings.json, eesel.ai — project vs user scope distinction, example structures; MEDIUM confidence (blog, consistent with official docs)
 
 ---
 
-*Feature research for: viflo v1.3 expert skills (Stripe, RAG, Agent Architecture)*
+*Feature research for: viflo init CLI (v1.4 milestone)*
 *Researched: 2026-02-24*

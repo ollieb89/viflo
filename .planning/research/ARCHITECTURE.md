@@ -653,3 +653,429 @@ references/
 
 *Architecture research for: viflo v1.3 Expert Skills (Stripe, RAG, Agent Architecture)*
 *Researched: 2026-02-24*
+
+---
+---
+
+# Architecture Research — v1.4 Addition: `viflo init` CLI
+
+**Domain:** CLI tooling — `viflo init` command for an existing agentic dev methodology toolkit
+**Researched:** 2026-02-24
+**Confidence:** HIGH
+
+## System Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        viflo repo (source of truth)                  │
+│                                                                       │
+│  bin/viflo.cjs          .agent/skills/          scripts/             │
+│  ┌─────────────┐        ┌──────────────┐        ┌──────────────┐    │
+│  │ CLI entry   │        │ 42 SKILL.md  │        │ setup-dev.sh │    │
+│  │ --minimal   │        │ dirs         │        │ log-telemetry│    │
+│  │ --full      │        │ INDEX.md     │        └──────────────┘    │
+│  │ idempotency │        └──────────────┘                            │
+│  └──────┬──────┘                                                     │
+│         │ resolves self via __dirname                                │
+└─────────┼───────────────────────────────────────────────────────────┘
+          │
+          │ invoked from target project directory (process.cwd())
+          ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                     target project (cwd)                             │
+│                                                                       │
+│  CLAUDE.md              .claude/                  .planning/         │
+│  ┌─────────────┐        ┌──────────────────────┐  ┌──────────────┐  │
+│  │ @import     │        │ settings.json        │  │ PROJECT.md   │  │
+│  │ stanza for  │        │ merged permissions   │  │ ROADMAP.md   │  │
+│  │ viflo skills│        │ + env keys           │  │ STATE.md     │  │
+│  │             │        └──────────────────────┘  │ config.json  │  │
+│  └─────────────┘                                  └──────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+## Option Decision: Where Does `viflo init` Live?
+
+**Recommendation: Option B — `bin/viflo.cjs` with package.json bin field.**
+
+| Option | Verdict | Rationale |
+|--------|---------|-----------|
+| A: `scripts/viflo-init.sh` | Reject | Cannot safely manipulate JSON. No cross-platform guarantee for sed/awk between BSD and GNU. No test path. |
+| B: `bin/viflo.cjs` | **Choose this** | Matches gsd-tools.cjs pattern already proven in this ecosystem. Node.js is already the runtime. JSON.parse/stringify is native and safe. Testable via Vitest. `__dirname` gives self-referential path resolution. |
+| C: `packages/cli/` | Defer | Adds TypeScript compilation, build pipeline, and workspace publish step before the CLI shape is proven. Premature complexity. Extract here in a future milestone if warranted. |
+
+## Recommended Project Structure
+
+```
+viflo/
+├── bin/
+│   ├── viflo.cjs              # CLI entry: #!/usr/bin/env node, argument routing
+│   └── lib/
+│       ├── init.cjs           # init command logic (--minimal, --full)
+│       ├── paths.cjs          # viflo install dir resolution, OS path utilities
+│       └── writers.cjs        # file write/merge operations
+├── package.json               # add "bin": { "viflo": "bin/viflo.cjs" }
+│                              # add "files": ["bin/", ".agent/"] for npm publish
+├── .agent/
+│   └── skills/                # source of truth, referenced by absolute path
+├── scripts/                   # existing shell scripts — no changes
+└── apps/, packages/           # existing workspace members — no changes
+```
+
+### Structure Rationale
+
+- **bin/viflo.cjs:** Mirrors gsd-tools.cjs pattern. `#!/usr/bin/env node` shebang, CommonJS (not ESM), no compilation required. Executable via `node bin/viflo.cjs` during development and `viflo` after `npm link`.
+- **bin/lib/:** Keeps the entry point thin (routing only). Individual modules are single-concern. Tests can `require()` individual lib modules without loading the full CLI.
+- **`packages/` NOT used:** bin/ is not a workspace package. pnpm-workspace.yaml covers `apps/*` and `packages/*` — bin/ sits outside workspace scope, which is correct for a root-level CLI tool.
+
+## Component Responsibilities
+
+| Component | Responsibility | Communicates With |
+|-----------|----------------|-------------------|
+| `bin/viflo.cjs` | Argument parsing, subcommand routing, user-facing stdout | bin/lib/init.cjs |
+| `bin/lib/init.cjs` | Orchestrates --minimal and --full flows, idempotency logic | paths.cjs, writers.cjs |
+| `bin/lib/paths.cjs` | Self-referential viflo root resolution via `__dirname`, OS-agnostic path construction | Node.js `path`, `os` |
+| `bin/lib/writers.cjs` | CLAUDE.md sentinel-aware merge, settings.json JSON merge, .planning/ scaffold | Node.js `fs` |
+
+## Architectural Patterns
+
+### Pattern 1: Self-Referential Install Dir Resolution
+
+**What:** The CLI derives the viflo repo root from `__dirname` at runtime — no env variable, no config file.
+
+**When to use:** At startup, before any writes. Compute once, pass down to all writers.
+
+**Trade-offs:** `__dirname` only works in CommonJS (`.cjs`), not ESM (`.mjs`). This is the primary reason the file must be `.cjs`. After `npm install -g viflo`, `__dirname` points to the npm global install location, and `.agent/skills/` ships inside the package via the `"files"` key — so the path resolution remains correct post-install.
+
+```javascript
+// bin/lib/paths.cjs
+const path = require('path');
+
+function getVifloRoot() {
+  // bin/lib/paths.cjs → up two levels to repo root
+  return path.resolve(__dirname, '..', '..');
+}
+
+function getSkillsDir() {
+  return path.join(getVifloRoot(), '.agent', 'skills');
+}
+
+function getTargetClaudeSettingsPath(targetDir) {
+  // Project-level: <target>/.claude/settings.json
+  // Per Claude Code docs: https://code.claude.com/docs/en/settings
+  return path.join(targetDir, '.claude', 'settings.json');
+}
+
+function getTargetClaudeMdPath(targetDir) {
+  // Write to CLAUDE.md at project root (most visible, most conventional)
+  // Claude Code also supports .claude/CLAUDE.md but root is preferred
+  return path.join(targetDir, 'CLAUDE.md');
+}
+```
+
+### Pattern 2: Idempotent Sentinel-Based CLAUDE.md Merge
+
+**What:** The CLI wraps its CLAUDE.md stanza in HTML comment sentinels. On re-run, it detects the markers and replaces the block rather than appending again.
+
+**When to use:** Every write to CLAUDE.md. Satisfies INIT-04 (idempotency).
+
+**Trade-offs:** The sentinel format must be stable across viflo versions. Adding a version to the sentinel (e.g. `<!-- viflo:v1.4:start -->`) enables future migration between versions but adds complexity. Start without versioning.
+
+```javascript
+// bin/lib/writers.cjs
+const VIFLO_SENTINEL_START = '<!-- viflo:start -->';
+const VIFLO_SENTINEL_END = '<!-- viflo:end -->';
+
+function mergeClaudeMd(existingContent, vifloStanza) {
+  const wrappedStanza = `${VIFLO_SENTINEL_START}\n${vifloStanza}\n${VIFLO_SENTINEL_END}`;
+
+  if (existingContent.includes(VIFLO_SENTINEL_START)) {
+    // Replace existing viflo block in-place (idempotent re-run)
+    const pattern = new RegExp(
+      `${VIFLO_SENTINEL_START}[\\s\\S]*?${VIFLO_SENTINEL_END}`,
+      'g'
+    );
+    return existingContent.replace(pattern, wrappedStanza);
+  }
+  // First run: append to existing content (preserves all non-viflo content)
+  return existingContent.trimEnd() + '\n\n' + wrappedStanza + '\n';
+}
+```
+
+### Pattern 3: CLAUDE.md @import Stanza for Viflo Skills
+
+**What:** Claude Code supports `@path/to/file` syntax in CLAUDE.md to import external skill files at session start. `viflo init` writes a stanza with the absolute path to each skill's SKILL.md in the viflo install directory.
+
+**When to use:** This is the primary integration mechanism. It makes viflo skills available in any target project without copying files.
+
+**Trade-offs:**
+- Absolute paths tie the stanza to the current viflo install location. If the user moves the viflo repo, the stanza breaks. `viflo init` is idempotent (re-running updates the stanza with the new path).
+- Claude Code shows a one-time approval dialog when it first encounters `@` imports from an external absolute path. This is documented behavior. The CLI should warn the user about this with a note in stdout.
+- Imports are not evaluated inside markdown code spans or code blocks — the sentinel HTML comments do not interfere.
+
+**Example output written to target project CLAUDE.md:**
+```markdown
+<!-- viflo:start -->
+## Viflo Skills
+
+Access the full viflo skill library:
+
+@/home/user/tools/viflo/.agent/skills/gsd-workflow/SKILL.md
+@/home/user/tools/viflo/.agent/skills/frontend/SKILL.md
+@/home/user/tools/viflo/.agent/skills/backend-dev-guidelines/SKILL.md
+@/home/user/tools/viflo/.agent/skills/database-design/SKILL.md
+<!-- viflo:end -->
+```
+
+**Note:** The stanza can list all 42 skill SKILL.md files, or a curated subset. Listing all is simpler and avoids a skills selection UX. Claude Code loads files lazily (child CLAUDE.md files only when Claude reads in that directory), so listing all 42 does not bloat every context window.
+
+### Pattern 4: settings.json JSON Merge
+
+**What:** `.claude/settings.json` in the target project is a standard JSON file. The CLI reads it if it exists, merges viflo-required keys, deduplicates the `permissions.allow` array, and writes it back.
+
+**When to use:** Every run. The merge is safe to repeat (idempotent).
+
+**Trade-offs:** Write atomically (write to temp file, `fs.renameSync` to final path) to avoid corrupt JSON if the process is killed mid-write.
+
+```javascript
+// bin/lib/writers.cjs
+const VIFLO_PERMISSIONS = [
+  // Allow reading viflo skill files via WebFetch if needed
+  // (Claude Code uses file:// for local paths — usually no permission needed)
+  // Primary use: ensure no restrictive default blocks skill file access
+];
+
+function mergeClaudeSettings(existingJson, vifloRoot) {
+  const existing = existingJson ? JSON.parse(existingJson) : {};
+  const merged = { ...existing };
+
+  // Ensure permissions key exists
+  if (!merged.permissions) merged.permissions = {};
+  if (!merged.permissions.allow) merged.permissions.allow = [];
+
+  // Deduplicate: add viflo entries not already present
+  const currentAllow = new Set(merged.permissions.allow);
+  for (const entry of VIFLO_PERMISSIONS) {
+    currentAllow.add(entry);
+  }
+  merged.permissions.allow = [...currentAllow];
+
+  return JSON.stringify(merged, null, 2) + '\n';
+}
+```
+
+## Settings.json and CLAUDE.md Paths — Platform Reference
+
+**Confidence: HIGH.** Sourced from [Claude Code official docs](https://code.claude.com/docs/en/settings) and [memory docs](https://code.claude.com/docs/en/memory), verified 2026-02-24.
+
+| Platform | Global user settings (DO NOT write here) | Project settings (viflo init writes here) |
+|----------|------------------------------------------|-------------------------------------------|
+| Linux | `~/.claude/settings.json` | `<target>/.claude/settings.json` |
+| macOS | `~/.claude/settings.json` | `<target>/.claude/settings.json` |
+| Windows | `~/.claude/settings.json` | `<target>/.claude/settings.json` |
+
+| Platform | CLAUDE.md project location (viflo init writes here) |
+|----------|-----------------------------------------------------|
+| Linux / macOS / Windows | `<target>/CLAUDE.md` (preferred) or `<target>/.claude/CLAUDE.md` |
+
+`viflo init` writes only to project-level files in `process.cwd()`. It never touches `~/.claude/settings.json` or `~/.claude/CLAUDE.md`.
+
+## Data Flow
+
+### --minimal mode
+
+```
+viflo init --minimal
+    │ (run from target project directory)
+    │
+    ▼
+[paths.cjs] getVifloRoot() via __dirname
+    │  → vifloRoot = /path/to/viflo
+    │  → skillsDir  = /path/to/viflo/.agent/skills
+    │  → targetDir  = process.cwd()
+    │
+    ▼
+[writers.cjs] read targetDir/CLAUDE.md (create empty string if absent)
+    │  → detect VIFLO_SENTINEL_START
+    │  → replace or append viflo stanza with @import lines per SKILL.md
+    │  → write CLAUDE.md
+    │
+    ▼
+[writers.cjs] read targetDir/.claude/settings.json (create {} if absent)
+    │  → fs.mkdirSync('.claude', { recursive: true })
+    │  → merge permissions.allow (deduplicate)
+    │  → write atomically via tmp + rename
+    │
+    ▼
+stdout:
+  "viflo init complete.
+   CLAUDE.md: updated with viflo skill imports.
+   .claude/settings.json: permissions merged.
+   Note: Claude Code will show a one-time approval dialog for @imports on first use."
+```
+
+### --full mode (superset of --minimal)
+
+```
+[same as --minimal — CLAUDE.md + settings.json]
+    │
+    ▼
+[init.cjs] scaffold .planning/ directory
+    │  → fs.mkdirSync('.planning', { recursive: true })
+    │  → for each template file:
+    │      if file does not exist: write stub from viflo template
+    │      if file exists: skip (idempotent — never overwrite)
+    │  → files written: PROJECT.md, ROADMAP.md, STATE.md, config.json
+    │
+    ▼
+[init.cjs] write starter CLAUDE.md project section (if CLAUDE.md is brand new)
+    │  → only if CLAUDE.md did not exist before this run
+    │  → prepends project-specific sections above the viflo sentinel block
+    │
+    ▼
+stdout:
+  "viflo init --full complete.
+   .planning/ scaffolded with GSD template stubs.
+   Run 'viflo init --minimal' on subsequent runs to update skill paths only."
+```
+
+## Integration Points
+
+### New Files in Viflo Repo
+
+| File | Type | Purpose |
+|------|------|---------|
+| `bin/viflo.cjs` | NEW | CLI entry point with argument parsing |
+| `bin/lib/init.cjs` | NEW | --minimal/--full orchestration, idempotency logic |
+| `bin/lib/paths.cjs` | NEW | Path resolution — viflo root, skills dir, target paths |
+| `bin/lib/writers.cjs` | NEW | File write/merge — CLAUDE.md sentinel merge, settings.json JSON merge |
+
+### Modified Files in Viflo Repo
+
+| File | Change | Why |
+|------|--------|-----|
+| `package.json` | Add `"bin": { "viflo": "bin/viflo.cjs" }` | Registers CLI as npm executable |
+| `package.json` | Add `"files": ["bin/", ".agent/", "scripts/"]` | Ensures skills ship in npm package |
+
+### Files Written to Target Project by viflo init
+
+| File | Mode | Action |
+|------|------|--------|
+| `CLAUDE.md` | --minimal + --full | Sentinel merge: adds/updates viflo @import block |
+| `.claude/settings.json` | --minimal + --full | JSON merge: adds viflo permissions to allow array |
+| `.planning/PROJECT.md` | --full only | Create-if-absent: GSD project stub |
+| `.planning/ROADMAP.md` | --full only | Create-if-absent: GSD roadmap stub |
+| `.planning/STATE.md` | --full only | Create-if-absent: GSD state stub |
+| `.planning/config.json` | --full only | Create-if-absent: GSD config with model defaults |
+
+### Files Never Modified by viflo init
+
+- `~/.claude/settings.json` — user-level, out of scope
+- `~/.claude/CLAUDE.md` — user-level, out of scope
+- Any CLAUDE.md content outside the `<!-- viflo:start -->` / `<!-- viflo:end -->` block
+- Any existing `.planning/` files (create-if-absent, never overwrite)
+
+## Build Order for v1.4 Implementation
+
+Dependencies flow from bottom up:
+
+1. **`bin/lib/paths.cjs`** — No dependencies. Path utilities only. All other lib modules depend on this.
+
+2. **`bin/lib/writers.cjs`** — Depends on paths.cjs. Implements CLAUDE.md merge and settings.json merge.
+
+3. **`bin/lib/init.cjs`** — Depends on paths.cjs + writers.cjs. Implements --minimal and --full orchestration with idempotency.
+
+4. **`bin/viflo.cjs`** — Depends on init.cjs. CLI entry point: `#!/usr/bin/env node`, `process.argv` parsing, routes to init.
+
+5. **`package.json` modification** — Wire `"bin"` field. Can be done at step 4 but logically final.
+
+6. **Tests** — Vitest tests for each lib module. `require()` individual modules. Test paths.cjs with mock `__dirname`, test writers.cjs with temp directories, test init.cjs end-to-end against a temp project dir.
+
+## Anti-Patterns
+
+### Anti-Pattern 1: Shell Script for JSON Manipulation
+
+**What people do:** Implement as `scripts/viflo-init.sh` using sed/awk to write settings.json.
+
+**Why it's wrong:** JSON manipulation in shell is fragile — no safe array deduplication, special characters in paths break sed patterns, BSD vs GNU awk behavioral differences.
+
+**Do this instead:** `bin/viflo.cjs` with `JSON.parse` / `JSON.stringify`. The runtime exists; use it.
+
+### Anti-Pattern 2: Hardcoding the Viflo Install Path
+
+**What people do:** Document "set VIFLO_DIR=~/tools/viflo" and read from env.
+
+**Why it's wrong:** Breaks when users clone to non-standard paths. Adds setup friction. Env var is undiscoverable.
+
+**Do this instead:** Use `__dirname` in `bin/lib/paths.cjs`. The file is always at `<viflo-root>/bin/lib/paths.cjs`, so `path.resolve(__dirname, '..', '..')` is the viflo root with zero configuration.
+
+### Anti-Pattern 3: Appending CLAUDE.md Without Sentinel Guards
+
+**What people do:** Append the stanza on every run without checking for existing content.
+
+**Why it's wrong:** Violates INIT-04. Running `viflo init` twice produces duplicate blocks. Moving the viflo repo and re-running leaves stale paths alongside fresh ones.
+
+**Do this instead:** Sentinel markers `<!-- viflo:start -->` / `<!-- viflo:end -->`. Detect on read, replace in-place on write.
+
+### Anti-Pattern 4: Writing to ~/.claude/settings.json
+
+**What people do:** Modify global user settings to grant skill permissions.
+
+**Why it's wrong:** Wrong scope. Pollutes settings that apply to all projects. `viflo init` is a per-project operation.
+
+**Do this instead:** Write only to `<target-project>/.claude/settings.json`. Per Claude Code docs, this is the correct project-level location.
+
+### Anti-Pattern 5: Premature packages/cli/ Package (Option C)
+
+**What people do:** Create a TypeScript workspace package with compilation and publish pipeline before the CLI shape is proven.
+
+**Why it's wrong:** Compilation step, tsconfig, build scripts, and CI changes before requirements are stable. Over-engineering relative to the problem.
+
+**Do this instead:** Start with `bin/viflo.cjs`. The gsd-tools.cjs reference pattern confirms plain CJS is production-sufficient. Migrate to `packages/cli/` in a future milestone when TypeScript type safety or complexity justifies it.
+
+## Invocation Patterns
+
+```bash
+# Development (from within viflo repo, targeting any project)
+cd /path/to/my-project
+node /path/to/viflo/bin/viflo.cjs init --minimal
+node /path/to/viflo/bin/viflo.cjs init --full
+
+# After npm link (recommended for local development)
+# Run once from viflo repo root:
+npm link
+# Then from any project:
+viflo init --minimal
+viflo init --full
+
+# After npm install -g (end-user install)
+npm install -g viflo
+# or install from local path:
+npm install -g /path/to/viflo
+viflo init --minimal
+viflo init --full
+```
+
+**Target directory:** Always `process.cwd()`. The user runs `viflo init` from inside their project — standard shell convention. No `--target-dir` flag needed at this stage.
+
+## Scaling Considerations
+
+| Scenario | Adjustment Needed |
+|----------|-------------------|
+| Single developer, local clone | Current design is complete. `npm link` for development use. |
+| Team with shared viflo fork | Add optional `--skills-dir <path>` flag to override. Low effort addition. |
+| Distributed npm package | Ensure `.agent/` is in `"files"` in package.json. `__dirname` resolves to npm install location. Skills ship with the package. No change to core logic. |
+| Multiple viflo versions in use | Extend sentinel to `<!-- viflo:v1.4:start -->` for version-aware updates. Defer until needed. |
+
+## Sources
+
+- Claude Code settings file paths: [https://code.claude.com/docs/en/settings](https://code.claude.com/docs/en/settings) — HIGH confidence (official docs, 2026-02-24)
+- Claude Code CLAUDE.md memory and @import syntax: [https://code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory) — HIGH confidence (official docs, 2026-02-24)
+- gsd-tools.cjs reference CLI pattern: `/home/ollie/.claude/get-shit-done/bin/gsd-tools.cjs` — HIGH confidence (direct inspection)
+- viflo existing repo structure: `/home/ollie/Development/Tools/viflo/` — HIGH confidence (direct inspection)
+- Node.js `__dirname` in CommonJS vs ESM: stable behavior, HIGH confidence
+
+---
+
+*Architecture research for: viflo init CLI (v1.4)*
+*Researched: 2026-02-24*

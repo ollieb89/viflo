@@ -1,369 +1,269 @@
 # Stack Research
 
-**Domain:** viflo v1.3 Expert Skills — Stripe Payments, RAG/Vector Search, Agent Architecture
+**Domain:** `viflo init` CLI tool — Node.js bin script wiring new projects to viflo
 **Researched:** 2026-02-24
-**Confidence:** HIGH (all versions verified against npm/PyPI/official sources on 2026-02-24)
+**Confidence:** HIGH (versions verified against npm registry on 2026-02-24)
 
-> **Scope note:** This file covers only the three NEW skill domains for v1.3. Auth Systems and Prompt Engineering are already shipped at v1.2 depth; their stack entries were retained in the previous revision but are excluded here to keep this document tightly scoped to what the skill authors need for v1.3.
+> **Scope note:** This file covers only the `viflo init` CLI milestone (v1.4). It replaces the v1.3 STACK.md which covered Stripe, RAG, and Agent Architecture skill domains. Those entries remain relevant for skill authors but are not needed for CLI implementation.
 
 ---
 
-## Skill 1: Stripe Payments
+## Verdict: CJS Workspace Package, Zero Runtime Dependencies
+
+Use a Node.js CJS file at `packages/cli/bin/viflo.cjs`, registered as a pnpm workspace package with a `bin` field. Zero external runtime dependencies — use Node.js built-in `fs`, `path`, and `readline` exclusively. This matches the gsd-tools.cjs pattern already established in the repo's toolchain and satisfies the "no external dependencies beyond standard tools" constraint.
+
+**Why not a shell script:** Shell scripts cannot reliably handle JSON merging, CLAUDE.md section idempotency markers, or cross-platform path construction. The existing `scripts/*.sh` files are setup/telemetry helpers — file manipulation logic belongs in Node.js.
+
+**Why not a proper npm-published bin (yet):** npm publishing requires a public registry account, versioning overhead, and install ceremony (`npm install -g viflo`). At v1.4, the tool only needs to run from the monorepo. The `bin` field and package structure will be npm-publish ready, but actual publishing is deferred.
+
+**Why CJS over ESM:** The workspace root uses `"type": "commonjs"` (package.json has no `"type": "module"` field — default is CJS). The gsd-tools.cjs precedent proves single-file CJS scripts work cleanly with `#!/usr/bin/env node`. ESM in Node requires `.mjs` extension or `"type": "module"` in a separate package, adding friction with no benefit for a CLI with no async module graph.
+
+---
+
+## Recommended Stack
 
 ### Core Technologies
 
 | Technology | Version | Purpose | Why Recommended |
 |------------|---------|---------|-----------------|
-| `stripe` (Node.js) | ^20.3.1 | Server-side Stripe API client | Official SDK; handles checkout sessions, subscriptions, invoices, webhook signature verification. Full TypeScript types included. Pinned to API version `2026-01-28` by default in v20. |
-| `@stripe/stripe-js` | ^8.8.0 | Client-side Stripe.js CDN loader | Lazy-loads Stripe.js from Stripe's CDN; required for PCI-compliant payment UI. v8 is the current major — do NOT use v5 or earlier (old types). |
-| `@stripe/react-stripe-js` | ^5.6.0 | React wrapper for Stripe Elements | Provides `<Elements>`, `<CardElement>`, `<PaymentElement>` components compatible with React 19 and Next.js 16. |
-| `stripe` (Python) | ^14.3.0 | Server-side Stripe API for FastAPI backends | Official Stripe Python SDK; use for webhook processing in FastAPI or async billing logic. Released 2026-01-28. |
+| Node.js | >=20.0.0 (already required by repo) | Runtime | Node 20 includes `fs.cpSync`, `fs.mkdirSync({recursive: true})`, `fs/promises` — all file ops needed for `viflo init` without any external library |
+| CommonJS (`.cjs`) | n/a — language mode | Module format | Single-file CJS scripts require no bundling, no compilation step, and work identically on macOS, Linux, and WSL. Matches gsd-tools.cjs precedent. |
+| `#!/usr/bin/env node` shebang | n/a | Makes bin executable | Required by npm bin spec — without this, the file runs as a shell script. |
+| pnpm workspace package | pnpm >=10.0.0 (already required) | Wires bin into monorepo PATH | Add `packages/cli` to `pnpm-workspace.yaml`; after `pnpm install`, `pnpm --filter @viflo/cli run viflo init` works without a global install. |
 
 ### Supporting Libraries
 
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| Raw body config | n/a (config, not a package) | Webhook signature verification requires raw request body | ALWAYS — in Next.js App Router use `await request.text()` before parsing; in FastAPI use `Request.body()` before JSON decode |
-| `stripe[async]` (Python) | ^14.3.0 | Async HTTP support for the Python SDK | Install with `pip install stripe[async]` when using `AsyncStripe` in FastAPI async handlers |
+None. The following Node.js built-ins cover all requirements:
 
-### Installation
+| Built-in | Purpose | Node version available |
+|----------|---------|----------------------|
+| `node:fs` | File existence checks (`existsSync`), reads (`readFileSync`), writes (`writeFileSync`), mkdir (`mkdirSync({recursive:true})`) | All Node 20+ |
+| `node:fs/promises` | Async variants for future migration if needed | Node 20+ |
+| `node:path` | Cross-platform path construction, `path.join`, `path.resolve` | All |
+| `node:os` | `os.homedir()` — for locating `~/.claude/` when writing global Claude Code settings | All |
+| `node:readline` | Interactive confirmation prompt (`--dry-run` or overwrite guards) | All |
+| `JSON.parse` / `JSON.stringify` | JSON settings merging | Built-in |
 
-```bash
-# Server-side (Next.js Route Handlers)
-npm install stripe
+**Rationale for zero external dependencies:** `deepmerge@4.3.1` would handle nested JSON merge elegantly, but the `.claude/settings.json` merge is shallow — it only needs to inject an `enabledPlugins` key. A 10-line recursive merge function replaces the library. `fs-extra@11.3.3` would add `ensureDir` and `outputFile` convenience methods, but `fs.mkdirSync({recursive: true})` + `fs.writeFileSync` provide identical behavior in Node 20. Adding any npm dependency to `packages/cli` creates a `node_modules` install requirement for users who `git clone` — the zero-dep approach avoids that entirely.
 
-# Client-side (React checkout UI)
-npm install @stripe/stripe-js @stripe/react-stripe-js
+### Development Tools
 
-# Server-side (FastAPI)
-pip install stripe          # sync
-pip install "stripe[async]" # async handlers
+| Tool | Purpose | Notes |
+|------|---------|-------|
+| Vitest | Unit tests for CLI logic | Already in repo — add test coverage for idempotency guards, JSON merge, CLAUDE.md section injection. Use `node:fs` mock via `vi.mock`. |
+| pnpm `--filter` | Run or test the CLI within the workspace | `pnpm --filter @viflo/cli run viflo init ~/my-project` |
+
+---
+
+## Package Structure
+
+### New workspace package: `packages/cli/`
+
+```
+packages/cli/
+├── package.json        ← defines bin field and package name
+├── bin/
+│   └── viflo.cjs      ← the CLI implementation (single file, CJS, shebang)
+└── tests/
+    └── init.test.js   ← Vitest unit tests
 ```
 
-### Alternatives Considered
+### `packages/cli/package.json`
 
-| Recommended | Alternative | When to Use Alternative |
-|-------------|-------------|-------------------------|
-| `stripe` official SDK | `@lemonsqueezy/lemonsqueezy.js` | Lemon Squeezy for digital products with simpler pricing; Stripe is required for custom billing logic and global coverage |
-| Stripe hosted Checkout | Custom payment form with `CardElement` | Hosted Checkout simplest to launch; custom form needed when checkout must be embedded in-app |
-| Stripe Customer Portal | Custom subscription management UI | Portal handles plan changes/cancellations for free; build custom UI only when brand consistency is critical |
-
-### What NOT to Use
-
-| Avoid | Why | Use Instead |
-|-------|-----|-------------|
-| `stripe@<16` | Locks to deprecated API versions; missing TypeScript improvements and idempotency auto-retry | `stripe@^20` |
-| `@stripe/stripe-js@<8` | v5/v6 types misalign with `stripe` Node SDK v20 APIs | `@stripe/stripe-js@^8.8.0` |
-| Parsing webhook body as JSON before verification | Destroys raw buffer; `stripe.webhooks.constructEvent()` will throw | `await request.text()` (Next.js) or `await request.body()` (FastAPI) before verification |
-| Storing card numbers or CVV anywhere | PCI DSS violation — Stripe Elements keeps card data off your servers | Always use `<PaymentElement>` or hosted Checkout |
-| Trusting `payment_intent.succeeded` from the client | Client can be spoofed | Verify only from Stripe webhook events server-side |
-
-### Stack Patterns by Variant
-
-**One-time payments (e-commerce checkout):**
-- Use Stripe Checkout (hosted) for fastest launch, or `<PaymentElement>` embedded for in-page feel
-- `payment_intent` flow: create intent server-side → client confirms → webhook fulfills
-
-**Recurring subscriptions (SaaS billing):**
-- Use `subscription` objects with Stripe `price` IDs
-- Combine with `stripe.billingPortal.sessions.create()` for self-serve plan management
-- Sync subscription state to your DB on `customer.subscription.updated` and `customer.subscription.deleted` webhook events
-
-**Webhooks in Next.js App Router (current viflo stack):**
-```typescript
-// app/api/webhooks/stripe/route.ts
-export async function POST(request: Request) {
-  const body = await request.text(); // raw body — critical
-  const sig = request.headers.get('stripe-signature')!;
-  const event = stripe.webhooks.constructEvent(
-    body, sig, process.env.STRIPE_WEBHOOK_SECRET!
-  );
-  // route on event.type
+```json
+{
+  "name": "@viflo/cli",
+  "version": "1.4.0",
+  "description": "viflo init CLI — wires new projects to viflo skills",
+  "type": "commonjs",
+  "bin": {
+    "viflo": "./bin/viflo.cjs"
+  },
+  "scripts": {
+    "viflo": "node ./bin/viflo.cjs",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "bin/"
+  ]
 }
 ```
 
-**Webhooks in FastAPI:**
-```python
-@app.post("/webhooks/stripe")
-async def stripe_webhook(request: Request):
-    body = await request.body()  # raw bytes
-    sig = request.headers.get("stripe-signature", "")
-    event = stripe.Webhook.construct_event(body, sig, STRIPE_WEBHOOK_SECRET)
-    # route on event["type"]
+**Why `"bin": { "viflo": "./bin/viflo.cjs" }`:** The `bin` field maps the CLI command name `viflo` to the file. When the package is installed globally (`npm install -g @viflo/cli`), this creates a `viflo` symlink in PATH. When used within the pnpm workspace, `pnpm run viflo` resolves it locally. The `"files"` field ensures only `bin/` is published — no test files or dev artifacts go to npm.
+
+### `pnpm-workspace.yaml` update
+
+```yaml
+packages:
+  - 'apps/*'
+  - 'packages/*'
 ```
 
-### Version Compatibility
+`packages/cli` is already covered by the existing `packages/*` glob — no change needed to the workspace file.
 
-| Package | Version | Compatible With | Notes |
-|---------|---------|-----------------|-------|
-| `stripe` (Node.js) | ^20.3.1 | Node.js 16+ | Node 20+ recommended; matches viflo stack |
-| `@stripe/react-stripe-js` | ^5.6.0 | React 16.8+, React 19 | Compatible with viflo's React 19 |
-| `@stripe/stripe-js` | ^8.8.0 | All modern browsers | v8 required to match stripe Node SDK v20 type signatures |
-| `stripe` (Python) | ^14.3.0 | Python 3.7+ | viflo uses Python 3.11+ — fully compatible |
+### Invocation patterns
+
+| Context | Command | When to use |
+|---------|---------|-------------|
+| Within monorepo | `pnpm --filter @viflo/cli run viflo -- init ~/my-project` | Development, CI |
+| Direct node call | `node packages/cli/bin/viflo.cjs init ~/my-project` | Debugging, no pnpm filter needed |
+| After global install | `viflo init ~/my-project` | End-user scenario (post npm publish) |
+| npx (no install) | `npx @viflo/cli init ~/my-project` | End-user one-shot (post npm publish) |
 
 ---
 
-## Skill 2: RAG / Vector Search
+## Implementation Patterns
 
-### Core Technologies
+### Idempotent file writing (CLAUDE.md stanza injection)
 
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| `pgvector` (Python) | ^0.4.2 | pgvector driver for Python (SQLAlchemy, asyncpg, psycopg3) | Keeps vector search inside existing PostgreSQL — no extra managed service for projects under ~50M vectors. Integrates directly with FastAPI/SQLAlchemy 2.0 already in the viflo stack. |
-| `pgvector` (Node.js) | ^0.2.1 | pgvector driver for Node.js/TypeScript | For Next.js Route Handler retrieval pipelines that query vectors without a Python service hop |
-| `openai` (Python) | ^1.x (latest: 6.22.0 via npm; Python package uses separate versioning) | OpenAI Embeddings API | Standard embedding provider — `text-embedding-3-small` is the default recommendation (1536 dims, ~$0.02/1M tokens) |
-| `@pinecone-database/pinecone` | ^7.1.0 | Managed Pinecone vector DB client | Use when scale exceeds pgvector's sweet spot (>50M vectors) or when fully managed latency SLAs are required |
+Use sentinel comment markers to make the stanza idempotent. If the markers are already present, skip writing. If they are absent, append. Never overwrite existing content above the markers.
 
-### Supporting Libraries
+```javascript
+const STANZA_START = '<!-- viflo:start -->';
+const STANZA_END   = '<!-- viflo:end -->';
 
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| `langchain-community` (Python) | ^0.3.x | PGVector `VectorStore` integration for LangChain RAG chains | When building full LangChain RAG pipelines — wraps pgvector in LangChain's retriever interface |
-| `langchain-openai` (Python) | ^0.3.x | LangChain OpenAI embedding wrapper | Needed when using LangChain's `OpenAIEmbeddings` class in a chain |
-| `anthropic` (Python) | ^0.83.0 | Claude as the generator in RAG retrieve-then-generate | When using Claude Sonnet/Opus as the generation step |
-| `ai` (Vercel AI SDK) | ^6.x | Streaming RAG responses in Next.js | `useChat` + `streamText` with retrieval tool calls gives real-time streaming UX for RAG chatbots |
-
-### Embedding Model Recommendation
-
-| Model | Dimensions | Cost (per 1M tokens) | When to Use |
-|-------|------------|----------------------|-------------|
-| `text-embedding-3-small` | 1536 | ~$0.02 | Default — strong performance, low cost, fits pgvector well at small-to-medium scale |
-| `text-embedding-3-large` | 3072 | ~$0.13 | High-recall use cases (legal, medical, support) where cost is secondary to retrieval precision |
-
-Both models support the `dimensions` API parameter to shorten embeddings without losing concept representation — useful for reducing storage.
-
-### Installation
-
-```bash
-# Python (FastAPI RAG backend)
-pip install pgvector anthropic openai langchain-community langchain-openai
-
-# Node.js (Next.js retrieval helpers)
-npm install pgvector
-
-# Pinecone (optional — use only when pgvector is insufficient)
-npm install @pinecone-database/pinecone
-# or
-pip install pinecone
+function injectStanza(filePath, stanza) {
+  const existing = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : '';
+  if (existing.includes(STANZA_START)) {
+    return { action: 'skipped', reason: 'stanza already present' };
+  }
+  const content = existing + (existing.endsWith('\n') ? '' : '\n') +
+    STANZA_START + '\n' + stanza + '\n' + STANZA_END + '\n';
+  fs.writeFileSync(filePath, content, 'utf8');
+  return { action: 'written' };
+}
 ```
 
-### Alternatives Considered
+### JSON settings merging (`.claude/settings.json`)
+
+Deep merge is overkill — the target key is always `enabledPlugins`. A targeted path-aware write is safer:
+
+```javascript
+function mergeSettings(filePath, patch) {
+  let existing = {};
+  if (fs.existsSync(filePath)) {
+    try { existing = JSON.parse(fs.readFileSync(filePath, 'utf8')); }
+    catch (_) { /* corrupt file — treat as empty */ }
+  }
+  // Shallow merge at top level; nested keys under same property are merged 1 level deep
+  const merged = { ...existing };
+  for (const [k, v] of Object.entries(patch)) {
+    if (typeof v === 'object' && !Array.isArray(v) && typeof merged[k] === 'object') {
+      merged[k] = { ...merged[k], ...v };
+    } else {
+      merged[k] = v;
+    }
+  }
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, JSON.stringify(merged, null, 2) + '\n', 'utf8');
+}
+```
+
+**Why not `deepmerge`:** The merge target (`enabledPlugins`) is a flat key-value object. One level of shallow merge is sufficient and avoids a `node_modules` dependency.
+
+### Scaffold directory creation (`.planning/` structure)
+
+```javascript
+function ensureDir(dirPath) {
+  fs.mkdirSync(dirPath, { recursive: true }); // no-ops if dir exists
+}
+```
+
+`mkdirSync` with `recursive: true` is idempotent — it does not throw if the directory already exists (Node 20+, verified).
+
+---
+
+## Installation
+
+```bash
+# No new dependencies — the CLI uses only Node.js built-ins.
+# Workspace registration happens automatically via pnpm-workspace.yaml.
+
+# After adding packages/cli/package.json:
+pnpm install
+
+# Run locally:
+pnpm --filter @viflo/cli run viflo -- init --minimal /path/to/project
+```
+
+---
+
+## Alternatives Considered
 
 | Recommended | Alternative | When to Use Alternative |
 |-------------|-------------|-------------------------|
-| pgvector (default for viflo stack) | Pinecone | >50M vectors, managed SLA required, no Postgres ops available |
-| pgvector | Qdrant | Complex metadata filtering at scale — Qdrant's payload filtering is best-in-class and maintains recall under selective filters; pgvector recall degrades with complex filters |
-| pgvector | Weaviate | Hybrid search (dense + BM25 keyword) in a single query — Weaviate supports this natively; not worth the ops overhead at small scale |
-| `text-embedding-3-small` | `text-embedding-3-large` | When retrieval recall is critical (legal/medical/enterprise search) and the 6.5x cost increase is justified |
-
-### What NOT to Use
-
-| Avoid | Why | Use Instead |
-|-------|-----|-------------|
-| pgvector with `ivfflat` index beyond 1M vectors without `pgvectorscale` | `ivfflat` index degrades at scale — recall drops and exact KNN is slow | Add `pgvectorscale` extension or migrate to Pinecone/Qdrant |
-| Embedding entire documents as a single vector | Long chunks reduce retrieval precision — a 10K-token document gets averaged into noise | Chunk to 512–1024 tokens with 10–15% overlap |
-| Storing raw LLM-generated text in the vector store | Embeddings should represent source content, not generated text | Embed original document chunks only |
-| `text-embedding-ada-002` | Deprecated; `text-embedding-3-small` outperforms it at lower cost | `text-embedding-3-small` |
-| Cosine similarity without normalizing vectors first | Produces subtly wrong results unless vectors are normalized | Normalize at embed time or use pgvector's `<=>` cosine operator which handles it |
-
-### Stack Patterns by Variant
-
-**Building on existing viflo PostgreSQL stack (recommended for MVP):**
-- Use pgvector Python client + SQLAlchemy 2.0 async
-- Add `CREATE EXTENSION IF NOT EXISTS vector;` to your first migration
-- Store embeddings as `VECTOR(1536)` column alongside existing data
-- Use HNSW index for production (better recall vs IVFFlat): `CREATE INDEX ON items USING hnsw (embedding vector_cosine_ops);`
-
-**When scale or managed infra is required:**
-- Replace pgvector with `@pinecone-database/pinecone` v7 or `pinecone` Python SDK
-- Keep the same retrieval interface — the pattern is identical, only the client changes
-
-**RAG pipeline stages (standard pattern):**
-1. Ingest: chunk documents → embed chunks → store in pgvector
-2. Retrieve: embed query → cosine search top-k → return chunks with metadata
-3. Generate: inject chunks into prompt context → call LLM → stream response
-
-### Version Compatibility
-
-| Package | Version | Compatible With | Notes |
-|---------|---------|-----------------|-------|
-| `pgvector` (Python) | ^0.4.2 | SQLAlchemy 2.0, psycopg3, asyncpg | Matches viflo's SQLAlchemy 2.0 stack |
-| `pgvector` (Node.js) | ^0.2.1 | Node.js 18+, TypeScript 5+ | Works with `pg` driver (node-postgres) |
-| `@pinecone-database/pinecone` | ^7.1.0 | TypeScript >=5.2, Node.js >=20 | Fits viflo's TS 5.7+ and Node 20+ |
-| `langchain-community` | ^0.3.x | Python >=3.10 | viflo uses Python 3.11+ — compatible |
+| Zero-dependency CJS single file | `commander@14.0.3` | Use commander when the CLI has 5+ subcommands with complex option parsing, help text generation, or version flags. `viflo init` has 2 flags (`--minimal`, `--full`) — `process.argv.slice(2)` is 10 lines vs adding a dependency. |
+| Zero-dependency CJS single file | Shell script (`.sh`) | Use shell scripts for environment setup (as `setup-dev.sh` does), not for file content manipulation or JSON merging. |
+| Zero-dependency CJS single file | TypeScript compiled script | TypeScript adds a build step and requires `tsc` or `tsx` at runtime. The CLI is simple enough that type annotations don't justify the compilation overhead. Align with gsd-tools.cjs precedent. |
+| CJS `.cjs` | ESM `.mjs` | Use ESM if the package adopts `"type": "module"` later or if the file needs to `import` ESM-only packages. CJS is the safer default for CLI tools that target all Node 20+ environments. |
+| Inline JSON merge (10 lines) | `deepmerge@4.3.1` | Use deepmerge if the settings schema becomes deeply nested (3+ levels). For the current `.claude/settings.json` shape (flat top-level keys), inline merge is cleaner. |
+| `fs` built-ins | `fs-extra@11.3.3` | Use fs-extra if Node 16 or earlier compatibility is needed. Node 20+ built-ins cover everything: `mkdirSync({recursive})`, `cpSync`, `writeFileSync`. |
 
 ---
 
-## Skill 3: Agent Architecture
-
-### Core Technologies
-
-| Technology | Version | Purpose | Why Recommended |
-|------------|---------|---------|-----------------|
-| `@anthropic-ai/sdk` (TypeScript) | ^0.78.0 | Anthropic Claude API — tools, streaming, multi-turn | Official SDK; supports tool use, extended thinking, streaming, vision. Use for direct Claude-based agent construction without framework overhead. Async-native. |
-| `anthropic` (Python) | ^0.83.0 | Same as above for FastAPI agent backends | `AsyncAnthropic` client works natively with FastAPI's async handlers. DO NOT use synchronous `Anthropic` client in async FastAPI routes. |
-| `@anthropic-ai/claude-agent-sdk` | ^0.2.49 | Programmatic Claude Code / agentic SDK | Specialized SDK for agents that control file systems and run commands. Powers Claude Code itself. Relevant for viflo's own GSD workflow agentic tooling. |
-| `ai` (Vercel AI SDK) | ^6.x | Unified LLM SDK for Next.js streaming + agents | Best DX for streaming agent UI in Next.js — `useChat`, `useCompletion`, `streamText`, tool execution, MCP support. Abstracts over Anthropic/OpenAI/Gemini SDKs. |
-| `@langchain/langgraph` | ^1.1.5 | Stateful multi-agent graph orchestration | Use for complex multi-step agent workflows requiring explicit state transitions, checkpointing, and human-in-the-loop. Production-ready as of 2026. |
-
-### Supporting Libraries
-
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| `@ai-sdk/anthropic` | ^1.x | Vercel AI SDK Anthropic provider | Required when using Vercel AI SDK with Claude models — sits between `ai` and `@anthropic-ai/sdk` |
-| `@langchain/langgraph-sdk` | ^1.6.2 | LangGraph client SDK | When running LangGraph server separately from the Next.js app; connect to hosted graph endpoint |
-| `langchain` (Python) | ^0.5.x | Python orchestration for agent chains | FastAPI agent backends needing complex chain composition or LangChain's built-in tool library |
-| `langchain-core` (Python) | ^0.3.x | Core primitives for LangChain (runnable, schema) | Always install with `langchain` — it's the shared interface layer |
-| `openai` (npm) | ^4.x | OpenAI API client | When agents need to use GPT-4o or o3 alongside Claude (multi-model agent patterns) |
-
-### Installation
-
-```bash
-# TypeScript / Next.js — direct Claude agents
-npm install @anthropic-ai/sdk
-
-# TypeScript / Next.js — streaming agent UI
-npm install ai @ai-sdk/anthropic
-
-# TypeScript / Next.js — stateful multi-step agents
-npm install @langchain/langgraph @langchain/langgraph-sdk
-
-# TypeScript — autonomous code/file-system agents (viflo GSD tooling)
-npm install @anthropic-ai/claude-agent-sdk
-
-# Python / FastAPI — Claude agents
-pip install anthropic
-
-# Python / FastAPI — LangChain agent pipelines
-pip install langchain langchain-core
-```
-
-### Alternatives Considered
-
-| Recommended | Alternative | When to Use Alternative |
-|-------------|-------------|-------------------------|
-| Vercel AI SDK (`ai`) for Next.js agent UI | Direct `@anthropic-ai/sdk` | Use direct SDK when you don't need streaming hooks, multi-provider switching, or built-in tool call rendering |
-| `@langchain/langgraph` for multi-agent | CrewAI | CrewAI ships production faster for role-based team workflows (40% less boilerplate); LangGraph is better for stateful, conditional branching pipelines where you need control |
-| `@langchain/langgraph` for multi-agent | Custom orchestrator | Build custom only if LangGraph's graph model doesn't map to your workflow — LangGraph's checkpointing and human-in-the-loop are hard to replicate |
-| `anthropic` SDK direct | OpenAI Agents SDK | Use OpenAI SDK if the project is committed to GPT-4o / o3; Anthropic SDK for Claude-first development |
-| Mastra (`@mastra/core`) | — | Mastra v1.6 is production-ready (Feb 2026, Gatsby team) — worth evaluating as an alternative to LangGraph for TypeScript-first workflows; not yet as widely adopted |
-
-### What NOT to Use
+## What NOT to Use
 
 | Avoid | Why | Use Instead |
 |-------|-----|-------------|
-| `langchain` (Python or JS) for simple single-turn completions | Massive abstraction overhead for a 5-line API call; debugging is painful | Direct `@anthropic-ai/sdk` or `ai` |
-| Synchronous `Anthropic` Python client in FastAPI | Blocks the async event loop — kills concurrency and throughput | `AsyncAnthropic` client |
-| Storing full conversation history in process memory | Agent state lost on restart; in multi-user apps, sessions corrupt each other | PostgreSQL-backed session store or LangGraph checkpointer |
-| LangGraph for every agent use case | LangGraph adds significant complexity — state machines, graph topology, edge conditions | Use LangGraph only when the workflow has multiple conditional branches and persistent state; use Vercel AI SDK tools for simpler pipelines |
-| `langchain` v0.1.x (Python) | Old API surface (pre-LCEL), being deprecated in 2026 | `langchain` ^0.5.x with LCEL (`RunnableSequence`) |
-
-### Stack Patterns by Variant
-
-**Building agent UI in Next.js (streaming chat, live tool call display):**
-- Use Vercel AI SDK v6 (`ai` + `@ai-sdk/anthropic`)
-- `useChat` hook + `streamText` with tool definitions handles 90% of streaming agent UX
-- Tool results render in real-time as the agent executes
-
-**Building a stateful multi-step agent pipeline (research, code review, multi-hop Q&A):**
-- Use `@langchain/langgraph` with typed state schema
-- Define nodes as tool-calling steps, edges as conditional transitions
-- Use LangGraph's checkpointer with PostgreSQL for durable state across requests
-
-**Building autonomous coding/file-system agents (viflo GSD workflow tooling):**
-- Use `@anthropic-ai/claude-agent-sdk` (the same SDK that powers Claude Code)
-- `query()` function returns an async iterator — consume the stream to react to tool calls as Claude works
-
-**Anthropic multi-agent recommended pattern (2026):**
-- Orchestrator: Claude Opus 4 (`claude-opus-4-5` or latest) — plans and delegates
-- Subagents: Claude Sonnet 4 (`claude-sonnet-4-5` or latest) — execute tasks
-- ~15x token cost vs single-agent; only viable when task complexity justifies the cost
-- Keep subagent context windows small — each subagent should receive only the context it needs
-
-**Simple RAG + agent hybrid (most common viflo use case):**
-- Vercel AI SDK `streamText` with a `retrieve` tool definition
-- Tool calls pgvector endpoint, injects chunks into assistant context, streams final answer
-- No LangGraph needed — tool-calling handles the retrieve step inline
-
-### Version Compatibility
-
-| Package | Version | Compatible With | Notes |
-|---------|---------|-----------------|-------|
-| `@anthropic-ai/sdk` | ^0.78.0 | Node.js 18+, TypeScript 5+ | Use `AsyncAnthropic` / `client.messages.stream()` for streaming |
-| `anthropic` (Python) | ^0.83.0 | Python 3.9+ | viflo uses Python 3.11+ — fully compatible |
-| `ai` (Vercel AI SDK) | ^6.x | Next.js 14+, React 18+ | AI SDK 6 stable; includes MCP support and Agent abstraction |
-| `@ai-sdk/anthropic` | ^1.x | Same as `ai` | Provider adapter — must match major version of `ai` |
-| `@langchain/langgraph` | ^1.1.5 | Node.js 18+, TypeScript 5+ | Use alongside Vercel AI SDK for stateful agents |
-| `langchain` (Python) | ^0.5.x | Python >=3.10 | viflo uses Python 3.11+ — compatible; use LCEL interface |
+| `commander`, `yargs`, `meow`, `oclif` | Runtime npm dependencies that require `node_modules` present; overkill for 2-flag CLI | `process.argv.slice(2)` with a 15-line arg parser |
+| `fs-extra`, `graceful-fs` | Node 20+ built-in `fs` has `mkdirSync({recursive})`, `cpSync` — no gap to fill | `node:fs` |
+| `deepmerge`, `lodash.merge`, `merge-deep` | JSON merge needed is shallow (1-level deep) — single for-loop is sufficient | Inline merge function |
+| `chalk`, `kleur`, `picocolors` | Color terminal output is nice but adds a dependency; `setup-dev.sh` uses raw ANSI codes | ANSI escape codes directly: `\x1b[32m` for green, `\x1b[0m` to reset |
+| TypeScript compilation | Adds `tsc`/`tsx` build step for a file simple enough to write in plain JS | Plain CJS `.cjs` — matches gsd-tools.cjs |
+| ESM (`import`/`export`) | CJS interop with existing workspace packages is simpler; CJS is the workspace default | CJS `require`/`module.exports` |
+| npm publish at v1.4 | Not yet needed — tool only runs from monorepo; publishing adds versioning overhead | Defer to a dedicated "npm package" milestone |
 
 ---
 
-## Full Installation Reference
+## Stack Patterns by Variant
 
-```bash
-# ── STRIPE SKILL ────────────────────────────────────────────────
-# Node.js / Next.js
-npm install stripe @stripe/stripe-js @stripe/react-stripe-js
+**If `--minimal` flag:**
+- Write CLAUDE.md import stanza (idempotent, marker-based)
+- Merge `enabledPlugins` key into `.claude/settings.json` (create file if absent)
+- No directory scaffolding
 
-# Python / FastAPI
-pip install stripe
-pip install "stripe[async]"  # if using async handlers
+**If `--full` flag:**
+- All of `--minimal`
+- Create `.planning/` directory structure with GSD template stubs
+- Write starter CLAUDE.md template with project-specific placeholder sections
 
-# ── RAG / VECTOR SEARCH SKILL ──────────────────────────────────
-# Node.js (retrieval helpers)
-npm install pgvector
+**If target project already has CLAUDE.md with viflo stanza:**
+- Detect sentinel markers
+- Print "already configured" and exit 0 — do not modify the file
 
-# Pinecone (optional — only when pgvector scale is insufficient)
-npm install @pinecone-database/pinecone
+**If target project has `.claude/settings.json` with conflicting `enabledPlugins`:**
+- Shallow-merge: existing plugin keys are preserved; viflo entries are added
+- Never remove existing plugin entries
 
-# Python / FastAPI
-pip install pgvector openai anthropic langchain-community langchain-openai
+---
 
-# ── AGENT ARCHITECTURE SKILL ───────────────────────────────────
-# TypeScript / Next.js — Claude agents + streaming UI
-npm install @anthropic-ai/sdk ai @ai-sdk/anthropic
+## Version Compatibility
 
-# TypeScript / Next.js — stateful multi-agent graphs
-npm install @langchain/langgraph @langchain/langgraph-sdk
-
-# TypeScript — autonomous code/file-system agents (GSD tooling)
-npm install @anthropic-ai/claude-agent-sdk
-
-# Python / FastAPI — Claude agents
-pip install anthropic
-
-# Python / FastAPI — LangChain agent pipelines
-pip install langchain langchain-core
-```
+| Package | Version | Compatible With | Notes |
+|---------|---------|-----------------|-------|
+| Node.js | >=20.0.0 | `fs.mkdirSync({recursive})`, `fs.cpSync` | Node 20 is already the repo minimum — no new constraint |
+| pnpm | >=10.0.0 | workspace package linking, `--filter` | Already required at repo root |
+| Vitest | ^1.0.0 | Already in `apps/web` devDependencies | Add to `packages/cli` devDependencies separately; version pin matches existing |
 
 ---
 
 ## Sources
 
-- [npmjs.com — stripe](https://www.npmjs.com/package/stripe) — v20.3.1 confirmed current (published ~18 days before 2026-02-24); MEDIUM confidence (search result claim)
-- [npmjs.com — @stripe/stripe-js releases](https://github.com/stripe/stripe-js/releases) — v8.8.0 confirmed current (published 3 days before 2026-02-24); MEDIUM confidence
-- [npmjs.com — @stripe/react-stripe-js](https://www.npmjs.com/package/@stripe/react-stripe-js) — v5.6.0 confirmed; MEDIUM confidence
-- [PyPI — stripe](https://pypi.org/project/stripe/) — v14.3.0 confirmed (released 2026-01-28); HIGH confidence (fetched directly from PyPI)
-- [Stripe Webhook Docs](https://docs.stripe.com/webhooks) — raw body requirement and `constructEvent()` verified; HIGH confidence
-- [Stripe Idempotency Docs](https://docs.stripe.com/api/idempotent_requests) — auto-retry with idempotency keys in Node SDK v17+ verified; HIGH confidence
-- [npmjs.com — pgvector](https://www.npmjs.com/package/pgvector) — v0.2.1 confirmed (Node.js); MEDIUM confidence
-- [PyPI — pgvector](https://pypi.org/project/pgvector/) — v0.4.2 confirmed (Python); MEDIUM confidence
-- [npmjs.com — @pinecone-database/pinecone](https://www.npmjs.com/package/@pinecone-database/pinecone) — v7.1.0 confirmed, Node >=20 requirement verified; MEDIUM confidence
-- [OpenAI text-embedding-3 docs](https://platform.openai.com/docs/models/text-embedding-3-small) — 1536 dims, $0.02/1M tokens verified; HIGH confidence
-- [pgvector/pgvector GitHub](https://github.com/pgvector/pgvector) — HNSW index recommendation, scale guidance verified; HIGH confidence
-- [instaclustr.com — pgvector 2026 guide](https://www.instaclustr.com/education/vector-database/pgvector-key-features-tutorial-and-pros-and-cons-2026-guide/) — scale thresholds and best practices; MEDIUM confidence
-- [npmjs.com — @anthropic-ai/sdk](https://www.npmjs.com/package/@anthropic-ai/sdk) — v0.78.0 confirmed (published 4 days before 2026-02-24); MEDIUM confidence
-- [npmjs.com — @anthropic-ai/claude-agent-sdk](https://www.npmjs.com/package/@anthropic-ai/claude-agent-sdk) — v0.2.49 confirmed; MEDIUM confidence
-- [Vercel — AI SDK 6 announcement](https://vercel.com/blog/ai-sdk-6) — v6 stable, MCP support, Agent abstraction, tool execution verified; HIGH confidence
-- [npmjs.com — ai](https://www.npmjs.com/package/ai) — v6.0.x confirmed current (published 2 hours before 2026-02-24 search); MEDIUM confidence
-- [npmjs.com — @langchain/langgraph](https://www.npmjs.com/package/@langchain/langgraph) — v1.1.5 confirmed (published 6 days before 2026-02-24); MEDIUM confidence
-- [PyPI — langchain](https://pypi.org/project/langchain/) — v0.5.1 (Feb 10, 2026) confirmed as latest; MEDIUM confidence
-- [LangGraph JS docs](https://docs.langchain.com/oss/javascript/langgraph/overview) — TypeScript support, StateGraph pattern verified; HIGH confidence
-- [datacamp.com — CrewAI vs LangGraph 2026](https://www.datacamp.com/tutorial/crewai-vs-langgraph-vs-autogen) — production comparison, LangGraph recommended for stateful/conditional workflows; MEDIUM confidence
-- [Anthropic — Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — orchestrator/subagent model, context scoping; HIGH confidence
-- [mastra.ai](https://mastra.ai/docs) — @mastra/core v1.6.0 (Feb 2026), TypeScript-first agent framework; MEDIUM confidence
+- npm registry — `commander@14.0.3` confirmed current (2026-02-24, fetched directly from `registry.npmjs.org`); HIGH confidence
+- npm registry — `deepmerge@4.3.1` confirmed current (2026-02-24); HIGH confidence
+- npm registry — `fs-extra@11.3.3` confirmed current (2026-02-24); HIGH confidence
+- [Node.js fs docs](https://nodejs.org/api/fs.html) — `mkdirSync({recursive})`, `cpSync`, `writeFileSync` behavior verified; HIGH confidence
+- [npm docs — bin field](https://docs.npmjs.com/cli/v7/configuring-npm/package-json#bin) — `#!/usr/bin/env node` shebang requirement, bin map format; HIGH confidence
+- [code.claude.com/docs/en/settings](https://code.claude.com/docs/en/settings) — `.claude/settings.json` `enabledPlugins` format, project-scope path verified; HIGH confidence (fetched directly 2026-02-24)
+- [code.claude.com/docs/en/plugins-reference](https://code.claude.com/docs/en/plugins-reference) — plugin manifest schema, skills directory structure verified; HIGH confidence (fetched directly 2026-02-24)
+- `/home/ollie/.claude/get-shit-done/bin/gsd-tools.cjs` — CJS single-file CLI pattern, zero-dependency approach validated against working production tool; HIGH confidence
+- `viflo/package.json` (repo root) — Node `>=20.0.0`, pnpm `>=10.0.0`, default CJS module type confirmed; HIGH confidence
+- `viflo/apps/web/package.json` — Vitest `^1.0.0` confirmed as existing test framework version; HIGH confidence
 
 ---
 
-*Stack research for: viflo v1.3 Expert Skills (Stripe, RAG, Agent Architecture)*
+*Stack research for: viflo v1.4 — `viflo init` CLI*
 *Researched: 2026-02-24*
