@@ -1,69 +1,45 @@
 // .agent/skills/rag-vector-search/eval.ts
 // Run: npx tsx .agent/skills/rag-vector-search/eval.ts
 //
-// Evaluates RAG retrieval quality using a golden set of hardcoded queries.
-// No DB seeding required — expects data from the Quick Start to already be inserted.
+// RAG evaluation script. Requires the Quick Start data to be inserted first
+// (see SKILL.md Quick Start section — 3 sample documents are embedded there).
 //
 // Metrics:
-//   recall@k  — fraction of expected chunks found in top-k results (threshold: recall@5 > 0.8)
-//   MRR       — mean reciprocal rank of first relevant result (threshold: MRR > 0.7)
+//   recall@k  — fraction of expected chunks in top-k results (threshold: >0.8 for production)
+//   MRR       — mean reciprocal rank of first relevant result (threshold: >0.7)
 //
-// Prerequisites:
-//   1. Run the Quick Start: npx tsx embed-and-retrieve.ts
-//   2. Copy the UUIDs printed by the insert step into GOLDEN_SET below
-//   3. Run: npx tsx .agent/skills/rag-vector-search/eval.ts
+// No DB seeding required — uses hardcoded chunk IDs from Quick Start inserts.
+// To get the chunk IDs: SELECT id, content FROM document_chunks LIMIT 10;
 
 import OpenAI from 'openai';
 import pgvector from 'pgvector/prisma';
 import { PrismaClient } from '@prisma/client';
 
-const openai = new OpenAI();
-const db = new PrismaClient();
-
-// ── Golden Set ────────────────────────────────────────────────────────────────
-// Replace placeholder UUIDs with actual IDs from your Quick Start insert.
-// Each entry: a natural language query + the IDs of chunks that should appear in top-5.
-
-const GOLDEN_SET = [
+// Replace UUID values with actual IDs after running Quick Start inserts:
+//   SELECT id, content FROM document_chunks ORDER BY created_at;
+const GOLDEN_SET: Array<{ query: string; expectedChunkIds: string[] }> = [
   {
     query: 'how does approximate nearest neighbor search work?',
-    expectedChunkIds: [
-      '<UUID of HNSW chunk from Quick Start>',
-    ],
+    expectedChunkIds: ['<replace-with-chunk-id-from-Quick-Start>'],
   },
   {
-    query: 'what is vector similarity search in postgres?',
-    expectedChunkIds: [
-      '<UUID of pgvector chunk from Quick Start>',
-    ],
+    query: 'what is pgvector used for in PostgreSQL?',
+    expectedChunkIds: ['<replace-with-chunk-id-from-Quick-Start>'],
   },
   {
-    query: 'how does hybrid search combine semantic and keyword search?',
-    expectedChunkIds: [
-      '<UUID of hybrid search chunk from Quick Start>',
-    ],
+    query: 'how does hybrid search combine vector and keyword search?',
+    expectedChunkIds: ['<replace-with-chunk-id-from-Quick-Start>'],
   },
 ];
-// ─────────────────────────────────────────────────────────────────────────────
 
-// ── Metrics ───────────────────────────────────────────────────────────────────
-
-/**
- * recall@k: fraction of expected chunks appearing in top-k results.
- * Formula: hits / expected.length
- * Thresholds: > 0.8 = production-ready; < 0.6 = investigate chunking or embedding
- */
+// recall@k: fraction of expected chunks found in top-k retrieved results
 function recallAtK(retrieved: string[], expected: string[], k: number): number {
   const topK = retrieved.slice(0, k);
   const hits = expected.filter((id) => topK.includes(id)).length;
   return hits / expected.length;
 }
 
-/**
- * Reciprocal Rank: 1 / rank_of_first_relevant (0 if no relevant result found).
- * MRR is the mean of this across all queries.
- * Threshold: MRR > 0.7 means the first relevant result appears in the top 2 on average.
- */
+// MRR: reciprocal rank of the first relevant result (1/rank, or 0 if not found)
 function reciprocalRank(retrieved: string[], expected: string[]): number {
   for (let i = 0; i < retrieved.length; i++) {
     if (expected.includes(retrieved[i])) return 1 / (i + 1);
@@ -71,24 +47,20 @@ function reciprocalRank(retrieved: string[], expected: string[]): number {
   return 0;
 }
 
-// ── Retrieval ─────────────────────────────────────────────────────────────────
-
-interface ChunkRow {
-  id: string;
-  score: number;
-}
-
-async function retrieve(query: string, topK = 5): Promise<string[]> {
-  const embedResponse = await openai.embeddings.create({
+async function retrieveIds(
+  openai: OpenAI,
+  db: PrismaClient,
+  query: string,
+  topK = 5
+): Promise<string[]> {
+  const response = await openai.embeddings.create({
     model: 'text-embedding-3-small',
     input: query,
   });
-  const queryVector = pgvector.toSql(embedResponse.data[0].embedding);
+  const queryVector = pgvector.toSql(response.data[0].embedding);
 
-  const results = await db.$queryRaw<ChunkRow[]>`
-    SELECT
-      id::text,
-      1 - (embedding <=> ${queryVector}) AS score
+  const results = await db.$queryRaw<{ id: string }[]>`
+    SELECT id
     FROM document_chunks
     WHERE embedding_model_version = 'text-embedding-3-small-v1'
     ORDER BY embedding <=> ${queryVector}
@@ -98,45 +70,44 @@ async function retrieve(query: string, topK = 5): Promise<string[]> {
   return results.map((r) => r.id);
 }
 
-// ── Main ──────────────────────────────────────────────────────────────────────
+async function main(): Promise<void> {
+  const openai = new OpenAI();
+  const db = new PrismaClient();
 
-const K = 5;
-let totalRecall = 0;
-let totalMRR = 0;
+  console.log('RAG Evaluation\n' + '='.repeat(40));
 
-console.log(`\nRAG Evaluation — recall@${K} and MRR\n${'─'.repeat(50)}`);
+  let totalRecall = 0;
+  let totalMRR = 0;
 
-for (const item of GOLDEN_SET) {
-  const retrieved = await retrieve(item.query, K);
-  const recall = recallAtK(retrieved, item.expectedChunkIds, K);
-  const rr = reciprocalRank(retrieved, item.expectedChunkIds);
+  for (const { query, expectedChunkIds } of GOLDEN_SET) {
+    const retrieved = await retrieveIds(openai, db, query);
+    const recall = recallAtK(retrieved, expectedChunkIds, 5);
+    const mrr = reciprocalRank(retrieved, expectedChunkIds);
 
-  totalRecall += recall;
-  totalMRR += rr;
+    totalRecall += recall;
+    totalMRR += mrr;
 
-  const recallLabel = recall >= 0.8 ? 'PASS' : recall >= 0.6 ? 'WARN' : 'FAIL';
-  const mrrLabel = rr > 0.7 ? 'PASS' : 'WARN';
+    console.log(`\nQuery: "${query}"`);
+    console.log(`  recall@5: ${recall.toFixed(2)}  MRR: ${mrr.toFixed(2)}`);
+    console.log(`  retrieved: ${retrieved.slice(0, 5).join(', ')}`);
+  }
 
-  console.log(`Query:    "${item.query}"`);
-  console.log(`recall@${K}: ${recall.toFixed(2)} [${recallLabel}]`);
-  console.log(`RR:       ${rr.toFixed(2)} [${mrrLabel}]`);
-  console.log('');
+  const avgRecall = totalRecall / GOLDEN_SET.length;
+  const avgMRR = totalMRR / GOLDEN_SET.length;
+
+  console.log('\n' + '='.repeat(40));
+  console.log(`Average recall@5: ${avgRecall.toFixed(2)}  (threshold: >0.80 for production)`);
+  console.log(`Average MRR:      ${avgMRR.toFixed(2)}  (threshold: >0.70)`);
+
+  if (avgRecall < 0.6) {
+    console.log('\n⚠ recall@5 < 0.60 — investigate chunking strategy or embedding model');
+  } else if (avgRecall >= 0.8) {
+    console.log('\n✓ recall@5 ≥ 0.80 — production-ready');
+  } else {
+    console.log('\n~ recall@5 0.60–0.80 — acceptable; consider tuning chunk size or overlap');
+  }
+
+  await db.$disconnect();
 }
 
-const avgRecall = totalRecall / GOLDEN_SET.length;
-const avgMRR = totalMRR / GOLDEN_SET.length;
-
-console.log('─'.repeat(50));
-console.log(`Mean recall@${K}: ${avgRecall.toFixed(2)} (threshold: > 0.8 for production-ready)`);
-console.log(`Mean MRR:        ${avgMRR.toFixed(2)} (threshold: > 0.7 = relevant result in top 2 on average)`);
-console.log('');
-
-if (avgRecall >= 0.8) {
-  console.log('Status: PRODUCTION-READY (recall@5 > 0.8)');
-} else if (avgRecall >= 0.6) {
-  console.log('Status: BORDERLINE — consider tuning chunking strategy or topK');
-} else {
-  console.log('Status: NOT READY — recall@5 < 0.6. Investigate chunking or embedding model.');
-}
-
-await db.$disconnect();
+main().catch(console.error);
