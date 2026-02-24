@@ -241,10 +241,10 @@ const response = await client.messages.parse({
       content: 'Classify the sentiment: "The product arrived broken and customer service was useless."',
     },
   ],
-  response_format: zodOutputFormat(SentimentSchema, 'sentiment'),
+  output_config: { format: zodOutputFormat(SentimentSchema, 'sentiment') },
 });
 
-const result = response.choices[0].message.parsed;
+const result = response.parsed_output;
 // result.sentiment => 'negative'
 // result.confidence => 0.97
 ```

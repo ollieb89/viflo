@@ -108,10 +108,10 @@ const response = await client.messages.parse({
   model: 'claude-haiku-4-5-20251001',
   max_tokens: 256,
   messages: [{ role: 'user', content: `Classify sentiment: ${text}` }],
-  response_format: zodOutputFormat(SentimentSchema, 'sentiment'),
+  output_config: { format: zodOutputFormat(SentimentSchema, 'sentiment') },
 });
 
-const result = response.choices[0].message.parsed;
+const result = response.parsed_output;
 // result is typed and validated — throws on schema mismatch
 ```
 
