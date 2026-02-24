@@ -103,7 +103,15 @@ Files not intended to be loaded into context, but rather used within the output 
 
 ## Implementation Patterns
 
-[TODO: Provide working code examples — not prose. Show the actual implementation, not "use library X".]
+[TODO: Provide at least 2 working code examples showing core operations. Use fenced code blocks with language tags. Replace the placeholders below with real snippets. Prefer copy-pasteable, runnable code over pseudo-code.]
+
+```python
+# [e.g. Basic usage / happy path]
+```
+
+```python
+# [e.g. Error-handled / production variant with edge cases]
+```
 
 ## Failure Modes & Edge Cases
 
