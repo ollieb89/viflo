@@ -44,6 +44,9 @@ Recent decisions affecting current work:
 - [11-01]: applies-to schema uses exact model IDs (claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5-20251001) not family names — prevents ambiguity when new models release
 - [11-01]: eval.ts uses LLM-as-judge (claude-haiku-4-5-20251001) against bullet criteria — handles natural language output variance without brittle string matching
 - [11-01]: golden-set .md test cases use human-readable sections parsed by eval.ts — keeps test cases editable without changing runner
+- [11-02]: Better Auth replaces Auth.js as self-hosted alternative — authjs-patterns.md replaced with deprecation stub
+- [11-02]: Better Auth middleware uses getSessionCookie() fast path (Approach A) as recommended default; auth.api.getSession() reserved for server components needing user data
+- [11-02]: CVE-2025-29927 documented as Next.js App Router framework-level pitfall — applies to Clerk and Better Auth users equally; requires Next.js 15.2.3+
 
 ### Pending Todos
 
@@ -57,5 +60,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 11-01-PLAN.md (prompt-engineering skill v1.2 rewrite)
-Resume with: `/gsd:execute-phase 11` for next plan (11-02 auth-systems)
+Stopped at: Completed 11-02-PLAN.md (auth-systems skill v1.2 rewrite — Phase 11 complete)
+Resume with: `/gsd:plan-phase 12` for Phase 12 (agent-architecture)

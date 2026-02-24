@@ -9,12 +9,12 @@ Requirements for the Skills Expansion milestone. Each maps to roadmap phases (Ph
 
 ### Auth Systems
 
-- [ ] **AUTH-01**: Developer can follow a Clerk quick-start to add auth to a Next.js App Router app (sign-up, sign-in, protected routes via proxy.ts)
-- [ ] **AUTH-02**: Developer can configure Better Auth as the self-hosted alternative with the same protected-route pattern
-- [ ] **AUTH-03**: Developer can access session data in server components, server actions, and API routes
-- [ ] **AUTH-04**: Developer can wire OAuth providers (GitHub, Google) through both Clerk and Better Auth
-- [ ] **AUTH-05**: Skill documents the App Router cache pitfall and DAL re-validation pattern to prevent auth bypass
-- [ ] **AUTH-06**: Developer can set up a Clerk webhook receiver for user lifecycle sync (created, updated, deleted)
+- [x] **AUTH-01**: Developer can follow a Clerk quick-start to add auth to a Next.js App Router app (sign-up, sign-in, protected routes via proxy.ts)
+- [x] **AUTH-02**: Developer can configure Better Auth as the self-hosted alternative with the same protected-route pattern
+- [x] **AUTH-03**: Developer can access session data in server components, server actions, and API routes
+- [x] **AUTH-04**: Developer can wire OAuth providers (GitHub, Google) through both Clerk and Better Auth
+- [x] **AUTH-05**: Skill documents the App Router cache pitfall and DAL re-validation pattern to prevent auth bypass
+- [x] **AUTH-06**: Developer can set up a Clerk webhook receiver for user lifecycle sync (created, updated, deleted)
 
 ### Stripe Payments
 
@@ -103,12 +103,12 @@ Requirements for the Skills Expansion milestone. Each maps to roadmap phases (Ph
 | PROMPT-03 | Phase 11 | Complete |
 | PROMPT-04 | Phase 11 | Complete |
 | PROMPT-05 | Phase 11 | Complete |
-| AUTH-01 | Phase 11 | Pending |
-| AUTH-02 | Phase 11 | Pending |
-| AUTH-03 | Phase 11 | Pending |
-| AUTH-04 | Phase 11 | Pending |
-| AUTH-05 | Phase 11 | Pending |
-| AUTH-06 | Phase 11 | Pending |
+| AUTH-01 | Phase 11 | Complete |
+| AUTH-02 | Phase 11 | Complete |
+| AUTH-03 | Phase 11 | Complete |
+| AUTH-04 | Phase 11 | Complete |
+| AUTH-05 | Phase 11 | Complete |
+| AUTH-06 | Phase 11 | Complete |
 | RAG-01 | Phase 12 | Pending |
 | RAG-02 | Phase 12 | Pending |
 | RAG-03 | Phase 12 | Pending |
