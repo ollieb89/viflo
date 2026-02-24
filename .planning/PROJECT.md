@@ -1,14 +1,17 @@
 # Viflo: Universal Agentic Development Environment
 
-## Current Milestone: v1.4 — Project Tooling
+## Current Milestone: v1.5 — viflo init CLI
 
-**Goal:** Close v1.3 integration debt and ship `viflo init` — a CLI that wires new projects to viflo in one command.
+**Goal:** Ship the `viflo init` CLI so developers can wire any project to viflo in one command.
 
 **Target features:**
-- Integration review: INDEX.md update, 500-line compliance verification, cross-skill references (INFRA-01–03)
-- `viflo init --minimal`: writes CLAUDE.md import stanza + Claude Code settings.json for skill referencing
-- `viflo init --full`: also scaffolds `.planning/` directory + starter CLAUDE.md template
-- Idempotent, safe to re-run on existing projects
+- `viflo init --minimal`: writes CLAUDE.md sentinel block with `@` import lines + `.claude/settings.json` permissions (INIT-01, INIT-02)
+- `viflo init --full`: also scaffolds `.planning/` directory with GSD stubs + starter CLAUDE.md template (INIT-03, INIT-04)
+- `viflo init --dry-run`: preview all file actions without writing (INIT-06)
+- Labelled per-file output (`created`/`updated`/`skipped`/`merged`) with resolved absolute paths (INIT-07)
+- Idempotent across all modes — already covered at library level by v1.4 CLI Foundation (INIT-05 ✓)
+
+**Deferred from v1.4:** Phases 17–19 scope unchanged; library layer (paths.cjs, writers.cjs) is ready.
 
 ## What This Is
 
@@ -55,16 +58,19 @@ A complete agentic dev environment you can install in one command — structured
 - ✓ RAG/Vector Search skill at v1.3 depth — HNSW schema, RRF hybrid search SQL, 4 Gotchas, runnable eval.ts with recall@5/MRR (RAG-01–05) — v1.3
 - ✓ Agent Architecture skill at v1.3 depth — MAX_TURNS guardrails in every example, FastAPI SSE streaming, LangGraph 1.x, pgvector episodic memory, MCP overview (AGENT-01–05) — v1.3
 - ✓ Stripe Payments skill at v1.3 depth — raw-body webhooks, atomic ON CONFLICT idempotency, four-event subscription lifecycle, Customer Portal, trial periods (STRIPE-01–05) — v1.3
+- ✓ INDEX.md updated with intro paragraph and accurate descriptions for all five v1.4 skills (INFRA-01) — v1.4
+- ✓ All v1.4 SKILL.md files verified ≤500 lines with VERIFICATION.md audit table (INFRA-02) — v1.4 (agent-architecture 503 lines, accepted per decision)
+- ✓ Bidirectional See Also cross-references across RAG ↔ Agent Architecture ↔ prompt-engineering at three named seams (INFRA-03) — v1.4
+- ✓ `viflo init` library layer idempotent — CLAUDE.md sentinel merge and settings.json deep-merge safe to re-run (INIT-05) — v1.4
 
 ### Active
 
-- [ ] INDEX.md updated with prompt-engineering, auth-systems, rag-vector-search, agent-architecture, stripe-payments (INFRA-01)
-- [ ] All new/updated SKILL.md files verified ≤500 lines with line counts in VERIFICATION.md (INFRA-02)
-- [ ] Cross-references between RAG ↔ Agent Architecture ↔ prompt-engineering skills at integration seams (INFRA-03)
-- [ ] `viflo init --minimal` writes CLAUDE.md stanza + Claude Code settings.json to reference viflo skills (INIT-01)
-- [ ] `viflo init --full` additionally scaffolds .planning/ directory with GSD template stubs (INIT-02)
-- [ ] `viflo init --full` writes a starter CLAUDE.md template with project-specific sections (INIT-03)
-- [ ] `viflo init` is idempotent — safe to re-run on existing projects without overwriting custom content (INIT-04)
+- [ ] `viflo init --minimal` writes CLAUDE.md sentinel block with `@` import lines for all viflo skills (INIT-01)
+- [ ] `viflo init --minimal` writes/merges `.claude/settings.json` with safe default `permissions.allow` entries (INIT-02)
+- [ ] `viflo init --full` scaffolds `.planning/` directory with GSD stub files — skips files that already exist (INIT-03)
+- [ ] `viflo init --full` writes starter CLAUDE.md template when no CLAUDE.md exists (INIT-04)
+- [ ] `viflo init --dry-run` previews all file actions with resolved absolute paths without writing any files (INIT-06)
+- [ ] Each file action emits a labelled result (`created`/`updated`/`skipped`/`merged`) with resolved absolute path (INIT-07)
 
 ### Out of Scope
 
@@ -115,17 +121,20 @@ A complete agentic dev environment you can install in one command — structured
 Shipped v1.0 with 35 skill packages, ~60,775 LOC across Markdown/JS/TS/JSON (7 days, 5 phases).
 Shipped v1.1 with CI pipeline, Vitest coverage, skill modularization, and VERIFICATION.md audit trail (2 days, 6 phases, 33 commits).
 Shipped v1.2 (Foundation Skills) with prompt-engineering and auth-systems rewrites at v1.2 depth standard (1 day, 1 phase, 3 plans).
-Shipped v1.3 (Expert Skills) with RAG/Vector Search, Agent Architecture, and Stripe Payments skills at v1.2 depth standard (7 days, 3 phases, 6 plans, 28 commits).
+Shipped v1.3 (Expert Skills) with RAG/Vector Search, Agent Architecture, and Stripe Payments skills at v1.3 depth standard (7 days, 3 phases, 6 plans, 28 commits).
+Shipped v1.4 (Project Tooling) with integration review (INDEX.md, VERIFICATION.md, See Also links) and CLI library layer (paths.cjs, writers.cjs, 23 Vitest tests) (1 day, 2 phases, 5 plans, +3,165 lines).
 
-Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js tooling, pnpm workspace.
-~48,455 LOC in `.agent/skills/` (pre-v1.3 baseline; v1.3 added ~5,500 net lines).
+Tech stack: Claude Code / GSD methodology, Markdown-first, Node.js/CommonJS tooling, pnpm workspace, Vitest.
+~53,000 LOC estimated in `.agent/skills/` (v1.3 baseline ~48,455 + v1.4 additions).
 
 Known tech debt:
 - Makefile `make setup` target (09-CONTEXT.md specified Makefile; execution used `scripts/setup-dev.sh` instead — different mechanism, same function)
 - 07-VERIFICATION.md checked off telemetry commit before verifying against `git ls-files` — future verifications should use `git ls-files` to confirm committed state
-- INDEX.md not yet updated with v1.2/v1.3 skills (INFRA-01 — deferred to v1.4)
-- 500-line compliance not formally verified for v1.3 skills (INFRA-02 — deferred to v1.4)
-- Cross-skill references between RAG ↔ Agent ↔ prompt-engineering not added (INFRA-03 — deferred to v1.4)
+- writeIfChanged helper not exported from writers.cjs — Phase 17+ must extend or duplicate idempotency logic
+- resolveViFloRoot() exported and tested but not yet called within bin/ tree — correctly deferred to Phase 17+
+- ROADMAP.md Phase 17 success criterion uses stale sentinel format (viflo:start/end) — must update before Phase 17 planning
+- research/ files reference stale viflo:start/viflo:end format — update before Phase 17 research begins
+- agent-architecture SKILL.md is 503 lines (over 500-line limit) — accepted per locked Phase 15 decision; 4/5 skills within limit is the accepted outcome
 
 ## Key Decisions
 
@@ -156,7 +165,15 @@ Known tech debt:
 | 2026-02-24 | Next.js API route proxy for SSE streaming | ✓ Good — keeps API key server-side, avoids CORS, simpler than direct FastAPI-to-useChat bridge |
 | 2026-02-24 | pg.Pool raw SQL for Stripe idempotency | ✓ Good — atomic ON CONFLICT DO NOTHING preferred over Prisma P2002 try/catch; consistent across SKILL.md and references/ |
 | 2026-02-24 | Defer Phase 15 (INFRA) to v1.4    | ✓ Good — 15/18 requirements satisfied; INDEX.md/compliance/cross-refs are housekeeping, not blockers |
+| 2026-02-24 | Scope v1.4 to Phases 15–16 only    | ✓ Good — Phases 17–19 (viflo init CLI) deferred to v1.5; library layer ships independently as a clean foundation |
+| 2026-02-24 | Sentinel format: `<!-- BEGIN VIFLO -->` / `<!-- END VIFLO -->` | ✓ Good — HTML comment delimiters safe in any Markdown context; indexOf+slice avoids regex escaping pitfalls |
+| 2026-02-24 | resolveViFloRoot() uses `__dirname` not `process.cwd()` | ✓ Good — deterministic regardless of where node is invoked from |
+| 2026-02-24 | existing-first Set spread for array dedup in settings.json merge | ✓ Good — stable ordering preserves user entries at front |
+| 2026-02-24 | vitest installed at workspace root (not apps/web) | ✓ Good — `pnpm exec vitest` resolves from repo root; web app tests unaffected |
+| 2026-02-24 | Real temp directories (fs.mkdtempSync) for writers tests | ✓ Good — real I/O is what the tests are designed to verify; filesystem mocking would defeat the purpose |
+| 2026-02-24 | agent-architecture 503 lines accepted, trimming ruled out | ✓ Good — See Also section addition was post-baseline; 4/5 within limit is valid pass state |
+| 2026-02-24 | Named seam annotations in See Also links (not just destination) | ✓ Good — "episodic memory pattern (pgvector-backed recall)" tells readers what they'll find, not just where |
 
 ---
 
-_Last updated: 2026-02-24 after v1.4 milestone started_
+_Last updated: 2026-02-24 after v1.4 milestone_

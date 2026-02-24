@@ -84,3 +84,31 @@
 
 ---
 
+
+## v1.4 Project Tooling (Shipped: 2026-02-24)
+
+**Phases completed:** 2 phases (15–16), 5 plans
+**Timeline:** 2026-02-24 → 2026-02-24 (1 day)
+**Files changed:** 31 files (+3,165 / −25 lines)
+**Git range:** feat(15-01): update INDEX.md → feat(16-02): create writers unit tests
+
+**Key accomplishments:**
+- Updated INDEX.md with intro paragraph and accurate v1.4 skill descriptions (Better Auth for auth-systems, HNSW hybrid search for rag-vector-search)
+- Added bidirectional See Also cross-reference links across rag-vector-search, agent-architecture, and prompt-engineering skills at three named integration seams
+- Created VERIFICATION.md with post-edit wc -l audit for all five v1.4 SKILL.md files (4/5 within 500-line limit; agent-architecture 503 lines accepted per locked decision)
+- `bin/lib/paths.cjs` — deterministic `__dirname`-based repo root and target-path resolution with no process.cwd() dependency
+- `bin/lib/writers.cjs` — idempotent CLAUDE.md sentinel merge (indexOf+slice) and settings.json deep-merge (Set dedup, existing-first order)
+- Vitest CJS test suite with 23 passing tests for paths.cjs and writers.cjs, wired as `pnpm run test:cli`; INIT-05 idempotency regression gate active
+
+**Scope note:** Scoped to Phases 15–16 (Integration Review + CLI Foundation). Phases 17–19 (viflo init --minimal, --full, polish) deferred to v1.5.
+
+**Known tech debt:**
+- writeIfChanged helper not exported from writers.cjs — Phase 17+ must extend writers.cjs or duplicate idempotency logic
+- resolveViFloRoot() exported and tested but not yet called within bin/ tree — correctly deferred to Phase 17+
+- ROADMAP.md Phase 17 success criterion still uses stale sentinel format (viflo:start/end); must update before Phase 17 planning
+- research/ files reference stale viflo:start/viflo:end format — update before Phase 17 research begins
+
+**Archive:** `.planning/milestones/v1.4-ROADMAP.md`
+
+---
+
