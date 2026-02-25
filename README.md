@@ -75,6 +75,23 @@ cd viflo
 
 This script installs all dependencies, sets up pre-commit hooks for secret scanning, and verifies your environment. See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed contribution guidelines.
 
+### Security Hook Setup (Canonical)
+
+Viflo enforces secret scanning with `gitleaks` and `detect-secrets` through pre-commit hooks.
+
+- Canonical setup path: `./scripts/setup-dev.sh` (auto-attempts hook install/refresh).
+- Explicit rerun path: `bash scripts/setup-security-hooks.sh`.
+- Parity/drift check: `pnpm run quality-gate` reports hook drift and remediation command.
+- If hooks are missing, commits and PRs can fail CI until hook setup is repaired.
+
+False-positive handling policy:
+
+- Update `.secrets.baseline` and/or `.gitleaks.toml` only with explicit PR rationale.
+- Baseline/allowlist edits require standard `CODEOWNERS` review.
+- No special override-team routing is used for baseline/allowlist updates.
+
+Contributor troubleshooting details are documented in [CONTRIBUTING.md](./CONTRIBUTING.md#security-hooks-troubleshooting).
+
 ## Usage
 
 ### Planning Phase

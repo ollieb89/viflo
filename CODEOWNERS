@@ -1,0 +1,3 @@
+# Security ownership for secret-scan baseline/allowlist artifacts.
+.secrets.baseline @maintainers
+.gitleaks.toml @maintainers

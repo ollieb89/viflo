@@ -132,6 +132,45 @@ pre-commit run --all-files
 
 If a commit is blocked, the hook will print the detected secret's file and line. Remove the secret, use an environment variable instead, and re-commit.
 
+#### Security Hooks Troubleshooting
+
+Canonical setup path:
+
+```bash
+./scripts/setup-dev.sh
+```
+
+Explicit rerun/recovery path:
+
+```bash
+bash scripts/setup-security-hooks.sh
+```
+
+Parity and drift diagnostics:
+
+```bash
+pnpm run quality-gate
+```
+
+If drift is reported (for example missing `.git/hooks/pre-commit` or version mismatch), rerun:
+
+```bash
+bash scripts/setup-security-hooks.sh
+```
+
+CI behavior:
+
+- CI will fail until required hooks are installed and secret scans pass locally.
+- `gitleaks` and `detect-secrets` are hard-blocking; there is no first-commit bypass path.
+
+False-positive handling policy:
+
+- Keep changes scoped to `.secrets.baseline` / `.gitleaks.toml`.
+- Include explicit PR rationale for baseline/allowlist updates.
+- Baseline/allowlist files are protected by `CODEOWNERS` and require standard owner review.
+
+Canonical setup guidance is mirrored in [README.md](./README.md#security-hook-setup-canonical).
+
 ### Step 4: Make Your Changes
 
 Follow these conventions:
