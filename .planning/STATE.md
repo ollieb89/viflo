@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-02-24 after v1.6 milestone kickoff)
 
 ## Current Position
 
-Phase: 20-gate-enforcement-hardening
-Plan: 20-02 complete (2/2)
-Status: Complete
-Last activity: 2026-02-25 — Executed 20-02 (override audit + hook bootstrap hardening + baseline ownership/docs)
+Phase: 21-test-reliability-and-budget-guards
+Plan: Context gathered (pre-planning)
+Status: Ready for planning
+Last activity: 2026-02-25 — Captured 21-CONTEXT.md with reliability, coverage, and LLM cost-control decisions
 
 ## Accumulated Context
 
@@ -48,5 +48,5 @@ Last activity: 2026-02-25 — Executed 20-02 (override audit + hook bootstrap ha
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Completed 20-02-PLAN.md
-Resume with: `/gsd-plan-phase 21` or `/gsd-execute-phase 21`
+Stopped at: Phase 21 context gathered
+Resume with: `/gsd-plan-phase 21`
