@@ -138,6 +138,6 @@
 | 17. Minimal Mode                       | v1.5      | 2/2            | Complete    | 2026-02-24 |
 | 18. Full Mode                          | v1.5      | 2/2            | Complete    | 2026-02-24 |
 | 19. Polish                             | v1.5      | 2/2            | Complete    | 2026-02-24 |
-| 20. Gate Enforcement Hardening         | v1.6      | 2/2            | Complete    | 2026-02-25 |
+| 20. Gate Enforcement Hardening         | v1.6      | Complete    | 2026-02-25 | 2026-02-25 |
 | 21. Test Reliability and Budget Guards | v1.6      | 0/2            | Planned     | —          |
 | 22. Database Ops for Integration       | v1.6      | 0/1            | Planned     | —          |
