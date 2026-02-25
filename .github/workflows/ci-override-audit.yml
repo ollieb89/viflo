@@ -1,0 +1,30 @@
+name: CI Override Audit
+
+on:
+  pull_request:
+    branches: [main, "release/*"]
+    types: [opened, synchronize, reopened, edited, labeled, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  override-audit:
+    name: override-audit
+    runs-on: ubuntu-latest
+    # Run only when ci-override is present on the PR.
+    if: contains(github.event.pull_request.labels.*.name, 'ci-override')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate ci-override evidence and authorization
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_API_URL: ${{ github.api_url }}
+          CI_OVERRIDE_AUTHORIZED_TEAM: maintainers
+        run: |
+          bash scripts/verify-ci-override.sh
