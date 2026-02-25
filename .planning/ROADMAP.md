@@ -116,28 +116,28 @@
 
 ## Progress
 
-| Phase                                  | Milestone | Plans Complete | Status   | Completed  |
-| -------------------------------------- | --------- | -------------- | -------- | ---------- |
-| 0. Foundation                          | v1.0      | —              | Complete | 2026-02-23 |
-| 1. Core Skills Development             | v1.0      | —              | Complete | 2026-02-23 |
-| 2. Extended Skills                     | v1.0      | —              | Complete | 2026-02-23 |
-| 3. DevOps & Deployment                 | v1.0      | —              | Complete | 2026-02-23 |
-| 4. Polish & Community                  | v1.0      | 4/4            | Complete | 2026-02-23 |
-| 5. CI & Security                       | v1.1      | 2/2            | Complete | 2026-02-23 |
-| 6. Test Suite                          | v1.1      | 2/2            | Complete | 2026-02-23 |
-| 7. Content Hygiene                     | v1.1      | 3/3            | Complete | 2026-02-23 |
-| 8. Verification Closure                | v1.1      | 2/2            | Complete | 2026-02-23 |
-| 9. Workspace Tooling                   | v1.1      | 2/2            | Complete | 2026-02-24 |
-| 10. Commit & Verify                    | v1.1      | 3/3            | Complete | 2026-02-24 |
-| 11. Foundation Skills                  | v1.2      | 3/3            | Complete | 2026-02-24 |
-| 12. RAG / Vector Search                | v1.3      | 2/2            | Complete | 2026-02-24 |
-| 13. Agent Architecture                 | v1.3      | 2/2            | Complete | 2026-02-24 |
-| 14. Stripe Payments                    | v1.3      | 2/2            | Complete | 2026-02-24 |
-| 15. Integration Review                 | v1.4      | 3/3            | Complete | 2026-02-24 |
-| 16. CLI Foundation                     | v1.4      | 2/2            | Complete | 2026-02-24 |
-| 17. Minimal Mode                       | v1.5      | 2/2            | Complete | 2026-02-24 |
-| 18. Full Mode                          | v1.5      | 2/2            | Complete | 2026-02-24 |
-| 19. Polish                             | v1.5      | 2/2            | Complete | 2026-02-24 |
-| 20. Gate Enforcement Hardening         | v1.6      | 0/2            | Planned  | —          |
-| 21. Test Reliability and Budget Guards | v1.6      | 0/2            | Planned  | —          |
-| 22. Database Ops for Integration       | v1.6      | 0/1            | Planned  | —          |
+| Phase                                  | Milestone | Plans Complete | Status      | Completed  |
+| -------------------------------------- | --------- | -------------- | ----------- | ---------- |
+| 0. Foundation                          | v1.0      | —              | Complete    | 2026-02-23 |
+| 1. Core Skills Development             | v1.0      | —              | Complete    | 2026-02-23 |
+| 2. Extended Skills                     | v1.0      | —              | Complete    | 2026-02-23 |
+| 3. DevOps & Deployment                 | v1.0      | —              | Complete    | 2026-02-23 |
+| 4. Polish & Community                  | v1.0      | 4/4            | Complete    | 2026-02-23 |
+| 5. CI & Security                       | v1.1      | 2/2            | Complete    | 2026-02-23 |
+| 6. Test Suite                          | v1.1      | 2/2            | Complete    | 2026-02-23 |
+| 7. Content Hygiene                     | v1.1      | 3/3            | Complete    | 2026-02-23 |
+| 8. Verification Closure                | v1.1      | 2/2            | Complete    | 2026-02-23 |
+| 9. Workspace Tooling                   | v1.1      | 2/2            | Complete    | 2026-02-24 |
+| 10. Commit & Verify                    | v1.1      | 3/3            | Complete    | 2026-02-24 |
+| 11. Foundation Skills                  | v1.2      | 3/3            | Complete    | 2026-02-24 |
+| 12. RAG / Vector Search                | v1.3      | 2/2            | Complete    | 2026-02-24 |
+| 13. Agent Architecture                 | v1.3      | 2/2            | Complete    | 2026-02-24 |
+| 14. Stripe Payments                    | v1.3      | 2/2            | Complete    | 2026-02-24 |
+| 15. Integration Review                 | v1.4      | 3/3            | Complete    | 2026-02-24 |
+| 16. CLI Foundation                     | v1.4      | 2/2            | Complete    | 2026-02-24 |
+| 17. Minimal Mode                       | v1.5      | 2/2            | Complete    | 2026-02-24 |
+| 18. Full Mode                          | v1.5      | 2/2            | Complete    | 2026-02-24 |
+| 19. Polish                             | v1.5      | 2/2            | Complete    | 2026-02-24 |
+| 20. Gate Enforcement Hardening         | v1.6      | 1/2            | In Progress | —          |
+| 21. Test Reliability and Budget Guards | v1.6      | 0/2            | Planned     | —          |
+| 22. Database Ops for Integration       | v1.6      | 0/1            | Planned     | —          |
