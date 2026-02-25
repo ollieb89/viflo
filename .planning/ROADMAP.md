@@ -70,7 +70,7 @@
 
 ### 📋 v1.6 Infrastructure Hardening & Quality Gates (Phases 20–22)
 
-- [ ] **Phase 20: Gate Enforcement Hardening** — align/activate GitHub Actions gates with local reproducibility and enforce secret scanning hooks
+- [x] **Phase 20: Gate Enforcement Hardening** — align/activate GitHub Actions gates with local reproducibility and enforce secret scanning hooks (completed 2026-02-25)
 - [ ] **Phase 21: Test Reliability and Budget Guards** — enforce baseline tests, coverage ratchet, and explicit low-cost/local gating for LLM-assisted tests
 - [ ] **Phase 22: Database Ops for Integration** — operationalize migration command and CI database provisioning for integration tests
 
@@ -138,6 +138,6 @@
 | 17. Minimal Mode                       | v1.5      | 2/2            | Complete    | 2026-02-24 |
 | 18. Full Mode                          | v1.5      | 2/2            | Complete    | 2026-02-24 |
 | 19. Polish                             | v1.5      | 2/2            | Complete    | 2026-02-24 |
-| 20. Gate Enforcement Hardening         | v1.6      | 1/2            | In Progress | —          |
+| 20. Gate Enforcement Hardening         | v1.6      | 2/2            | Complete    | 2026-02-25 |
 | 21. Test Reliability and Budget Guards | v1.6      | 0/2            | Planned     | —          |
 | 22. Database Ops for Integration       | v1.6      | 0/1            | Planned     | —          |

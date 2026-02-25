@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-24 after v1.6 milestone kickoff)
 ## Current Position
 
 Phase: 20-gate-enforcement-hardening
-Plan: 20-01 complete (1/2)
-Status: In progress
-Last activity: 2026-02-25 — Executed 20-01 (quality-gate runner + CI gate jobs + gate policy note)
+Plan: 20-02 complete (2/2)
+Status: Complete
+Last activity: 2026-02-25 — Executed 20-02 (override audit + hook bootstrap hardening + baseline ownership/docs)
 
 ## Accumulated Context
 
@@ -30,6 +30,10 @@ Last activity: 2026-02-25 — Executed 20-01 (quality-gate runner + CI gate jobs
 - [v1.6 / 20-01]: Required checks remain individual jobs: `lint`, `typecheck`, `test`, `build`; aggregate job is visibility-only
 - [v1.6 / 20-01]: Phase executed with `git commit --no-verify` per explicit user instruction due unrelated pre-existing hook failures
 - [v1.6 / 20-01]: `rg`-based fallback verification used where `yq` is unavailable in environment
+- [v1.6 / 20-02]: Override path uses single `ci-override` label with fail-closed validation for mandatory evidence (reason/scope/tracking/expiry/approver evidence) and authorized team membership checks.
+- [v1.6 / 20-02]: Deterministic hook lifecycle path is `bash scripts/setup-security-hooks.sh`; `setup-dev.sh` auto-attempts and continues with explicit CI-impact warning + remediation command on failure.
+- [v1.6 / 20-02]: `scripts/quality-gate.sh` reports hook drift on every run with exact remediation command and no auto-fix behavior.
+- [v1.6 / 20-02]: `.secrets.baseline` and `.gitleaks.toml` are CODEOWNERS-protected; baseline/allowlist changes require auditable PR rationale and standard owner review.
 
 ### Pending Todos
 
@@ -37,11 +41,12 @@ Last activity: 2026-02-25 — Executed 20-01 (quality-gate runner + CI gate jobs
 
 ### Blockers/Concerns
 
-- `pnpm run gate:test` and full `pnpm run quality-gate` timed out in this environment (exit 124); follow-up needed in phase 20-02 or dedicated debug pass.
-- `yq` is not installed locally, so YAML-query verification commands from plan require fallback tooling.
+- `yq` is not installed locally, so YAML-query verification commands require fallback tooling.
+- `pre-commit` is not installed in this environment and cannot be installed due restricted network access; secret-scan hook verification depth is limited to script/path checks.
+- Husky pre-commit currently fails on unrelated pre-existing CLI test failures; plan task commits required `--no-verify` per user instruction.
 
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Completed 20-01-PLAN.md
-Resume with: `/gsd-execute-phase 20` to execute 20-02-PLAN.md
+Stopped at: Completed 20-02-PLAN.md
+Resume with: `/gsd-plan-phase 21` or `/gsd-execute-phase 21`
