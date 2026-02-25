@@ -13,6 +13,11 @@
   },
   "scripts": {
     "prepare": "husky",
+    "quality-gate": "bash scripts/quality-gate.sh",
+    "gate:lint": "bash scripts/quality-gate.sh --gate lint",
+    "gate:typecheck": "bash scripts/quality-gate.sh --gate typecheck",
+    "gate:test": "bash scripts/quality-gate.sh --gate test",
+    "gate:build": "bash scripts/quality-gate.sh --gate build",
     "lint": "prettier --check \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
     "lint:fix": "prettier --write \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
     "type-check": "echo 'type-check: no TS sources at root (documentation repo)' && exit 0",
