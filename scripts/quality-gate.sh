@@ -56,6 +56,9 @@ declare -A STATUS_BY_GATE=()
 declare -A DURATION_BY_GATE=()
 declare -A EXIT_BY_GATE=()
 declare -A LOG_BY_GATE=()
+HOOK_DRIFT=false
+HOOK_DRIFT_DETAILS=""
+HOOK_REMEDIATION="bash scripts/setup-security-hooks.sh"
 
 json_escape() {
   local value="$1"
@@ -91,6 +94,45 @@ run_gate() {
   LOG_BY_GATE["$gate"]="$log_file"
 }
 
+detect_hook_drift() {
+  local hook_file=".git/hooks/pre-commit"
+  local version_marker=".git/hooks/.viflo-pre-commit-version"
+  local installed_version=""
+  local current_version=""
+  local reasons=()
+
+  if [[ ! -d .git ]]; then
+    HOOK_DRIFT=true
+    HOOK_DRIFT_DETAILS="not running from a git repository root"
+    return
+  fi
+
+  if [[ ! -f "$hook_file" ]]; then
+    reasons+=("hook missing")
+  elif ! grep -qi "pre-commit" "$hook_file"; then
+    reasons+=("hook content mismatch")
+  fi
+
+  if ! command -v pre-commit >/dev/null 2>&1; then
+    reasons+=("pre-commit command missing")
+  else
+    current_version="$(pre-commit --version | awk '{print $2}')"
+    if [[ -f "$version_marker" ]]; then
+      installed_version="$(cat "$version_marker" 2>/dev/null || true)"
+      if [[ "$installed_version" != "$current_version" ]]; then
+        reasons+=("version drift ($installed_version -> $current_version)")
+      fi
+    else
+      reasons+=("version marker missing")
+    fi
+  fi
+
+  if [[ ${#reasons[@]} -gt 0 ]]; then
+    HOOK_DRIFT=true
+    HOOK_DRIFT_DETAILS="$(IFS='; '; echo "${reasons[*]}")"
+  fi
+}
+
 cleanup_logs() {
   for gate in "${EXECUTED_GATES[@]}"; do
     rm -f "${LOG_BY_GATE[$gate]}"
@@ -116,6 +158,8 @@ for gate in "${EXECUTED_GATES[@]}"; do
     failed_count=$((failed_count + 1))
   fi
 done
+
+detect_hook_drift
 
 if [[ "$JSON_MODE" == "true" ]]; then
   printf '{\n'
@@ -149,6 +193,10 @@ if [[ "$JSON_MODE" == "true" ]]; then
     printf '\n'
   done
   printf '  ],\n'
+  printf '  "hook_drift": {"detected": %s, "details": "%s", "remediation_command": "%s"},\n' \
+    "$HOOK_DRIFT" \
+    "$(json_escape "$HOOK_DRIFT_DETAILS")" \
+    "$(json_escape "$HOOK_REMEDIATION")"
   printf '  "summary": {"total": %s, "passed": %s, "failed": %s}\n' \
     "${#EXECUTED_GATES[@]}" "$((${#EXECUTED_GATES[@]} - failed_count))" "$failed_count"
   printf '}\n'
@@ -162,6 +210,18 @@ else
     echo "mode: full"
   fi
   echo
+
+  if [[ "$HOOK_DRIFT" == "true" ]]; then
+    echo "== HOOK DRIFT =="
+    echo "status: DRIFT_DETECTED"
+    echo "details: $HOOK_DRIFT_DETAILS"
+    echo "next_step: Run '$HOOK_REMEDIATION' to repair security hook state."
+    echo
+  else
+    echo "== HOOK DRIFT =="
+    echo "status: OK"
+    echo
+  fi
 
   for gate in "${EXECUTED_GATES[@]}"; do
     echo "== GATE: $gate =="

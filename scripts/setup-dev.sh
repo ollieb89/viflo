@@ -101,16 +101,18 @@ echo -e "${GREEN}✓${NC} Dependencies installed"
 echo ""
 echo "🔧 Setting up pre-commit hooks..."
 
-# Install pre-commit hooks
-if [ -f ".git/hooks/pre-commit" ]; then
-    echo "   pre-commit hooks already installed, updating..."
+# Auto-attempt deterministic security hook setup. Fail open with loud remediation.
+if bash scripts/setup-security-hooks.sh; then
+    echo -e "${GREEN}✓${NC} Pre-commit hooks installed"
 else
-    echo "   Installing pre-commit hooks..."
+    echo ""
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${YELLOW}WARNING: security hooks setup failed${NC}"
+    echo "Commits and pull requests can fail CI until hooks are installed."
+    echo "Run: bash scripts/setup-security-hooks.sh"
+    echo "Docs: CONTRIBUTING.md#pre-commit-hooks-secret-scanning"
+    echo -e "${YELLOW}================================================================${NC}"
 fi
-
-pre-commit install
-
-echo -e "${GREEN}✓${NC} Pre-commit hooks installed"
 
 echo ""
 echo "🧪 Verifying setup..."
@@ -121,14 +123,12 @@ if [ ! -d "apps/web/node_modules" ]; then
     exit 1
 fi
 
-# Verify pre-commit hooks
-if [ ! -f ".git/hooks/pre-commit" ]; then
-    echo -e "${RED}❌ pre-commit hooks not installed${NC}"
-    exit 1
-fi
-
 echo -e "${GREEN}✓${NC} Workspace packages have dependencies"
-echo -e "${GREEN}✓${NC} Pre-commit hooks are active"
+if [ -f ".git/hooks/pre-commit" ]; then
+    echo -e "${GREEN}✓${NC} Pre-commit hooks are active"
+else
+    echo -e "${YELLOW}⚠ Pre-commit hooks are not active (run: bash scripts/setup-security-hooks.sh)${NC}"
+fi
 
 echo ""
 echo -e "${GREEN}🎉 Setup complete!${NC}"
