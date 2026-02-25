@@ -41,13 +41,13 @@ declare -a ORDERED_GATES=("lint" "typecheck" "test" "build")
 declare -A COMMANDS=(
   ["lint"]="pnpm run lint"
   ["typecheck"]="pnpm run type-check"
-  ["test"]="pnpm run test"
+  ["test"]="pnpm run test:web:ci"
   ["build"]="pnpm run build"
 )
 declare -A SUGGESTED=(
   ["lint"]="pnpm run lint"
   ["typecheck"]="pnpm run type-check"
-  ["test"]="pnpm run test"
+  ["test"]="pnpm run test:web:ci"
   ["build"]="pnpm run build"
 )
 

@@ -9,7 +9,7 @@ import re
 import sys
 from pathlib import Path
 from typing import List, Dict
-from datetime import datetime
+
 
 
 class PlanMerger:
@@ -20,7 +20,11 @@ class PlanMerger:
     
     def load_plan(self, filename: str) -> Dict:
         """Load and parse a plan file."""
-        filepath = self.planning_dir / filename
+        # Prevent path traversal - normalize and check it's within planning_dir
+        filepath = (self.planning_dir / filename).resolve()
+        if not str(filepath).startswith(str(self.planning_dir.resolve())):
+            raise ValueError(f"Invalid plan path: {filename}")
+        
         if not filepath.exists():
             raise FileNotFoundError(f"Plan not found: {filename}")
         

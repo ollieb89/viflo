@@ -206,6 +206,36 @@ MCP_PROBE_CMD=true ALLOW_FLAKY_PROBES=1 pnpm run bench:sc-reflect
 
 These tests also run automatically in our nightly benchmark workflows to monitor the health of the agent integrations over time without blocking everyday development.
 
+#### LLM-Assisted Test Policy
+
+LLM-assisted tests are intentionally disabled by default to keep normal gates reliable and cost-controlled.
+
+Default deterministic paths (no LLM calls):
+
+```bash
+pnpm run test
+pnpm run gate:test
+```
+
+Explicit opt-in path:
+
+```bash
+RUN_LLM_TESTS=1 TEST_MODEL_PROFILE=local pnpm run test:llm
+```
+
+Allowed `TEST_MODEL_PROFILE` values:
+
+- `local`
+- `budget`
+
+Fail-closed behavior:
+
+- `RUN_LLM_TESTS` missing or not `1`: wrapper exits without running LLM tests.
+- Opt-in with missing/invalid profile: command exits non-zero with remediation text.
+- Unsupported profiles such as `premium` are rejected by design.
+
+Policy overview is mirrored in [README.md](./README.md#llm-assisted-test-policy-default-off).
+
 ### Step 6: Push and Open a PR
 
 ```bash

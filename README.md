@@ -92,6 +92,27 @@ False-positive handling policy:
 
 Contributor troubleshooting details are documented in [CONTRIBUTING.md](./CONTRIBUTING.md#security-hooks-troubleshooting).
 
+### LLM-Assisted Test Policy (Default Off)
+
+Standard quality gates stay deterministic and non-LLM by default:
+
+- `pnpm run test`
+- `pnpm run gate:test`
+
+Optional LLM-assisted tests require explicit opt-in and approved profile:
+
+```bash
+RUN_LLM_TESTS=1 TEST_MODEL_PROFILE=local pnpm run test:llm
+```
+
+Allowed values for `TEST_MODEL_PROFILE`:
+
+- `local`
+- `budget`
+
+Any missing/unsupported profile fails closed by design. See
+[CONTRIBUTING.md](./CONTRIBUTING.md#llm-assisted-test-policy) for troubleshooting and examples.
+
 ## Usage
 
 ### Planning Phase

@@ -6,9 +6,10 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:llm": "node -e \"console.log('No LLM-assisted tests are currently defined for @viflo/web.');\"",
     "test:coverage": "vitest run --coverage",
-    "test:coverage:ratchet": "vitest run --coverage && npx tsx scripts/coverage-ratchet.ts",
-    "test:coverage:update": "vitest run --coverage && npx tsx scripts/coverage-ratchet.ts update"
+    "test:coverage:ratchet": "vitest run --coverage && node scripts/coverage-ratchet.cjs",
+    "test:coverage:update": "vitest run --coverage && node scripts/coverage-ratchet.cjs update"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -2,7 +2,15 @@
 phase: 20-gate-enforcement-hardening
 plan: "02"
 subsystem: infra
-tags: [github-actions, ci-override, pre-commit, gitleaks, detect-secrets, codeowners]
+tags:
+  [
+    github-actions,
+    ci-override,
+    pre-commit,
+    gitleaks,
+    detect-secrets,
+    codeowners,
+  ]
 requires:
   - phase: 20-gate-enforcement-hardening
     provides: canonical quality-gate runner and individual CI gate checks from 20-01
@@ -13,8 +21,14 @@ provides:
   - baseline/allowlist CODEOWNERS protection and canonical setup docs
 affects: [phase-21-test-reliability-and-budget-guards, security, ci]
 tech-stack:
-  added: [GitHub Actions override-audit workflow, bash validator for override policy]
-  patterns: [single override label with mandatory evidence, fail-closed authorization checks, deterministic hook remediation]
+  added:
+    [GitHub Actions override-audit workflow, bash validator for override policy]
+  patterns:
+    [
+      single override label with mandatory evidence,
+      fail-closed authorization checks,
+      deterministic hook remediation,
+    ]
 key-files:
   created:
     - .github/workflows/ci-override-audit.yml
@@ -51,6 +65,7 @@ completed: 2026-02-25
 - **Files modified:** 9
 
 ## Accomplishments
+
 - Added `ci-override` audit workflow and validator script that enforce evidence completeness, override scope declaration, and authorized-team membership.
 - Added deterministic `scripts/setup-security-hooks.sh`, integrated setup auto-attempt + fail-open warning path, and added hook drift reporting in `scripts/quality-gate.sh`.
 - Added `CODEOWNERS` protection for `.secrets.baseline` and `.gitleaks.toml`, and documented canonical setup/recovery policy with README/CONTRIBUTING cross-links.
@@ -64,6 +79,7 @@ Each task was committed atomically:
 3. **Task 3: Lock baseline ownership and document canonical security setup in README + CONTRIBUTING** - `1d623ac` (docs)
 
 ## Files Created/Modified
+
 - `.github/workflows/ci-override-audit.yml` - PR event-driven override audit workflow.
 - `scripts/verify-ci-override.sh` - Override evidence/scope/team authorization validator.
 - `.github/pull_request_template.md` - Mandatory override evidence fields/checklist.
@@ -75,6 +91,7 @@ Each task was committed atomically:
 - `CONTRIBUTING.md` - Hook troubleshooting, CI failure expectations, and baseline policy.
 
 ## Decisions Made
+
 - Enforced a single override label model (`ci-override`) with explicit scope and evidence instead of per-gate labels.
 - Implemented fail-closed authorization checks against one configured team slug.
 - Drift detection in parity path is report-only; remediation remains explicit via one command.
@@ -84,6 +101,7 @@ Each task was committed atomically:
 ### Auto-fixed Issues
 
 **1. [Rule 3 - Blocking] `yq` unavailable for YAML verification commands**
+
 - **Found during:** Task 1 verification
 - **Issue:** `yq` command is missing in this environment.
 - **Fix:** Used `rg` structural checks against workflow YAML content as fallback.
@@ -92,6 +110,7 @@ Each task was committed atomically:
 - **Committed in:** N/A (verification-only fallback)
 
 **2. [Rule 3 - Blocking] `pre-commit` unavailable and package install blocked by network restrictions**
+
 - **Found during:** Task 2 verification
 - **Issue:** `pre-commit` command missing; `pip3 install --user pre-commit` failed due offline/network-restricted environment.
 - **Fix:** Verified script syntax and drift reporting behavior with current environment state (`pre-commit` missing + hook missing), including exact remediation command output.
@@ -105,6 +124,7 @@ Each task was committed atomically:
 **Impact on plan:** No scope creep; enforcement behavior shipped, with environment-limited verification explicitly documented.
 
 ## Issues Encountered
+
 - Pre-commit commit hooks fail in this repo due pre-existing unrelated CLI test failures; task commits used `--no-verify` per instruction.
 - Environment lacks `yq` and internet access for installing `pre-commit`, reducing available verification depth.
 
@@ -113,9 +133,11 @@ Each task was committed atomically:
 None - no external service configuration required.
 
 ## Next Phase Readiness
+
 - Phase 20 implementation is now complete with both plans executed.
 - Ready for Phase 21 planning/execution (test reliability and budget guards).
 
 ---
-*Phase: 20-gate-enforcement-hardening*
-*Completed: 2026-02-25*
+
+_Phase: 20-gate-enforcement-hardening_
+_Completed: 2026-02-25_

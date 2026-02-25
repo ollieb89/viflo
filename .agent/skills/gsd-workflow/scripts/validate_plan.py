@@ -29,7 +29,14 @@ class PlanValidator:
             self.errors.append(f"File not found: {self.plan_path}")
             return False
         
-        content = self.plan_path.read_text()
+        try:
+            content = self.plan_path.read_text(encoding='utf-8', errors='replace')
+        except PermissionError:
+            self.errors.append(f"Permission denied: {self.plan_path}")
+            return False
+        except (IOError, OSError) as e:
+            self.errors.append(f"Error reading file: {e}")
+            return False
         
         # Basic structure checks
         self._check_xml_structure(content)
@@ -218,6 +225,7 @@ def main():
     
     if args.all or not args.plan:
         validate_all_plans(planning_dir)
+        return 0
     else:
         plan_path = planning_dir / args.plan
         if not plan_path.exists():

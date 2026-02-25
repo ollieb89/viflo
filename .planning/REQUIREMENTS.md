@@ -19,18 +19,18 @@ Requirements for milestone v1.6 Infrastructure Hardening & Quality Gates. Each m
 
 ### Test Baseline and Coverage
 
-- [ ] **TEST-01**: `apps/web` has a working Vitest setup that runs in CI
-- [ ] **TEST-02**: `apps/web` includes at least 5 baseline unit tests for core components or utilities
-- [ ] **TEST-03**: Coverage ratchet blocks CI when coverage falls below the locked baseline
+- [x] **TEST-01**: `apps/web` has a working Vitest setup that runs in CI
+- [x] **TEST-02**: `apps/web` includes at least 5 baseline unit tests for core components or utilities
+- [x] **TEST-03**: Coverage ratchet blocks CI when coverage falls below the locked baseline
 
 ### Database Operationalization
 
-- [ ] **DBOP-01**: Contributor can run one workspace command (for example `turbo db:migrate`) to provision or update development database schema from migrations
-- [ ] **DBOP-02**: CI integration-test flow provisions a database service and successfully runs migration command before integration tests
+- [x] **DBOP-01**: Contributor can run one workspace command (for example `turbo db:migrate`) to provision or update development database schema from migrations
+- [x] **DBOP-02**: CI integration-test flow provisions a database service and successfully runs migration command before integration tests
 
 ### LLM Test Cost Control
 
-- [ ] **COST-01**: Any LLM-assisted test path is disabled by default and runs only when explicitly requested with approved low-cost/local model profile
+- [x] **COST-01**: Any LLM-assisted test path is disabled by default and runs only when explicitly requested with approved low-cost/local model profile
 
 ## Future Requirements
 
@@ -55,18 +55,18 @@ Requirements for milestone v1.6 Infrastructure Hardening & Quality Gates. Each m
 
 Which phases cover which requirements. Updated during roadmap creation.
 
-| Requirement | Phase    | Status  |
-| ----------- | -------- | ------- |
-| GATE-01     | Phase 20 | Pending |
-| GATE-02     | Phase 20 | Pending |
-| SEC-01      | Phase 20 | Pending |
-| SEC-02      | Phase 20 | Pending |
-| TEST-01     | Phase 21 | Pending |
-| TEST-02     | Phase 21 | Pending |
-| TEST-03     | Phase 21 | Pending |
-| COST-01     | Phase 21 | Pending |
-| DBOP-01     | Phase 22 | Pending |
-| DBOP-02     | Phase 22 | Pending |
+| Requirement | Phase    | Status   |
+| ----------- | -------- | -------- |
+| GATE-01     | Phase 20 | Pending  |
+| GATE-02     | Phase 20 | Pending  |
+| SEC-01      | Phase 20 | Pending  |
+| SEC-02      | Phase 20 | Pending  |
+| TEST-01     | Phase 21 | Complete |
+| TEST-02     | Phase 21 | Complete |
+| TEST-03     | Phase 21 | Complete |
+| COST-01     | Phase 21 | Complete |
+| DBOP-01     | Phase 22 | Complete |
+| DBOP-02     | Phase 22 | Complete |
 
 **Coverage:**
 

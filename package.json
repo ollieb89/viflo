@@ -22,10 +22,17 @@
     "lint:fix": "prettier --write \"**/*.{md,yaml,yml,json}\" --ignore-path .gitignore",
     "type-check": "echo 'type-check: no TS sources at root (documentation repo)' && exit 0",
     "test": "pnpm --filter @viflo/web test",
+    "test:web:ci": "pnpm --filter @viflo/web run test && pnpm --filter @viflo/web run test:coverage:ratchet",
+    "test:llm": "bash scripts/run-llm-tests.sh",
     "test:cli": "pnpm exec vitest run --config bin/vitest.config.cjs",
     "precommit:secrets": "./scripts/precommit-secrets.sh",
     "validate:sc-prompts": "./scripts/validate-sc-prompts.sh",
     "bench:sc-reflect": "./scripts/benchmark-sc-reflect.sh",
+    "db:up": "docker-compose -f packages/db/docker-compose.yml up -d",
+    "db:down": "docker-compose -f packages/db/docker-compose.yml down",
+    "db:migrate": "cd packages/db && alembic upgrade head",
+    "db:reset": "pnpm run db:down && pnpm run db:up && sleep 3 && pnpm run db:migrate",
+    "db:test": "cd packages/db && pnpm run test:integration",
     "build": "echo 'build: documentation repo — no build step' && exit 0"
   },
   "devDependencies": {

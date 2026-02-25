@@ -1,0 +1,22 @@
+{
+  "name": "@viflo/db",
+  "version": "0.1.0",
+  "description": "Database package for Viflo — migrations and models",
+  "private": true,
+  "scripts": {
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "db:logs": "docker-compose logs -f postgres",
+    "db:migrate": "alembic upgrade head",
+    "db:migrate:down": "alembic downgrade -1",
+    "db:reset": "docker-compose down -v && docker-compose up -d && sleep 3 && alembic upgrade head",
+    "db:revision": "alembic revision --autogenerate",
+    "db:status": "alembic current",
+    "db:history": "alembic history --verbose",
+    "test:integration": "pytest tests/integration/ -v",
+    "install:python": "pip install -e .",
+    "install:python:dev": "pip install -e '.[dev]'"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

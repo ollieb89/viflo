@@ -134,3 +134,51 @@
 **Archive:** `.planning/milestones/v1.5-ROADMAP.md`
 
 ---
+
+## v1.6 Infrastructure Hardening & Quality Gates (Shipped: 2026-02-25)
+
+**Phases completed:** 3 phases (20–22), 3 plans
+**Timeline:** 2026-02-24 → 2026-02-25 (2 days)
+**Files changed:** 28 files (+4,892 / −156 lines)
+
+**Key accomplishments:**
+
+### Phase 20: Gate Enforcement Hardening
+
+- Canonical quality gate script `scripts/quality-gate.sh` with local/CI parity
+- Individual required jobs (lint, typecheck, test, build) + visibility-only aggregate job
+- Pre-commit security hooks (`gitleaks`, `detect-secrets`) with one-command setup
+- CODEOWNERS protection for `.secrets.baseline` and `.gitleaks.toml`
+- Override audit workflow for emergency bypasses with mandatory evidence fields
+
+### Phase 21: Test Reliability and Budget Guards
+
+- **25 baseline unit tests** in `apps/web/` (skill validation, plan parsing, coverage ratchet, sc-reflect)
+- **Coverage ratchet** (`test:coverage:ratchet`) fails CI on regression below 98.11% baseline
+- **LLM test budget guards** (`evaluateLlmTestGate()`) — off by default, requires explicit `RUN_LLM_TESTS=1` + `TEST_MODEL_PROFILE=local|budget`
+- All tests run in both local and CI via `quality-gate.sh --gate test`
+
+### Phase 22: Database Ops for Integration
+
+- New `packages/db/` package with PostgreSQL + Alembic (SQLAlchemy 2.0)
+- **Workspace commands:** `pnpm db:up`, `pnpm db:migrate`, `pnpm db:reset`, `pnpm db:test`
+- **Initial migration:** `projects` table with UUID PK, timestamps, Alembic versioning
+- **Integration tests:** 4 pytest tests (connect, table exists, CRUD, schema validation)
+- **CI integration:** GitHub Actions job with PostgreSQL service container, migrations, integration tests
+- **Documentation:** `MIGRATIONS.md` with quick-start, workflow guide, troubleshooting
+
+**Requirements satisfied:** 10/10 v1.6 requirements
+
+| Requirement               | Phase | Status |
+| ------------------------- | ----- | ------ |
+| GATE-01, GATE-02          | 20    | ✅     |
+| SEC-01, SEC-02            | 20    | ✅     |
+| TEST-01, TEST-02, TEST-03 | 21    | ✅     |
+| COST-01                   | 21    | ✅     |
+| DBOP-01, DBOP-02          | 22    | ✅     |
+
+**Archive:** `.planning/milestones/v1.6-ROADMAP.md` (create if needed)
+
+---
+
+_Last updated: 2026-02-25 after v1.6 milestone completion_

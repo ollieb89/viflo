@@ -22,6 +22,7 @@ class PhaseManager:
         "planning",
         "ready-to-execute",
         "executing",
+        "in-progress",  # Alias for executing
         "verifying",
         "complete"
     ]
@@ -54,7 +55,8 @@ class PhaseManager:
             return "unknown"
         
         content = self.roadmap_file.read_text()
-        pattern = rf'## Phase {phase}:[^\n]*\n[^#]*?\*\*Status\*\*:\s*(\w+)'
+        # Status can contain hyphens (e.g., "in-progress", "not-started")
+        pattern = rf'## Phase {phase}:[^\n]*\n[^#]*?\*\*Status\*\*:\s*([\w-]+)'
         match = re.search(pattern, content, re.DOTALL)
         
         return match.group(1).lower() if match else "unknown"
@@ -70,20 +72,36 @@ class PhaseManager:
             print(f"   Valid: {', '.join(self.VALID_STATES)}")
             return False
         
-        content = self.roadmap_file.read_text()
+        try:
+            content = self.roadmap_file.read_text()
+        except PermissionError:
+            print(f"❌ Permission denied reading ROADMAP.md")
+            return False
+        except (IOError, OSError) as e:
+            print(f"❌ Error reading ROADMAP.md: {e}")
+            return False
         
-        # Update status line
-        pattern = rf'(## Phase {phase}:.*?(?:\n|\r)\s*\*\*Status\*\*:\s*)\w+'
+        # Check if phase exists first
+        phase_pattern = rf'## Phase {phase}:'
+        if not re.search(phase_pattern, content):
+            print(f"⚠️  Phase {phase} not found in ROADMAP.md")
+            return False
+        
+        # Update status line - status can contain hyphens (e.g., "in-progress", "not-started")
+        pattern = rf'(## Phase {phase}:.*?(?:\n|\r)\s*\*\*Status\*\*:\s*)[\w-]+'
         replacement = rf'\g<1>{new_status}'
         
         new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
         
-        if new_content == content:
-            print(f"⚠️  Phase {phase} not found in ROADMAP.md")
+        try:
+            self.roadmap_file.write_text(new_content)
+            return True
+        except PermissionError:
+            print(f"❌ Permission denied writing ROADMAP.md")
             return False
-        
-        self.roadmap_file.write_text(new_content)
-        return True
+        except (IOError, OSError) as e:
+            print(f"❌ Error writing ROADMAP.md: {e}")
+            return False
     
     def update_state_file(self, phase: int, status: str, note: str = "") -> bool:
         """Update STATE.md with current phase info."""
@@ -91,7 +109,15 @@ class PhaseManager:
             print(f"❌ STATE.md not found")
             return False
         
-        content = self.state_file.read_text()
+        try:
+            content = self.state_file.read_text()
+        except PermissionError:
+            print(f"❌ Permission denied reading STATE.md")
+            return False
+        except (IOError, OSError) as e:
+            print(f"❌ Error reading STATE.md: {e}")
+            return False
+        
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
         
         # Update current phase and status
@@ -114,11 +140,18 @@ class PhaseManager:
         
         # Insert after "## Session Memory" or at end
         if "## Session Memory" in content:
-            parts = content.split("## Session Memory")
+            parts = content.split("## Session Memory", 1)
             content = parts[0] + "## Session Memory" + session_entry + parts[1]
         
-        self.state_file.write_text(content)
-        return True
+        try:
+            self.state_file.write_text(content)
+            return True
+        except PermissionError:
+            print(f"❌ Permission denied writing STATE.md")
+            return False
+        except (IOError, OSError) as e:
+            print(f"❌ Error writing STATE.md: {e}")
+            return False
     
     def get_plan_files(self, phase: int) -> list:
         """Get all plan files for a phase."""

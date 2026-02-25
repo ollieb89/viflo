@@ -55,6 +55,7 @@ lerna-debug.log*
 .tmp/
 .temp/
 .parcel-cache/
+.pytest_cache/
 
 # AI/LLM tools
 .aider/
